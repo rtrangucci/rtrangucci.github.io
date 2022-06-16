@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2 | Rob Trangucci</title>
+    <link>https://rtrangucci.github.io/publication-type/2/</link>
+      <atom:link href="https://rtrangucci.github.io/publication-type/2/index.xml" rel="self" type="application/rss+xml" />
+    <description>2</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Mon, 01 Mar 2021 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://rtrangucci.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png</url>
+      <title>2</title>
+      <link>https://rtrangucci.github.io/publication-type/2/</link>
+    </image>
+    
+    <item>
+      <title>Racial Disparities in Coronavirus Disease 2019 (COVID-19) Mortality Are Driven by Unequal Infection Risks</title>
+      <link>https://rtrangucci.github.io/publication/zelner-racial-disparities-coronavirus-2021/</link>
+      <pubDate>Mon, 01 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://rtrangucci.github.io/publication/zelner-racial-disparities-coronavirus-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Quantifying Observed Prior Impact</title>
+      <link>https://rtrangucci.github.io/publication/jones-quantifying-observed-prior-2021/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://rtrangucci.github.io/publication/jones-quantifying-observed-prior-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bayesian Hierarchical Weighting Adjustment and Survey Inference</title>
+      <link>https://rtrangucci.github.io/publication/si-bayesian-hierarchical-weighting-2020-a/</link>
+      <pubDate>Tue, 01 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>https://rtrangucci.github.io/publication/si-bayesian-hierarchical-weighting-2020-a/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Modeling Spatial Risk of Diarrheal Disease Associated with Household Proximity to Untreated Wastewater Used for Irrigation in the Mezquital Valley, Mexico</title>
+      <link>https://rtrangucci.github.io/publication/contrerasjessed-modeling-spatial-risk/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://rtrangucci.github.io/publication/contrerasjessed-modeling-spatial-risk/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Effects of Sequential Influenza A(H1N1)Pdm09 Vaccination on Antibody Waning</title>
+      <link>https://rtrangucci.github.io/publication/zelner-effects-sequential-influenza-2019/</link>
+      <pubDate>Sat, 01 Jun 2019 00:00:00 +0000</pubDate>
+      <guid>https://rtrangucci.github.io/publication/zelner-effects-sequential-influenza-2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hierarchical Gaussian Processes In Stan</title>
+      <link>https://rtrangucci.github.io/conference_papers/trangucci-hierarchical-gaussian-processes-2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://rtrangucci.github.io/conference_papers/trangucci-hierarchical-gaussian-processes-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Prior formulation for Gaussian process hyperparameters</title>
+      <link>https://rtrangucci.github.io/conference_papers/trangucci-prior-hyperparms-2016/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>https://rtrangucci.github.io/conference_papers/trangucci-prior-hyperparms-2016/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
