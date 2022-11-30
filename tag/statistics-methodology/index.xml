@@ -5,12 +5,20 @@
     <link>https://rtrangucci.github.io/tag/statistics-methodology/</link>
       <atom:link href="https://rtrangucci.github.io/tag/statistics-methodology/index.xml" rel="self" type="application/rss+xml" />
     <description>Statistics - Methodology</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Thu, 16 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><lastBuildDate>Tue, 29 Nov 2022 00:00:00 +0000</lastBuildDate>
     <image>
       <url>https://rtrangucci.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png</url>
       <title>Statistics - Methodology</title>
       <link>https://rtrangucci.github.io/tag/statistics-methodology/</link>
     </image>
+    
+    <item>
+      <title>Identified vaccine efficacy for binary post-infection outcomes under misclassification without monotonicity</title>
+      <link>https://rtrangucci.github.io/preprints/trangucci-ve/</link>
+      <pubDate>Tue, 29 Nov 2022 00:00:00 +0000</pubDate>
+      <guid>https://rtrangucci.github.io/preprints/trangucci-ve/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Modeling racial/ethnic differences in COVID-19 incidence with covariates subject to non-random missingness</title>
