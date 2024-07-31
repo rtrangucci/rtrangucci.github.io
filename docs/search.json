@@ -54,5 +54,26 @@
     "title": "About",
     "section": "",
     "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Rob Trangucci",
+    "section": "",
+    "text": "I am an assistant professor of Statistics at Oregon State University. My research focuses on novel statistical methodology in missing data analysis and causal inference for problems in epidemiology, designing Bayesian methods for survey inference, and creating tools to quantify how priors impact posterior inferences. Before I returned to academia to pursue a doctorate in statistics, I worked as a data scientist for a fintech startup, a statistical consultant for a Big Five publisher, and a core developer for the Stan statistical modeling and inference platform (https://mc-stan.org/). I earned a PhD in Statistics from the University of Michigan, an M.A. in Quantitative Methods in the Social Sciences from Columbia University, and a B.A. in Physics from Bucknell University."
+  },
+  {
+    "objectID": "index.html#interests",
+    "href": "index.html#interests",
+    "title": "Rob Trangucci",
+    "section": "Interests",
+    "text": "Interests\n\nCausal inference for vaccine efficacy\nMissing data\nPrincipal stratification\nPrior influence\nMultilevel regression and poststratification (MRP)\nBayesian inference"
+  },
+  {
+    "objectID": "index.html#education",
+    "href": "index.html#education",
+    "title": "Rob Trangucci",
+    "section": "Education",
+    "text": "Education\n\nPhD in Statistics, 2023\n\nUniversity of Michigan\n\nMA in Quantitative Methods in the Social Science, 2014\n\nColumbia University\n\nBA in Physics, 2009\n\nBucknell University"
   }
 ]
