@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Heckman models in Stan</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../papers.html">
+ <span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html">
+ <span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../courses.html">
+ <span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Heckman models in Stan</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>This is cmdstanr version 0.8.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan path: /Users/robertntrangucci/.cmdstan/cmdstan-2.35.0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>- CmdStan version: 2.35.0</code></pre>
+</div>
+</div>
+<p>I took a class in the first year of my Master’s program about missing data from Ben Goodrich. The class was all about what to do when you encountered some sort of missing observations when analyzing a dataset. Missingness can arise for many reasons when analyzing data: it can arise from potential survey respondents declining to participate in a survey, survey respondents refusing to answer a question, from patients who drop out of a randomized study, or from the fact that an outcome of interest is only observable for a subset of patients who experience (or don’t experience) an intermediate event.</p>
+<p>To make things a little more concrete, suppose we’re interested in learning about the how vaccines moderate post-infection viral loads. The precise quantity we’re interested in is the change in post-infection viral load for people who would be infected with the pathogen no matter what. These unlucky people are referred to as the ``Always-Infected’’ group. We might be tempted to get a rough estimate of this quantity by comparing viral loads in infected people in the vaccinated group vs.&nbsp;the unvaccinated group. The problem with this analysis is that, supposing the vaccine has some causal effect on infection, the individual characteristics of the two groups, namely infected and vaccinated people, and infected and unvaccinated people, may differ. In this problem missingness arises in two forms. The first is that we observe only one outcome for each participant in our trial: the outcome corresponding to the treatment arm assignment. This is what Holland called the fundamental problem of causal inference. The second is more unique, and it is that we observe viral loads only in those who are infected.</p>
+<p>The Heckman selection model was one of the first examples we were shown in class of a missing data problem where the probability that an individual had a missing observation depended on the value of the missing observation <span class="citation" data-cites="heckman1979">(<a href="#ref-heckman1979" role="doc-biblioref">Heckman 1979</a>)</span>. A standard survey example would be that people with very high and those with very low incomes may decline to report income on a survey more than those with moderate incomes. In the vaccine example, the selection effect we are concerned with is that people with weaker immune systems may become infected even with a vaccine and thus have higher viral loads. A naive comparison of viral loads between vaccinated and unvaccinated people might show that the vaccine increases viral loads in those who are vaccinated <span class="citation" data-cites="hudgens2003">(<a href="#ref-hudgens2003" role="doc-biblioref">Hudgens, Hoering, and Self 2003</a>)</span>.</p>
+<p>Let <span class="math inline">\(Z_i\)</span> be the vaccine treatment, with <span class="math inline">\(Z_i = 1\)</span> indicating treatment and <span class="math inline">\(Z_i = 0\)</span> indicating placebo. For the ease of exposition, let’s suppose that treatment is randomized. We don’t need more selection bias (though selection into treatment could very well be a source of selection bias). Let <span class="math inline">\(S_i(z)\)</span> be the infection status of individual <span class="math inline">\(i\)</span> with vaccination status <span class="math inline">\(z\)</span>, and let <span class="math inline">\(Y_i(z)\)</span> be the viral load of individual <span class="math inline">\(i\)</span>. If <span class="math inline">\(S_i(z) = 0\)</span>, we set <span class="math inline">\(Y_i(z) = *\)</span>.</p>
+<p>Suppose we also observe the study site, <span class="math inline">\(R_i\)</span> typically a hospital or health clinic, that enrolls patient <span class="math inline">\(i\)</span> into the study. This study site is assumed to impact that probability of infection, but it is assumed to be independent of post-infection viral load. The standard term for a variable like <span class="math inline">\(R_i\)</span> is an instrumental variable.</p>
+<p>The model we’ll simulate data from is the following: <span class="math display">\[
+\begin{aligned}
+\log Y_i(z) &amp; = \mu_Y(z) + \sigma_z\, U_i(z) \\
+\tilde{S}_i(z) \mid R_i &amp; = \mu_S(z, R_i) + W_i \\
+S_i(z) &amp; = 1(\tilde{S}_i(z) &gt; 0) \\
+(U_i(0),U_i(1),W_i) &amp; \sim \text{Normal}(\mathbf{0}, \boldsymbol{\Omega})
+\end{aligned}
+\]</span></p>
+<p>The likelihood for the model is fairly straightforward: For individuals who remain uninfected, the likelihood term corresponds to <span class="math inline">\(P(\tilde{S}_i(z) \leq 0)\)</span>, which corresponds to the univariate standard normal CDF evaluated at <span class="math inline">\(-\mu_S(z,r)\)</span>, or: <span class="math display">\[
+P(\mu_S(z,r) + W_i \leq 0) = \Phi(-\mu_S(z,r))
+\]</span></p>
+<p>For infected individuals, the likelihood for the <span class="math inline">\(i^\mathrm{th}\)</span> corresponds to observing <span class="math inline">\(\log Y_i(z) = y_i\)</span> and <span class="math inline">\(\tilde{S}_i(z) &gt; 0 \mid \log Y_i(z) = y_i, R_i = r_i\)</span>: <span class="math display">\[
+\begin{aligned}
+L_i(\theta) &amp; = \frac{1}{\sqrt{2\pi} \sigma_z}\exp\left(-\frac{1}{2\sigma_z^2}(y_i - \mu_Y(z_i))^2\right) \\
+&amp; \Phi\left(\frac{\mu_S(z_i) + \frac{\rho_{z_i}}{\sigma_z}(y_i - \mu_Y(z_i))}{\sqrt{1 - \rho_{z_i}^2}}\right)
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\rho_z = \text{Cor}(W_i,U_i(z))\)</span>. Note that <span class="math inline">\(\rho_{01} = \text{Cor}(U_i(0),U_i(1))\)</span> does not enter into the likelihood, which makes sense because we’ll never observe both <span class="math inline">\(S_i(0)\)</span> and <span class="math inline">\(S_i(1)\)</span> for the same individual. This does <em>not</em> mean that we won’t have any information about <span class="math inline">\(\rho_{01}\)</span>; because <span class="math inline">\(\boldsymbol{\Omega}\)</span> must be positive definite, the <span class="math inline">\(\det \boldsymbol{\Omega} &gt; 0\)</span>. This means that what we do learn about <span class="math inline">\(\rho_0\)</span> and <span class="math inline">\(\rho_1\)</span> will constrain the domain of <span class="math inline">\(\rho_{01}\)</span> so that <span class="math inline">\(\det \boldsymbol{\Omega} &gt; 0\)</span>. This translates to the following bounds on <span class="math inline">\(\rho_{01}\)</span> <span class="math display">\[
+\rho_{01} \in \left(\rho_0\rho_1 - \sqrt{1 - \rho_0^2 - \rho_1^2 + \rho_0^2\rho_1^2},\, \rho_0\rho_1 + \sqrt{1 - \rho_0^2 - \rho_1^2 + \rho_0^2\rho_1^2}\right)
+\]</span> If we incorporate prior information, the asymptotic posterior for <span class="math inline">\(\rho_{01}\)</span> will take on the shape of the conditional prior for <span class="math inline">\(\rho_{01}\)</span> given the values for <span class="math inline">\(\rho_0\)</span> and <span class="math inline">\(\rho_1\)</span>.</p>
+<p>Given our focus on comparing the impact of vaccination on viral load, the target causal estimand is a measure of the average decrease (hopefully) in viral load caused by vaccination in individuals who are always infected. Mathematically, this is: <span class="math display">\[\mathbb{E}[Y_i(1) - Y_i(0) \mid S_i(1) = S_i(0) = 1].\]</span> This estimand is somewhat odd in that we can never observe both infection outcomes, so we can never calculate this estimand exactly from observed data without extra assumptions. I explained above why we can’t equate this target estimand with the ``naive’’ version, the difference in viral load between vaccinated and unvaccinated people: <span class="math display">\[
+\mathbb{E}[Y_i(1) \mid S_i(1) = 1] - \mathbb{E}[Y_i(0) \mid S_i(0) = 1].
+\]</span> Logically, it makes sense, because the naive estimand is a mixture over several groups, instead of just the always-infected group, but we’ll simulate some data to get a better sense of how different the two estimands can be.</p>
+<p>In our simulated example, we’ll suppose we have a randomized vaccine trial with 5,000 participants spread evenly across 10 study sites. We’ll set <span class="math inline">\(\rho_0\)</span> and <span class="math inline">\(\rho_1\)</span> to <span class="math inline">\(0.9\)</span>, which equates to strong residual correlation between infection risk and viral load; that might be reasonable if there is an unobserved factor impacting both infection and viral load. Maybe this is prior exposure to the virus plus genetic factors related to immune system health.</p>
+<p>The covariates we’re including in the infection risk equation, <span class="math inline">\(\mu_S(z)\)</span> are age and study site, while the only covariates we’re including in the viral load model are categorical age predictors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12222</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>sig0 <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sig1 <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>sig3 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>rho_0 <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>rho_1 <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>lb <span class="ot">&lt;-</span> rho_0<span class="sc">*</span>rho_1 <span class="sc">-</span> <span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> rho_0<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> rho_1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> rho_0<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>rho_1<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ub <span class="ot">&lt;-</span> rho_0<span class="sc">*</span>rho_1 <span class="sc">+</span> <span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> rho_0<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> rho_1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> rho_0<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>rho_1<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>rho_01 <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>diag_sigs <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(sig0,sig1,sig3))</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>Omega <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,rho_01,rho_0,rho_01,<span class="dv">1</span>,rho_1,rho_0,rho_1,<span class="dv">1</span>),<span class="dv">3</span>,<span class="dv">3</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">&lt;-</span> diag_sigs <span class="sc">%*%</span> Omega  <span class="sc">%*%</span> diag_sigs</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>U0_U1_W <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">Sigma =</span> Sigma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The plot of <span class="math inline">\(U_0\)</span> vs.&nbsp;<span class="math inline">\(W\)</span> gives a sense of how related the two error terms are:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="heckman-in-stan_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The covariates we will include in the model are age, which we treat as a categorical variable, the study site, which is also treated as a categorical variable, and the binary treatment variable, which is assumed to be balanced within study sites.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>N_age <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>N_sites <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>age_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(N_age, n, <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">factor</span>()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>site_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>N_sites,<span class="at">each=</span>n <span class="sc">/</span> N_sites) <span class="sc">|&gt;</span> <span class="fu">factor</span>()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>treat <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>,n<span class="sc">/</span><span class="dv">20</span>),<span class="fu">rep</span>(<span class="dv">1</span>,n<span class="sc">/</span><span class="dv">20</span>)),<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll create the model matrices from these variables, along with the coefficients for each model equation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>X_S <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> age_vec <span class="sc">+</span> site_vec)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>X_Y <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> age_vec)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>d_S <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X_S)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>d_Y <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X_Y)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>b_S <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fu">rnorm</span>(N_sites <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fl">0.1</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>b_Y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">10.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>S_0  <span class="ot">&lt;-</span> (X_S <span class="sc">%*%</span> b_S <span class="sc">+</span> U0_U1_W[,<span class="dv">3</span>]) <span class="sc">&gt;=</span> <span class="dv">0</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>S_1  <span class="ot">&lt;-</span> (X_S <span class="sc">%*%</span> b_S <span class="sc">-</span> <span class="fl">0.25</span> <span class="sc">+</span> U0_U1_W[,<span class="dv">3</span>]) <span class="sc">&gt;=</span> <span class="dv">0</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">as.integer</span>(S_0), <span class="fu">as.integer</span>(S_1))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>Y_0  <span class="ot">&lt;-</span> X_Y <span class="sc">%*%</span> b_Y <span class="sc">+</span> U0_U1_W[,<span class="dv">1</span>]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>Y_1  <span class="ot">&lt;-</span> X_Y <span class="sc">%*%</span> b_Y <span class="sc">-</span> <span class="fl">0.5</span> <span class="sc">+</span> U0_U1_W[,<span class="dv">2</span>]</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">ifelse</span>(S_0 <span class="sc">==</span> <span class="dv">1</span>, Y_0, <span class="cn">NA</span>),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>(S_1 <span class="sc">==</span> <span class="dv">1</span>, Y_1, <span class="cn">NA</span>))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>S_o <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>n, \(i) S[i,treat[i] <span class="sc">+</span> <span class="dv">1</span>])</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>Y_o <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>n, \(i) Y[i,treat[i] <span class="sc">+</span> <span class="dv">1</span>])</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>Y_o_sel <span class="ot">&lt;-</span> Y_o[S_o <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>X_Y_sel <span class="ot">&lt;-</span> X_Y[S_o <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>naive_estimand <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">exp</span>(Y_o_sel[treat[S_o <span class="sc">==</span> <span class="dv">1</span>] <span class="sc">==</span> <span class="dv">1</span>])) <span class="sc">-</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mean</span>(<span class="fu">exp</span>(Y_o_sel[treat[S_o <span class="sc">==</span> <span class="dv">1</span>] <span class="sc">==</span> <span class="dv">0</span>]))</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>Y_estimand <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">exp</span>(Y_1[S_0 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> S_1 <span class="sc">==</span> <span class="dv">1</span>])) <span class="sc">-</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>               <span class="fu">mean</span>(<span class="fu">exp</span>(Y_0[S_0 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> S_1 <span class="sc">==</span> <span class="dv">1</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After all is said and done, the target finite-sample estimand is -71,183, while the naive finite-sample estimand is -43,475.</p>
+<p>This means that the naive estimand understates the benefit of the vaccine for people who are always infected by about 39%.</p>
+<p>The Stan model is written like so:</p>
+<div class="cell" data-output.var="model">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N;     </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_neg; </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_pos; </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; D_S;   </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; D_Y;   </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N_pos] Y;    </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=<span class="dv">1</span>&gt; S;  </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=<span class="dv">1</span>&gt; Z;  </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N_pos,D_Y] X_Y; </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N,D_S] X_S;  </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_pos] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>,<span class="kw">upper</span>=N&gt; n_pos;</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_neg] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=N&gt; n_neg;</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span> Z_idx;</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i;</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> j;</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    i = <span class="dv">1</span>;</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    j = <span class="dv">1</span>;</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (S[n] == <span class="dv">1</span>) {</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>        n_pos[i] = n;</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>        i = i + <span class="dv">1</span>;</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>        n_neg[j] = n;</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        j = j + <span class="dv">1</span>;</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>      Z_idx[n] = Z[n] + <span class="dv">1</span>;</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  <span class="dt">cholesky_factor_corr</span>[<span class="dv">3</span>] L_Omega;</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[<span class="dv">2</span>] sd_Y;</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[D_Y] b_Y;</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[D_S] b_S;</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> gamma_S;</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> gamma_Y;</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[<span class="dv">3</span>,<span class="dv">3</span>] Omega = L_Omega * L_Omega';</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] mu_S = X_S * b_S + to_vector(Z) * gamma_S;</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N_pos] mu_Y = X_Y * b_Y + to_vector(Z[n_pos]) * gamma_Y;</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[<span class="dv">2</span>] <span class="dt">real</span> rho = {Omega[<span class="dv">1</span>,<span class="dv">3</span>], Omega[<span class="dv">2</span>,<span class="dv">3</span>]};</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>  b_Y ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>  b_S ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>  sd_Y ~ normal(<span class="dv">0</span>, <span class="dv">2</span>);</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>  gamma_S ~ normal(<span class="dv">0</span>, <span class="dv">5</span>);</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>  gamma_Y ~ normal(<span class="dv">0</span>, <span class="dv">5</span>);</span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N_neg) {</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">target +=</span> log(Phi(-mu_S[n_neg[n]]));</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N_pos) {</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> treat_idx = Z_idx[n_pos[n]];</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>    <span class="kw">target +=</span> log(Phi(sqrt((<span class="dv">1</span> - rho[treat_idx]) * (<span class="dv">1</span> + rho[treat_idx]))^(-<span class="dv">1</span>)*(mu_S[n_pos[n]]</span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>                               + rho[treat_idx] / sd_Y[treat_idx]</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>                               * (Y[n] - mu_Y[n]))));</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>    Y[n] ~ normal(mu_Y[n], sd_Y[treat_idx]);</span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[<span class="dv">2</span>] <span class="dt">real</span> rho = {Omega[<span class="dv">1</span>,<span class="dv">3</span>], Omega[<span class="dv">2</span>,<span class="dv">3</span>]};</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> Y_estimand = <span class="dv">0</span>;</span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>    <span class="dt">vector</span>[N] mu_S = X_S * b_S;</span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>    <span class="dt">matrix</span>[<span class="dv">3</span>,<span class="dv">3</span>] Sigma = quad_form_diag(Omega, append_row(sd_Y, [<span class="dv">1</span>]'));</span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tot_11 = <span class="dv">0</span>;</span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>      <span class="dt">vector</span>[<span class="dv">3</span>] errors = multi_normal_rng(rep_vector(<span class="dv">0</span>,<span class="dv">3</span>), Sigma);</span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (errors[<span class="dv">3</span>] &gt; -mu_S[n] - gamma_S &amp;&amp; errors[<span class="dv">3</span>] &gt; -mu_S[n]) {</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>        <span class="dt">real</span> mu_Y_cf = X_S[n,<span class="dv">1</span>:D_Y] * b_Y;</span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>        <span class="dt">real</span> Y_0 = errors[<span class="dv">1</span>] + mu_Y_cf;</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>        <span class="dt">real</span> Y_1 = errors[<span class="dv">2</span>] + mu_Y_cf + gamma_Y;</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>        Y_estimand += Y_1 -  Y_0;</span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>        tot_11 += <span class="dv">1</span>;</span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>    Y_estimand /= tot_11;</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol type="1">
+<li>Data block</li>
+</ol>
+<p>Some comments on the Stan code are in order. The data block is pretty straightforward, though it’s worth keeping in mind that we’ll need to keep track of three dimensions: the total number of data points, the number of infected and uninfected patients. This is because we’ll only have access to viral loads in the infected patients.</p>
+<p>Let’s generate some data to see how the errors change how the .</p>
+<p>First, let’s see whether the</p>
+
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-heckman1979" class="csl-entry" role="doc-biblioentry">
+Heckman, James J. 1979. <span>“Sample Selection Bias as a Specification Error.”</span> <em>Econometrica</em> 47 (1): 153. <a href="https://doi.org/10.2307/1912352">https://doi.org/10.2307/1912352</a>.
+</div>
+<div id="ref-hudgens2003" class="csl-entry" role="doc-biblioentry">
+Hudgens, Michael G., Antje Hoering, and Steven G. Self. 2003. <span>“On the Analysis of Viral Load Endpoints in HIV Vaccine Trials.”</span> <em>Statistics in Medicine</em> 22 (14): 2281–98. <a href="https://doi.org/10.1002/sim.1394">https://doi.org/10.1002/sim.1394</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
