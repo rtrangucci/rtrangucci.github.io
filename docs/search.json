@@ -25,7 +25,7 @@
     "href": "courses.html",
     "title": "Courses",
     "section": "",
-    "text": "STAT 625 - Winter 2024\nSTAT 625 - Winter 2025"
+    "text": "STAT 625 - Winter 2024\n\n\n\n\n\nSTAT 625 - Winter 2025\nSTAT 599 - Winter 2025"
   },
   {
     "objectID": "posts/heckman-in-stan.html",
@@ -82,5 +82,12 @@
     "title": "ST 625 - W 25",
     "section": "",
     "text": "Required: Modelling Survival Data in Medical Research, 4th Edition, Collett\nOptional: Survival and Event History Analysis, Aalen, Borgan, and Gjessing\nOptional: Counting Processes and Survival Analysis, Fleming and Harrington\n\n\n\n\nTo highlight the unique challenges posed by the analysis of failure/survival data. To allow you to analyze survival data using parametric and nonparametric techniques in the face of these challenges. To apply these techniques to real data using R code and R packages for survival analysis. To understand the theory and methodology through math, practice and code.\nCourse content\nConcepts to be discussed include: hazard function (failure rate function); nonparametric likeli- hood; counting processes; empirical distribution function; censoring and truncation; Kaplan-Meier estimator; Bias of the KM estimator; Cox proportional hazards model; Accelerated Failure Time Model; Partial Likelihood; log-rank test; martingales. R will be the programming language used in the course.\n\n\n\n\nSyllabus\n\n\n\n\n\nNotes"
+  },
+  {
+    "objectID": "st_599_w_25.html",
+    "href": "st_599_w_25.html",
+    "title": "ST 599 - W 25: Missing data and causal inference",
+    "section": "",
+    "text": "Required: Statistical Analysis with Missing Data, 3rd edition Little and Rubin\nRequired: Causal Inference for Statistics, Social, and Biomedical Sciences, Imbens and Rubin\nOptional: Bayesian Inference for Partially Identified Models, Gustafson\n\n\n\n\nUpon completion of this course, students should be able to critically evaluate how published literature handles (or does not handle) missing data, and analyze datasets that have missing values by designing models that account for missingness. Students should also be able to read published literature using randomized study designs, and assess whether researchers’ causal conclusions are reasonable.\n\n\n\n\nDifferentiate between missing-completely-at-random, missing-at-random (MAR), and missing-not-at-random (MNAR) processes via assumptions about the joint distribution of missingness indicators, outcomes, and covariates.\nEvaluate whether estimands of interest are identifiable for a given data generating process.\nDerive the identification region and limiting posterior density for partially-identified models.\nDerive a principal causal effect using the Neyman-Rubin causal model.\nConstruct and fit maximum likelihood (in R)/Bayesian models (in Stan) for MAR, MNAR, and causal models.\n\n\n\n\n\nSyllabus\n\n\n\n\n\nLecture 1 notes"
   }
 ]

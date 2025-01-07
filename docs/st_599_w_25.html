@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Courses</title>
+<title>ST 599 - W 25: Missing data and causal inference</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -87,7 +87,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./courses.html" aria-current="page">
+    <a class="nav-link" href="./courses.html">
  <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -105,10 +105,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#academic-courses" id="toc-academic-courses" class="nav-link active" data-scroll-target="#academic-courses">Academic courses</a>
+  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
   <ul class="collapse">
-  <li><a href="#winter-2024" id="toc-winter-2024" class="nav-link" data-scroll-target="#winter-2024">Winter 2024</a></li>
-  <li><a href="#winter-2025" id="toc-winter-2025" class="nav-link" data-scroll-target="#winter-2025">Winter 2025</a></li>
+  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
+  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
+  <li><a href="#course-learning-outcomes" id="toc-course-learning-outcomes" class="nav-link" data-scroll-target="#course-learning-outcomes"><strong>Course learning outcomes</strong></a></li>
+  <li><a href="#course-syllabus" id="toc-course-syllabus" class="nav-link" data-scroll-target="#course-syllabus">Course syllabus</a></li>
+  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -118,7 +121,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Courses</h1>
+<h1 class="title">ST 599 - W 25: Missing data and causal inference</h1>
 </div>
 
 
@@ -133,19 +136,40 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="academic-courses" class="level2">
-<h2 class="anchored" data-anchor-id="academic-courses">Academic courses</h2>
-<section id="winter-2024" class="level3">
-<h3 class="anchored" data-anchor-id="winter-2024">Winter 2024</h3>
+<section id="syllabus" class="level2">
+<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
+<section id="textbook" class="level3">
+<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
 <ul>
-<li><a href="./st_625_w_24.html">STAT 625 - Winter 2024</a></li>
+<li><p>Required: <em>Statistical Analysis with Missing Data, 3rd edition</em> Little and Rubin</p></li>
+<li><p>Required: <em>Causal Inference for Statistics, Social, and Biomedical Sciences</em>, Imbens and Rubin</p></li>
+<li><p>Optional: <em>Bayesian Inference for Partially Identified Models</em>, Gustafson</p></li>
 </ul>
 </section>
-<section id="winter-2025" class="level3">
-<h3 class="anchored" data-anchor-id="winter-2025">Winter 2025</h3>
+<section id="course-objectives" class="level3">
+<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
+<p>Upon completion of this course, students should be able to critically evaluate how published literature handles (or does not handle) missing data, and analyze datasets that have missing values by designing models that account for missingness. Students should also be able to read published literature using randomized study designs, and assess whether researchers’ causal conclusions are reasonable.</p>
+</section>
+<section id="course-learning-outcomes" class="level3">
+<h3 class="anchored" data-anchor-id="course-learning-outcomes"><strong>Course learning outcomes</strong></h3>
+<ol type="1">
+<li>Differentiate between missing-completely-at-random, missing-at-random (MAR), and missing-not-at-random (MNAR) processes via assumptions about the joint distribution of missingness indicators, outcomes, and covariates.</li>
+<li>Evaluate whether estimands of interest are identifiable for a given data generating process.</li>
+<li>Derive the identification region and limiting posterior density for partially-identified models.</li>
+<li>Derive a principal causal effect using the Neyman-Rubin causal model.</li>
+<li>Construct and fit maximum likelihood (in R)/Bayesian models (in Stan) for MAR, MNAR, and causal models.</li>
+</ol>
+</section>
+<section id="course-syllabus" class="level3">
+<h3 class="anchored" data-anchor-id="course-syllabus">Course syllabus</h3>
 <ul>
-<li><a href="./st_625_w_25.html">STAT 625 - Winter 2025</a></li>
-<li><a href="./st_599_w_25.html">STAT 599 - Winter 2025</a></li>
+<li><a href="pdfs/missing_data_course/missing_data_syllabus.pdf">Syllabus</a></li>
+</ul>
+</section>
+<section id="course-notes" class="level3">
+<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
+<ul>
+<li><a href="pdfs/missing_data_course/lecture-1-notes.pdf">Lecture 1 notes</a></li>
 </ul>
 
 
