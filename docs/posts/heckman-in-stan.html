@@ -214,15 +214,10 @@ div.csl-indent {
 <pre><code>- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>- CmdStan path: /Users/robertntrangucci/.cmdstan/cmdstan-2.35.0</code></pre>
+<pre><code>- CmdStan path: /Users/robertntrangucci/.cmdstan/cmdstan-2.36.0</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>- CmdStan version: 2.35.0</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-A newer version of CmdStan is available. See ?install_cmdstan() to install it.
-To disable this check set option or environment variable cmdstanr_no_ver_check=TRUE.</code></pre>
+<pre><code>- CmdStan version: 2.36.0</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: stats4</code></pre>
@@ -277,44 +272,63 @@ L_i(\theta) &amp; = \frac{1}{\sqrt{2\pi} \sigma_z}\exp\left(-\frac{1}{2\sigma_z^
 \]</span> To my knowledge, this doesn’t have a closed form expression because of the exponentiation of <span class="math inline">\(y\)</span>, though there might be a clever way to evaluate this integral. We can, however, use R’s 1-d numerical integration routine to approximate this expectation.</p>
 <p>The code below evaluates <span class="math inline">\(\tau^\text{naive}\)</span>, as well as</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cond_exp <span class="ot">&lt;-</span> <span class="cf">function</span>(y, mu_y, mu_s, sd_y, rho) {</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(y <span class="sc">+</span> <span class="fu">dnorm</span>(y, mu_y, sd_y, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">pnorm</span>((mu_s <span class="sc">+</span> rho <span class="sc">/</span> sd_y <span class="sc">*</span> (y <span class="sc">-</span> mu_y))<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> rho<span class="sc">^</span><span class="dv">2</span>),<span class="at">log.p =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>tau_naive <span class="ot">&lt;-</span> <span class="cf">function</span>(rho_0, rho_1, sd_y, mu_y, mu_s, s_eff, y_eff) {</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  I1 <span class="ot">&lt;-</span> <span class="fu">integrate</span>(cond_exp, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>, </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu_y =</span> mu_y <span class="sc">+</span> y_eff, </span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu_s =</span> mu_s <span class="sc">+</span> s_eff, </span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sd_y =</span> sd_y, </span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">rho =</span> rho_1, </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">abs.tol =</span> 0L, </span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">rel.tol =</span> .Machine<span class="sc">$</span>double.eps<span class="sc">^</span><span class="fl">0.85</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(I1<span class="sc">$</span>subdivisions <span class="sc">&gt;</span> <span class="dv">3</span>)</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  D1 <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(mu_s <span class="sc">+</span> s_eff)</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  I2 <span class="ot">&lt;-</span> <span class="fu">integrate</span>(cond_exp, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>, </span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu_y =</span> mu_y, </span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu_s =</span> mu_s, </span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sd_y =</span> sd_y, </span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>                  <span class="at">rho =</span> rho_0, </span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>                  <span class="at">abs.tol =</span> 0L, </span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>                  <span class="at">rel.tol =</span> .Machine<span class="sc">$</span>double.eps<span class="sc">^</span><span class="fl">0.85</span>)</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(I2<span class="sc">$</span>subdivisions <span class="sc">&gt;</span> <span class="dv">3</span>)</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  D2 <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(mu_s)</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(I1<span class="sc">$</span>value <span class="sc">/</span> D1 <span class="sc">-</span> I2<span class="sc">$</span>value <span class="sc">/</span> D2)</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>true_eff <span class="ot">&lt;-</span> <span class="cf">function</span>(sd_y, mu_y, y_eff) {</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  mu_0 <span class="ot">&lt;-</span> <span class="fu">exp</span>(mu_y <span class="sc">+</span> sd_y<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  mu_1 <span class="ot">&lt;-</span> <span class="fu">exp</span>(mu_y <span class="sc">+</span> y_eff <span class="sc">+</span> sd_y<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(mu_1 <span class="sc">-</span> mu_0)</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>delta_s <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_z, s_eff) {</span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  p_0 <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(mu_z)</span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  p_1 <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(mu_z <span class="sc">+</span> s_eff)</span>
-<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_1 <span class="sc">-</span> p_0)</span>
-<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>cond_exp <span class="ot">&lt;-</span> <span class="cf">function</span>(y, mu_y, mu_s, sd_y, rho) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>(y <span class="sc">+</span> <span class="fu">dnorm</span>(y, mu_y, sd_y, <span class="at">log =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> <span class="fu">pnorm</span>((mu_s <span class="sc">+</span> rho <span class="sc">/</span> sd_y <span class="sc">*</span> (y <span class="sc">-</span> mu_y))<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> rho<span class="sc">^</span><span class="dv">2</span>),<span class="at">log.p =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>tau_naive <span class="ot">&lt;-</span> <span class="cf">function</span>(rho_0, rho_1, sd_y, mu_y, mu_s, s_eff, y_eff) {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  I1 <span class="ot">&lt;-</span> <span class="fu">integrate</span>(cond_exp, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>, </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu_y =</span> mu_y <span class="sc">+</span> y_eff, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu_s =</span> mu_s <span class="sc">+</span> s_eff, </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sd_y =</span> sd_y, </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">rho =</span> rho_1, </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">abs.tol =</span> 0L, </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">rel.tol =</span> .Machine<span class="sc">$</span>double.eps<span class="sc">^</span><span class="fl">0.85</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(I1<span class="sc">$</span>subdivisions <span class="sc">&gt;</span> <span class="dv">3</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  D1 <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(mu_s <span class="sc">+</span> s_eff)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  I2 <span class="ot">&lt;-</span> <span class="fu">integrate</span>(cond_exp, <span class="sc">-</span><span class="cn">Inf</span>, <span class="cn">Inf</span>, </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu_y =</span> mu_y, </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu_s =</span> mu_s, </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sd_y =</span> sd_y, </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                  <span class="at">rho =</span> rho_0, </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                  <span class="at">abs.tol =</span> 0L, </span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>                  <span class="at">rel.tol =</span> .Machine<span class="sc">$</span>double.eps<span class="sc">^</span><span class="fl">0.85</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(I2<span class="sc">$</span>subdivisions <span class="sc">&gt;</span> <span class="dv">3</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  D2 <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(mu_s)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(I1<span class="sc">$</span>value <span class="sc">/</span> D1 <span class="sc">-</span> I2<span class="sc">$</span>value <span class="sc">/</span> D2)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>true_eff <span class="ot">&lt;-</span> <span class="cf">function</span>(sd_y, mu_y, y_eff) {</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  mu_0 <span class="ot">&lt;-</span> <span class="fu">exp</span>(mu_y <span class="sc">+</span> sd_y<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  mu_1 <span class="ot">&lt;-</span> <span class="fu">exp</span>(mu_y <span class="sc">+</span> y_eff <span class="sc">+</span> sd_y<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(mu_1 <span class="sc">-</span> mu_0)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>delta_s <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_z, s_eff) {</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  p_0 <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(mu_z)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  p_1 <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(mu_z <span class="sc">+</span> s_eff)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p_1 <span class="sc">-</span> p_0)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>First we’ll explore a scenario where there is high positive correlation between the errors in the viral load equation and the latent variable related to infection. We set <span class="math inline">\(\rho_1 = \rho_0 = 0.9\)</span>, <span class="math inline">\(\sigma_0 = \sigma_1 = 0.5\)</span>, <span class="math inline">\(\mu_Y(0) = 10\)</span> and <span class="math inline">\(\mu_S(0) = -1.5\)</span>. Let the true effect of the vaccine on mean log-viral load be <span class="math inline">\(\delta_y = -0.25\)</span>.</p>
 <p>We will plot how the naive estimand of viral load effect changes with the change in infection probability.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>effs <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>p_s <span class="ot">&lt;-</span> <span class="fu">sapply</span>(effs, \(x) <span class="fu">delta_s</span>(<span class="sc">-</span><span class="fl">0.5</span>, x)) </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>estimand <span class="ot">&lt;-</span> <span class="fu">sapply</span>(effs, \(x) <span class="fu">f_naive_est</span>(<span class="at">rho =</span> <span class="fl">0.9</span>, <span class="at">sd_y =</span> <span class="fl">0.5</span>, <span class="at">mu_y =</span> <span class="dv">10</span>, <span class="at">mu_s =</span> <span class="sc">-</span><span class="fl">1.5</span>, <span class="at">s_eff =</span> x, <span class="at">y_eff =</span> <span class="sc">-</span><span class="fl">0.25</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>p_change_in_sign <span class="ot">&lt;-</span> p_s[<span class="fu">which.min</span>(<span class="fu">abs</span>(estimand))]</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p_s, </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>     estimand,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Naive effect estimand vs. infection effect"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">bquote</span>(<span class="fu">E</span>(y <span class="sc">~</span> <span class="st">"|"</span> <span class="sc">~</span> S <span class="sc">==</span> <span class="dv">1</span>, Z <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">E</span>(y <span class="sc">~</span> <span class="st">"|"</span> <span class="sc">~</span> S <span class="sc">==</span> <span class="dv">1</span>, Z <span class="sc">==</span> <span class="dv">0</span>)),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">bquote</span>(<span class="fu">P</span>(S <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"|"</span> <span class="sc">~</span> Z <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">P</span>(S <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"|"</span> <span class="sc">~</span> Z <span class="sc">==</span> <span class="dv">0</span>)),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"l"</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> p_change_in_sign, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="heckman-in-stan_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>This graph shows that as the vaccine becomes more effective at preventing infection, the apparent benefit of the vaccine on viral load decreases. In fact, at around a -0.18 decrease in the probability of infection, the naive estimand shows that the vaccine increases viral load, which is not the case.</p>
+<p>If we fix a scenario and</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>effs <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>p_s <span class="ot">&lt;-</span> <span class="fu">sapply</span>(effs, \(x) <span class="fu">delta_s</span>(<span class="sc">-</span><span class="fl">0.5</span>, x)) </span>
@@ -329,25 +343,6 @@ L_i(\theta) &amp; = \frac{1}{\sqrt{2\pi} \sigma_z}\exp\left(-\frac{1}{2\sigma_z^
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> p_change_in_sign, <span class="at">col =</span> <span class="st">"red"</span>)</span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="heckman-in-stan_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>This graph shows that as the vaccine becomes more effective at preventing infection, the apparent benefit of the vaccine on viral load decreases. In fact, at around a -0.18 decrease in the probability of infection, the naive estimand shows that the vaccine increases viral load, which is not the case.</p>
-<p>If we fix a scenario and</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>effs <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>p_s <span class="ot">&lt;-</span> <span class="fu">sapply</span>(effs, \(x) <span class="fu">delta_s</span>(<span class="sc">-</span><span class="fl">0.5</span>, x)) </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>estimand <span class="ot">&lt;-</span> <span class="fu">sapply</span>(effs, \(x) <span class="fu">f_naive_est</span>(<span class="at">rho =</span> <span class="fl">0.9</span>, <span class="at">sd_y =</span> <span class="fl">0.5</span>, <span class="at">mu_y =</span> <span class="dv">10</span>, <span class="at">mu_s =</span> <span class="sc">-</span><span class="fl">1.5</span>, <span class="at">s_eff =</span> x, <span class="at">y_eff =</span> <span class="sc">-</span><span class="fl">0.25</span>))</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>p_change_in_sign <span class="ot">&lt;-</span> p_s[<span class="fu">which.min</span>(<span class="fu">abs</span>(estimand))]</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(p_s, </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>     estimand,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Naive effect estimand vs. infection effect"</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="fu">bquote</span>(<span class="fu">E</span>(y <span class="sc">~</span> <span class="st">"|"</span> <span class="sc">~</span> S <span class="sc">==</span> <span class="dv">1</span>, Z <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">E</span>(y <span class="sc">~</span> <span class="st">"|"</span> <span class="sc">~</span> S <span class="sc">==</span> <span class="dv">1</span>, Z <span class="sc">==</span> <span class="dv">0</span>)),</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">bquote</span>(<span class="fu">P</span>(S <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"|"</span> <span class="sc">~</span> Z <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">P</span>(S <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"|"</span> <span class="sc">~</span> Z <span class="sc">==</span> <span class="dv">0</span>)),</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"l"</span>)</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> p_change_in_sign, <span class="at">col =</span> <span class="st">"red"</span>)</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">0</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
 <p><img src="heckman-in-stan_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
@@ -360,21 +355,21 @@ L_i(\theta) &amp; = \frac{1}{\sqrt{2\pi} \sigma_z}\exp\left(-\frac{1}{2\sigma_z^
 <p>In our simulated example, we’ll suppose we have a randomized vaccine trial with 20,000 participants spread evenly across 10 study sites. We’ll set <span class="math inline">\(\rho_0\)</span> and <span class="math inline">\(\rho_1\)</span> to <span class="math inline">\(0.75\)</span>, which equates to strong residual correlation between infection risk and viral load; that might be reasonable if there is an unobserved factor impacting both infection and viral load. Maybe this is prior exposure to the virus plus genetic factors related to immune system health.</p>
 <p>The covariates we’re including in the infection risk equation, <span class="math inline">\(\mu_S(z)\)</span> are age and study site, while the only covariates we’re including in the viral load model are categorical age predictors.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12222</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>sigma_0 <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>sigma_1 <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>sigma_W <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>rho_0 <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>rho_1 <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>lb <span class="ot">&lt;-</span> rho_0<span class="sc">*</span>rho_1 <span class="sc">-</span> <span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> rho_0<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> rho_1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> rho_0<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>rho_1<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>ub <span class="ot">&lt;-</span> rho_0<span class="sc">*</span>rho_1 <span class="sc">+</span> <span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> rho_0<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> rho_1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> rho_0<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>rho_1<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>rho_01 <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>diag_sigs <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(sigma_0,sigma_1,sigma_W))</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>Omega <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,rho_01,rho_0,rho_01,<span class="dv">1</span>,rho_1,rho_0,rho_1,<span class="dv">1</span>),<span class="dv">3</span>,<span class="dv">3</span>)</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">&lt;-</span> diag_sigs <span class="sc">%*%</span> Omega  <span class="sc">%*%</span> diag_sigs</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>U0_U1_W <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">Sigma =</span> Sigma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12222</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">20000</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>sigma_0 <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>sigma_1 <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>sigma_W <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>rho_0 <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>rho_1 <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>lb <span class="ot">&lt;-</span> rho_0<span class="sc">*</span>rho_1 <span class="sc">-</span> <span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> rho_0<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> rho_1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> rho_0<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>rho_1<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>ub <span class="ot">&lt;-</span> rho_0<span class="sc">*</span>rho_1 <span class="sc">+</span> <span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> rho_0<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> rho_1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> rho_0<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>rho_1<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>rho_01 <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>diag_sigs <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(sigma_0,sigma_1,sigma_W))</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>Omega <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,rho_01,rho_0,rho_01,<span class="dv">1</span>,rho_1,rho_0,rho_1,<span class="dv">1</span>),<span class="dv">3</span>,<span class="dv">3</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">&lt;-</span> diag_sigs <span class="sc">%*%</span> Omega  <span class="sc">%*%</span> diag_sigs</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>U0_U1_W <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">Sigma =</span> Sigma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The plot of <span class="math inline">\(U_0\)</span> vs.&nbsp;<span class="math inline">\(W\)</span> gives a sense of how related the two error terms are:</p>
 <div class="cell">
@@ -384,53 +379,53 @@ L_i(\theta) &amp; = \frac{1}{\sqrt{2\pi} \sigma_z}\exp\left(-\frac{1}{2\sigma_z^
 </div>
 <p>The covariates we will include in the model are age, which we treat as a categorical variable, the study site, which is also treated as a categorical variable, and the binary treatment variable, which is assumed to be balanced within study sites.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>N_age <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>N_sites <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>age_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(N_age, n, <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">factor</span>()</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>site_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>N_sites,<span class="at">each=</span>n <span class="sc">/</span> N_sites) <span class="sc">|&gt;</span> <span class="fu">factor</span>()</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>treat <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>,n<span class="sc">/</span><span class="dv">20</span>),<span class="fu">rep</span>(<span class="dv">1</span>,n<span class="sc">/</span><span class="dv">20</span>)),<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>N_age <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>N_sites <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>age_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(N_age, n, <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">factor</span>()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>site_vec <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>N_sites,<span class="at">each=</span>n <span class="sc">/</span> N_sites) <span class="sc">|&gt;</span> <span class="fu">factor</span>()</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>treat <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>,n<span class="sc">/</span><span class="dv">20</span>),<span class="fu">rep</span>(<span class="dv">1</span>,n<span class="sc">/</span><span class="dv">20</span>)),<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We’ll create the model matrices from these variables, along with the coefficients for each model equation:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>X_S <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> age_vec <span class="sc">+</span> site_vec)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>X_Y <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> age_vec)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>d_S <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X_S)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>d_Y <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X_Y)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>gamma_Y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.25</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>gamma_S <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.85</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>beta_S <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fu">rnorm</span>(N_sites <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fl">0.1</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>beta_Y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">10.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>S_0  <span class="ot">&lt;-</span> (X_S <span class="sc">%*%</span> beta_S <span class="sc">+</span> U0_U1_W[,<span class="dv">3</span>]) <span class="sc">&gt;=</span> <span class="dv">0</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>S_1  <span class="ot">&lt;-</span> (X_S <span class="sc">%*%</span> beta_S <span class="sc">+</span> gamma_S <span class="sc">+</span> U0_U1_W[,<span class="dv">3</span>]) <span class="sc">&gt;=</span> <span class="dv">0</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">as.integer</span>(S_0), <span class="fu">as.integer</span>(S_1))</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>Y_0  <span class="ot">&lt;-</span> X_Y <span class="sc">%*%</span> beta_Y <span class="sc">+</span> U0_U1_W[,<span class="dv">1</span>]</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>Y_1  <span class="ot">&lt;-</span> X_Y <span class="sc">%*%</span> beta_Y <span class="sc">+</span> gamma_Y <span class="sc">+</span> U0_U1_W[,<span class="dv">2</span>]</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">ifelse</span>(S_0 <span class="sc">==</span> <span class="dv">1</span>, Y_0, <span class="cn">NA</span>),</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>(S_1 <span class="sc">==</span> <span class="dv">1</span>, Y_1, <span class="cn">NA</span>))</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>sel <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">rbind</span>(<span class="dv">1</span><span class="sc">-</span>treat, treat))</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>S_o <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(S))[sel <span class="sc">==</span> <span class="dv">1</span>]</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>Y_o <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(Y))[sel <span class="sc">==</span> <span class="dv">1</span>]</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>idx_S_o <span class="ot">&lt;-</span> <span class="fu">which</span>(S_o <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>idx_AI <span class="ot">&lt;-</span> <span class="fu">which</span>(S_0 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> S_1 <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>Y_o_sel <span class="ot">&lt;-</span> Y_o[idx_S_o]</span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>X_Y_sel <span class="ot">&lt;-</span> X_Y[idx_S_o, ]</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>naive_estimand <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">exp</span>(Y_o_sel[treat[idx_S_o] <span class="sc">==</span> <span class="dv">1</span>])) <span class="sc">-</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mean</span>(<span class="fu">exp</span>(Y_o_sel[treat[idx_S_o] <span class="sc">==</span> <span class="dv">0</span>]))</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>Y_estimand <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">exp</span>(Y_1[idx_AI])) <span class="sc">-</span></span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>               <span class="fu">mean</span>(<span class="fu">exp</span>(Y_0[idx_AI]))</span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>n_s_0 <span class="ot">&lt;-</span> <span class="fu">sum</span>(treat[idx_S_o] <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>n_s_1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(treat[idx_S_o] <span class="sc">==</span> <span class="dv">0</span>)</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>n_AI <span class="ot">&lt;-</span> <span class="fu">length</span>(idx_AI)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>X_S <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> age_vec <span class="sc">+</span> site_vec)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>X_Y <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> age_vec)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>d_S <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X_S)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>d_Y <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X_Y)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>gamma_Y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.25</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>gamma_S <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.85</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>beta_S <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fu">rnorm</span>(N_sites <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fl">0.1</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>beta_Y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">10.3</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>S_0  <span class="ot">&lt;-</span> (X_S <span class="sc">%*%</span> beta_S <span class="sc">+</span> U0_U1_W[,<span class="dv">3</span>]) <span class="sc">&gt;=</span> <span class="dv">0</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>S_1  <span class="ot">&lt;-</span> (X_S <span class="sc">%*%</span> beta_S <span class="sc">+</span> gamma_S <span class="sc">+</span> U0_U1_W[,<span class="dv">3</span>]) <span class="sc">&gt;=</span> <span class="dv">0</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">as.integer</span>(S_0), <span class="fu">as.integer</span>(S_1))</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>Y_0  <span class="ot">&lt;-</span> X_Y <span class="sc">%*%</span> beta_Y <span class="sc">+</span> U0_U1_W[,<span class="dv">1</span>]</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>Y_1  <span class="ot">&lt;-</span> X_Y <span class="sc">%*%</span> beta_Y <span class="sc">+</span> gamma_Y <span class="sc">+</span> U0_U1_W[,<span class="dv">2</span>]</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">ifelse</span>(S_0 <span class="sc">==</span> <span class="dv">1</span>, Y_0, <span class="cn">NA</span>),</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>           <span class="fu">ifelse</span>(S_1 <span class="sc">==</span> <span class="dv">1</span>, Y_1, <span class="cn">NA</span>))</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>sel <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">rbind</span>(<span class="dv">1</span><span class="sc">-</span>treat, treat))</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>S_o <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(S))[sel <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>Y_o <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(Y))[sel <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>idx_S_o <span class="ot">&lt;-</span> <span class="fu">which</span>(S_o <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>idx_AI <span class="ot">&lt;-</span> <span class="fu">which</span>(S_0 <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> S_1 <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>Y_o_sel <span class="ot">&lt;-</span> Y_o[idx_S_o]</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>X_Y_sel <span class="ot">&lt;-</span> X_Y[idx_S_o, ]</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>naive_estimand <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">exp</span>(Y_o_sel[treat[idx_S_o] <span class="sc">==</span> <span class="dv">1</span>])) <span class="sc">-</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mean</span>(<span class="fu">exp</span>(Y_o_sel[treat[idx_S_o] <span class="sc">==</span> <span class="dv">0</span>]))</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>Y_estimand <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">exp</span>(Y_1[idx_AI])) <span class="sc">-</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>               <span class="fu">mean</span>(<span class="fu">exp</span>(Y_0[idx_AI]))</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>n_s_0 <span class="ot">&lt;-</span> <span class="fu">sum</span>(treat[idx_S_o] <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>n_s_1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(treat[idx_S_o] <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>n_AI <span class="ot">&lt;-</span> <span class="fu">length</span>(idx_AI)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>After all is said and done, the finite-sample estimator for the population estimand is -63,883, with a standard error of 6888.1207534 while the naive estimator for the population estimand is 41,600 with a standard error of 8335.141496. Note that these standard errors are understated a bit because the selection indicators are treated as fixed. In reality, both the selection and the outcome are random, so a more complete standard error calculation would account for the randomness in both sets of outcomesboth sets of outcomes.</p>
 <p>This means that the naive estimator understates the benefit of the vaccine for people who are always infected by about 165%.</p>
@@ -440,18 +435,18 @@ L_i(\theta) &amp; = \frac{1}{\sqrt{2\pi} \sigma_z}\exp\left(-\frac{1}{2\sigma_z^
 <li>Data block</li>
 </ol>
 <div class="cell" data-output.var="test">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N;     </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_neg; </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_pos; </span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; D_S;   </span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; D_Y;   </span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N_pos] Y;    </span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=<span class="dv">1</span>&gt; S;  </span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=<span class="dv">1</span>&gt; Z;  </span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N_pos,D_Y] X_Y; </span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N,D_S] X_S;  </span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N;     </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_neg; </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_pos; </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; D_S;   </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; D_Y;   </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N_pos] Y;    </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=<span class="dv">1</span>&gt; S;  </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=<span class="dv">1</span>&gt; Z;  </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N_pos,D_Y] X_Y; </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N,D_S] X_S;  </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We need the number of observations, <code>N</code>, the number of negative and positive cases (<code>N_neg</code> and <code>N_pos</code>). We also need the dimensions of the predictors for the <span class="math inline">\(S\)</span> equation and the <span class="math inline">\(Y\)</span> equation, <code>D_S</code> and <code>D_Y</code>. The observed viral loads are collected into a length-<code>N_pos</code> vector <code>Y</code>, while the observed infection status and treatment assignment are collected into length-<code>N</code> binary integer arrays <code>S</code> and <code>Z</code>. Finally, we have the predictors for the <span class="math inline">\(Y\)</span> equation, <code>X_Y</code>, which is an <code>N_pos</code> by <code>D_Y</code> matrix, and the predictors for the <span class="math inline">\(S\)</span> equation, which is an <code>N</code> by <code>D_S</code> matrix.</p>
 <ol start="2" type="1">
@@ -460,153 +455,153 @@ L_i(\theta) &amp; = \frac{1}{\sqrt{2\pi} \sigma_z}\exp\left(-\frac{1}{2\sigma_z^
 <p>The <strong>transformed data</strong> block is needed to collect the indices, measured from <span class="math inline">\(1,\dots,N\)</span>, of the negative cases (<span class="math inline">\(S_i = 0\)</span>) and positive cases (<span class="math inline">\(S_i = 1\)</span>). The reason we need this information is because the likelihood contribution to the infection status probit model, shown in <a href="#eq-pos-idx">Equation&nbsp;1</a>, requires the value of the log-viral load, so we’ll need to match the infection status outcomes to the viral load outcomes. We could do this matching in the R code outside the Stan model, but I prefer to do it within the Stan code so everything is in one place. We’ll collect the indices of the positive cases in <code>n_pos</code>, which is an array of length <code>N_pos</code> and holds integers between <code>1</code> and <code>N</code>, while negative case indices are collected in <code>n_neg</code>, defined similarly.</p>
 <p>The other piece of information the infection status likelihood will need for positive cases is the value <span class="math inline">\(\rho_z\)</span>, which depends on the individual treatment assignment. This information is collected in the vector <code>Z_idx</code>.</p>
 <div class="cell" data-output.var="test">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_pos] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>,<span class="kw">upper</span>=N&gt; n_pos;</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_neg] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=N&gt; n_neg;</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span> Z_idx;</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i;</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> j;</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    i = <span class="dv">1</span>;</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    j = <span class="dv">1</span>;</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (S[n] == <span class="dv">1</span>) {</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        n_pos[i] = n;</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        i = i + <span class="dv">1</span>;</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>        n_neg[j] = n;</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>        j = j + <span class="dv">1</span>;</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>      Z_idx[n] = Z[n] + <span class="dv">1</span>;</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_pos] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>,<span class="kw">upper</span>=N&gt; n_pos;</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_neg] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=N&gt; n_neg;</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span> Z_idx;</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i;</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> j;</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    i = <span class="dv">1</span>;</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    j = <span class="dv">1</span>;</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (S[n] == <span class="dv">1</span>) {</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        n_pos[i] = n;</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        i = i + <span class="dv">1</span>;</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>        n_neg[j] = n;</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        j = j + <span class="dv">1</span>;</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>      Z_idx[n] = Z[n] + <span class="dv">1</span>;</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="3" type="1">
 <li>Parameters block</li>
 </ol>
 <p>The <strong><em>parameter</em></strong> block is where we define which unknown parameters we need to estimate with our model. Our unknown parameters is the set: - <span class="math inline">\(\boldsymbol{\Omega}\)</span>: correlation matrix between the error terms for the regressions - <span class="math inline">\(\sigma_0\)</span>: error standard deviation for log-viral load regression in placebo group - <span class="math inline">\(\sigma_1\)</span>: error standard deviation for log-viral load regression in treatment group - <span class="math inline">\(\beta_y\)</span>: regression coefficients for the log-viral load regression - <span class="math inline">\(\beta_s\)</span> - <span class="math inline">\(\gamma_s\)</span> _y)$, the correlation matrix for the errors. In our case, we have a</p>
 <div class="cell" data-output.var="test">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">cholesky_factor_corr</span>[<span class="dv">3</span>] L_Omega;</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[<span class="dv">2</span>] sd_Y;</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[D_Y] b_Y;</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[D_S] b_S;</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> gamma_S;</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> gamma_Y;</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">cholesky_factor_corr</span>[<span class="dv">3</span>] L_Omega;</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[<span class="dv">2</span>] sd_Y;</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[D_Y] b_Y;</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[D_S] b_S;</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> gamma_S;</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> gamma_Y;</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The Stan model is written like so:</p>
 <div class="cell" data-output.var="model">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N;     </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_neg; </span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_pos; </span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; D_S;   </span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; D_Y;   </span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N_pos] Y;    </span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=<span class="dv">1</span>&gt; S;  </span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=<span class="dv">1</span>&gt; Z;  </span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N_pos,D_Y] X_Y; </span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N,D_S] X_S;  </span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_pos] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>,<span class="kw">upper</span>=N&gt; n_pos;</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_neg] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=N&gt; n_neg;</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span> Z_idx;</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i;</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> j;</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    i = <span class="dv">1</span>;</span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    j = <span class="dv">1</span>;</span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (S[n] == <span class="dv">1</span>) {</span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>        n_pos[i] = n;</span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>        i = i + <span class="dv">1</span>;</span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>        n_neg[j] = n;</span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        j = j + <span class="dv">1</span>;</span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>      Z_idx[n] = Z[n] + <span class="dv">1</span>;</span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
-<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>  <span class="dt">cholesky_factor_corr</span>[<span class="dv">3</span>] L_Omega;</span>
-<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[<span class="dv">2</span>] sd_Y;</span>
-<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[D_Y] b_Y;</span>
-<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[D_S] b_S;</span>
-<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> gamma_S;</span>
-<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> gamma_Y;</span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
-<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[<span class="dv">3</span>,<span class="dv">3</span>] Omega = L_Omega * L_Omega';</span>
-<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] mu_S = X_S * b_S + to_vector(Z) * gamma_S;</span>
-<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N_pos] mu_Y = X_Y * b_Y + to_vector(Z[n_pos]) * gamma_Y;</span>
-<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[<span class="dv">2</span>] <span class="dt">real</span> rho = {Omega[<span class="dv">1</span>,<span class="dv">3</span>], Omega[<span class="dv">2</span>,<span class="dv">3</span>]};</span>
-<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>  b_Y ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>  b_S ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
-<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>  sd_Y ~ normal(<span class="dv">0</span>, <span class="dv">2</span>);</span>
-<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>  gamma_S ~ normal(<span class="dv">0</span>, <span class="dv">5</span>);</span>
-<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>  gamma_Y ~ normal(<span class="dv">0</span>, <span class="dv">5</span>);</span>
-<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N_neg) {</span>
-<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">target +=</span> log(Phi(-mu_S[n_neg[n]]));</span>
-<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N_pos) {</span>
-<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> treat_idx = Z_idx[n_pos[n]];</span>
-<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a>    <span class="kw">target +=</span> log(Phi(sqrt((<span class="dv">1</span> - rho[treat_idx]) * (<span class="dv">1</span> + rho[treat_idx]))^(-<span class="dv">1</span>)*(mu_S[n_pos[n]]</span>
-<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>                               + rho[treat_idx] / sd_Y[treat_idx]</span>
-<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>                               * (Y[n] - mu_Y[n]))));</span>
-<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a>    Y[n] ~ normal(mu_Y[n], sd_Y[treat_idx]);</span>
-<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
-<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[<span class="dv">2</span>] <span class="dt">real</span> rho = {Omega[<span class="dv">1</span>,<span class="dv">3</span>], Omega[<span class="dv">2</span>,<span class="dv">3</span>]};</span>
-<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> Y_estimand = <span class="dv">0</span>;</span>
-<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a>    <span class="dt">vector</span>[N] mu_S = X_S * b_S;</span>
-<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a>    <span class="dt">matrix</span>[<span class="dv">3</span>,<span class="dv">3</span>] Sigma = quad_form_diag(Omega, append_row(sd_Y, [<span class="dv">1</span>]'));</span>
-<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tot_11 = <span class="dv">0</span>;</span>
-<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
-<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a>      <span class="dt">vector</span>[<span class="dv">3</span>] errors = multi_normal_rng(rep_vector(<span class="dv">0</span>,<span class="dv">3</span>), Sigma);</span>
-<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (errors[<span class="dv">3</span>] &gt; -mu_S[n] - gamma_S &amp;&amp; errors[<span class="dv">3</span>] &gt; -mu_S[n]) {</span>
-<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a>        <span class="dt">real</span> mu_Y_cf = X_S[n,<span class="dv">1</span>:D_Y] * b_Y;</span>
-<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a>        <span class="dt">real</span> Y_0 = errors[<span class="dv">1</span>] + mu_Y_cf;</span>
-<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a>        <span class="dt">real</span> Y_1 = errors[<span class="dv">2</span>] + mu_Y_cf + gamma_Y;</span>
-<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a>        Y_estimand += Y_1 -  Y_0;</span>
-<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a>        tot_11 += <span class="dv">1</span>;</span>
-<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a>    Y_estimand /= tot_11;</span>
-<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">data</span> {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N;     </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_neg; </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; N_pos; </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; D_S;   </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; D_Y;   </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N_pos] Y;    </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=<span class="dv">1</span>&gt; S;  </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=<span class="dv">1</span>&gt; Z;  </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N_pos,D_Y] X_Y; </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[N,D_S] X_S;  </span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_pos] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>,<span class="kw">upper</span>=N&gt; n_pos;</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_neg] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=N&gt; n_neg;</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span> Z_idx;</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i;</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> j;</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    i = <span class="dv">1</span>;</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    j = <span class="dv">1</span>;</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (S[n] == <span class="dv">1</span>) {</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>        n_pos[i] = n;</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>        i = i + <span class="dv">1</span>;</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>        n_neg[j] = n;</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>        j = j + <span class="dv">1</span>;</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>      Z_idx[n] = Z[n] + <span class="dv">1</span>;</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="kw">parameters</span> {</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>  <span class="dt">cholesky_factor_corr</span>[<span class="dv">3</span>] L_Omega;</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt;[<span class="dv">2</span>] sd_Y;</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[D_Y] b_Y;</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[D_S] b_S;</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> gamma_S;</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> gamma_Y;</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed parameters</span> {</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[<span class="dv">3</span>,<span class="dv">3</span>] Omega = L_Omega * L_Omega';</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N] mu_S = X_S * b_S + to_vector(Z) * gamma_S;</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>  <span class="dt">vector</span>[N_pos] mu_Y = X_Y * b_Y + to_vector(Z[n_pos]) * gamma_Y;</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[<span class="dv">2</span>] <span class="dt">real</span> rho = {Omega[<span class="dv">1</span>,<span class="dv">3</span>], Omega[<span class="dv">2</span>,<span class="dv">3</span>]};</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>  b_Y ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>  b_S ~ normal(<span class="dv">0</span>, <span class="dv">1</span>);</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>  sd_Y ~ normal(<span class="dv">0</span>, <span class="dv">2</span>);</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>  gamma_S ~ normal(<span class="dv">0</span>, <span class="dv">5</span>);</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>  gamma_Y ~ normal(<span class="dv">0</span>, <span class="dv">5</span>);</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N_neg) {</span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>    <span class="kw">target +=</span> log(Phi(-mu_S[n_neg[n]]));</span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N_pos) {</span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> treat_idx = Z_idx[n_pos[n]];</span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>    <span class="kw">target +=</span> log(Phi(sqrt((<span class="dv">1</span> - rho[treat_idx]) * (<span class="dv">1</span> + rho[treat_idx]))^(-<span class="dv">1</span>)*(mu_S[n_pos[n]]</span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a>                               + rho[treat_idx] / sd_Y[treat_idx]</span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>                               * (Y[n] - mu_Y[n]))));</span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>    Y[n] ~ normal(mu_Y[n], sd_Y[treat_idx]);</span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[<span class="dv">2</span>] <span class="dt">real</span> rho = {Omega[<span class="dv">1</span>,<span class="dv">3</span>], Omega[<span class="dv">2</span>,<span class="dv">3</span>]};</span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>  <span class="dt">real</span> Y_estimand = <span class="dv">0</span>;</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>    <span class="dt">vector</span>[N] mu_S = X_S * b_S;</span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a>    <span class="dt">matrix</span>[<span class="dv">3</span>,<span class="dv">3</span>] Sigma = quad_form_diag(Omega, append_row(sd_Y, [<span class="dv">1</span>]'));</span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> tot_11 = <span class="dv">0</span>;</span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a>      <span class="dt">vector</span>[<span class="dv">3</span>] errors = multi_normal_rng(rep_vector(<span class="dv">0</span>,<span class="dv">3</span>), Sigma);</span>
+<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (errors[<span class="dv">3</span>] &gt; -mu_S[n] - gamma_S &amp;&amp; errors[<span class="dv">3</span>] &gt; -mu_S[n]) {</span>
+<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a>        <span class="dt">real</span> mu_Y_cf = X_S[n,<span class="dv">1</span>:D_Y] * b_Y;</span>
+<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a>        <span class="dt">real</span> Y_0 = errors[<span class="dv">1</span>] + mu_Y_cf;</span>
+<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a>        <span class="dt">real</span> Y_1 = errors[<span class="dv">2</span>] + mu_Y_cf + gamma_Y;</span>
+<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a>        Y_estimand += Y_1 -  Y_0;</span>
+<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a>        tot_11 += <span class="dv">1</span>;</span>
+<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb16-83"><a href="#cb16-83" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb16-84"><a href="#cb16-84" aria-hidden="true" tabindex="-1"></a>    Y_estimand /= tot_11;</span>
+<span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-86"><a href="#cb16-86" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-output.var="test">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_pos] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>,<span class="kw">upper</span>=N&gt; n_pos;</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_neg] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=N&gt; n_neg;</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span> Z_idx;</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  {</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i;</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> j;</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    i = <span class="dv">1</span>;</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    j = <span class="dv">1</span>;</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (S[n] == <span class="dv">1</span>) {</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        n_pos[i] = n;</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        i = i + <span class="dv">1</span>;</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        n_neg[j] = n;</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        j = j + <span class="dv">1</span>;</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>      }</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>      Z_idx[n] = Z[n] + <span class="dv">1</span>;</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">transformed data</span> {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_pos] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>,<span class="kw">upper</span>=N&gt; n_pos;</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N_neg] <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>,<span class="kw">upper</span>=N&gt; n_neg;</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[N] <span class="dt">int</span> Z_idx;</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> i;</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> j;</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    i = <span class="dv">1</span>;</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    j = <span class="dv">1</span>;</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span>:N) {</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (S[n] == <span class="dv">1</span>) {</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        n_pos[i] = n;</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        i = i + <span class="dv">1</span>;</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>        n_neg[j] = n;</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        j = j + <span class="dv">1</span>;</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>      Z_idx[n] = Z[n] + <span class="dv">1</span>;</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Some comments on the Stan code are in order. The data block is pretty straightforward, though it’s worth keeping in mind that we’ll need to keep track of three dimensions: the total number of data points, the number of infected and uninfected patients. This is because we’ll only have access to viral loads in the infected patients.</p>
 <p>Let’s generate some data to see how the errors change how the .</p>
