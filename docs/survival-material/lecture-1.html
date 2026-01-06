@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 625 - W 26</title>
+<title>Lecture 1</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,47 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +88,60 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +157,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -117,14 +188,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
+  <li><a href="#sec-intro" id="toc-sec-intro" class="nav-link active" data-scroll-target="#sec-intro"><span class="header-section-number">1</span> Introduction</a>
   <ul class="collapse">
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
-  <li><a href="#course-syllabus" id="toc-course-syllabus" class="nav-link" data-scroll-target="#course-syllabus">Course syllabus</a></li>
-  <li><a href="#project-proposal" id="toc-project-proposal" class="nav-link" data-scroll-target="#project-proposal">Project proposal</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
+  <li><a href="#sec-indycensor" id="toc-sec-indycensor" class="nav-link" data-scroll-target="#sec-indycensor"><span class="header-section-number">1.1</span> Independent censoring</a></li>
+  </ul></li>
+  <li><a href="#sec-mttf" id="toc-sec-mttf" class="nav-link" data-scroll-target="#sec-mttf"><span class="header-section-number">2</span> Mean time to failure</a></li>
+  <li><a href="#sec-survfun" id="toc-sec-survfun" class="nav-link" data-scroll-target="#sec-survfun"><span class="header-section-number">3</span> Survival function</a>
+  <ul class="collapse">
+  <li><a href="#sec-prop-surv-fun" id="toc-sec-prop-surv-fun" class="nav-link" data-scroll-target="#sec-prop-surv-fun"><span class="header-section-number">3.1</span> Properties of the survival function</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -134,7 +205,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 625 - W 26</h1>
+<h1 class="title">Lecture 1</h1>
 </div>
 
 
@@ -151,51 +222,91 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level2">
-<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
-<section id="textbook" class="level3">
-<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
-<ul>
-<li><p>Required: <em>Modelling Survival Data in Medical Research, 4th Edition,</em> Collett</p></li>
-<li><p>Optional: <em>Survival and Event History Analysis</em>, Aalen, Borgan, and Gjessing</p></li>
-<li><p>Optional: <em>Counting Processes and Survival Analysis</em>, Fleming and Harrington</p></li>
-</ul>
+<section id="sec-intro" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>This introduction is based in part on <span class="citation" data-cites="klein2003survival">Klein, Moeschberger, et al. (<a href="#ref-klein2003survival" role="doc-biblioref">2003</a>)</span>, and in part on <span class="citation" data-cites="aalen2008survival">Aalen, Borgan, and Gjessing (<a href="#ref-aalen2008survival" role="doc-biblioref">2008</a>)</span> plus <span class="citation" data-cites="fleming2005counting">Fleming and Harrington (<a href="#ref-fleming2005counting" role="doc-biblioref">2005</a>)</span>.</p>
+<p>Survival analysis is the modeling and analysis of time-to-event data; this means we will be studying how to model random variables (time will always be measured in such a way so that the observations are nonnegative). Think about a clinical trial for a new COVID vaccine and how you might model the length of time between study entry and infection in each arm of the trial. Let <span class="math inline">\(X_i\)</span> be the time from trial entry to infection for the <span class="math inline">\(i\)</span>-th participant. These sorts of trials are typically run until a prespecified number of people have become infected. Let <span class="math inline">\(n\)</span> be the total number of participants in the trial and let <span class="math inline">\(r\)</span> be the prespecified number of infections. Let <span class="math inline">\(T_i\)</span> be the observed infection time for the <span class="math inline">\(i\)</span>-th participant. This means that for <span class="math inline">\(r\)</span> participants, <span class="math inline">\(T_i = X_i\)</span>, but for <span class="math inline">\(n-r\)</span> participants we know only that the time-to-infection is larger than the observed time. Let <span class="math inline">\(C_i\)</span> denote the time from study entry for participant <span class="math inline">\(i\)</span> to study end. Then <span class="math inline">\(T_i = \min (X_i, C_i)\)</span>, and let <span class="math inline">\(\delta_i = \ind{T_i = X_i}\)</span>. The density of <span class="math inline">\(T_i\)</span> is related to the joint probability for <span class="math inline">\(X_i\)</span> and <span class="math inline">\(C_i\)</span>, which is indexed by a possibly infinite dimensional parameter <span class="math inline">\(\theta\)</span>: <span class="math inline">\(P_{\theta}(X_i &gt; t, C_i &gt; c)\)</span>. When <span class="math inline">\(\delta_i = 1\)</span>, and <span class="math inline">\(T_i = X_i\)</span>, the likelihood of the observation is <span class="math display">\[
+\left.\lp-\frac{\partial}{\partial u}P_{\theta}(X_i &gt; u, C_i &gt; t)\rp\right\rvert_{u = t},
+\]</span> while the likelihood for <span class="math inline">\(\delta_i = 0\)</span> is <span class="math display">\[
+\left.\lp-\frac{\partial}{\partial u}P_{\theta}(X_i &gt; t, C_i &gt; u)\rp\right\rvert_{u = t},
+\]</span> Then <span class="math inline">\(T_i = C_i\)</span> for the other <span class="math inline">\(n-r\)</span> participants. Under the null hypothesis that the vaccine has no effect, the population distribution function for all <span class="math inline">\(n\)</span> participants for <span class="math inline">\(X_i, C_i\)</span> is <span class="math inline">\(P_{\theta}(X_1 &gt; x, C_1 &gt; c)\)</span> (i.e.&nbsp;the distribution for survival times in the treatment group and the placebo group is the same). Then the joint density for the observed infection times is as follows: <span class="math display">\[\begin{align*}
+f_{T_1, \dots, T_n}(t_1, \dots, t_n ;\, \theta) &amp; = n! \prod_{i=1}^r \left.\lp-\frac{\partial}{\partial u}P_{\theta}(X_1 &gt; u, C_1 &gt; t_{(i)})\rp\right\rvert_{u = t_{(i)}} \\
+&amp; \times \prod_{i=r+1}^n \left.\lp-\frac{\partial}{\partial u}P_{\theta}(X_1 &gt; t_{(i)}, C_1 &gt; u)\rp\right\rvert_{u = t_{(i)}},
+\end{align*}\]</span> where <span class="math inline">\(t_{(i)}\)</span> is the <span class="math inline">\(i\)</span>-th order statistic of the set <span class="math inline">\(\{t_1, \dots, t_n\}\)</span>. Note that this is different from most other data analysis where missing observations are not expected to occur with much frequency. On the contrary, in survival analysis, missingness, both <em>truncation</em> and <em>censoring</em> are expected to occur with nearly every dataset, so much of our time will be spent ensuring our methods work when data arise with these peculiarities.</p>
+<section id="sec-indycensor" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="sec-indycensor"><span class="header-section-number">1.1</span> Independent censoring</h2>
+<p>Now suppose that <span class="math inline">\(X_1 \indy C_1\)</span>, and that <span class="math inline">\(\theta\)</span> partitions into <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span>, such that <span class="math display">\[
+P_{\theta}(X_1 &gt; x, C_1 &gt; c) = P_{\eta}(X_1 &gt; x)P_{\phi}(C_1 &gt; c).
+\]</span> Then we can rewrite the joint observational density for <span class="math inline">\(T_i\)</span> as: <span class="math display">\[\begin{align*}
+f_{T_1, \dots, T_n}(t_1, \dots, t_n ;\, \theta) &amp; = n! \lp \prod_{i=1}^r f_{X_1}(t_{(i)} ;\, \eta) \rp \prod_{i=r+1}^n P_{\eta}(X_1 &gt; t_{(i)}) \\
+&amp; \times \lp \prod_{i=1}^r P_{\phi}(C_1 &gt; t_{(i)}) \rp \prod_{i=r+1}^n f_C(t_{(i)} ;\, \phi).
+\end{align*}\]</span> If we are only interested about inference about <span class="math inline">\(\eta\)</span>, the parameters that govern the distribution of the true time-to-infection random variables, we can ignore the the distribution for the censoring random variables <span class="math inline">\(C_1\)</span>, and maximize the likelihood because, in <span class="math inline">\(\eta\)</span>: <span class="math display">\[\begin{align*}
+f_{T_1, \dots, T_n}(t_1, \dots, t_n ;\, \eta) \propto \lp \prod_{i=1}^r f_{X_1}(t_{(i)} ;\, \eta) \rp \prod_{i=r+1}^n P_{\eta}(X_1 &gt; t_{(i)})  
+\end{align*}\]</span> We will talk in more detail about censoring in the coming lectures.</p>
 </section>
-<section id="course-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
-<p>To highlight the unique challenges posed by the analysis of failure/survival data. To allow you to analyze survival data using parametric and nonparametric techniques in the face of these challenges. To apply these techniques to real data using R code and R packages for survival analysis. To understand the theory and methodology through math, practice and code.</p>
-<p><strong>Course content</strong></p>
-<p>Concepts to be discussed include: hazard function (failure rate function); nonparametric likeli- hood; counting processes; empirical distribution function; censoring and truncation; Kaplan-Meier estimator; Bias of the KM estimator; Cox proportional hazards model; Accelerated Failure Time Model; Partial Likelihood; log-rank test; martingales. R will be the programming language used in the course.</p>
 </section>
-<section id="course-syllabus" class="level3">
-<h3 class="anchored" data-anchor-id="course-syllabus">Course syllabus</h3>
-<ul>
-<li><a href="pdfs/survival-class/survival_analysis_syllabus_W26.pdf">Syllabus</a></li>
-</ul>
+<section id="sec-mttf" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Mean time to failure</h1>
+<p><span class="citation" data-cites="aalen2008survival">Aalen, Borgan, and Gjessing (<a href="#ref-aalen2008survival" role="doc-biblioref">2008</a>)</span> notes that we cannot even compute a simple mean in this situation, so something like a t-test will be useless. As an aside, let’s try to compute a mean from the data above. Let <span class="math inline">\(\bar{T} = \frac{1}{n} \sum_{i=1}^n T_i\)</span>. We can show that <span class="math inline">\(\lim_{n \to \infty} \bar{T} \leq \Exp{X_i}\)</span> with probability <span class="math inline">\(1\)</span>.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>Let <span class="math inline">\(T_i = X_i \ind{X_i \leq C_i} + C_i \ind{X_i &gt; C_i}\)</span>. Then by the SLLN <span class="math inline">\(\bar{T} \overset{\text{a.s.}}{\to} \Exp{T_i}\)</span>. <span class="math display">\[\begin{align*}
+\Exp{T_i} &amp; = \Exp{X_i \ind{X_i \leq C_i}} + \Exp{C_i \ind{X_i &gt; C_i}} \\
+&amp; \leq \Exp{X_i \ind{X_i \leq C_i}} + \Exp{X_i \ind{X_i &gt; C_i}} = \Exp{X_i}
+\end{align*}\]</span></p>
+</div>
 </section>
-<section id="project-proposal" class="level3">
-<h3 class="anchored" data-anchor-id="project-proposal">Project proposal</h3>
-<ul>
-<li><a href="pdfs/survival-class/project-proposal.pdf">Project proposal</a></li>
-</ul>
-</section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ul>
-<li><a href="./survival-material/lecture-1.html">Lecture 1</a></li>
-</ul>
-</section>
-<section id="homework" class="level3">
-<h3 class="anchored" data-anchor-id="homework">Homework</h3>
-<ul>
-<li><a href="pdfs/survival-class/HW-1.pdf">HW 1</a> <!-- -   [HW 2](pdfs/survival-class/HW-2.pdf) --> <!-- -   [HW 3](pdfs/survival-class/HW-3.pdf) --> <!-- -   [HW 4](pdfs/survival-class/HW-4.pdf) --> <!-- -   [HW 5](pdfs/survival-class/HW-5.pdf) --> <!-- -   [HW 6](pdfs/survival-class/HW-6.pdf) --></li>
-</ul>
+<section id="sec-survfun" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Survival function</h1>
+<p>How can we compute the mean time to infection then? One way to estimate the mean time to infection is to first estimate the function <span class="math inline">\(S_{X_i}(t ;\, \theta) = P_{\theta}(X_i &gt; t)\)</span>, which is also known as the . Recall this fact about non-negative random variables <span class="math inline">\(X_i \geq 0\)</span> w.p. 1: <span class="math display">\[\begin{align*}
+\Exp{X_i} = \int_0^\infty P_{\theta}(X_i &gt; t) dt    
+\end{align*}\]</span> This follows from an application of Fubini’s theorem applied to the integral: <span class="math display">\[\begin{align*}
+\Exp{X_i} &amp; = \int_0^\infty u dP_{X_i}(u ;\, \theta) \\
+&amp; = \int_0^\infty \int_{0}^\infty \ind{0 \leq t \leq u} dt \, dP_{X_i}(u ;\, \theta) \\
+&amp; = \int_0^\infty \int_{0}^\infty \ind{0 \leq t \leq u} dP_{X_i}(u ;\, \theta) dt \\
+&amp; = \int_0^\infty P_{\theta}(X_i &gt; t) dt
+\end{align*}\]</span></p>
+<section id="sec-prop-surv-fun" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="sec-prop-surv-fun"><span class="header-section-number">3.1</span> Properties of the survival function</h2>
+<p>Let <span class="math inline">\(F_{X_i}(t ;\, \theta) = P_{\theta}(X_i \leq t)\)</span>. Then because the survival function is defined as <span class="math inline">\(S_{X_i}(t ;\, \theta) = 1 - F_{X_i}(t ;\, \theta)\)</span> (also known as the complementary CDF) the survival function inherits its properties from the CDF. The survival function:</p>
+<ol type="1">
+<li><p><span class="math inline">\(S_{X_i}(t ;\, \theta)\)</span> is a nonincreasing function</p></li>
+<li><p><span class="math inline">\(S_{X_i}(0 ;\, \theta) = 1\)</span></p></li>
+<li><p><span class="math inline">\(\lim_{t\to\infty} S_{X_i}(t ;\, \theta) = 0\)</span></p></li>
+<li><p>Has lefthand limits: <span class="math inline">\(\lim_{s \nearrow t} S_{X_i}(s ;\, \theta) = S_{X_i}(t-;\, \theta).\)</span></p></li>
+<li><p>Is right continuous: <span class="math inline">\(\lim_{s \searrow t} S_{X_i}(s;\, \theta) = S_{X_i}(t;\, \theta).\)</span></p></li>
+</ol>
+<p>An example of a discrete survival function is shown in <a href="#fig-example-disc-surv-fun" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-example-disc-surv-fun" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-example-disc-surv-fun-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-1_files/figure-html/fig-example-disc-surv-fun-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-example-disc-surv-fun-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Example plot of a survival function for a discrete survival time, bounded between <span class="math inline">\([0,10]\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
+
 </section>
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-aalen2008survival" class="csl-entry" role="listitem">
+Aalen, Odd, Ornulf Borgan, and Hakon Gjessing. 2008. <em>Survival and Event History Analysis: A Process Point of View</em>. Springer Science &amp; Business Media.
+</div>
+<div id="ref-fleming2005counting" class="csl-entry" role="listitem">
+Fleming, Thomas R, and David P Harrington. 2005. <span>“Counting Processes and Survival Analysis.”</span> <em>Wiley Series in Probability and Statistics</em>.
+</div>
+<div id="ref-klein2003survival" class="csl-entry" role="listitem">
+Klein, John P, Melvin L Moeschberger, et al. 2003. <em>Survival Analysis: Techniques for Censored and Truncated Data</em>. Vol. 1230. Springer.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
