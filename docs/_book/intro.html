@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Lecture 1</title>
+<title>1&nbsp; Introduction – survival-notes</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -43,30 +43,32 @@ div.csl-indent {
 }</style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./summary.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-27c261d06b905028a18691de25d09dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "navbar",
+  "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "end",
-  "type": "overlay",
+  "panel-placement": "start",
+  "type": "textbox",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -104,7 +106,6 @@ window.MathJax = {
         \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
         \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
         \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
-        \newcommand{\abs}[1]{\ensuremath{\left| #1 \right|}}
       `);
     }
   },
@@ -143,62 +144,91 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
-      <div class="navbar-container container-fluid">
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-  <span class="navbar-toggler-icon"></span>
-</button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../papers.html"> 
-<span class="menu-text">My papers</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../blog.html"> 
-<span class="menu-text">Random thoughts</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../courses.html"> 
-<span class="menu-text">Courses</span></a>
-  </li>  
-</ul>
-          </div> <!-- /navcollapse -->
-            <div class="quarto-navbar-tools">
-</div>
-      </div> <!-- /container-fluid -->
-    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">survival-notes</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-intro" id="toc-sec-intro" class="nav-link active" data-scroll-target="#sec-intro"><span class="header-section-number">1</span> Introduction</a>
-  <ul>
-  <li><a href="#sec-indycensor" id="toc-sec-indycensor" class="nav-link" data-scroll-target="#sec-indycensor"><span class="header-section-number">1.1</span> Independent censoring</a></li>
+  <li><a href="#sec-indycensor" id="toc-sec-indycensor" class="nav-link active" data-scroll-target="#sec-indycensor"><span class="header-section-number">1.1</span> Independent censoring</a></li>
   <li><a href="#sec-mttf" id="toc-sec-mttf" class="nav-link" data-scroll-target="#sec-mttf"><span class="header-section-number">1.2</span> Mean time to failure</a></li>
   <li><a href="#sec-survfun" id="toc-sec-survfun" class="nav-link" data-scroll-target="#sec-survfun"><span class="header-section-number">1.3</span> Survival function</a>
   <ul class="collapse">
   <li><a href="#sec-prop-surv-fun" id="toc-sec-prop-surv-fun" class="nav-link" data-scroll-target="#sec-prop-surv-fun"><span class="header-section-number">1.3.1</span> Properties of the survival function</a></li>
   </ul></li>
+  <li><a href="#hazard-function" id="toc-hazard-function" class="nav-link" data-scroll-target="#hazard-function"><span class="header-section-number">1.4</span> Hazard function</a>
+  <ul class="collapse">
+  <li><a href="#properties-of-the-hazard-function" id="toc-properties-of-the-hazard-function" class="nav-link" data-scroll-target="#properties-of-the-hazard-function"><span class="header-section-number">1.4.1</span> Properties of the hazard function</a></li>
   </ul></li>
+  <li><a href="#density-function-for-survival-time" id="toc-density-function-for-survival-time" class="nav-link" data-scroll-target="#density-function-for-survival-time"><span class="header-section-number">1.5</span> Density function for survival time</a></li>
+  <li><a href="#sec-cumu-haz" id="toc-sec-cumu-haz" class="nav-link" data-scroll-target="#sec-cumu-haz"><span class="header-section-number">1.6</span> Cumulative hazard function</a></li>
+  <li><a href="#discrete-survival-time" id="toc-discrete-survival-time" class="nav-link" data-scroll-target="#discrete-survival-time"><span class="header-section-number">1.7</span> Discrete survival time</a></li>
+  <li><a href="#sec:disc-continue" id="toc-sec:disc-continue" class="nav-link" data-scroll-target="#sec\:disc-continue"><span class="header-section-number">1.8</span> Connection between discrete and continuous survival functions</a></li>
+  <li><a href="#mean-residual-lifetime" id="toc-mean-residual-lifetime" class="nav-link" data-scroll-target="#mean-residual-lifetime"><span class="header-section-number">1.9</span> Mean residual lifetime</a></li>
   </ul>
 </nav>
     </div>
@@ -207,7 +237,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Lecture 1</h1>
+<h1 class="title"><span id="sec-intro" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></h1>
 </div>
 
 
@@ -224,9 +254,7 @@ window.Quarto = {
 </header>
 
 
-<section id="sec-intro" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
-<p>This introduction is based in part on <span class="citation" data-cites="klein2003survival">Klein, Moeschberger, et al. (<a href="#ref-klein2003survival" role="doc-biblioref">2003</a>)</span>, and in part on <span class="citation" data-cites="aalen2008survival">Aalen, Borgan, and Gjessing (<a href="#ref-aalen2008survival" role="doc-biblioref">2008</a>)</span> plus <span class="citation" data-cites="fleming2005counting">Fleming and Harrington (<a href="#ref-fleming2005counting" role="doc-biblioref">2005</a>)</span>.</p>
+<p>This introduction is based in part on <span class="citation" data-cites="klein2003survival">Klein, Moeschberger, et al. (<a href="references.html#ref-klein2003survival" role="doc-biblioref">2003</a>)</span>, and in part on <span class="citation" data-cites="aalen2008survival">Aalen, Borgan, and Gjessing (<a href="references.html#ref-aalen2008survival" role="doc-biblioref">2008</a>)</span> plus <span class="citation" data-cites="fleming2005counting">Fleming and Harrington (<a href="references.html#ref-fleming2005counting" role="doc-biblioref">2005</a>)</span>.</p>
 <p>Survival analysis is the modeling and analysis of time-to-event data; this means we will be studying how to model <strong>nonnegative</strong> random variables (time will always be measured in such a way so that the observations are nonnegative). Think about a clinical trial for a new COVID vaccine and how you might model the length of time between study entry and infection in each arm of the trial. Let <span class="math inline">\(X_i\)</span> be the time from trial entry to infection for the <span class="math inline">\(i\)</span>-th participant. These sorts of trials are typically run until a prespecified number of people have become infected. Let <span class="math inline">\(n\)</span> be the total number of participants in the trial and let <span class="math inline">\(r\)</span> be the prespecified number of infections. Let <span class="math inline">\(T_i\)</span> be the observed infection time for the <span class="math inline">\(i\)</span>-th participant. This means that for <span class="math inline">\(r\)</span> participants, <span class="math inline">\(T_i = X_i\)</span>, but for <span class="math inline">\(n-r\)</span> participants we know only that the time-to-infection is larger than the observed time. Let <span class="math inline">\(C_i\)</span> denote the time from study entry for participant <span class="math inline">\(i\)</span> to study end. Then <span class="math inline">\(T_i = \min (X_i, C_i)\)</span>, and let <span class="math inline">\(\delta_i = \ind{T_i = X_i}\)</span>. The density of <span class="math inline">\(T_i\)</span> is related to the joint probability for <span class="math inline">\(X_i\)</span> and <span class="math inline">\(C_i\)</span>, which is indexed by a possibly infinite dimensional parameter <span class="math inline">\(\theta\)</span>: <span class="math inline">\(P_{\theta}(X_i &gt; t, C_i &gt; c)\)</span>. When <span class="math inline">\(\delta_i = 1\)</span>, and <span class="math inline">\(T_i = X_i\)</span>, the likelihood of the observation is <span class="math display">\[
 \left.\lp-\frac{\partial}{\partial u}P_{\theta}(X_i &gt; u, C_i &gt; t)\rp\right\rvert_{u = t},
 \]</span> while the likelihood for <span class="math inline">\(\delta_i = 0\)</span> is <span class="math display">\[
@@ -248,7 +276,7 @@ f_{T_1, \dots, T_n}(t_1, \dots, t_n ;\, \eta) \propto \lp \prod_{i=1}^r f_{X_1}(
 </section>
 <section id="sec-mttf" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="sec-mttf"><span class="header-section-number">1.2</span> Mean time to failure</h2>
-<p><span class="citation" data-cites="aalen2008survival">Aalen, Borgan, and Gjessing (<a href="#ref-aalen2008survival" role="doc-biblioref">2008</a>)</span> notes that we cannot even compute a simple mean in this situation, so something like a t-test will be useless. As an aside, let’s try to compute a mean from the data above. Let <span class="math inline">\(\bar{T} = \frac{1}{n} \sum_{i=1}^n T_i\)</span>. We can show that <span class="math inline">\(\lim_{n \to \infty} \bar{T} \leq \Exp{X_i}\)</span> with probability <span class="math inline">\(1\)</span>.</p>
+<p><span class="citation" data-cites="aalen2008survival">Aalen, Borgan, and Gjessing (<a href="references.html#ref-aalen2008survival" role="doc-biblioref">2008</a>)</span> notes that we cannot even compute a simple mean in this situation, so something like a t-test will be useless. As an aside, let’s try to compute a mean from the data above. Let <span class="math inline">\(\bar{T} = \frac{1}{n} \sum_{i=1}^n T_i\)</span>. We can show that <span class="math inline">\(\lim_{n \to \infty} \bar{T} \leq \Exp{X_i}\)</span> with probability <span class="math inline">\(1\)</span>.</p>
 <div class="proof">
 <p><span class="proof-title"><em>Proof</em>. </span>Let <span class="math inline">\(T_i = X_i \ind{X_i \leq C_i} + C_i \ind{X_i &gt; C_i}\)</span>. Then by the SLLN <span class="math inline">\(\bar{T} \overset{\text{a.s.}}{\to} \Exp{T_i}\)</span>. <span class="math display">\[\begin{align*}
 \Exp{T_i} &amp; = \Exp{X_i \ind{X_i \leq C_i}} + \Exp{C_i \ind{X_i &gt; C_i}} \\
@@ -276,29 +304,163 @@ f_{T_1, \dots, T_n}(t_1, \dots, t_n ;\, \eta) \propto \lp \prod_{i=1}^r f_{X_1}(
 <li><p>Has lefthand limits: <span class="math inline">\(\lim_{s \nearrow t} S_{X_i}(s ;\, \theta) = S_{X_i}(t-;\, \theta).\)</span></p></li>
 <li><p>Is right continuous: <span class="math inline">\(\lim_{s \searrow t} S_{X_i}(s;\, \theta) = S_{X_i}(t;\, \theta).\)</span></p></li>
 </ol>
-<p>An example of a discrete survival function is shown in <a href="#fig-example-disc-surv-fun" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<p>An example of a discrete survival function is shown in <a href="#fig-example-disc-surv-fun" class="quarto-xref">Figure&nbsp;<span>1.1</span></a>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-example-disc-surv-fun" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-example-disc-surv-fun-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="lecture-1_files/figure-html/fig-example-disc-surv-fun-1.png" class="img-fluid figure-img" width="672">
+<img src="intro_files/figure-html/fig-example-disc-surv-fun-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-example-disc-surv-fun-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Example plot of a survival function for a discrete survival time, bounded between <span class="math inline">\([0,10]\)</span>
+Figure&nbsp;1.1: Example plot of a survival function for a discrete survival time, bounded between <span class="math inline">\([0,10]\)</span>
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-
-
-
 </section>
 </section>
+<section id="hazard-function" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="hazard-function"><span class="header-section-number">1.4</span> Hazard function</h2>
+<p>Another way to characterize the random variable <span class="math inline">\(X_i\)</span> is the <em>hazard function</em>, which is typically denoted as <span class="math inline">\(\lambda(t)\)</span> or <span class="math inline">\(h(t)\)</span> and is defined as <span class="math display">\[\begin{align*}
+\lambda_{X_i}(t) &amp; = \lim_{\Delta t \searrow 0}\frac{1}{\Delta t}\Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t}{\theta} \\
+&amp; = \lim_{\Delta t \searrow 0}\frac{1}{\Delta t}\frac{\Prob{t \leq X_i &lt; t + \Delta t}{\theta}}{\Prob{X_i \geq t }{\theta}}
+\end{align*}\]</span> First, note that we can define <span class="math inline">\(\Prob{X_i \geq t}{\theta}\)</span> in terms of the survival function as: <span class="math display">\[
+\Prob{X_i \geq t}{\theta} = \lim_{s\nearrow t} S_{X_i}(s ;\, \theta).
+\]</span> Using the notation introduced in <a href="#sec-prop-surv-fun" class="quarto-xref"><span>Section 1.3.1</span></a>, we can write this as <span class="math display">\[
+\Prob{X_i \geq t}{\theta} = S_{X_i}(t- ;\, \theta).
+\]</span> Of course, when <span class="math inline">\(X_i\)</span> is absolutely continuous,<span class="math inline">\(S_{X_i}(t- ;\, \theta) = S_{X_i}(t ;\, \theta)\)</span>, but when <span class="math inline">\(X_i\)</span> is discrete, or mixed discrete and continuous, as noted above, it is not true in general that the survival function is left-continuous.</p>
+<p>A few things to note about <span class="math inline">\(\lambda_{X_i}(t ;\, \theta)\)</span>: when <span class="math inline">\(X_i\)</span> is an absolutely continuous random variable, which occurs when we’re considering survival in continuous time, we can write this in terms of the probability density function <span class="math inline">\(f_{X_i}(t ;\, \theta)\)</span> and the cumulative distribution function <span class="math inline">\(F_{X_i}(t ;\, \theta)\)</span>: <span class="math display">\[\begin{align*}
+\lambda_{X_i}(t) &amp; = \lim_{\Delta t \searrow 0}\frac{1}{\Delta t}\frac{\Prob{t \leq X_i &lt; t + \Delta t}{\theta}}{\Prob{X_i \geq t}{\theta}} \\
+&amp; = \lim_{\Delta t \searrow 0}\frac{F_{X_i}(t + \Delta t;\, \theta) - F_{X_i}(t;\, \theta)}{\Delta t} \times \frac{1}{1 - F_{X_i}(t;\, \theta)} \\
+&amp; = \frac{f_{X_i}(t;\, \theta)}{1 - F_{X_i}(t;\, \theta)}.
+\end{align*}\]</span> Let’s examine how the survival function and the hazard function fit together. <span class="math display">\[
+\lambda_{X_i}(t) = \frac{f_{X_i}(t ;\, \theta)}{S_{X_i}(t- ;\, \theta)}.
+\]</span> Note that we can write the hazard function in terms of the survival function instead of the density, when <span class="math inline">\(X_i\)</span> is absolutely continuous: <span class="math display">\[\begin{align*}
+\lambda_{X_i}(t) &amp; = \lim_{\Delta t \searrow 0}\frac{1}{\Delta t}\frac{\Prob{t \leq X_i &lt; t + \Delta t}{\theta}}{\Prob{X_i \geq t}{\theta}} \\
+&amp; = \lim_{\Delta t \searrow 0}\frac{S_{X_i}(t ;\, \theta)-S_{X_i}(t + \Delta t ;\, \theta) }{\Delta t} \times \frac{1}{S_{X_i}(t ;\, \theta)} \\
+&amp; = -\frac{d}{dt} S_{X_i}(t ;\, \theta)/S_{X_i}(t ;\, \theta).
+\end{align*}\]</span> This implies that <span class="math display">\[
+\lambda_{X_i}(t) = -\frac{d}{dt} \log S_{X_i}(t ;\, \theta).
+\]</span> If we integrate both sides, we get another important identity in survival analysis: <span class="math display">\[\begin{align}
+   \int_{0}^u \frac{d}{dt} \log S_{X_i}(t ;\, \theta) dt &amp; = -\int_{0}^u\lambda_{X_i}(t) dt \\
+   \log S_{X_i}(u ;\, \theta) - \log S_{X_i}(0 ;\, \theta) &amp; = -\int_{0}^u\lambda_{X_i}(t) dt \quad \text{note}\,\,\, S_{X_i}(0 ;\, \theta) = 1\\
+   S_{X_i}(u ;\, \theta) &amp; = \exp \lp -\int_{0}^u\lambda_{X_i}(t) dt\rp \label{eq:exp-hazard}
+\end{align}\]</span></p>
+<section id="properties-of-the-hazard-function" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="properties-of-the-hazard-function"><span class="header-section-number">1.4.1</span> Properties of the hazard function</h3>
+<p>The relationship <span class="math inline">\(S_{X_i}(u;\,\theta) = \exp \lp -\int_{0}^u\lambda_{X_i}(t) dt\rp\)</span> and the properties of the survival function reveal the following facts about the hazard function and highlight its differences with a probability density.</p>
+<ol type="1">
+<li><p><span class="math inline">\(\lim_{t\to\infty} S_{X_i}(t;\,\theta) = 0\)</span> implies that <span class="math inline">\(\lim_{t\to\infty} \int_0^t \lambda_X(u) du = \infty\)</span></p></li>
+<li><p>Given that <span class="math inline">\(S_{X_i}(t;\,\theta)\)</span> is a nonincreasing function, <span class="math inline">\(\lambda_X(t) \geq 0\)</span> for all <span class="math inline">\(t\)</span>.</p></li>
+</ol>
+<p>So unlike a probability density function, <span class="math inline">\(\lambda_X(t)\)</span> isn’t integrable over the support of the random variable.</p>
 </section>
+</section>
+<section id="density-function-for-survival-time" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="density-function-for-survival-time"><span class="header-section-number">1.5</span> Density function for survival time</h2>
+<p>Given that we have <span class="math inline">\(S_{X_i}(t;\,\theta)\)</span> and <span class="math inline">\(\lambda(t) = \frac{f_{X_i}(t;\,\theta)}{S_{X_i}(t-;\,\theta)}\)</span>, we can recover the density, <span class="math inline">\(f_{X_i}(t;\,\theta)\)</span> easily: <span class="math display">\[
+f_{X_i}(t;\,\theta) = \lambda_{X_i}(t) S_{X_i}(t-;\,\theta)
+\]</span></p>
+</section>
+<section id="sec-cumu-haz" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="sec-cumu-haz"><span class="header-section-number">1.6</span> Cumulative hazard function</h2>
+<p>One final important quantity that describes a survival distribution is that of <em>cumulative hazard</em>, which we’ll denote as <span class="math inline">\(\Lambda_{X_i}(t)\)</span>, though it is also denoted as <span class="math inline">\(H(t)\)</span> in <span class="citation" data-cites="klein2003survival">Klein, Moeschberger, et al. (<a href="references.html#ref-klein2003survival" role="doc-biblioref">2003</a>)</span>. This is defined as you might expect: <span class="math display">\[
+\Lambda_{X_i}(t) = \int_{0}^t \lambda_{X_i}(u) du.
+\]</span> It has the important property that for any absolutely continuous failure time <span class="math inline">\(X_i\)</span> with a given cumulative hazard function, the random variable <span class="math inline">\(Y_i = \Lambda_{X_i}(X_i)\)</span> is exponentially distributed with rate <span class="math inline">\(1\)</span>. The derivation is straightforward. Remember that <span class="math inline">\(P(X_i &gt; t) = \exp\lp-\Lambda_{X_i}(t)\rp\)</span> <span class="math display">\[\begin{align*}
+P(\Lambda_{X_i}(X_i) &gt; t) &amp; = P(X_i &gt; \Lambda_{X_i}^{-1}(t)) \\
+&amp; = \exp\lp-\Lambda_{X_i}(\Lambda_{X_i}^{-1}(t))\rp \\
+&amp; = \exp\lp-t\rp
+\end{align*}\]</span></p>
+</section>
+<section id="discrete-survival-time" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="discrete-survival-time"><span class="header-section-number">1.7</span> Discrete survival time</h2>
+<p>We’ve been working with continuous survival times until now. If <span class="math inline">\(X_i\)</span> is a discrete random variable with support on <span class="math inline">\(\{t_1, t_2, \dots\}\)</span>, we lose some of the tidyness of the previous derivations. We can define the distribution of <span class="math inline">\(X_i\)</span> in terms of the survival function, <span class="math inline">\(P_{\theta}(X_i &gt; t)\)</span>. First let <span class="math inline">\(p_j = P_{\theta}(X_i = t_j)\)</span>, so <span class="math display">\[
+S_{X_i}(t;\,\theta) = P_{\theta}(X_i &gt; t) = \sum_{j \mid t_j &gt; t} p_j
+\]</span> We can also define the hazard function for a discrete random variable: <span class="math display">\[
+\lambda_{X_i}(t_j) = \frac{p_j}{S_{X_i}(t_{j-1};\,\theta)} = \frac{p_j}{p_j + p_{j+1} + \dots}
+\]</span> Note that <span class="math inline">\(p_j = S_{X_i}(t_{j-1};\,\theta) - S_{X_i}(t_{j};\,\theta)\)</span>, then <span class="math display">\[
+\lambda_{X_i}(t_j) = 1 - \frac{S_{X_i}(t_j;\,\theta)}{S_{X_i}(t_{j-1};\,\theta)}.
+\]</span> If we let <span class="math inline">\(t_0 = 0\)</span> then <span class="math inline">\(S_{X_i}(t_0;\,\theta) = 1\)</span>. This allows us to write the survival function in a sort of telescoping product: <span class="math display">\[\begin{align*}
+P_{\theta}(X_i &gt; t_j) &amp; = P_{\theta}(X_i &gt; t_0) \frac{P_{\theta}(X_i &gt; t_1)}{P_{\theta}(X_i &gt; t_0)} \frac{P_{\theta}(X_i &gt; t_2)}{P_{\theta}(X_i &gt; t_1)} \dots \frac{P_{\theta}(X_i &gt; t_j)}{P_{\theta}(X_i &gt; t_{j-1})} \\
+   &amp; =  1 \frac{S_{X_i}(t_1;\,\theta)}{S_{X_i}(t_0;\,\theta)}\frac{S_{X_i}(t_2;\,\theta)}{S_{X_i}(t_1;\,\theta)}  \dots \frac{S_{X_i}(t_j;\,\theta)}{S_{X_i}(t_{j-1};\,\theta)}
+\end{align*}\]</span> This yields another way to write <span class="math inline">\(S_{X_i}(t;\,\theta)\)</span>: <span id="eq-discrete-survival"><span class="math display">\[
+\begin{aligned}
+S_{X_i}(t;\,\theta) = \prod_{j \mid t_j \leq t} (1 - \lambda_{X_i}(t_j)).
+\end{aligned}
+\tag{1.1}\]</span></span> It turns out that we can write the survival function for continuous random variables in the same way.</p>
+</section>
+<section id="sec:disc-continue" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="sec:disc-continue"><span class="header-section-number">1.8</span> Connection between discrete and continuous survival functions</h2>
+<p>Recall the definition of the hazard function: <span class="math display">\[
+\lambda_{X_i}(t) = \lim_{\Delta t \searrow 0}\frac{1}{\Delta t}\Prob{t \leq X &lt; t + \Delta t \mid X \geq t}{\theta}
+\]</span> Note that $_{X_i}(t) ,t $ is approximately <span class="math inline">\(\Prob{t \leq X &lt; t + \Delta t \mid X \geq t}{\theta}\)</span>. Let <span class="math inline">\(\mathcal{T}\)</span> be a partition of <span class="math inline">\((0,\infty)\)</span> with partition size <span class="math inline">\(\Delta t\)</span>, <span class="math inline">\(t_0 = 0\)</span>: <span class="math display">\[
+\mathcal{T} = \bigcup_{j=0}^\infty [t_j, t_j + \Delta t).
+\]</span> Then we can use <a href="#eq-discrete-survival" class="quarto-xref">Equation&nbsp;<span>1.1</span></a> to represent the survival function: <span class="math display">\[\begin{align}
+S_{X_i}(t;\,\theta) = \prod_{j \mid t_j + \Delta t \leq t} (1 - \lambda_{X_i}(t_j)\Delta t).
+\end{align}\]</span> We can show that as the partition of the time domain gets finer and finer, we will recover <span class="math inline">\(S_{X_i}(t;\,\theta) = \exp(-\int_0^t\lambda_{X_i}(u)du)\)</span> <span class="math display">\[\begin{align}
+S_{X_i}(t;\,\theta) &amp; = \prod_{j \in \mathcal{T} \mid t_j + \Delta t \leq t} (1 - \lambda_{X_i}(t_j)\Delta t) \\
+\log S_{X_i}(t;\,\theta)&amp; = \sum_{j \in \mathcal{T} \mid t_j + \Delta t \leq t} \log(1 - \lambda_{X_i}(t_j)\Delta t)
+\end{align}\]</span> We use the Taylor expansion of <span class="math inline">\(\log(1 - \lambda_{X_i}(t_j) \Delta t)\)</span> for small <span class="math inline">\(\lambda_{X_i}(t_j) \Delta t\)</span>, assuming that <span class="math inline">\(\lambda_{X_i}(t)\)</span> is sufficiently well-behaved for all <span class="math inline">\(t\)</span>. <span class="math display">\[
+\log(1 - \lambda_{X_i}(t_j) \Delta t) \approxeq -\lambda_{X_i}(t_j) \Delta t.
+\]</span> Then <span class="math display">\[\begin{align}
+\log S_{X_i}(t;\,\theta)&amp; \approxeq \sum_{j \in \mathcal{T} \mid t_j + \Delta t \leq t} -\lambda_{X_i}(t_j)\Delta t
+\end{align}\]</span> As <span class="math display">\[
+\lim_{\Delta t \searrow 0} \sum_{j \in \mathcal{T} \mid t_j + \Delta t \leq t} -\lambda_{X_i}(t_j)\Delta t = -\int_0^t \lambda_{X_i}(u) du.
+\]</span> So, <span class="math inline">\(S_{X_i}(t;\,\theta) = \exp(-\int_0^t\lambda_{X_i}(u)du)\)</span>, or <span id="eq-suvival-exp-cumulative-hazard"><span class="math display">\[
+\begin{aligned}
+S_{X_i}(t;\,\theta) = \exp(-\lambda_{X_i}(t))
+\end{aligned}
+\tag{1.2}\]</span></span></p>
+</section>
+<section id="mean-residual-lifetime" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="mean-residual-lifetime"><span class="header-section-number">1.9</span> Mean residual lifetime</h2>
+<p>We also might be interested in the <em>mean residual lifetime</em> (mrl for short), or the expected lifetime given survival up to a certain point: <span class="math display">\[
+\Exp{X_i - x \mid X_i &gt; x}.
+\]</span> We can compute this for an absolutely continuous random variable by using the survival function: <span class="math display">\[\begin{align*}
+    \frac{\int_{x}^\infty (u - x) f_{X_i}(u ;\, \eta) du}{S_{X_i}(x;\, \eta)} = \frac{\int_x^\infty S_{X_i}(u;\, \eta) du }{S_{X_i}(x;\, \eta)}
+\end{align*}\]</span> To derive the mrl in terms of the survival function, note that we can use Fubini again on the numerator (Exercise 1), or <!-- %\begin{align*} --> <!-- %    \int_{x}^\infty (u - x) f_{X_i}(u) du & = \int_{x}^\infty \int_0^\infty \ind{0 \leq s \leq u - x} ds f_{X_i}(u) du \\ --> <!-- %    & =  \int_0^\infty \int_{x}^\infty\ind{x \leq s + x \leq u} f_{X_i}(u) du ds \\ --> <!-- %    & = \int_0^\infty P(X_i > s + x) ds \\ --> <!-- %    & = \int_x^\infty P(X_i > v) dv --> <!-- %\end{align*} --> we can use integration by parts: <span class="math display">\[\begin{align*}
+    \int_{x}^\infty (u - x) f_{X_i}(u) du &amp; = -\int_{x}^\infty (u - x) \frac{d}{du} S_{X_i}(u) du \\
+    &amp; = \left.-(u-x) S_{X_i}(u)\right\rvert_{u=x}^\infty + \int_x^\infty S_{X_i}(u) du
+\end{align*}\]</span> and use the fact that <span class="math inline">\(\lim_{u\to\infty} S_{X_i}(u) = 0\)</span>. We also need the following: <span id="eq-tail"><span class="math display">\[
+\begin{align}
+    \lim_{u\to\infty} u P(X_i &gt; u) = 0.
+\end{align}
+\tag{1.3}\]</span></span> This is a pretty weak condition, random variables with second moments satisfy this condition (Exercise 2), as do random variables with only first moments. It turns out that under this condition we’ll have a weak law of large numbers (see 7.1 in <span class="citation" data-cites="resnick2019probability">Resnick (<a href="references.html#ref-resnick2019probability" role="doc-biblioref">2019</a>)</span>).</p>
+<p>Suppose we assume that <span class="math inline">\(\Exp{X} \leq \infty\)</span>. Then we can write: <span class="math display">\[
+\Exp{X} = \Exp{X \ind{X \leq n}}+\Exp{X \ind{X &gt; n}}
+\]</span> Note that if we define <span class="math inline">\(X_n = X \ind{X \leq n}\)</span> then <span class="math display">\[
+X_1(\omega) \leq X_2(\omega) \leq \dots \leq X_k(\omega) \leq \dots.
+\]</span> By the Monotone Convergence Theorem (MCT), <span class="math inline">\(\Exp{X_n} \to \Exp{X}\)</span>. Then <span class="math display">\[\begin{align*}
+\Exp{X} &amp; = \Exp{X_n}+\Exp{X \ind{X &gt; n}} \\
+&amp; \geq \Exp{X_n}+\Exp{n \ind{X &gt; n}} \\
+&amp; = \Exp{X_n}+n P(X &gt; n)
+\end{align*}\]</span> This leads to the system of inequqalities: <span class="math display">\[\begin{align*}
+\Exp{X} - \Exp{X_n} \geq n P(X &gt; n) \geq 0.
+\end{align*}\]</span></p>
+<p>By the MCT <span class="math inline">\(\Exp{X} - \Exp{X_n} \to 0\)</span> so <span class="math display">\[
+    \lim_{n\to\infty} n P(X_i &gt; n) = 0.
+\]</span> However, there are random variables for which <span class="math inline">\(\Exp{X_i}\)</span> does not exist, but do satisfy (see the end of 7.1 in <span class="citation" data-cites="resnick2019probability">Resnick (<a href="references.html#ref-resnick2019probability" role="doc-biblioref">2019</a>)</span>).</p>
+<p>The first example we’ll run through is for an exponentially distributed survival time: <span class="math display">\[X_i \overset{\mathrm{iid}}{\sim} \mathrm{Exp}(\lambda).\]</span> The survival function is <span class="math inline">\(S_{X}(t) = e^{-\lambda t}\)</span>. We can read off from this that <span class="math inline">\(\Lambda(t) = \lambda t\)</span>. What’s the hazard function? Let’s plot the hazard function. What does this imply about the exponential distribution (memorylessness)? The mean lifetime is <span class="math inline">\(\frac{1}{\lambda}\)</span>. The mean residual lifetime is: <span class="math display">\[\begin{align*}
+   \frac{\int_{t}^\infty e^{-\lambda u} du}{e^{-\lambda t}} &amp; = \frac{1}{\lambda}\frac{e^{-\lambda t} du}{e^{-\lambda t}} \\
+    &amp; = \frac{1}{\lambda}.
+\end{align*}\]</span> This is a consequence of the memoryless property of the exponential distribution.</p>
+<p>Another parametric distribution for survival times is the Weibull. <span class="math display">\[X_i \overset{\mathrm{iid}}{\sim} \mathrm{Weibull}(\gamma, \alpha).\]</span> The survival function: <span class="math display">\[
+S_X(t) = \exp(-\gamma t ^ \alpha).
+\]</span> Again, we have that <span class="math inline">\(\Lambda(t) = \gamma t ^ \alpha\)</span>, so we can take the derivative with respect to <span class="math inline">\(t\)</span> to get the hazard: <span class="math display">\[
+\lambda(t) = \gamma \alpha t^{\alpha - 1}.
+\]</span> This is more flexible than the exponential distribution, though note that for <span class="math inline">\(\alpha = 1\)</span>, <span class="math inline">\(X_i \sim \text{Exponential}(\gamma)\)</span>, so the Weibull family contains the exponential family as a special case. The <span class="math inline">\(\alpha\)</span> parameter allows for the hazard rate to have more flexibility than the exponential. If <span class="math inline">\(\alpha &gt; 1\)</span>, the hazard rate is increasing in <span class="math inline">\(t\)</span>. This corresponds to an aging process, whereby the longer something has survived, the higher the rate of failure. If <span class="math inline">\(\alpha &lt; 1\)</span>, the hazard rate is decreasing in <span class="math inline">\(t\)</span>. This might correspond to something like the hazard for SIDS, which is quite high for children before 1 year old, but drops off rapidly after 1. Let’s compute the mean lifetime, <span class="math inline">\(\Exp{X} = \int_0^\infty S_X(t) dt\)</span>, using a <span class="math inline">\(v\)</span>-sub, <span class="math inline">\(v = t^\alpha\)</span>, so <span class="math inline">\(v^{\frac{1}{\alpha}} = t \to \frac{1}{\alpha} v^{\frac{1}{\alpha} - 1} dv = dt\)</span>: <span class="math display">\[\begin{align*}
+   \int_0^\infty \exp(-\gamma t ^ \alpha)dt &amp; = \frac{1}{\alpha} \int_0^\infty v^{\frac{1}{\alpha} - 1} \exp(-\gamma v)dv \\
+   &amp; = \frac{1}{\alpha} \frac{1}{\gamma^{\frac{1}{\alpha}}} \Gamma(\frac{1}{\alpha}) \\
+   &amp; = \frac{\Gamma(\frac{1}{\alpha} + 1)}{\gamma^{\frac{1}{\alpha}}}
+\end{align*}\]</span> The mean residual lifetime is a bit more involved. Let <span class="math inline">\(v = \gamma u^\alpha\)</span> so <span class="math inline">\(\lp\frac{v}{\gamma}\rp^{1/\alpha} = u \to \gamma^{-1/\alpha}\frac{1}{\alpha} v^{\frac{1}{\alpha} - 1} dv = du\)</span>: <span class="math display">\[\begin{align*}
+   \int_t^\infty \exp(-\gamma u ^ \alpha)du &amp; = \gamma^{-1/\alpha}\frac{1}{\alpha} \int_{\gamma t^\alpha}^\infty v^{\frac{1}{\alpha} - 1} \exp(-v)dv \\
+   &amp; = \gamma^{-1/\alpha}\frac{1}{\alpha} \Gamma(\frac{1}{\alpha}, \gamma t^\alpha),
+\end{align*}\]</span> where <span class="math inline">\(\Gamma(\frac{1}{\alpha}, \gamma t^\alpha)\)</span> is the upper incomplete Gamma function.</p>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
 <div id="ref-aalen2008survival" class="csl-entry" role="listitem">
 Aalen, Odd, Ornulf Borgan, and Hakon Gjessing. 2008. <em>Survival and Event History Analysis: A Process Point of View</em>. Springer Science &amp; Business Media.
 </div>
@@ -308,7 +470,13 @@ Fleming, Thomas R, and David P Harrington. 2005. <span>“Counting Processes and
 <div id="ref-klein2003survival" class="csl-entry" role="listitem">
 Klein, John P, Melvin L Moeschberger, et al. 2003. <em>Survival Analysis: Techniques for Censored and Truncated Data</em>. Vol. 1230. Springer.
 </div>
-</div></section></div></main> <!-- /main -->
+<div id="ref-resnick2019probability" class="csl-entry" role="listitem">
+Resnick, Sidney. 2019. <em>A Probability Path</em>. Springer.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -709,6 +877,18 @@ Klein, John P, Melvin L Moeschberger, et al. 2003. <em>Survival Analysis: Techni
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./summary.html" class="pagination-link" aria-label="Summary">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
