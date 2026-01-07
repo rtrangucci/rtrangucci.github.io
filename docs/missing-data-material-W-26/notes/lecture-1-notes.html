@@ -236,7 +236,6 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#missing-completely-at-random-mcar" id="toc-missing-completely-at-random-mcar" class="nav-link" data-scroll-target="#missing-completely-at-random-mcar">Missing completely at random (MCAR)</a></li>
   <li><a href="#missing-at-random-mar" id="toc-missing-at-random-mar" class="nav-link" data-scroll-target="#missing-at-random-mar">Missing at random (MAR)</a></li>
-  <li><a href="#missing-not-at-random-mnar" id="toc-missing-not-at-random-mnar" class="nav-link" data-scroll-target="#missing-not-at-random-mnar">Missing-not-at-random (MNAR)</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -311,6 +310,7 @@ window.Quarto = {
 </div>
 </div>
 <p>While these are worst-case bounds, this shows that even small proportions of missing values can impact inferences if the missingness is correlated with the outcome value.</p>
+<p>To give a sense of how large a proportion of patient might have missing values, a recent clinical trial evaluating Skyrizi, a popular treatment for Crohn’s, had three treatment groups (1 placebo and two active treatment arms), of which 12%, 8% and 15% had missing values for CDAI at week 52.</p>
 <p>There is also the variance to consider. Even if the covariance between the missing values is zero, we will lose efficiency by dropping observations that have missing values. In the case where our estimator is a sample mean, and there are <span class="math inline">\(n\)</span> units with <span class="math inline">\(m\)</span> missing values, the variance of the CC estimator will be larger by <span class="math inline">\(1 + \frac{m}{n - m}\)</span>.</p>
 <p>Thus, in many cases, even if there are only small proportions of missing values, it can make sense to use partial information from incomplete cases to improve our estimators.</p>
 </section>
@@ -395,72 +395,41 @@ Figure&nbsp;4: General missingness pattern for two variables
 </section>
 <section id="missingness-mechanisms" class="level2">
 <h2 class="anchored" data-anchor-id="missingness-mechanisms">Missingness mechanisms</h2>
-<p>The most important paper in missing data was published by Don Rubin in 1976 <span class="citation" data-cites="rubinInferenceMissingData1976">Donald B. Rubin (<a href="#ref-rubinInferenceMissingData1976" role="doc-biblioref">1976</a>)</span>. Somewhat surprisingly to me, this paper was rejected by many stats journals. Rod Little says that he was assigned to review the paper as a graduate student when it was submitted to Biometrika, and he was convinced the paper was wrong after writing a long review. Luckily Little was overridden by his advisor, David Cox, who thought the paper was right, and decided to accept the paper.</p>
+<p>The most important paper in missing data was published by Don Rubin in 1976 <span class="citation" data-cites="rubinInferenceMissingData1976">Rubin (<a href="#ref-rubinInferenceMissingData1976" role="doc-biblioref">1976</a>)</span>. Somewhat surprisingly to me, this paper was rejected by many stats journals. Rod Little says that he was assigned to review the paper as a graduate student when it was submitted to Biometrika, and he was convinced the paper was wrong after writing a long review. Luckily Little was overridden by his advisor, David Cox, who thought the paper was right, and decided to accept the paper.</p>
 <p>The paper was important because it formalized methods of modeling missingness indicators, or the <span class="math inline">\(M\)</span> matrix from above. Prior to this paper, the <span class="math inline">\(M\)</span> matrix was not considered an outcome that could be modeled. Rubin’s paper instead categorized <span class="math inline">\(M\)</span> as a random variable, and determined how the conditional distribution <span class="math inline">\(M \mid Y\)</span> impacted inferences using only the observed values of <span class="math inline">\(Y\)</span>.</p>
 <p>The various ways in which <span class="math inline">\(M\)</span> can depend on <span class="math inline">\(Y\)</span> is really an investigation of <em>why</em> a value is missing. Is a survey respondent unwilling to report their income because is high? Did the patient drop out of the study because of side-effects of a drug, or because the drug exacerbated their condition? Did a database error lead to the random dropping of records?</p>
 <p>The crux of missing data analysis hinges in what we’re willing to believe about why data are missing. These beliefs aren’t typically testable, unless we have designed our study to have missingness<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<p>Again, let <span class="math inline">\(M\)</span> be the matrix with <span class="math inline">\((i,j)^\text{th}\)</span> entry <span class="math inline">\(m_{ij}\)</span>. Further, let <span class="math inline">\(m_i\)</span> be the <span class="math inline">\(i^\text{th}\)</span> row of <span class="math inline">\(M\)</span>. Let <span class="math inline">\(Y\)</span>, <span class="math inline">\(y_{ij}\)</span> and <span class="math inline">\(y_i\)</span> be similarly defined. We assume for simplicity (and for much of the book) that <span class="math inline">\((m_i, y_i)\)</span> are independent between rows.</p>
+<p>Again, let <span class="math inline">\(M\)</span> be the matrix with <span class="math inline">\((i,j)^\text{th}\)</span> entry <span class="math inline">\(M_{ij}\)</span>. Further, let <span class="math inline">\(M_i\)</span> be the <span class="math inline">\(i^\text{th}\)</span> row of <span class="math inline">\(M\)</span>, let <span class="math inline">\(\tilde{m}_i\)</span> be a particular realization of <span class="math inline">\(M_i\)</span> and let <span class="math inline">\(m_i\)</span> be a dummy value. Let <span class="math inline">\(Y\)</span> be the <span class="math inline">\(n \times K\)</span> matrix of measurements of interest (possibly including covariates), with elements <span class="math inline">\(Y_{ij}\)</span>. Let <span class="math inline">\(Y_i\)</span> be the <span class="math inline">\(i^\mathrm{th}\)</span> row of matrix <span class="math inline">\(Y\)</span>, while <span class="math inline">\(\tilde{y}_i\)</span> is a particular realization of <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(y_i\)</span> is a dummy value. We assume for simplicity (and for much of the book) that <span class="math inline">\((M_i, Y_i)\)</span> are independent between rows.</p>
 <p>To put a finer point on it, there are generally three categories of missingness mechanisms. They each relate to the distribution: <span class="math display">\[
-f_{M \mid Y}(m_i \mid y_i, \phi),
+f_{M_i \mid Y_i}(M_i = \tilde{m}_i \mid Y_i = y_i, \phi),
 \]</span> where <span class="math inline">\(\phi\)</span> are the parameters that govern the missingness mechanism.</p>
-<p>It will be useful in the next subsections to define the following partitions of <span class="math inline">\(y_i\)</span>: Let <span class="math display">\[y_{(0)i} = (y_{ij} : m_{ij} = 0)\]</span> be the vector of components of <span class="math inline">\(y_i\)</span> that are observed for unit <span class="math inline">\(i\)</span> and let <span class="math display">\[y_{(1)i} = (y_{ij} : m_{ij} = 1)\]</span> denote the vector of <span class="math inline">\(y_i\)</span> components that are missing for <span class="math inline">\(y_i\)</span>.</p>
-<p>We can see that <span class="math inline">\(y_{(0)i}, y_{(1)i}\)</span> depend on <span class="math inline">\(m_i\)</span>.</p>
+<p>It will be useful in the next subsections to define the following partitions of <span class="math inline">\(Y_i\)</span>: Let <span class="math display">\[Y_{(0)i} = (Y_{ij} : M_{ij} = 0)\]</span> be the vector of components of <span class="math inline">\(Y_i\)</span> that are observed for unit <span class="math inline">\(i\)</span> and let <span class="math display">\[Y_{(1)i} = (Y_{ij} : M_{ij} = 1)\]</span> denote the vector of <span class="math inline">\(Y_i\)</span> components that are missing for <span class="math inline">\(Y_i\)</span>. The corresponding values, <span class="math inline">\(\tilde{y}_{(0)i}, \tilde{y}_{(1)i}\)</span>. For example: <span class="math display">\[\tilde{y}_{(0)i} = (\tilde{y}_{ij} : \tilde{m}_{ij} = 0)\]</span> are particular realizations of these variables, while <span class="math inline">\(y_{(0)i}, y_{(1)i}\)</span> will be dummy values. For example: <span class="math display">\[y_{(0)i} = (y_{ij} : m_{ij} = 0)\]</span></p>
+<p>We can see that <span class="math inline">\(Y_{(0)i}, Y_{(1)i}, \tilde{y}_{(0)i}, y_{(1)i}, y_{(0)i}, y_{(1)i}\)</span> depend on the missingness indicator variables, <span class="math inline">\(M_i, \tilde{m}_i, m_i\)</span>, respectively.</p>
 <section id="missing-completely-at-random-mcar" class="level3">
 <h3 class="anchored" data-anchor-id="missing-completely-at-random-mcar">Missing completely at random (MCAR)</h3>
 <p>The simplest mechanism is called missing-completely-at-random (MCAR). This is where the missingness is unrelated to the outcome. Data are said to MCAR if the following holds for all <span class="math inline">\(i\)</span>, <span class="math inline">\(y_i\)</span>, <span class="math inline">\(y^\star_i\)</span>, and <span class="math inline">\(\phi\)</span>: <span class="math display">\[
-f_{M\mid Y}(m_i \mid y_i, \phi) = f_{M\mid Y}(m_i \mid y^*_i, \phi).
-\]</span> An imporant clarification is that this <strong>NOT</strong> a conditional independence assumption. It is an assumption about the evaluation of the conditional mass function <span class="math inline">\(f_{M \mid Y}(m_i \mid y_i, \phi)\)</span> at a <em>specific</em> <span class="math inline">\(m_i\)</span> <span class="citation" data-cites="mealliClarifyingMissingRandom2015">(<a href="#ref-mealliClarifyingMissingRandom2015" role="doc-biblioref">Mealli and Rubin 2015</a>)</span>. This point is often misunderstood (including by me).</p>
-<p>Conditional independence, <span class="math inline">\(M \indy Y\)</span> would be characterized as missing-always-completely-at-random (MACAR): Data are said to MACAR if the following holds for all <span class="math inline">\(i\)</span>, <span class="math inline">\(m_i\)</span>, <span class="math inline">\(y_i\)</span>, <span class="math inline">\(y^\star_i\)</span>, and <span class="math inline">\(\phi\)</span>: <span class="math display">\[
-f_{M\mid Y}(m_i \mid y_i, \phi) = f_{M\mid Y}(m_i \mid y^*_i, \phi).
+f_{M_i\mid Y_i}(M_i = \tilde{m}_i \mid Y_i = y_i, \phi) = f_{M\mid Y}(M_i = \tilde{m}_i \mid Y_i = y^*_i, \phi).
+\]</span> An imporant clarification is that this <strong>NOT</strong> a conditional independence assumption. It is an assumption about the evaluation of the conditional mass function <span class="math inline">\(f_{M_i\mid Y_i}(M_i = \tilde{m}_i \mid Y_i = y_i, \phi)\)</span> at a <em>specific</em> <span class="math inline">\(m_i\)</span> <span class="citation" data-cites="mealliClarifyingMissingRandom2015">(<a href="#ref-mealliClarifyingMissingRandom2015" role="doc-biblioref">Mealli and Rubin 2015</a>)</span>. This point is often misunderstood (including by me).</p>
+<p>Conditional independence, <span class="math inline">\(M_i \indy Y_i\)</span> would be characterized as missing-always-completely-at-random (MACAR): Data are said to MACAR if the following holds for all <span class="math inline">\(i\)</span>, <span class="math inline">\(m_i\)</span>, <span class="math inline">\(y_i\)</span>, <span class="math inline">\(y^\star_i\)</span>, and <span class="math inline">\(\phi\)</span>: <span class="math display">\[
+f_{M_i\mid Y_i}(M_i = m_i \mid Y_i = y_i, \phi) = f_{M\mid Y}(M_i = m_i \mid Y_i = y^*_i, \phi).
 \]</span> The next mechanism is less restrictive than MCAR.</p>
 </section>
 <section id="missing-at-random-mar" class="level3">
 <h3 class="anchored" data-anchor-id="missing-at-random-mar">Missing at random (MAR)</h3>
 <p>Missing at random data are characterized by the following equality for all <span class="math inline">\(i\)</span>, <span class="math inline">\(y_{(1)i}\)</span>, <span class="math inline">\(y^*_{(1)i}\)</span>, and <span class="math inline">\(\phi\)</span>: <span class="math display">\[
-f_{M\mid Y}(m_i \mid y_{(0)i}, y_{(1)i} \phi) = f_{M\mid Y}(m_i \mid y_{(0)i}, y^*_{(1)i} \phi)
+f_{M_i\mid Y_i}(M_i = \tilde{m}_i \mid Y_{(0)i} = \tilde{y}_{(0)i}, Y_{(1)i} = y_{(1)i} \phi) = f_{M_i\mid Y_i}(M_i = \tilde{m}_i \mid Y_{(0)i} = \tilde{y}_{(0)i}, Y_{(1)i} = y^\star_{(1)i} \phi)  
 \]</span> Again, as with MCAR, this is a statement about the evaluation of the function <span class="math inline">\(f_{M\mid Y}(m_i \mid y_i, \phi)\)</span>. We can define a missing-at-random variant, missing-always-at-random (MAAR) that is equivalent to <span class="math inline">\(M \indy Y_{(1)i} \mid Y_{(0)i}\)</span><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
-<p>The following example is adapted from <span class="citation" data-cites="mealliClarifyingMissingRandom2015">Mealli and Rubin (<a href="#ref-mealliClarifyingMissingRandom2015" role="doc-biblioref">2015</a>)</span>: Suppose we’re analyzing data from that Crohn’s disease trial and <span class="math inline">\(y_i\)</span> has two components: <span class="math inline">\(y_{i1}\)</span> is CDAI at visit 1 and <span class="math inline">\(y_{i2}\)</span> is CDAI at visit 2. For patient <span class="math inline">\(i\)</span> suppose that <span class="math inline">\(m_i = (1, 0)\)</span>. Consider two scenarios:</p>
+<p>The following example is adapted from <span class="citation" data-cites="mealliClarifyingMissingRandom2015">Mealli and Rubin (<a href="#ref-mealliClarifyingMissingRandom2015" role="doc-biblioref">2015</a>)</span>: Suppose we’re analyzing data from that Crohn’s disease trial and <span class="math inline">\(Y_i\)</span> has two components: <span class="math inline">\(Y_{i1}\)</span> is CDAI at visit 1 and <span class="math inline">\(Y_{i2}\)</span> is CDAI at visit 2. For patient <span class="math inline">\(i\)</span> suppose that <span class="math inline">\(m_i = (0, 1)\)</span>, or that <span class="math inline">\(Y_{i2}\)</span> is missing but <span class="math inline">\(Y_{i1}\)</span> is observed.</p>
+<p>Bringing this example into line with our previous notation, <span class="math inline">\(Y_{(0)i} \equiv Y_{i1}\)</span> and <span class="math inline">\(Y_{(1)i} \equiv Y_{i2}\)</span>. Then <span class="math inline">\(\tilde{y}_{(0)i} \equiv \tilde{y}_{i1}\)</span>.</p>
+<p>Consider two scenarios:</p>
 <ol type="1">
-<li><p><span class="math inline">\(y_{i2}\)</span> is missing because <span class="math inline">\(y_{i1} &gt; \phi\)</span></p></li>
-<li><p><span class="math inline">\(y_{i2}\)</span> is missing because <span class="math inline">\(y_{i2} &gt; \phi\)</span></p></li>
+<li><p><span class="math inline">\(Y_{i2}\)</span> is missing because <span class="math inline">\(Y_{i1} &gt; \phi\)</span>. Given that <span class="math inline">\(0^0 = 1\)</span>, in this scenario the missingness mechanism can be translated as: <span class="math display">\[
+f_{M_{i2}\mid Y_i}(M_{i2} = m_{i2} \mid Y_{(0)i} = \tilde{y}_{(0)i}, Y_{(1)i} = y_{(1)i}, \phi) = \ind{\tilde{y}_{(0)i} &gt; \phi}^{m_{i2}}(1 - \ind{\tilde{y}_{(0)i} &gt; \phi})^{1 - m_{i2}}
+\]</span></p></li>
+<li><p><span class="math inline">\(Y_{i2}\)</span> is missing because <span class="math inline">\(Y_{i2} &gt; \phi\)</span>. This mechanism is translated as <span class="math display">\[
+f_{M_{i2}\mid Y_i}(M_{i2} = m_{i2} \mid Y_{(0)i} = \tilde{y}_{(0)i}, Y_{(1)i} = y_{(1)i}, \phi) = \ind{y_{(1)i} &gt; \phi}^{m_{i2}}(1 - \ind{y_{(1)i} &gt; \phi})^{1 - m_{i2}}
+\]</span> In scenario 1 the data are MAR because the mass function is a function of <span class="math inline">\(\tilde{y}_{(0)i}\)</span> only, (i.e it depends only on <span class="math inline">\(Y_{i1}\)</span>), while in scenario 2 the data do not satisfy the definition of MAR.</p></li>
 </ol>
-<p>In scenario 1 the data are MAR because the mass function is a function of <span class="math inline">\(y_{i1}\)</span> only, while in scenario 2 the data do not satisfy the definition of MAR.</p>
-<p>Let’s make this example more general. The following is from <span class="citation" data-cites="little2019statistical">Roderick JA Little and Rubin (<a href="#ref-little2019statistical" role="doc-biblioref">2019, 23</a>)</span>. Again consider the bivariate case with <span class="math inline">\(y_{i1}, y_{i2}\)</span>. There are 4 possible missing data patterns: <span class="math display">\[
-(m_{i1}, m_{i2}) \in \{(0,0), (0,1), (1,0), (1,1)\}
-\]</span> We’ll need to define <span class="math inline">\(f_{M \mid Y}(m_{i1} = r, m_{i2} = s \mid y_{i1}, y_{i2}, \phi)\)</span>. To simplify the notation, let <span class="math display">\[
-g_{rs}(y_{i1}, y_{i2}, \phi) = f_{M \mid Y}(m_{i1} = r, m_{i2} = s \mid y_{i1}, y_{i2}, \phi)
-\]</span> The MAR assumption implies the following: <span class="math display">\[
-\begin{aligned}
-g_{11}(y_{i1}, y_{i2}, \phi) &amp; = g_{11}(\phi) \\
-g_{01}(y_{i1}, y_{i2}, \phi) &amp; = g_{01}(y_{i1}, \phi) \\
-g_{10}(y_{i1}, y_{i2}, \phi) &amp; = g_{10}(y_{i2}, \phi) \\
-g_{00}(y_{i1}, y_{i2}, \phi) &amp; = 1 - g_{10}(y_{i2}, \phi)  - g_{01}(y_{i1}, \phi) -  g_{11}(\phi)
-\end{aligned}
-\]</span> Thus the probability that <span class="math inline">\(y_{ij}\)</span> is missing can depend only on <span class="math inline">\(y_{i(-j)}\)</span>, which is a bit odd.</p>
-<p><span class="citation" data-cites="little2019statistical">Roderick JA Little and Rubin (<a href="#ref-little2019statistical" role="doc-biblioref">2019</a>)</span> proposes the following modification:</p>
-<p><span class="math display">\[
-\begin{aligned}
-g_{11}(y_{i1}, y_{i2}, \phi) &amp; = g_{1+}(y_{i1}, \phi)g_{+1}(y_{i2}, \phi) \\
-g_{01}(y_{i1}, y_{i2}, \phi) &amp; = (1 - g_{1+}(y_{i1}, \phi))g_{+1}(y_{i2}, \phi) \\
-g_{10}(y_{i1}, y_{i2}, \phi) &amp; = g_{1+}(y_{i1}, \phi)(1 - g_{+1}(y_{i2}, \phi)) \\
-g_{00}(y_{i1}, y_{i2}, \phi) &amp; = (1 - g_{1+}(y_{i1}, \phi))(1 - g_{+1}(y_{i2}, \phi))
-\end{aligned}
-\]</span> While this is maybe more realistic, though it does make an assumption that <span class="math inline">\(m_{i1}\)</span> and <span class="math inline">\(m_{i2}\)</span> are conditionally independent given <span class="math inline">\(y_{i1}, y_{i2}\)</span>, it is also hard to estimate, because we won’t observe missing values of <span class="math inline">\(y_{i1}\)</span> and <span class="math inline">\(y_{i2}\)</span>.</p>
-<p>This is a scenario called missing-not-at-random, or MNAR. This is defined in the next subsection.</p>
-</section>
-<section id="missing-not-at-random-mnar" class="level3">
-<h3 class="anchored" data-anchor-id="missing-not-at-random-mnar">Missing-not-at-random (MNAR)</h3>
-<p>MNAR data is characterized by the following relationship:</p>
-<p><span class="math display">\[
-f_{M\mid Y}(m_i \mid y_{(0)i}, y_{(1)i} \phi) \neq f_{M\mid Y}(m_i \mid y_{(0)i}, y^*_{(1)i} \phi)
-\]</span> for some <span class="math inline">\(\phi\)</span> and <span class="math inline">\(y_{(0)i} \neq y^*_{(0)i}\)</span> <span class="citation" data-cites="mealliClarifyingMissingRandom2015">(<a href="#ref-mealliClarifyingMissingRandom2015" role="doc-biblioref">Mealli and Rubin 2015</a>)</span>.</p>
-<p>The version using conditional dependence is called missing not always at random, or MNAAR, which is</p>
-<p><span class="math display">\[
-f_{M\mid Y}(m_i \mid y_{(0)i}, y_{(1)i} \phi) \neq f_{M\mid Y}(m_i \mid y_{(0)i}, y^*_{(1)i} \phi)
-\]</span></p>
-<p>for some <span class="math inline">\(\phi, m_i, y_{(1)i}\)</span> and <span class="math inline">\(y_{(0)i} \neq y^*_{(0)i}\)</span></p>
-<p>Our textbook mentions that sometimes MAR can yield better results than MNAR, citing <span class="citation" data-cites="rubin1995handling">Donald B. Rubin, Stern, and Vehovar (<a href="#ref-rubin1995handling" role="doc-biblioref">1995</a>)</span>. This is something we’ll explore later on in the course, namely how we would determine whether it was worth it to fit an MNAR model vs.&nbsp;a MAR model. Not surpisingly, like most things in statistics, the answer is ``It depends.”</p>
-<div style="page-break-after: always;"></div>
 
 
 
@@ -485,9 +454,6 @@ Mealli, Fabrizia, and Donald B. Rubin. 2015. <span>“Clarifying Missing at Rand
 <div id="ref-rubinInferenceMissingData1976" class="csl-entry" role="listitem">
 Rubin, Donald B. 1976. <span>“Inference and <span>Missing</span> <span>Data</span>.”</span> <em>Biometrika</em> 63 (3): 581–92. <a href="https://doi.org/10.2307/2335739">https://doi.org/10.2307/2335739</a>.
 </div>
-<div id="ref-rubin1995handling" class="csl-entry" role="listitem">
-Rubin, Donald B, Hal S Stern, and Vasja Vehovar. 1995. <span>“Handling <span>‘Don’t Know’</span> Survey Responses: The Case of the Slovenian Plebiscite.”</span> <em>Journal of the American Statistical Association</em> 90 (431): 822–28.
-</div>
 <div id="ref-surrogate" class="csl-entry" role="listitem">
 Van Der Elst, Wim, Florian Stijven, Fenny Ong, Dries De Witte, Paul Meyvisch, Alvaro Poveda, Ariel Alonso, Hannah Ensor, Christoper Weir, and Geert Molenberghs. 2024. <em>Surrogate: Evaluation of Surrogate Endpoints in Clinical Trials</em>. <a href="https://CRAN.R-project.org/package=Surrogate">https://CRAN.R-project.org/package=Surrogate</a>.
 </div>
@@ -495,10 +461,8 @@ Van Der Elst, Wim, Florian Stijven, Fenny Ong, Dries De Witte, Paul Meyvisch, Al
 
 <ol>
 <li id="fn1"><p>One way that can happen is in a univariate missingness setting where <span class="math inline">\(Y_3\)</span> respresents a hard-to-measure quantity (say number of REM cycles per night) and <span class="math inline">\(Y_1, Y_2\)</span> are proxies for this quantity. If we randomly select a subset of our participants in which to measure <span class="math inline">\(Y_3\)</span> then we know that missingness <span class="math inline">\(M\)</span> is not related to <span class="math inline">\(Y\)</span> (assuming that none of our selected participants refuse to participate!).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Missing always at random (MAAR)</p>
-<p>Missing always at random data are characterized by the following equality for all <span class="math inline">\(i\)</span>, <span class="math inline">\(m_i\)</span> <span class="math inline">\(y_{(1)i}\)</span>, <span class="math inline">\(y^*_{(1)i}\)</span>:</p>
-<p><span class="math display">\[
-f_{M\mid Y}(m_i \mid y_{(0)i}, y_{(1)i} \phi) = f_{M\mid Y}(m_i \mid y_{(0)i}, y^*_{(1)i} \phi)
+<li id="fn2"><p>Missing always at random (MAAR) Missing always at random data are characterized by the following equality for all <span class="math inline">\(i\)</span>, <span class="math inline">\(m_i\)</span> <span class="math inline">\(y_{(1)i}\)</span>, <span class="math inline">\(y^*_{(1)i}\)</span>: <span class="math display">\[
+f_{M_i\mid Y_i}(M_i = m_i \mid Y_{(0)i} = \tilde{y}_{(0)i}, Y_{(1)i} = y_{(1)i}, \phi) = f_{M_i\mid Y_i}(M_i = m_i \mid Y_{(0)i} = \tilde{y}_{(0)i}, Y_{(1)i} = y^\star_{(1)i}, \phi)  
 \]</span> This is a more restrictive assumption than MAR alone, though one could see why MAAR might be invoked for asymptotic arguments <span class="citation" data-cites="littleMissingDataAssumptions2021">(<a href="#ref-littleMissingDataAssumptions2021" role="doc-biblioref">Roderick J. Little 2021</a>)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
