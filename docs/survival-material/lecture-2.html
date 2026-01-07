@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -179,6 +199,8 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#sec-disc-continue" id="toc-sec-disc-continue" class="nav-link" data-scroll-target="#sec-disc-continue"><span class="header-section-number">4.1</span> Connection between discrete and continuous survival functions</a></li>
   </ul></li>
+  <li><a href="#mean-residual-lifetime" id="toc-mean-residual-lifetime" class="nav-link" data-scroll-target="#mean-residual-lifetime"><span class="header-section-number">5</span> Mean residual lifetime</a></li>
+  <li><a href="#parametric-examples" id="toc-parametric-examples" class="nav-link" data-scroll-target="#parametric-examples"><span class="header-section-number">6</span> Parametric examples</a></li>
   </ul>
 </nav>
     </div>
@@ -296,12 +318,65 @@ S_{X_i}(t;\,\theta) &amp; = \prod_{j \in \mathcal{T} \mid t_j + \Delta t \leq t}
 \]</span> So, <span class="math inline">\(S_{X_i}(t;\,\theta) = \exp(-\int_0^t\lambda_{X_i}(u)du)\)</span>, or <span class="math display">\[\begin{align}\label{eq:suvival-exp-cumulative-hazard}
 S_{X_i}(t;\,\theta) = \exp(-\lambda_{X_i}(t))
 \end{align}\]</span></p>
+</section>
+</section>
+<section id="mean-residual-lifetime" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Mean residual lifetime</h1>
+<p>We also might be interested in the <strong>mean residual lifetime</strong> (mrl for short), or the expected lifetime given survival up to a certain point: <span class="math display">\[
+\Exp{X_i - x \mid X_i &gt; x}.
+\]</span> We can compute this for an absolutely continuous random variable by using the survival function: <span class="math display">\[\begin{align*}
+    \frac{\int_{x}^\infty (u - x) f_{X_i}(u ;\, \eta) du}{S_{X_i}(x;\, \eta)} = \frac{\int_x^\infty S_{X_i}(u;\, \eta) du }{S_{X_i}(x;\, \eta)}
+\end{align*}\]</span> To derive the mrl in terms of the survival function, note that we can use Fubini again on the numerator (Exercise 1), or <!-- %\begin{align*} --> <!-- %    \int_{x}^\infty (u - x) f_{X_i}(u) du & = \int_{x}^\infty \int_0^\infty \ind{0 \leq s \leq u - x} ds f_{X_i}(u) du \\ --> <!-- %    & =  \int_0^\infty \int_{x}^\infty\ind{x \leq s + x \leq u} f_{X_i}(u) du ds \\ --> <!-- %    & = \int_0^\infty P(X_i > s + x) ds \\ --> <!-- %    & = \int_x^\infty P(X_i > v) dv --> <!-- %\end{align*} --> we can use integration by parts: <span class="math display">\[\begin{align*}
+    \int_{x}^\infty (u - x) f_{X_i}(u) du &amp; = -\int_{x}^\infty (u - x) \frac{d}{du} S_{X_i}(u) du \\
+    &amp; = \left.-(u-x) S_{X_i}(u)\right\rvert_{u=x}^\infty + \int_x^\infty S_{X_i}(u) du
+\end{align*}\]</span> and use the fact that <span class="math inline">\(\lim_{u\to\infty} S_{X_i}(u) = 0\)</span>. We also need the following: <span id="eq-tail"><span class="math display">\[
+\begin{align}
+    \lim_{u\to\infty} u P(X_i &gt; u) = 0.
+\end{align}
+\tag{2}\]</span></span> This is a pretty weak condition, random variables with second moments satisfy this condition (Exercise 2), as do random variables with only first moments. It turns out that under this condition we’ll have a weak law of large numbers (see 7.1 in <span class="citation" data-cites="resnick2019probability">Resnick (<a href="#ref-resnick2019probability" role="doc-biblioref">2019</a>)</span>).</p>
+<p>Suppose we assume that <span class="math inline">\(\Exp{X} \leq \infty\)</span>. Then we can write: <span class="math display">\[
+\Exp{X} = \Exp{X \ind{X \leq n}}+\Exp{X \ind{X &gt; n}}
+\]</span> Note that if we define <span class="math inline">\(X_n = X \ind{X \leq n}\)</span> then <span class="math display">\[
+X_1(\omega) \leq X_2(\omega) \leq \dots \leq X_k(\omega) \leq \dots.
+\]</span> By the Monotone Convergence Theorem (MCT), <span class="math inline">\(\Exp{X_n} \to \Exp{X}\)</span>. Then <span class="math display">\[\begin{align*}
+\Exp{X} &amp; = \Exp{X_n}+\Exp{X \ind{X &gt; n}} \\
+&amp; \geq \Exp{X_n}+\Exp{n \ind{X &gt; n}} \\
+&amp; = \Exp{X_n}+n P(X &gt; n)
+\end{align*}\]</span> This leads to the system of inequqalities: <span class="math display">\[\begin{align*}
+\Exp{X} - \Exp{X_n} \geq n P(X &gt; n) \geq 0.
+\end{align*}\]</span></p>
+<p>By the MCT <span class="math inline">\(\Exp{X} - \Exp{X_n} \to 0\)</span> so <span class="math display">\[
+    \lim_{n\to\infty} n P(X_i &gt; n) = 0.
+\]</span> However, there are random variables for which <span class="math inline">\(\Exp{X_i}\)</span> does not exist, but do satisfy <a href="#eq-tail" class="quarto-xref">Equation&nbsp;2</a> (see the end of 7.1 in <span class="citation" data-cites="resnick2019probability">Resnick (<a href="#ref-resnick2019probability" role="doc-biblioref">2019</a>)</span>).</p>
+</section>
+<section id="parametric-examples" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Parametric examples</h1>
+<p>The first example we’ll run through is for an exponentially distributed survival time: <span class="math display">\[X_i \overset{\mathrm{iid}}{\sim} \mathrm{Exp}(\lambda).\]</span> The survival function is <span class="math inline">\(S_{X}(t) = e^{-\lambda t}\)</span>. We can read off from this that <span class="math inline">\(\Lambda(t) = \lambda t\)</span>. What’s the hazard function? Let’s plot the hazard function. What does this imply about the exponential distribution (memorylessness)? The mean lifetime is <span class="math inline">\(\frac{1}{\lambda}\)</span>. The mean residual lifetime is: <span class="math display">\[\begin{align*}
+   \frac{\int_{t}^\infty e^{-\lambda u} du}{e^{-\lambda t}} &amp; = \frac{1}{\lambda}\frac{e^{-\lambda t} du}{e^{-\lambda t}} \\
+    &amp; = \frac{1}{\lambda}.
+\end{align*}\]</span> This is a consequence of the memoryless property of the exponential distribution.</p>
+<p>Another parametric distribution for survival times is the Weibull. <span class="math display">\[X_i \overset{\mathrm{iid}}{\sim} \mathrm{Weibull}(\gamma, \alpha).\]</span> The survival function: <span class="math display">\[
+S_X(t) = \exp(-\gamma t ^ \alpha).
+\]</span> Again, we have that <span class="math inline">\(\Lambda(t) = \gamma t ^ \alpha\)</span>, so we can take the derivative with respect to <span class="math inline">\(t\)</span> to get the hazard: <span class="math display">\[
+\lambda(t) = \gamma \alpha t^{\alpha - 1}.
+\]</span> This is more flexible than the exponential distribution, though note that for <span class="math inline">\(\alpha = 1\)</span>, <span class="math inline">\(X_i \sim \text{Exponential}(\gamma)\)</span>, so the Weibull family contains the exponential family as a special case. The <span class="math inline">\(\alpha\)</span> parameter allows for the hazard rate to have more flexibility than the exponential. If <span class="math inline">\(\alpha &gt; 1\)</span>, the hazard rate is increasing in <span class="math inline">\(t\)</span>. This corresponds to an aging process, whereby the longer something has survived, the higher the rate of failure. If <span class="math inline">\(\alpha &lt; 1\)</span>, the hazard rate is decreasing in <span class="math inline">\(t\)</span>. This might correspond to something like the hazard for SIDS, which is quite high for children before 1 year old, but drops off rapidly after 1. Let’s compute the mean lifetime, <span class="math inline">\(\Exp{X} = \int_0^\infty S_X(t) dt\)</span>, using a <span class="math inline">\(v\)</span>-sub, <span class="math inline">\(v = t^\alpha\)</span>, so <span class="math inline">\(v^{\frac{1}{\alpha}} = t \to \frac{1}{\alpha} v^{\frac{1}{\alpha} - 1} dv = dt\)</span>: <span class="math display">\[\begin{align*}
+   \int_0^\infty \exp(-\gamma t ^ \alpha)dt &amp; = \frac{1}{\alpha} \int_0^\infty v^{\frac{1}{\alpha} - 1} \exp(-\gamma v)dv \\
+   &amp; = \frac{1}{\alpha} \frac{1}{\gamma^{\frac{1}{\alpha}}} \Gamma(\frac{1}{\alpha}) \\
+   &amp; = \frac{\Gamma(\frac{1}{\alpha} + 1)}{\gamma^{\frac{1}{\alpha}}}
+\end{align*}\]</span> The mean residual lifetime is a bit more involved. Let <span class="math inline">\(v = \gamma u^\alpha\)</span> so <span class="math inline">\(\lp\frac{v}{\gamma}\rp^{1/\alpha} = u \to \gamma^{-1/\alpha}\frac{1}{\alpha} v^{\frac{1}{\alpha} - 1} dv = du\)</span>: <span class="math display">\[\begin{align*}
+   \int_t^\infty \exp(-\gamma u ^ \alpha)du &amp; = \gamma^{-1/\alpha}\frac{1}{\alpha} \int_{\gamma t^\alpha}^\infty v^{\frac{1}{\alpha} - 1} \exp(-v)dv \\
+   &amp; = \gamma^{-1/\alpha}\frac{1}{\alpha} \Gamma(\frac{1}{\alpha}, \gamma t^\alpha),
+\end{align*}\]</span> where <span class="math inline">\(\Gamma(\frac{1}{\alpha}, \gamma t^\alpha)\)</span> is the upper incomplete Gamma function.</p>
+
 
 
 </section>
-</section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-resnick2019probability" class="csl-entry" role="listitem">
+Resnick, Sidney. 2019. <em>A Probability Path</em>. Springer.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
