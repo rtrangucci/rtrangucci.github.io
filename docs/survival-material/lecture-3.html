@@ -208,7 +208,7 @@ window.Quarto = {
 </header>
 
 
-Now let’s delve into more detail about censoring, and how the likelihood can be built up from the hazard function and the survival function. define censoring as imprecise knowledge about an event time. If we observe a failure or an event exactly, the observation is not censored, but if we know only that an observation occurred within a range of values, we say the observation is censored. Let <span class="math inline">\(X_i\)</span>, as usual, be our failure time, which is not completely observed. Instead if:
+<p>Now let’s delve into more detail about censoring, and how the likelihood can be built up from the hazard function and the survival function. define censoring as imprecise knowledge about an event time. If we observe a failure or an event exactly, the observation is not censored, but if we know only that an observation occurred within a range of values, we say the observation is censored. Let <span class="math inline">\(X_i\)</span>, as usual, be our failure time, which is not completely observed. Instead if:</p>
 <section id="right-censoring" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Right censoring</h1>
 <p>Right censoring occurs when a survival time is known to be larger than a given value. This is the most common censoring scenario in survival analysis.</p>
@@ -283,7 +283,7 @@ Figure&nbsp;3: Example of generalized Type I censoring, viewed in patient time.
 </section>
 <section id="type-ii-censoring" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="type-ii-censoring"><span class="header-section-number">1.3</span> Type II censoring</h2>
-Type II censoring occurs when all units have the same study entry time, but researchers design the study to end when <span class="math inline">\(r &lt; n\)</span> units fail out of <span class="math inline">\(n\)</span> total units under observation.
+<p>Type II censoring occurs when all units have the same study entry time, but researchers design the study to end when <span class="math inline">\(r &lt; n\)</span> units fail out of <span class="math inline">\(n\)</span> total units under observation.</p>
 </section>
 <section id="generalized-type-ii-censoring" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="generalized-type-ii-censoring"><span class="header-section-number">1.4</span> Generalized Type II censoring</h2>
@@ -291,7 +291,7 @@ Type II censoring occurs when all units have the same study entry time, but rese
 </section>
 <section id="independent-censoring" class="level2" data-number="1.5">
 <h2 data-number="1.5" class="anchored" data-anchor-id="independent-censoring"><span class="header-section-number">1.5</span> Independent censoring</h2>
-A third type of censoring, helpfully called independent censoring, takes <span class="math inline">\(X_i \indy C_i\)</span>, and thus conclusions similar to those of generalized type I censoring can be drawn:
+<p>A third type of censoring, helpfully called independent censoring, takes <span class="math inline">\(X_i \indy C_i\)</span>, and thus conclusions similar to those of generalized type I censoring can be drawn:</p>
 </section>
 </section>
 <section id="noninformative-censoring" class="level1" data-number="2">
@@ -304,13 +304,16 @@ A third type of censoring, helpfully called independent censoring, takes <span c
 \begin{aligned}
 \Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t}{\eta} = \Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t, C_i \geq t}{\eta, \phi}.
 \end{aligned}
-\tag{2}\]</span></span> which is equivalent to writing <span id="eq-noninform-cens"><span class="math display">\[
+\tag{2}\]</span></span> which is equivalent to writing <span class="math display">\[
 \begin{aligned}
 \Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t}{\eta} = \Prob{t \leq T_i &lt; t + \Delta t, \delta_i = 1 \mid T_i \geq t}{\eta, \phi}.
 \end{aligned}
-\tag{3}\]</span></span></p>
-<p>For independent censoring, <a href="#eq-noninform-cens" class="quarto-xref">Equation&nbsp;3</a> holds, given that <span class="math inline">\(P_{\eta, \phi}(X_i &gt; t, C_i &gt; c) = P_{\eta}(X_i &gt; t) P_{\phi}(C_i &gt; c)\)</span> and that <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span> are <strong>variationally independent</strong>.</p>
-<p>This means that the parameter space <span class="math inline">\(\Omega_{\eta,\phi}\)</span> is the Cartesian product of the parameter space for <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span>. :::{#def-vari-indy} Let <span class="math inline">\(\eta \in \Omega_{\eta}\)</span> and <span class="math inline">\(\phi \in \Omega_{\phi}\)</span>. The joint space is denoted as <span class="math inline">\(\Omega_{\eta, \phi}\)</span>. If <span class="math inline">\(\Omega_{\eta, \phi} = \Omega_\eta \times \Omega_\phi\)</span>, <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span> are variationally independent. In other words, the range for <span class="math inline">\(\eta\)</span> does not change given a value for <span class="math inline">\(\phi\)</span>. :::</p>
+\]</span></p>
+<p>For independent censoring, <a href="#eq-noninform-cens" class="quarto-xref">Equation&nbsp;2</a> holds, given that <span class="math inline">\(P_{\eta, \phi}(X_i &gt; t, C_i &gt; c) = P_{\eta}(X_i &gt; t) P_{\phi}(C_i &gt; c)\)</span> and that <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span> are <strong>variationally independent</strong>.</p>
+<p>This means that the parameter space <span class="math inline">\(\Omega_{\eta,\phi}\)</span> is the Cartesian product of the parameter space for <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span>.</p>
+<div id="def-vari-indy" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1 (Variational independence)</strong></span> Let <span class="math inline">\(\eta \in \Omega_{\eta}\)</span> and <span class="math inline">\(\phi \in \Omega_{\phi}\)</span>. The joint space is denoted as <span class="math inline">\(\Omega_{\eta, \phi}\)</span>. If <span class="math inline">\(\Omega_{\eta, \phi} = \Omega_\eta \times \Omega_\phi\)</span>, <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span> are variationally independent. In other words, the range for <span class="math inline">\(\eta\)</span> does not change given a value for <span class="math inline">\(\phi\)</span>.</p>
+</div>
 <p>Under independent censoring, the observable hazard for uncensored failure times is as follows: <span class="math display">\[\begin{align}
   \frac{-\frac{\partial}{\partial u} P_{\eta, \phi}(X_i &gt; u, C_i &gt; t-) \mid_{u=t}}{P_{\eta,\phi}(X_i &gt; t-, C_i &gt; t-)} = \frac{-\frac{d}{du} S_{X_i}(u;\, \eta)}{S_{X_i}(t-;\, \eta)}
 \end{align}\]</span></p>
