@@ -170,19 +170,20 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#right-censoring" id="toc-right-censoring" class="nav-link active" data-scroll-target="#right-censoring"><span class="header-section-number">1</span> Right censoring</a>
+  <li><a href="#censoring-and-truncation" id="toc-censoring-and-truncation" class="nav-link active" data-scroll-target="#censoring-and-truncation"><span class="header-section-number">1</span> Censoring and truncation</a></li>
+  <li><a href="#right-censoring" id="toc-right-censoring" class="nav-link" data-scroll-target="#right-censoring"><span class="header-section-number">2</span> Right censoring</a>
   <ul class="collapse">
-  <li><a href="#type-i-censoring" id="toc-type-i-censoring" class="nav-link" data-scroll-target="#type-i-censoring"><span class="header-section-number">1.1</span> Type I censoring</a></li>
-  <li><a href="#generalized-type-i-censoring" id="toc-generalized-type-i-censoring" class="nav-link" data-scroll-target="#generalized-type-i-censoring"><span class="header-section-number">1.2</span> Generalized type I censoring</a></li>
-  <li><a href="#type-ii-censoring" id="toc-type-ii-censoring" class="nav-link" data-scroll-target="#type-ii-censoring"><span class="header-section-number">1.3</span> Type II censoring</a></li>
-  <li><a href="#generalized-type-ii-censoring" id="toc-generalized-type-ii-censoring" class="nav-link" data-scroll-target="#generalized-type-ii-censoring"><span class="header-section-number">1.4</span> Generalized Type II censoring</a></li>
-  <li><a href="#independent-censoring" id="toc-independent-censoring" class="nav-link" data-scroll-target="#independent-censoring"><span class="header-section-number">1.5</span> Independent censoring</a></li>
+  <li><a href="#type-i-censoring" id="toc-type-i-censoring" class="nav-link" data-scroll-target="#type-i-censoring"><span class="header-section-number">2.1</span> Type I censoring</a></li>
+  <li><a href="#generalized-type-i-censoring" id="toc-generalized-type-i-censoring" class="nav-link" data-scroll-target="#generalized-type-i-censoring"><span class="header-section-number">2.2</span> Generalized type I censoring</a></li>
+  <li><a href="#type-ii-censoring" id="toc-type-ii-censoring" class="nav-link" data-scroll-target="#type-ii-censoring"><span class="header-section-number">2.3</span> Type II censoring</a></li>
+  <li><a href="#generalized-type-ii-censoring" id="toc-generalized-type-ii-censoring" class="nav-link" data-scroll-target="#generalized-type-ii-censoring"><span class="header-section-number">2.4</span> Generalized Type II censoring</a></li>
+  <li><a href="#independent-censoring" id="toc-independent-censoring" class="nav-link" data-scroll-target="#independent-censoring"><span class="header-section-number">2.5</span> Independent censoring</a></li>
   </ul></li>
-  <li><a href="#noninformative-censoring" id="toc-noninformative-censoring" class="nav-link" data-scroll-target="#noninformative-censoring"><span class="header-section-number">2</span> Noninformative censoring</a>
+  <li><a href="#noninformative-censoring" id="toc-noninformative-censoring" class="nav-link" data-scroll-target="#noninformative-censoring"><span class="header-section-number">3</span> Noninformative censoring</a>
   <ul class="collapse">
-  <li><a href="#reasons-for-informative-censoring" id="toc-reasons-for-informative-censoring" class="nav-link" data-scroll-target="#reasons-for-informative-censoring"><span class="header-section-number">2.1</span> Reasons for informative censoring</a></li>
+  <li><a href="#reasons-for-informative-censoring" id="toc-reasons-for-informative-censoring" class="nav-link" data-scroll-target="#reasons-for-informative-censoring"><span class="header-section-number">3.1</span> Reasons for informative censoring</a></li>
   </ul></li>
-  <li><a href="#truncation" id="toc-truncation" class="nav-link" data-scroll-target="#truncation"><span class="header-section-number">3</span> Truncation</a></li>
+  <li><a href="#truncation" id="toc-truncation" class="nav-link" data-scroll-target="#truncation"><span class="header-section-number">4</span> Truncation</a></li>
   </ul>
 </nav>
     </div>
@@ -208,9 +209,17 @@ window.Quarto = {
 </header>
 
 
+<section id="censoring-and-truncation" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Censoring and truncation</h1>
 <p>Now let’s delve into more detail about censoring, and how the likelihood can be built up from the hazard function and the survival function. define censoring as imprecise knowledge about an event time. If we observe a failure or an event exactly, the observation is not censored, but if we know only that an observation occurred within a range of values, we say the observation is censored. Let <span class="math inline">\(X_i\)</span>, as usual, be our failure time, which is not completely observed. Instead if:</p>
-<section id="right-censoring" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Right censoring</h1>
+<ul>
+<li><p><span class="math inline">\(X_i \in [C, \infty)\)</span>, the observation is <strong>right censored</strong></p></li>
+<li><p><span class="math inline">\(X_i \in [0, U)\)</span>, the observation is <strong>left censored</strong></p></li>
+<li><p><span class="math inline">\(X_i \in [C, U)\)</span>, the observation is <strong>interval censored</strong></p></li>
+</ul>
+</section>
+<section id="right-censoring" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Right censoring</h1>
 <p>Right censoring occurs when a survival time is known to be larger than a given value. This is the most common censoring scenario in survival analysis.</p>
 <p>Recall our definition in Lecture 1:</p>
 <ul>
@@ -219,9 +228,10 @@ window.Quarto = {
 <li><p>Let <span class="math inline">\(\delta_i = \ind{X_i \leq C_i}\)</span>.</p></li>
 <li><p>Let <span class="math inline">\(T_i = \min(X_i, C_i)\)</span>. This implies that the event <span class="math inline">\(\{T_i \geq t\} \equiv \{C_i \geq t, X_i \geq t\}\)</span>.</p></li>
 </ul>
+<p>Note that another way to write <span class="math inline">\(\min(X_i, C_i)\)</span> is <span class="math inline">\(X_i \wedge C_i\)</span>. We’ll also see <span class="math inline">\(\max(X_i, C_i) \equiv X_i \vee C_i\)</span>.</p>
 <p>Given our definitions above, when an observation is censored, or when a measurement is taken of the survival time before the event has happened, <span class="math inline">\(\delta_i = 0\)</span> and <span class="math inline">\(T_i = C_i\)</span>.</p>
-<section id="type-i-censoring" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="type-i-censoring"><span class="header-section-number">1.1</span> Type I censoring</h2>
+<section id="type-i-censoring" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="type-i-censoring"><span class="header-section-number">2.1</span> Type I censoring</h2>
 <p>The simplest censoring scenario is one in which all individuals have the same, nonrandom censoring time. Imagine a study is designed to follow <span class="math inline">\(5\)</span> startups that are spun out of a tech incubator to study how long it takes a company to land its first contract. This information will be used for designing investments <span class="math inline">\(2\)</span> years from the study date, so the study has a length of <span class="math inline">\(1.75\)</span> years. We can say that all observations will have to have occurred, or not, by <span class="math inline">\(1.75\)</span> years.</p>
 <p><a href="#fig-type-i-censoring" class="quarto-xref">Figure&nbsp;1</a> shows a potential result of the study, where <span class="math inline">\(2\)</span> out of the <span class="math inline">\(5\)</span> companies have not landed a contract.</p>
 <div class="cell">
@@ -243,8 +253,8 @@ Figure&nbsp;1: Type I censoring
 <li><span class="math inline">\(\delta_i = 1 \implies T_i = X_i\)</span>.</li>
 </ul>
 </section>
-<section id="generalized-type-i-censoring" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="generalized-type-i-censoring"><span class="header-section-number">1.2</span> Generalized type I censoring</h2>
+<section id="generalized-type-i-censoring" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="generalized-type-i-censoring"><span class="header-section-number">2.2</span> Generalized type I censoring</h2>
 <p>A more general scenario, which is closer to most examples in clinical trials, is when each individual has a different study entry time and the investigator has a preset study end time. This is called generalized Type I censoring. These study entry times are typically assumed to be independent of the survival time. This is shown in <a href="#fig-gen-type-i-censoring" class="quarto-xref">Figure&nbsp;2</a>.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -281,35 +291,50 @@ Figure&nbsp;3: Example of generalized Type I censoring, viewed in patient time.
 </ul>
 <p>This is different from Type I censoring in that each individual has a different censoring time.</p>
 </section>
-<section id="type-ii-censoring" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="type-ii-censoring"><span class="header-section-number">1.3</span> Type II censoring</h2>
+<section id="type-ii-censoring" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="type-ii-censoring"><span class="header-section-number">2.3</span> Type II censoring</h2>
 <p>Type II censoring occurs when all units have the same study entry time, but researchers design the study to end when <span class="math inline">\(r &lt; n\)</span> units fail out of <span class="math inline">\(n\)</span> total units under observation.</p>
+<ul>
+<li><p>For the first <span class="math inline">\(r\)</span>, lucky or unlucky participants, <span class="math inline">\(\delta_i = 1 \implies T_i = X_{(i)}\)</span> or the <span class="math inline">\(i^\mathrm{th}\)</span> order statistic.</p></li>
+<li><p>For the remaining <span class="math inline">\(n - r\)</span> individuals, <span class="math inline">\(\delta_i = 0 \implies X_i &gt; X_{(r)}\)</span>.</p></li>
+</ul>
 </section>
-<section id="generalized-type-ii-censoring" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="generalized-type-ii-censoring"><span class="header-section-number">1.4</span> Generalized Type II censoring</h2>
+<section id="generalized-type-ii-censoring" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="generalized-type-ii-censoring"><span class="header-section-number">2.4</span> Generalized Type II censoring</h2>
 <p>You may be wondering, what happens when units have differing start times but we want to end the trial after the <span class="math inline">\(r\)</span>-th failure? It turns out that this was not a solved problem until , which was quite surprising to me.</p>
 </section>
-<section id="independent-censoring" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="independent-censoring"><span class="header-section-number">1.5</span> Independent censoring</h2>
+<section id="independent-censoring" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="independent-censoring"><span class="header-section-number">2.5</span> Independent censoring</h2>
 <p>A third type of censoring, helpfully called independent censoring, takes <span class="math inline">\(X_i \indy C_i\)</span>, and thus conclusions similar to those of generalized type I censoring can be drawn:</p>
+<ul>
+<li><p>For all individuals such that <span class="math inline">\(\delta_i = 0 \implies X_i &gt; C_i\)</span></p></li>
+<li><p><span class="math inline">\(\delta_i = 1 \implies T_i = X_i\)</span>.</p></li>
+</ul>
 </section>
 </section>
-<section id="noninformative-censoring" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Noninformative censoring</h1>
+<section id="noninformative-censoring" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Noninformative censoring</h1>
 <p>All of the previous censoring scenarios can be summarized as noninformative censoring. Let the parameters indexing the censoring distribution be <span class="math inline">\(\phi\)</span>, while the parameters indexing the failure time distribution are <span class="math inline">\(\eta\)</span>. Noninformative censoring is defined as the following equality: <span id="eq-noninform-cens-haz"><span class="math display">\[
 \begin{aligned}
 \lambda_{X_i}(t) = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t}\Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t, C_i \geq t}{\eta, \phi}
 \end{aligned}
-\tag{1}\]</span></span> Note that this implies the following: <span id="eq-noninform-cens"><span class="math display">\[
+\tag{1}\]</span></span> Note that this implies the following: <span id="eq-noninform-cens-prob"><span class="math display">\[
 \begin{aligned}
 \Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t}{\eta} = \Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t, C_i \geq t}{\eta, \phi}.
 \end{aligned}
-\tag{2}\]</span></span> which is equivalent to writing <span class="math display">\[
+\tag{2}\]</span></span> which is equivalent to writing</p>
+<p><span class="math display">\[
 \begin{aligned}
 \Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t}{\eta} = \Prob{t \leq T_i &lt; t + \Delta t, \delta_i = 1 \mid T_i \geq t}{\eta, \phi}.
 \end{aligned}
-\]</span></p>
-<p>For independent censoring, <a href="#eq-noninform-cens" class="quarto-xref">Equation&nbsp;2</a> holds, given that <span class="math inline">\(P_{\eta, \phi}(X_i &gt; t, C_i &gt; c) = P_{\eta}(X_i &gt; t) P_{\phi}(C_i &gt; c)\)</span> and that <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span> are <strong>variationally independent</strong>.</p>
+\]</span> Another useful expression for the RHS is the following: <span id="eq-noninformative-cens"><span class="math display">\[
+\begin{aligned}
+\Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t, C_i \geq t}{\eta, \phi} &amp; =
+\frac{\Prob{t \leq X_i &lt; t + \Delta t, C_i \geq t}{\eta, \phi}}{\Prob{X_i \geq t, C_i \geq t}{\eta, \phi}}\\
+&amp; = \frac{\Prob{X_i \geq t, C_i \geq t}{\eta, \phi} - \Prob{X_i \geq t + \Delta t, C_i \geq t}{\eta, \phi}}{\Prob{X_i \geq t, C_i \geq t}{\eta, \phi}}
+\end{aligned}
+\tag{3}\]</span></span></p>
+<p>For independent censoring, <a href="#eq-noninform-cens-prob" class="quarto-xref">Equation&nbsp;2</a> holds, given that <span class="math inline">\(P_{\eta, \phi}(X_i &gt; t, C_i &gt; c) = P_{\eta}(X_i &gt; t) P_{\phi}(C_i &gt; c)\)</span> and that <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span> are <strong>variationally independent</strong>.</p>
 <p>This means that the parameter space <span class="math inline">\(\Omega_{\eta,\phi}\)</span> is the Cartesian product of the parameter space for <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span>.</p>
 <div id="def-vari-indy" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 1 (Variational independence)</strong></span> Let <span class="math inline">\(\eta \in \Omega_{\eta}\)</span> and <span class="math inline">\(\phi \in \Omega_{\phi}\)</span>. The joint space is denoted as <span class="math inline">\(\Omega_{\eta, \phi}\)</span>. If <span class="math inline">\(\Omega_{\eta, \phi} = \Omega_\eta \times \Omega_\phi\)</span>, <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\phi\)</span> are variationally independent. In other words, the range for <span class="math inline">\(\eta\)</span> does not change given a value for <span class="math inline">\(\phi\)</span>.</p>
@@ -343,23 +368,29 @@ S_{X_i}(x;\, \alpha, \theta) S_{C_i}(c;\, \mu, \theta) \neq \exp(-\alpha x - \mu
 <div id="exm-dep-fail-noninform" class="theorem example">
 <p><span class="theorem-title"><strong>Example 2 (Dependent failure and censoring can be noninformative)</strong></span> Let <span class="math inline">\(Y_1, Y_2\)</span> and <span class="math inline">\(Y_{12}\)</span> be exponentially distributed with rates <span class="math inline">\(\alpha_1, \alpha_2, \alpha_{12}\)</span>, respectively. Let <span class="math inline">\(X = Y_1 \wedge Y_{12}\)</span> and <span class="math inline">\(C = Y_2 \wedge Y_{12}\)</span>. The survival function <span class="math inline">\(P_{\alpha_1, \alpha_2, \alpha_{12}}(X &gt; x, C &gt; c) = P(Y_1 &gt; x, Y_2 &gt; c, Y_{12} &gt; x \vee c) = e^{-\alpha_1 x -\alpha_2 c - \alpha_{12} x \vee c}\)</span> Then marginally <span class="math inline">\(X\)</span> is exponential with rate <span class="math inline">\(\alpha_1 + \alpha_{12}\)</span>, which is also equal to its hazard function. In order for noninformative censoring to hold, we need to check the definition <a href="#eq-noninform-cens-haz" class="quarto-xref">Equation&nbsp;1</a>, or that <span class="math display">\[\begin{align}
    \alpha_1 + \alpha_{12}  = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} \Prob{t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t}{\alpha_1, \alpha_2, \alpha_{12}}
-\end{align}\]</span> Because <span class="math inline">\(t + \Delta t \vee t = t + \Delta t\)</span> as <span class="math inline">\(\Delta t &gt; 0\)</span>, <span class="math display">\[\begin{align}
+\end{align}\]</span> Representing <span class="math display">\[
+\begin{aligned}
+&amp; \Prob{t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t}{\alpha_1, \alpha_2, \alpha_{12}}\\
+&amp; =  \frac{\Prob{X_i \geq t, C_i \geq t}{\alpha_1, \alpha_2, \alpha_{12}} - \Prob{X_i \geq t + \Delta t, C_i \geq t}{\alpha_1, \alpha_2, \alpha_{12}}}{\Prob{X_i \geq t, C_i \geq t}{\alpha_1, \alpha_2, \alpha_{12}}}
+\end{aligned}
+\]</span> and noting that <span class="math inline">\(t + \Delta t \vee t = t + \Delta t\)</span> as <span class="math inline">\(\Delta t &gt; 0\)</span>, <span class="math display">\[\begin{align}
     \lim_{\Delta t \searrow 0}\frac{e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t} - e^{-(\alpha_1 + \alpha_{12})(t + \Delta t)  -\alpha_2 t}}{\Delta t}
-\end{align}\]</span> which just equals <span class="math inline">\(e^{-\alpha t} -\frac{d}{ds} e^{-(\alpha_1 + \alpha_{12})s} \mid_{s = t}\)</span> or <span class="math inline">\((\alpha_1 + \alpha_{12})e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t}\)</span>. Then <span class="math display">\[\begin{align}
+\end{align}\]</span> which just equals <span class="math inline">\(e^{-\alpha t}(-\frac{d}{ds} e^{-(\alpha_1 + \alpha_{12})s} \mid_{s = t})\)</span> or <span class="math inline">\((\alpha_1 + \alpha_{12})e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t}\)</span>. Then <span class="math display">\[\begin{align}
     \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} \Prob{t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t}{\alpha_1, \alpha_2, \alpha_{12}} &amp; = \frac{(\alpha_1 + \alpha_{12})e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t}}{e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t}} \\
     &amp; = \alpha_1 + \alpha_{12}
 \end{align}\]</span> So in this case, while <span class="math inline">\(X\)</span> and <span class="math inline">\(C\)</span> are dependent, we still have noninformative censoring.</p>
 </div>
 <p>The benefit of noninformative censoring is that we can ignore the censoring random variables when constructing the likelihood for the survival random variables.</p>
-<section id="reasons-for-informative-censoring" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="reasons-for-informative-censoring"><span class="header-section-number">2.1</span> Reasons for informative censoring</h2>
+<section id="reasons-for-informative-censoring" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="reasons-for-informative-censoring"><span class="header-section-number">3.1</span> Reasons for informative censoring</h2>
 <p>A simple hypothetical situation with informative censoring would be one in which sick patients are lost to follow-up.</p>
 </section>
 </section>
-<section id="truncation" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Truncation</h1>
-<p>While censoring can be seen as partial information about an observation, truncation deals with exact observations of selected units. The simplest example of truncation is when measurements are made using an instrument with a lower limit of detection. Imagine using a microscope to measure the diameter of cells on a plate that has a lower limit of detection of 5 microns. If interest lies in inferring the population mean diameter of the cells, one must take into account the fact that only cells with diameters of greater than 5 micros can be seen with the microscope.</p>
-<p>Failure to take truncation into account can be a source of bias in inference. <span class="math display">\[\begin{align*}
+<section id="truncation" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Truncation</h1>
+<p>While censoring can be seen as partial information about an observation, truncation deals with exact observations of selected units. The simplest example of truncation is when measurements are made using an instrument with a lower limit of detection. Imagine using a microscope to measure the diameter of cells on a plate that has a lower limit of detection of 5 microns. If interest lies in inferring the population mean diameter of the cells, one must take into account the fact that only cells with diameters of greater than 5 microns can be seen with the microscope.</p>
+<p>Failure to take truncation into account can be a source of bias in inference. Let the lower bound of truncation be <span class="math inline">\(V\)</span>.</p>
+<p><span class="math display">\[\begin{align*}
 \Exp{X_i} &amp; = \Exp{X_i \mid X_i \geq V} P(X_i \geq V) +  \Exp{X_i \mid X_i &lt; V} P(X_i &lt; V) \\
 &amp; = \Exp{X_i \mid X_i \geq V} + P(X_i &lt; V) (\Exp{X_i \mid X_i &lt; V} - \Exp{X_i \mid X_i \geq V}) \\
 &amp; \leq \Exp{X_i \mid X_i \geq V}
@@ -368,9 +399,9 @@ S_{X_i}(x;\, \alpha, \theta) S_{C_i}(c;\, \mu, \theta) \neq \exp(-\alpha x - \mu
 <p>The observations in this example can be said to be left-truncated, because the researcher conditions the observations in the treatment group on having a lifespan long enough to fill a medication.</p>
 <p>Formally, we say that the density for a truncated observation is conditioned on the probability of the observation lying in the truncated region.</p>
 <ul>
-<li><p>If a researcher selects <span class="math inline">\(\ind{X_i \geq V}\)</span> we say the data are left-truncated, and <span class="math inline">\(f_{X_i}(x;\,\eta) = \frac{-\frac{d}{dx} S_{X_i}(x;\,\eta)}{S_{X_i}(v;\,\eta)}\)</span></p></li>
-<li><p>If a researcher selects <span class="math inline">\(\ind{X_i \leq U}\)</span> we say the data are right-truncated, and <span class="math inline">\(f_{X_i}(x;\,\eta) = \frac{-\frac{d}{dx} S_{X_i}(x;\,\eta)}{1 - S_{X_i}(u;\,\eta)}\)</span></p></li>
-<li><p>If a researcher selects <span class="math inline">\(\ind{V \leq X_i \leq U}\)</span> we say the data are interval-truncated, and <span class="math inline">\(f_{X_i}(x;\,\eta) = \frac{-\frac{d}{dx} S_{X_i}(x;\,\eta)}{S_{X_i}(v;\,\eta) - S_{X_i}(u;\,\eta)}\)</span></p></li>
+<li><p>If a researcher selects <span class="math inline">\(\ind{X_i \geq V}\)</span> we say the data are <strong>left-truncated</strong>, and <span class="math inline">\(f_{X_i}(x;\,\eta) = \frac{-\frac{d}{dx} S_{X_i}(x;\,\eta)}{S_{X_i}(v;\,\eta)}\)</span></p></li>
+<li><p>If a researcher selects <span class="math inline">\(\ind{X_i \leq U}\)</span> we say the data are <strong>right-truncated</strong>, and <span class="math inline">\(f_{X_i}(x;\,\eta) = \frac{-\frac{d}{dx} S_{X_i}(x;\,\eta)}{1 - S_{X_i}(u;\,\eta)}\)</span></p></li>
+<li><p>If a researcher selects <span class="math inline">\(\ind{V \leq X_i \leq U}\)</span> we say the data are <strong>interval-truncated</strong>, and <span class="math inline">\(f_{X_i}(x;\,\eta) = \frac{-\frac{d}{dx} S_{X_i}(x;\,\eta)}{S_{X_i}(v;\,\eta) - S_{X_i}(u;\,\eta)}\)</span></p></li>
 </ul>
 
 
