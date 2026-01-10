@@ -374,8 +374,9 @@ S_{X_i}(x;\, \alpha, \theta) S_{C_i}(c;\, \mu, \theta) \neq \exp(-\alpha x - \mu
 &amp; =  \frac{\Prob{X_i \geq t, C_i \geq t}{\alpha_1, \alpha_2, \alpha_{12}} - \Prob{X_i \geq t + \Delta t, C_i \geq t}{\alpha_1, \alpha_2, \alpha_{12}}}{\Prob{X_i \geq t, C_i \geq t}{\alpha_1, \alpha_2, \alpha_{12}}}
 \end{aligned}
 \]</span> and noting that <span class="math inline">\(t + \Delta t \vee t = t + \Delta t\)</span> as <span class="math inline">\(\Delta t &gt; 0\)</span>, <span class="math display">\[\begin{align}
-    \lim_{\Delta t \searrow 0}\frac{e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t} - e^{-(\alpha_1 + \alpha_{12})(t + \Delta t)  -\alpha_2 t}}{\Delta t}
-\end{align}\]</span> which just equals <span class="math inline">\(e^{-\alpha t}(-\frac{d}{ds} e^{-(\alpha_1 + \alpha_{12})s} \mid_{s = t})\)</span> or <span class="math inline">\((\alpha_1 + \alpha_{12})e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t}\)</span>. Then <span class="math display">\[\begin{align}
+\lim_{\Delta t \searrow 0} \frac{\Prob{X \geq t, C \geq t}{\alpha_1, \alpha_2, \alpha_{12}} - \Prob{X \geq t + \Delta t, C \geq t}{\alpha_1, \alpha_2, \alpha_{12}}}{\Delta t} =  \lim_{\Delta t \searrow 0}\frac{e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t} - e^{-(\alpha_1 + \alpha_{12})(t + \Delta t)  -\alpha_2 t}}{\Delta t}
+\end{align}\]</span> which just equals <span class="math inline">\(e^{-\alpha t}(-\frac{d}{ds} e^{-(\alpha_1 + \alpha_{12})s} \mid_{s = t})\)</span> or <span class="math inline">\((\alpha_1 + \alpha_{12})e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t}\)</span>. The denominator of the hazard rate is <span class="math inline">\(e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t}\)</span>.</p>
+<p>Then <span class="math display">\[\begin{align}
     \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} \Prob{t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t}{\alpha_1, \alpha_2, \alpha_{12}} &amp; = \frac{(\alpha_1 + \alpha_{12})e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t}}{e^{-\alpha_1 t -\alpha_2 t - \alpha_{12} t}} \\
     &amp; = \alpha_1 + \alpha_{12}
 \end{align}\]</span> So in this case, while <span class="math inline">\(X\)</span> and <span class="math inline">\(C\)</span> are dependent, we still have noninformative censoring.</p>
