@@ -422,12 +422,22 @@ S_{X_i}(x;\, \alpha, \theta) S_{C_i}(c;\, \mu, \theta) \neq \exp(-\alpha x - \mu
    f_{T_i, \delta_i}(t, \delta;\,\theta) = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq X &lt; t + \Delta t, C \geq t) \right)^\delta
     \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(X \geq t, t \leq C &lt; t + \Delta t)   \right)^{1 - \delta}
 \end{align*}\]</span> We can factorize the distribution function: <span class="math display">\[\begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(C \geq t \mid X \geq t) P_\eta(X \geq t) \right)^\delta  \\
+    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(C \geq t \mid X \geq t) P_\eta(X \geq t) \right)^\delta  \\
     &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(C \geq t \mid X \geq t)P_\eta(X \geq t)   \right)^{1 - \delta}
-\end{align*}\]</span> and rearranging and subbing in <span class="math inline">\(\lambda_\eta(t)\)</span> for the hazard function: <span class="math display">\[\begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\theta(C \geq t \mid t \leq X &lt; t + \Delta t)^\delta  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t)\right)^{1 - \delta}
-\end{align*}\]</span> Assuming that <span class="math inline">\(P_\theta(C_i \geq t \mid X_i = x) = P_\phi(C_i \geq t)\)</span> leads to the following <span class="math display">\[\begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\phi(C \geq t)^\delta  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t)\right)^{1 - \delta}
+\end{align*}\]</span>. Assuming noninformative censoring: <span class="math display">\[\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t)P_\theta(C \geq t \mid X \geq t) P_\eta(X \geq t) \right)^\delta  \\
+    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(C \geq t \mid X \geq t)P_\eta(X \geq t)   \right)^{1 - \delta}
+\end{align*}\]</span>.</p>
+<p>and rearranging and subbing in <span class="math inline">\(\lambda_\eta(t)\)</span> for the hazard function: <span class="math display">\[
+\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\theta(C \geq t \mid X \geq t)  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)\right)^{1 - \delta}
+\end{align*}\]</span> Assuming that <span class="math display">\[
+\begin{aligned}
+P_\theta(C_i \geq t \mid X_i \geq t) &amp; = P_\phi(C_i \geq t \mid X_i \geq t) \\
+P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t) &amp; = P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)
+\end{aligned}
+\]</span> and leads to the following <span class="math display">\[\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\phi(C \geq t \mid X \geq t)^\delta  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)\right)^{1 - \delta}
 \end{align*}\]</span> This means that we can factorize the joint density: <span class="math display">\[f_{T_i, \delta_i}(t, \delta;\,\theta) = f_{X_i, \delta_i}(t, \delta;\,\eta) f_{C_i, \delta_i}(t, \delta;\,\phi).\]</span> Thus, noninformative censoring and parameter separability yield a separable joint density. This means that when we want to do maximum likelihood for survival data, we can <em>ignore</em> the model for the censoring times, <span class="math inline">\(f_{C_i, \delta_i}(t, \delta;\,\phi)\)</span>, and focus on only the model for the failure times: <span class="math display">\[f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta P_\eta(X \geq t).\]</span> We can write this expression fully in terms of the hazard function by recalling <a href="#eq:exp-hazard" data-reference-type="ref+Label" data-reference="eq:exp-hazard">[eq:exp-hazard]</a>: <span id="eq-separable-like"><span class="math display">\[\begin{align}
 f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta \exp\left(-\int_0^t \lambda_{X_i}(u) du \right).
 \end{align}
