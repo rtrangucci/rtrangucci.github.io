@@ -183,7 +183,10 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#reasons-for-informative-censoring" id="toc-reasons-for-informative-censoring" class="nav-link" data-scroll-target="#reasons-for-informative-censoring"><span class="header-section-number">3.1</span> Reasons for informative censoring</a></li>
   </ul></li>
-  <li><a href="#truncation" id="toc-truncation" class="nav-link" data-scroll-target="#truncation"><span class="header-section-number">4</span> Truncation</a></li>
+  <li><a href="#truncation" id="toc-truncation" class="nav-link" data-scroll-target="#truncation"><span class="header-section-number">4</span> Truncation</a>
+  <ul class="collapse">
+  <li><a href="#likelihood-construction" id="toc-likelihood-construction" class="nav-link" data-scroll-target="#likelihood-construction"><span class="header-section-number">4.1</span> Likelihood construction</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -404,8 +407,58 @@ S_{X_i}(x;\, \alpha, \theta) S_{C_i}(c;\, \mu, \theta) \neq \exp(-\alpha x - \mu
 <li><p>If a researcher selects <span class="math inline">\(\ind{X_i \leq U}\)</span> we say the data are <strong>right-truncated</strong>, and <span class="math inline">\(f_{X_i}(x;\,\eta) = \frac{-\frac{d}{dx} S_{X_i}(x;\,\eta)}{1 - S_{X_i}(u;\,\eta)}\)</span></p></li>
 <li><p>If a researcher selects <span class="math inline">\(\ind{V \leq X_i \leq U}\)</span> we say the data are <strong>interval-truncated</strong>, and <span class="math inline">\(f_{X_i}(x;\,\eta) = \frac{-\frac{d}{dx} S_{X_i}(x;\,\eta)}{S_{X_i}(v;\,\eta) - S_{X_i}(u;\,\eta)}\)</span></p></li>
 </ul>
+<section id="likelihood-construction" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="likelihood-construction"><span class="header-section-number">4.1</span> Likelihood construction</h2>
+<p>We now turn to how to construct likelihoods in each of the prior scenarios, under censored or truncated data. As a reminder:</p>
+<ul>
+<li><p>Let <span class="math inline">\(X_i\)</span> be the time to failure, or time to event for individual <span class="math inline">\(i\)</span>.</p></li>
+<li><p>Let <span class="math inline">\(C_i\)</span> be the time to censoring. It may be helpful to think about <span class="math inline">\(C_i\)</span> as the time to investigator measurement.</p></li>
+<li><p>Let <span class="math inline">\(\delta_i = \mathbbm{1}\left(X_i \leq C_i\right)\)</span>.</p></li>
+<li><p>Let <span class="math inline">\(T_i = \min(X_i, C_i)\)</span>.</p></li>
+</ul>
+<p>When <span class="math inline">\(\delta_i = 1\)</span>, we observe <span class="math inline">\(T_i = X_i\)</span>; this is the event that <span class="math inline">\(\{X_i = T_i, C_i \geq X_i\}\)</span>. When <span class="math inline">\(\delta_i = 0\)</span>, we observe <span class="math inline">\(T_i = C_i\)</span>; this is the event that <span class="math inline">\(\{C_i = T_i, C_i &lt; X_i\}\)</span>. Let the joint distribution of <span class="math inline">\(X_i, C_i\)</span> be written as <span class="math inline">\(P_\theta(X &gt; x, C &gt; c)\)</span>, and further let <span class="math inline">\(\theta = (\eta, \phi)\)</span> such that <span class="math inline">\(P_\theta(X &gt; x, C &gt; c) = P_\eta(X &gt; x) P_\phi(C &gt; c \mid X &gt; x)\)</span>. We showed that the likelihood corresponding to the random variables <span class="math inline">\(T_i, \delta_i\)</span>, <span class="math inline">\(f_{T_i, \delta_i}(t, \delta;\,\theta)\)</span>, can be written in terms of partial derivatives of the joint density function when <span class="math inline">\(X_i\)</span> and <span class="math inline">\(C_i\)</span> are absolutely continuous random variables. <span class="math display">\[\begin{align*}
+  f_{T_i, \delta_i}(t, \delta;\,\theta)  = \left(-\frac{\partial}{\partial u} P_\theta(X \geq u, C \geq t) \mid_{u = t}  \right)^\delta \left(-\frac{\partial}{\partial u} P_\theta(X \geq t, C \geq u) \mid_{u = t}  \right)^{1 - \delta}
+\end{align*}\]</span> Let’s rewrite the partial derivatives in terms of their limits: <span class="math display">\[\begin{align*}
+   f_{T_i, \delta_i}(t, \delta;\,\theta) = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq X &lt; t + \Delta t, C \geq t) \right)^\delta
+    \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(X \geq t, t \leq C &lt; t + \Delta t)   \right)^{1 - \delta}
+\end{align*}\]</span> We can factorize the distribution function: <span class="math display">\[\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(C \geq t \mid X \geq t) P_\eta(X \geq t) \right)^\delta  \\
+    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(C \geq t \mid X \geq t)P_\eta(X \geq t)   \right)^{1 - \delta}
+\end{align*}\]</span> and rearranging and subbing in <span class="math inline">\(\lambda_\eta(t)\)</span> for the hazard function: <span class="math display">\[\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\theta(C \geq t \mid t \leq X &lt; t + \Delta t)^\delta  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t)\right)^{1 - \delta}
+\end{align*}\]</span> Assuming that <span class="math inline">\(P_\theta(C_i \geq t \mid X_i = x) = P_\phi(C_i \geq t)\)</span> leads to the following <span class="math display">\[\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\phi(C \geq t)^\delta  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t)\right)^{1 - \delta}
+\end{align*}\]</span> This means that we can factorize the joint density: <span class="math display">\[f_{T_i, \delta_i}(t, \delta;\,\theta) = f_{X_i, \delta_i}(t, \delta;\,\eta) f_{C_i, \delta_i}(t, \delta;\,\phi).\]</span> Thus, noninformative censoring and parameter separability yield a separable joint density. This means that when we want to do maximum likelihood for survival data, we can <em>ignore</em> the model for the censoring times, <span class="math inline">\(f_{C_i, \delta_i}(t, \delta;\,\phi)\)</span>, and focus on only the model for the failure times: <span class="math display">\[f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta P_\eta(X \geq t).\]</span> We can write this expression fully in terms of the hazard function by recalling <a href="#eq:exp-hazard" data-reference-type="ref+Label" data-reference="eq:exp-hazard">[eq:exp-hazard]</a>: <span id="eq-separable-like"><span class="math display">\[\begin{align}
+f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta \exp\left(-\int_0^t \lambda_{X_i}(u) du \right).
+\end{align}
+\tag{4}\]</span></span></p>
+<div id="exmp:mle-exp" class="exmp">
+<p><strong>Example 3.3</strong>. MLE for exponential survival timeLet <span class="math inline">\(X_i \overset{\text{iid}}{\sim} \text{Exp}(\alpha)\)</span> and assume we have independent censoring (<span class="math inline">\(X_i \perp\!\!\!\perp C_i\)</span>), the parameters for the censoring process are separable from <span class="math inline">\(\alpha\)</span>, and that <span class="math inline">\(C_i\)</span> are iid such that <span class="math inline">\(\Exp{C_i} &lt; \infty\)</span>. Then our observed data are <span class="math inline">\(T_i = \min(X_i, C_i)\)</span> and <span class="math inline">\(\delta_i = \mathbbm{1}\left(X_i \leq C_i\right)\)</span>. According to <a href="#eq-separable-like" class="quarto-xref">Equation&nbsp;4</a> we can write the likelihood as <span class="math display">\[\begin{align*}
+f_\alpha(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \prod_{i=1}^n \alpha^{\delta_i} \exp(-\textstyle{\sum_{i=1}^n \int_0^{t_i} }\alpha du)\\
+&amp; = \alpha^{\sum_{i=1}^n \delta_i} \exp(-\alpha \textstyle\sum_{i=1}^n t_i)
+\end{align*}\]</span> The log-likelihood is <span class="math display">\[\log(f_\alpha(t_1, \dots, t_n, \delta_1, \dots, \delta_n) ) = \log(\alpha)\sum_{i=1}^n \delta_i -\alpha \sum_{i=1}^n t_i\]</span> which has the maximizer <span class="math display">\[\hat{\alpha} = \frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i}.\]</span> Let’s show that this converges a.s. to <span class="math inline">\(\alpha\)</span> as <span class="math inline">\(n\to\infty\)</span>. We can rewrite <span class="math inline">\(\frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i}\)</span> as <span class="math display">\[\begin{align*}
+    \frac{\frac{1}{n}\sum_{i=1}^n \mathbbm{1}\left(X_i \leq C_i\right)}{\frac{1}{n}\sum_{i=1}^n X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}
+\end{align*}\]</span> The top and bottom expressions converge a.s. by Kolmogorov’s Strong Law of Large Numbers to <span class="math display">\[\begin{align*}
+\frac{1}{n}\sum_{i=1}^n \mathbbm{1}\left(X_i \leq C_i\right) &amp; \overset{\text{a.s.}}{\to} \ExpA{\mathbbm{1}\left(X_i \leq C_i\right)}{(X_i, C_i)} \\
+\frac{1}{n}\sum_{i=1}^n X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right) &amp; \overset{\text{a.s.}}{\to}  \ExpA{X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}{(X_i, C_i)}
+\end{align*}\]</span> We can evaluate the top expression using the tower property of expectation: <span class="math display">\[\begin{align*}
+    \ExpA{\mathbbm{1}\left(X_i \leq C_i\right)}{(X_i, C_i)} &amp; =  \ExpA{\ExpA{\mathbbm{1}\left(X_i \leq c\right)\mid C_i = c}{X_i \mid C_i}}{C_i} \\
+    &amp; = \ExpA{1 - e^{-\alpha C_i}}{C_i}
+\end{align*}\]</span> where the second line follows from the independent censoring condition. The bottom expression becomes: <span class="math display">\[\begin{align*}
+\ExpA{X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}{(X_i, C_i)} &amp; = \ExpA{\ExpA{X_i \mathbbm{1}\left(X_i \leq c\right) \mid C_i = c}{X_i \mid C_i}}{C_i} \\
+&amp; + \ExpA{\ExpA{c \mathbbm{1}\left(X_i &gt; c\right) \mid C_i = c}{X_i \mid C_i}}{C_i} \\
+&amp; = \ExpA{\frac{1}{\alpha}(1 - (1 + \alpha C_i) e^{-\alpha C_i})}{C_i} + \ExpA{C_i e^{-\alpha C_i}}{C_i} \\
+&amp; = \frac{1}{\alpha}\ExpA{1 - e^{-\alpha C_i}}{C_i}
+\end{align*}\]</span> Thus <span class="math display">\[\frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i} \overset{\text{a.s.}}{\to} \alpha\]</span> To show that <span class="math inline">\(\int_0^c x \alpha e^{-\alpha x} dx = \frac{1}{\alpha}(1 - (1 + \alpha c) e^{-\alpha c})\)</span>, we can use the trick of differentiating under the integral sign. <span class="math display">\[\begin{align*}
+  \alpha \int_0^c xe^{-\alpha x} dx &amp; = \alpha \int_0^c -\frac{d}{d \alpha} e^{-\alpha x} dx \\
+  &amp; = \alpha \left(-\frac{d}{d \alpha}\right)\int_0^c e^{-\alpha x} dx \\
+  &amp; = \alpha \left(-\frac{d}{d \alpha}\right)\frac{1}{\alpha} (1 - e^{-\alpha c}) \\
+  &amp; = \alpha \left(\frac{1 - (1 + \alpha c) e^{-\alpha c}}{\alpha^2}\right)
+\end{align*}\]</span></p>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
