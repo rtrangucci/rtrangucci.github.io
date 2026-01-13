@@ -211,6 +211,16 @@ window.Quarto = {
   <li><a href="#bias-of-cca" id="toc-bias-of-cca" class="nav-link" data-scroll-target="#bias-of-cca">Bias of CCA</a></li>
   </ul></li>
   <li><a href="#weighting-estimators" id="toc-weighting-estimators" class="nav-link" data-scroll-target="#weighting-estimators">Weighting estimators</a></li>
+  <li><a href="#inverse-probability-estimators" id="toc-inverse-probability-estimators" class="nav-link" data-scroll-target="#inverse-probability-estimators">Inverse probability estimators</a>
+  <ul class="collapse">
+  <li><a href="#simple-estimator" id="toc-simple-estimator" class="nav-link" data-scroll-target="#simple-estimator">Simple estimator</a></li>
+  </ul></li>
+  <li><a href="#augmented-inverse-probability-weighted-estimators" id="toc-augmented-inverse-probability-weighted-estimators" class="nav-link" data-scroll-target="#augmented-inverse-probability-weighted-estimators">Augmented inverse probability weighted estimators</a>
+  <ul class="collapse">
+  <li><a href="#correctly-specified-pix_ibeta" id="toc-correctly-specified-pix_ibeta" class="nav-link" data-scroll-target="#correctly-specified-pix_ibeta">Correctly specified <span class="math inline">\(\pi(x_i,\beta)\)</span></a></li>
+  <li><a href="#correctly-specified-mux_igamma" id="toc-correctly-specified-mux_igamma" class="nav-link" data-scroll-target="#correctly-specified-mux_igamma">Correctly specified <span class="math inline">\(\mu(x_i,\gamma)\)</span></a></li>
+  </ul></li>
+  <li><a href="#poststratified-estimators" id="toc-poststratified-estimators" class="nav-link" data-scroll-target="#poststratified-estimators">Poststratified estimators</a></li>
   </ul>
 </nav>
     </div>
@@ -510,7 +520,84 @@ f_{M_i\mid Y_i}(M_i = m_i \mid Y_{(0)i} = y_{(0)i},Y_{(1)i} =  y_{(1)i}, \phi) \
 &amp; = \frac{1}{N} \sum_{i=1}^N \frac{y_i \pi_i}{\pi_i}\\
 &amp; = \frac{1}{N} \sum_{i=1}^N y_i
 \end{aligned}
-\]</span> This same idea can be used for missing data and is called the <strong>inverse probability weighted complete case</strong> estimator, or IPWCC for short.</p>
+\]</span></p>
+</section>
+<section id="inverse-probability-estimators" class="level1">
+<h1>Inverse probability estimators</h1>
+<section id="simple-estimator" class="level2">
+<h2 class="anchored" data-anchor-id="simple-estimator">Simple estimator</h2>
+<p>This same idea can be used for missing data and is called the <strong>inverse probability weighted complete case</strong> estimator, or IPWCC for short.</p>
+<p>Suppose that we have a sample of pairs <span class="math inline">\((y_i, m_i), i = 1, \dots, n\)</span>.</p>
+<p>For the next section, we’ll make the more stringent assumption that there are completely observed covariates, <span class="math inline">\(X_i\)</span> such that the following holds <span class="math inline">\(M_i \indy Y_i \mid X_i\)</span> and that we have specified the correct model for <span class="math inline">\(M_i\)</span>: <span class="math display">\[
+P(M_i = 0 \mid X_i = x, \beta) = \pi(x,\beta)
+\]</span></p>
+<p><span class="math display">\[
+\bar{y}^\mathrm{IPWCC} = \frac{1}{n} \sum_{i=1}^n \frac{y_i (1 - M_i)}{\pi(x_i, \beta)} \overset{p}{\to} \ExpA{\frac{Y_i (1 - M_i)}{\pi(X_i, \beta)}}{(Y_i, M_i, X_i)}
+\]</span> where the convergence in probability follows from the weak law of large numbers.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\ExpA{\frac{Y_i (1 - M_i)}{\pi(X_i, \beta)}}{(Y_i, M_i, X_i)} &amp; = \ExpA{\ExpA{\frac{Y_i (1 - M_i)}{\pi(X_i, \beta)}}{M_i \mid Y_i, X_i}}{(Y_i, X_i)} \\
+&amp; = \ExpA{\frac{Y_i}{\pi(X_i, \beta)}\ExpA{ (1 - M_i)}{M_i \mid Y_i, X_i}}{(Y_i, X_i)} \\
+&amp; = \ExpA{\frac{Y_i}{\pi(X_i, \beta)}\pi(X_i, \beta)}{(Y_i, X_i)} \\
+&amp; = \ExpA{Y_i}{(Y_i, X_i)}
+\end{aligned}
+\]</span></p>
+<p>There are two drawbacks with the IPWCC estimator:</p>
+<ul>
+<li><p>It requires that <span class="math inline">\(\pi(X_i, \beta) &gt; 0\)</span> for all <span class="math inline">\(X_i\)</span> in the population; this may not be a good assumption.</p></li>
+<li><p>Even if <span class="math inline">\(\pi(X_i, \beta) &gt; 0\)</span> is strictly true, small values of <span class="math inline">\(\pi(X_i, \beta)\)</span> may occur (the interpretation is that the <span class="math inline">\(i^\mathrm{th}\)</span> observation will represent an inordinate number of missing cases because its probability of being missing is so high). If this happens, these estimators can have very large variance</p></li>
+<li><p>In practice, we don’t know <span class="math inline">\(\pi(X_i, \beta)\)</span> and typically have to estimate <span class="math inline">\(\beta\)</span> with <span class="math inline">\(\hat{\beta}\)</span>. If the sample is small, even if the form <span class="math inline">\(\pi(X_i, \beta)\)</span> is right, there may be high variance. If the model for <span class="math inline">\(M_i \mid X_i\)</span> is wrong, then we have no guarantees that our IPWCC estimator will be unbiased.</p></li>
+</ul>
+</section>
+</section>
+<section id="augmented-inverse-probability-weighted-estimators" class="level1">
+<h1>Augmented inverse probability weighted estimators</h1>
+<p>In order to help with the third bullet above, enter <strong>augmented inverse probability weighted complete case</strong> estimators or AIPWCCs. These models require building a model for <span class="math inline">\(\ExpA{Y_i \mid X_i}{Y_i \mid X_i}\)</span> and <span class="math inline">\(\ExpA{M_i \mid X_i}{M_i \mid X_i}\)</span>. If either of these models is correct, the estimator will correctly estimate <span class="math inline">\(\Exp{Y_i}\)</span>. Let’s write the model for <span class="math inline">\(\Exp{Y_i \mid X_i}\)</span> as <span class="math inline">\(\mu(X_i, \gamma)\)</span> and the model for <span class="math inline">\(P(M_i = 0 \mid X_i)\)</span> as above, or <span class="math inline">\(\pi(X_i, \beta)\)</span>.</p>
+<p>The AIPWCC estimator is as follows:</p>
+<p><span class="math display">\[
+\bar{y}^\mathrm{AIPWCC} = \frac{1}{n} \sum_{i=1}^n \frac{y_i (1 - m_i)}{\pi(x_i, \hat{\beta})} - \lp\frac{(1 - m_i) - \pi(x_i, \hat{\beta})}{\pi(x_i, \hat{\beta})}\rp\mu(x_i, \hat{\gamma})
+\]</span></p>
+<p>We can add and subtract the term <span class="math inline">\(\frac{(1 - m_i) - \pi(x_i, \hat{\beta})}{\pi(x_i, \hat{\beta})} y_i\)</span> to give us:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{1}{n} &amp; \sum_{i=1}^n \frac{y_i (1 - m_i)}{\pi(x_i, \hat{\beta})} - \lp\frac{(1 - m_i) - \pi(x_i, \hat{\beta})}{\pi(x_i, \hat{\beta})}\rp\mu(x_i, \hat{\gamma}) \\
+&amp; = \frac{1}{n} \sum_{i=1}^n \frac{y_i (1 - m_i)}{\pi(x_i, \hat{\beta})} - \lp\frac{(1 - m_i) - \pi(x_i, \hat{\beta})}{\pi(x_i, \hat{\beta})}\rp(y_i - \mu(x_i, \hat{\gamma})) - \lp\frac{(1 - m_i) - \pi(x_i, \hat{\beta})}{\pi(x_i, \hat{\beta})}\rp y_i \\
+&amp; = \frac{1}{n} \sum_{i=1}^n y_i - \lp\frac{(1 - m_i) - \pi(x_i, \hat{\beta})}{\pi(x_i, \hat{\beta})}\rp(y_i - \mu(x_i, \hat{\gamma}))
+\end{aligned}
+\]</span> Of course, the first line is computable, while the last line isn’t because we don’t observe <span class="math inline">\(y_i\)</span> when <span class="math inline">\(m_i = 1\)</span>. However, the version of the estimator below can be used to show that the estimator will be asymptotically unbiased when either <span class="math inline">\(\mu(X_i, \gamma)\)</span> or <span class="math inline">\(\pi(X_i, \beta)\)</span> is correctly specified.</p>
+<p>We’ll go through both cases. For both cases, suppose that <span class="math inline">\(\ExpA{Y_i \mid X_i}{Y_i \mid X_i} = \mu(X_i, \gamma^\dagger)\)</span> and <span class="math inline">\(P(M_i = 0) = \pi(X_i, \beta^\dagger)\)</span>.</p>
+<section id="correctly-specified-pix_ibeta" class="level2">
+<h2 class="anchored" data-anchor-id="correctly-specified-pix_ibeta">Correctly specified <span class="math inline">\(\pi(x_i,\beta)\)</span></h2>
+<p>Suppose that <span class="math inline">\(\pi(X_i, \beta)\)</span> is correctly specified, but <span class="math inline">\(\mu(x_i, \gamma)\)</span> is misspecified. Then <span class="math inline">\(\hat{\beta} \overset{p}{\to} \beta^\dagger\)</span> but <span class="math inline">\(\hat{\gamma} \overset{p}{\to} \gamma^\prime\)</span> such that <span class="math inline">\(\gamma^\prime \neq \gamma^\dagger\)</span>. By the WLLN, <span class="math inline">\(\bar{y}^\mathrm{AIPWCC} \overset{p}{\to}\)</span> the expression: <span class="math display">\[
+\ExpA{Y_i}{(Y_i, M_i, X_i)} - \ExpA{\lp\frac{(1 - M_i) + \pi(X_i, \beta^\dagger)}{\pi(X_i, \beta^\dagger)}\rp(Y_i - \mu(x_i, \gamma^\prime))}{(Y_i, M_i, X_i)}
+\]</span> The second term simplifies: <span class="math display">\[
+\begin{aligned}
+&amp; \ExpA{\lp\frac{(1 - M_i) - \pi(X_i, \beta^\dagger)}{\pi(X_i, \beta^\dagger)}\rp(Y_i - \mu(x_i, \gamma^\prime))}{(Y_i, M_i, X_i)} \\
+&amp; = \ExpA{\ExpA{\lp\frac{(1 - M_i) - \pi(X_i, \beta^\dagger)}{\pi(X_i, \beta^\dagger)}\rp(Y_i - \mu(x_i, \gamma^\prime))}{M_i \mid Y_i, X_i}}{(Y_i, X_i)} \\
+&amp; = \ExpA{(Y_i - \mu(x_i, \gamma^\prime))\frac{1}{\pi(X_i, \beta^\dagger)}\ExpA{(1 - M_i) - \pi(X_i, \beta^\dagger)}{M_i \mid Y_i, X_i}}{(Y_i, X_i)} \\
+&amp; = 0
+\end{aligned}
+\]</span></p>
+</section>
+<section id="correctly-specified-mux_igamma" class="level2">
+<h2 class="anchored" data-anchor-id="correctly-specified-mux_igamma">Correctly specified <span class="math inline">\(\mu(x_i,\gamma)\)</span></h2>
+<p>Suppose that <span class="math inline">\(\mu(X_i, \gamma)\)</span> is correctly specified, but <span class="math inline">\(\pi(x_i, \beta)\)</span> is misspecified. Then <span class="math inline">\(\hat{\gamma} \overset{p}{\to} \gamma^\dagger\)</span> but <span class="math inline">\(\hat{\beta} \overset{p}{\to} \beta^\prime\)</span> such that <span class="math inline">\(\beta^\prime \neq \beta^\dagger\)</span>. By the WLLN, <span class="math inline">\(\bar{y}^\mathrm{AIPWCC} \overset{p}{\to}\)</span> the expression: <span class="math display">\[
+\ExpA{Y_i}{(Y_i, M_i, X_i)} - \ExpA{\lp\frac{(1 - M_i) + \pi(X_i, \beta^\prime)}{\pi(X_i, \beta^\prime)}\rp(Y_i - \mu(x_i, \gamma^\dagger))}{(Y_i, M_i, X_i)}
+\]</span> The second term simplifies: <span class="math display">\[
+\begin{aligned}
+&amp; \ExpA{\lp\frac{(1 - M_i) - \pi(X_i, \beta^\prime)}{\pi(X_i, \beta^\prime)}\rp(Y_i - \mu(x_i, \gamma^\dagger))}{(Y_i, M_i, X_i)} \\
+&amp; = \ExpA{\ExpA{\lp\frac{(1 - M_i) - \pi(X_i, \beta^\prime)}{\pi(X_i, \beta^\prime)}\rp(Y_i - \mu(x_i, \gamma^\dagger))}{Y_i \mid M_i, X_i}}{(M_i, X_i)} \\
+&amp; = \ExpA{\lp\frac{(1 - M_i) - \pi(X_i, \beta^\prime)}{\pi(X_i, \beta^\prime)}\rp\ExpA{(Y_i - \mu(x_i, \gamma^\dagger))}{Y_i \mid M_i, X_i}}{(M_i, X_i)} \\
+&amp; = 0
+\end{aligned}
+\]</span></p>
+<p>This is great if you get one of the forms right. However, if both are wrong, there are no guarantees about the bias. <span class="citation" data-cites="kangDemystifyingDoubleRobustness2007">Kang and Schafer (<a href="#ref-kangDemystifyingDoubleRobustness2007" role="doc-biblioref">2007</a>)</span> investigates, via simulation study, how poorly AIPWCC estimators perform when both models are wrong. They find that regression imputation estimators, which are what we’ll study in the next section, perform better, both in terms of coverage and MSE, even when the regression equation is misspecified.</p>
+<p>The key is that the AIPWCC estimators have high variance because of the denominator <span class="math inline">\(\pi(X_i, \beta)\)</span>.</p>
+</section>
+</section>
+<section id="poststratified-estimators" class="level1">
+<h1>Poststratified estimators</h1>
+<p>These estimators directly exploit the law of total expectation.</p>
 
 
 
@@ -518,6 +605,9 @@ f_{M_i\mid Y_i}(M_i = m_i \mid Y_{(0)i} = y_{(0)i},Y_{(1)i} =  y_{(1)i}, \phi) \
 
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-kangDemystifyingDoubleRobustness2007" class="csl-entry" role="listitem">
+Kang, Joseph D. Y., and Joseph L. Schafer. 2007. <span>“Demystifying <span>Double</span> <span>Robustness</span>: <span>A</span> <span>Comparison</span> of <span>Alternative</span> <span>Strategies</span> for <span>Estimating</span> a <span>Population</span> <span>Mean</span> from <span>Incomplete</span> <span>Data</span>.”</span> <em>Statistical Science</em> 22 (4). <a href="https://doi.org/10.1214/07-STS227">https://doi.org/10.1214/07-STS227</a>.
+</div>
 <div id="ref-little2019statistical" class="csl-entry" role="listitem">
 Little, Roderick JA, and Donald B Rubin. 2019. <em>Statistical Analysis with Missing Data</em>. John Wiley &amp; Sons.
 </div>

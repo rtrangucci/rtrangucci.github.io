@@ -422,43 +422,33 @@ S_{X_i}(x;\, \alpha, \theta) S_{C_i}(c;\, \mu, \theta) \neq \exp(-\alpha x - \mu
    f_{T_i, \delta_i}(t, \delta;\,\theta) = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq X &lt; t + \Delta t, C \geq t) \right)^\delta
     \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(X \geq t, t \leq C &lt; t + \Delta t)   \right)^{1 - \delta}
 \end{align*}\]</span> We can factorize the distribution function: <span class="math display">\[\begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(C \geq t \mid X \geq t) P_\eta(X \geq t) \right)^\delta  \\
-    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(C \geq t \mid X \geq t)P_\eta(X \geq t)   \right)^{1 - \delta}
-\end{align*}\]</span>. Assuming noninformative censoring: <span class="math display">\[\begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t)P_\theta(C \geq t \mid X \geq t) P_\eta(X \geq t) \right)^\delta  \\
-    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(C \geq t \mid X \geq t)P_\eta(X \geq t)   \right)^{1 - \delta}
-\end{align*}\]</span>.</p>
-<p>and rearranging and subbing in <span class="math inline">\(\lambda_\eta(t)\)</span> for the hazard function: <span class="math display">\[
-\begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\theta(C \geq t \mid X \geq t)  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)\right)^{1 - \delta}
-\end{align*}\]</span> Assuming that <span class="math display">\[
-\begin{aligned}
-P_\theta(C_i \geq t \mid X_i \geq t) &amp; = P_\phi(C_i \geq t \mid X_i \geq t) \\
-P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t) &amp; = P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)
-\end{aligned}
-\]</span> and leads to the following <span class="math display">\[\begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\phi(C \geq t \mid X \geq t)^\delta  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)\right)^{1 - \delta}
-\end{align*}\]</span> This means that we can factorize the joint density: <span class="math display">\[f_{T_i, \delta_i}(t, \delta;\,\theta) = f_{X_i, \delta_i}(t, \delta;\,\eta) f_{C_i, \delta_i}(t, \delta;\,\phi).\]</span> Thus, noninformative censoring and parameter separability yield a separable joint density. This means that when we want to do maximum likelihood for survival data, we can <em>ignore</em> the model for the censoring times, <span class="math inline">\(f_{C_i, \delta_i}(t, \delta;\,\phi)\)</span>, and focus on only the model for the failure times: <span class="math display">\[f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta P_\eta(X \geq t).\]</span> We can write this expression fully in terms of the hazard function by recalling <a href="#eq:exp-hazard" data-reference-type="ref+Label" data-reference="eq:exp-hazard">[eq:exp-hazard]</a>: <span id="eq-separable-like"><span class="math display">\[\begin{align}
+    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t)P_\theta(C \geq t \mid t \leq X &lt; t + \Delta t) P_\eta(X \geq t) \right)^\delta  \\
+    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t)P_\eta(X \geq t)   \right)^{1 - \delta}
+\end{align*}\]</span> and rearranging and subbing in <span class="math inline">\(\lambda_\eta(t)\)</span> for the hazard function: <span class="math display">\[\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\theta(C \geq t \mid t \leq X &lt; t + \Delta t)^\delta  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t)\right)^{1 - \delta}
+\end{align*}\]</span> Assuming that <span class="math inline">\(P_\theta(C_i \geq t \mid X_i = x) = P_\phi(C_i \geq t)\)</span> leads to the following <span class="math display">\[\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\phi(C \geq t)^\delta  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t)\right)^{1 - \delta}
+\end{align*}\]</span> This means that we can factorize the joint density: <span class="math display">\[f_{T_i, \delta_i}(t, \delta;\,\theta) = f_{X_i, \delta_i}(t, \delta;\,\eta) f_{C_i, \delta_i}(t, \delta;\,\phi).\]</span> Thus, noninformative censoring and parameter separability yield a separable joint density. This means that when we want to do maximum likelihood for survival data, we can <em>ignore</em> the model for the censoring times, <span class="math inline">\(f_{C_i, \delta_i}(t, \delta;\,\phi)\)</span>, and focus on only the model for the failure times: <span class="math display">\[f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta P_\eta(X \geq t).\]</span> We can write this expression fully in terms of the hazard function by recalling <a href="#eq:exp-hazard" data-reference-type="ref+Label" data-reference="eq:exp-hazard">[eq:exp-hazard]</a>: <span class="math display">\[\begin{align}
+\label{eq:separable-like}
 f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta \exp\left(-\int_0^t \lambda_{X_i}(u) du \right).
-\end{align}
-\tag{4}\]</span></span></p>
+\end{align}\]</span></p>
 <div id="exmp:mle-exp" class="exmp">
-<p><strong>Example 3.3</strong>. MLE for exponential survival timeLet <span class="math inline">\(X_i \overset{\text{iid}}{\sim} \text{Exp}(\alpha)\)</span> and assume we have independent censoring (<span class="math inline">\(X_i \perp\!\!\!\perp C_i\)</span>), the parameters for the censoring process are separable from <span class="math inline">\(\alpha\)</span>, and that <span class="math inline">\(C_i\)</span> are iid such that <span class="math inline">\(\Exp{C_i} &lt; \infty\)</span>. Then our observed data are <span class="math inline">\(T_i = \min(X_i, C_i)\)</span> and <span class="math inline">\(\delta_i = \mathbbm{1}\left(X_i \leq C_i\right)\)</span>. According to <a href="#eq-separable-like" class="quarto-xref">Equation&nbsp;4</a> we can write the likelihood as <span class="math display">\[\begin{align*}
+<p><strong>Example 3.3</strong>. MLE for exponential survival timeLet <span class="math inline">\(X_i \overset{\text{iid}}{\sim} \text{Exp}(\alpha)\)</span> and assume we have independent censoring (<span class="math inline">\(X_i \perp\!\!\!\perp C_i\)</span>), the parameters for the censoring process are separable from <span class="math inline">\(\alpha\)</span>, and that <span class="math inline">\(C_i\)</span> are iid such that <span class="math inline">\(\Exp{C_i} &lt; \infty\)</span>. Then our observed data are <span class="math inline">\(T_i = \min(X_i, C_i)\)</span> and <span class="math inline">\(\delta_i = \mathbbm{1}\left(X_i \leq C_i\right)\)</span>. According to <a href="#eq:partial-lik" data-reference-type="ref+Label" data-reference="eq:partial-lik">[eq:partial-lik]</a> we can write the likelihood as <span class="math display">\[\begin{align*}
 f_\alpha(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \prod_{i=1}^n \alpha^{\delta_i} \exp(-\textstyle{\sum_{i=1}^n \int_0^{t_i} }\alpha du)\\
 &amp; = \alpha^{\sum_{i=1}^n \delta_i} \exp(-\alpha \textstyle\sum_{i=1}^n t_i)
 \end{align*}\]</span> The log-likelihood is <span class="math display">\[\log(f_\alpha(t_1, \dots, t_n, \delta_1, \dots, \delta_n) ) = \log(\alpha)\sum_{i=1}^n \delta_i -\alpha \sum_{i=1}^n t_i\]</span> which has the maximizer <span class="math display">\[\hat{\alpha} = \frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i}.\]</span> Let’s show that this converges a.s. to <span class="math inline">\(\alpha\)</span> as <span class="math inline">\(n\to\infty\)</span>. We can rewrite <span class="math inline">\(\frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i}\)</span> as <span class="math display">\[\begin{align*}
     \frac{\frac{1}{n}\sum_{i=1}^n \mathbbm{1}\left(X_i \leq C_i\right)}{\frac{1}{n}\sum_{i=1}^n X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}
 \end{align*}\]</span> The top and bottom expressions converge a.s. by Kolmogorov’s Strong Law of Large Numbers to <span class="math display">\[\begin{align*}
-\frac{1}{n}\sum_{i=1}^n \mathbbm{1}\left(X_i \leq C_i\right) &amp; \overset{\text{a.s.}}{\to} \ExpA{\mathbbm{1}\left(X_i \leq C_i\right)}{(X_i, C_i)} \\
-\frac{1}{n}\sum_{i=1}^n X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right) &amp; \overset{\text{a.s.}}{\to}  \ExpA{X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}{(X_i, C_i)}
+\frac{1}{n}\sum_{i=1}^n \mathbbm{1}\left(X_i \leq C_i\right) &amp; \overset{\text{a.s.}}{\to} \Exp{\mathbbm{1}\left(X_i \leq C_i\right)}{(X_i, C_i)} \\
+\frac{1}{n}\sum_{i=1}^n X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right) &amp; \overset{\text{a.s.}}{\to}  \Exp{X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}{(X_i, C_i)}
 \end{align*}\]</span> We can evaluate the top expression using the tower property of expectation: <span class="math display">\[\begin{align*}
-    \ExpA{\mathbbm{1}\left(X_i \leq C_i\right)}{(X_i, C_i)} &amp; =  \ExpA{\ExpA{\mathbbm{1}\left(X_i \leq c\right)\mid C_i = c}{X_i \mid C_i}}{C_i} \\
-    &amp; = \ExpA{1 - e^{-\alpha C_i}}{C_i}
+    \Exp{\mathbbm{1}\left(X_i \leq C_i\right)}{(X_i, C_i)} &amp; =  \Exp{\Exp{\mathbbm{1}\left(X_i \leq c\right)\mid C_i = c}{X_i \mid C_i}}{C_i} \\
+    &amp; = \Exp{1 - e^{-\alpha C_i}}{C_i}
 \end{align*}\]</span> where the second line follows from the independent censoring condition. The bottom expression becomes: <span class="math display">\[\begin{align*}
-\ExpA{X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}{(X_i, C_i)} &amp; = \ExpA{\ExpA{X_i \mathbbm{1}\left(X_i \leq c\right) \mid C_i = c}{X_i \mid C_i}}{C_i} \\
-&amp; + \ExpA{\ExpA{c \mathbbm{1}\left(X_i &gt; c\right) \mid C_i = c}{X_i \mid C_i}}{C_i} \\
-&amp; = \ExpA{\frac{1}{\alpha}(1 - (1 + \alpha C_i) e^{-\alpha C_i})}{C_i} + \ExpA{C_i e^{-\alpha C_i}}{C_i} \\
-&amp; = \frac{1}{\alpha}\ExpA{1 - e^{-\alpha C_i}}{C_i}
+\Exp{X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}{(X_i, C_i)} &amp; = \Exp{\Exp{X_i \mathbbm{1}\left(X_i \leq c\right) \mid C_i = c}{X_i \mid C_i}}{C_i} \\
+&amp; + \Exp{\Exp{c \mathbbm{1}\left(X_i &gt; c\right) \mid C_i = c}{X_i \mid C_i}}{C_i} \\
+&amp; = \Exp{\frac{1}{\alpha}(1 - (1 + \alpha C_i) e^{-\alpha C_i})}{C_i} + \Exp{C_i e^{-\alpha C_i}}{C_i} \\
+&amp; = \frac{1}{\alpha}\Exp{1 - e^{-\alpha C_i}}{C_i}
 \end{align*}\]</span> Thus <span class="math display">\[\frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i} \overset{\text{a.s.}}{\to} \alpha\]</span> To show that <span class="math inline">\(\int_0^c x \alpha e^{-\alpha x} dx = \frac{1}{\alpha}(1 - (1 + \alpha c) e^{-\alpha c})\)</span>, we can use the trick of differentiating under the integral sign. <span class="math display">\[\begin{align*}
   \alpha \int_0^c xe^{-\alpha x} dx &amp; = \alpha \int_0^c -\frac{d}{d \alpha} e^{-\alpha x} dx \\
   &amp; = \alpha \left(-\frac{d}{d \alpha}\right)\int_0^c e^{-\alpha x} dx \\
