@@ -85,6 +85,7 @@ window.MathJax = {
         \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
         \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
         \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
       `);
     }
   },
@@ -321,7 +322,8 @@ Figure&nbsp;3: Example of generalized Type I censoring, viewed in patient time.
 \begin{aligned}
 \lambda_{X_i}(t) = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t}\Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t, C_i \geq t}{\eta, \phi}
 \end{aligned}
-\tag{1}\]</span></span> Note that this implies the following: <span id="eq-noninform-cens-prob"><span class="math display">\[
+\tag{1}\]</span></span> Note that this implies the following:</p>
+<p><span id="eq-noninform-cens-prob"><span class="math display">\[
 \begin{aligned}
 \Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t}{\eta} = \Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t, C_i \geq t}{\eta, \phi}.
 \end{aligned}
@@ -346,6 +348,10 @@ Figure&nbsp;3: Example of generalized Type I censoring, viewed in patient time.
   \frac{-\frac{\partial}{\partial u} P_{\eta, \phi}(X_i &gt; u, C_i &gt; t-) \mid_{u=t}}{P_{\eta,\phi}(X_i &gt; t-, C_i &gt; t-)} = \frac{-\frac{d}{du} S_{X_i}(u;\, \eta)}{S_{X_i}(t-;\, \eta)}
 \end{align}\]</span></p>
 <p>Here’s an example that demonstrates the nonidentifiability of the joint distribution for censoring and failure time:</p>
+<p>First, let’s define identifiability:</p>
+<div id="def-id" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2</strong></span> &nbsp;</p>
+</div>
 <div id="exm-dep-fail" class="theorem example">
 <p><span class="theorem-title"><strong>Example 1 (Dependent failure and censoring)</strong></span> Let <span class="math inline">\(P_{\theta,\alpha, \mu}(X_i &gt; x, C_i &gt; c) = \exp(-\alpha x - \mu c - \theta x c)\)</span>. We can find the marginal survival functions just by evaluating <span class="math inline">\(P_{\theta,\alpha, \mu}(X_i &gt; x, C_i &gt; 0)\)</span> and vice-versa, which yields: <span class="math display">\[\begin{align*}
     P_{\alpha}(X_i &gt; x) &amp; = \exp(- \alpha x) \\
@@ -362,8 +368,8 @@ S_{X_i}(x;\, \alpha, \theta) S_{C_i}(c;\, \mu, \theta) \neq \exp(-\alpha x - \mu
 <p>However, if we calculate the true observable survival function <span class="math inline">\(P_{\theta,\alpha, \mu}(X_i &gt; x, C_i &gt; X_i-)\)</span> we get: <span class="math display">\[\begin{align*}
     \int_x^\infty -\frac{\partial}{\partial u} P_{\theta,\alpha, \mu}(X_i &gt; u, C_i &gt; t-) \mid_{u=t} dt &amp; = \int_x^\infty (\alpha + \theta t) \exp(-\alpha t - \mu t - \theta t^2) dt
 \end{align*}\]</span> while the observable survival function implied the by the erroneously assumed independent distributons is: <span class="math display">\[\begin{align*}
-    \int_x^\infty -\frac{\partial}{\partial u} S_{X_i}(u;\, \alpha, \theta) S_{C_i}(t-;\, \mu, \theta) \mid_{u=t} dt &amp; = \int_x^\infty (-\frac{d}{dt}\exp(- \alpha t - \theta t^2 / 2 ))\exp(- \mu t - \theta t^2/ 2 ) \\
-    &amp; = \int_x^\infty (\alpha + \theta t) \exp(-\alpha t - \mu t - \theta t^2) du
+    \int_x^\infty -\frac{\partial}{\partial u} S_{X_i}(u;\, \alpha, \theta) \mid_{u=t} S_{C_i}(t-;\, \mu, \theta) dt &amp; = \int_x^\infty (-\frac{d}{du}\exp(- \alpha u - \theta u^2 / 2 ))\mid_{u=t}\exp(- \mu t - \theta t^2/ 2 )dt \\
+    &amp; = \int_x^\infty (\alpha + \theta t) \exp(-\alpha t - \mu t - \theta t^2) dt
 \end{align*}\]</span></p>
 <p>Thus, two different joint densities lead to the same observable survival functions, so the joint distribution is nonidentifiable.</p>
 </div>
@@ -417,38 +423,113 @@ S_{X_i}(x;\, \alpha, \theta) S_{C_i}(c;\, \mu, \theta) \neq \exp(-\alpha x - \mu
 <li><p>Let <span class="math inline">\(T_i = \min(X_i, C_i)\)</span>.</p></li>
 </ul>
 <p>When <span class="math inline">\(\delta_i = 1\)</span>, we observe <span class="math inline">\(T_i = X_i\)</span>; this is the event that <span class="math inline">\(\{X_i = T_i, C_i \geq X_i\}\)</span>. When <span class="math inline">\(\delta_i = 0\)</span>, we observe <span class="math inline">\(T_i = C_i\)</span>; this is the event that <span class="math inline">\(\{C_i = T_i, C_i &lt; X_i\}\)</span>. Let the joint distribution of <span class="math inline">\(X_i, C_i\)</span> be written as <span class="math inline">\(P_\theta(X &gt; x, C &gt; c)\)</span>, and further let <span class="math inline">\(\theta = (\eta, \phi)\)</span> such that <span class="math inline">\(P_\theta(X &gt; x, C &gt; c) = P_\eta(X &gt; x) P_\phi(C &gt; c \mid X &gt; x)\)</span>. We showed that the likelihood corresponding to the random variables <span class="math inline">\(T_i, \delta_i\)</span>, <span class="math inline">\(f_{T_i, \delta_i}(t, \delta;\,\theta)\)</span>, can be written in terms of partial derivatives of the joint density function when <span class="math inline">\(X_i\)</span> and <span class="math inline">\(C_i\)</span> are absolutely continuous random variables. <span class="math display">\[\begin{align*}
-  f_{T_i, \delta_i}(t, \delta;\,\theta)  = \left(-\frac{\partial}{\partial u} P_\theta(X \geq u, C \geq t) \mid_{u = t}  \right)^\delta \left(-\frac{\partial}{\partial u} P_\theta(X \geq t, C \geq u) \mid_{u = t}  \right)^{1 - \delta}
+  f_{T_i, \delta_i}(t, \delta;\,\theta) = \left(-\frac{\partial}{\partial u} P_\theta(X \geq u, C \geq t) \mid_{u = t}  \right)^\delta \left(-\frac{\partial}{\partial u} P_\theta(X \geq t, C \geq u) \mid_{u = t}  \right)^{1 - \delta}
 \end{align*}\]</span> Let’s rewrite the partial derivatives in terms of their limits: <span class="math display">\[\begin{align*}
    f_{T_i, \delta_i}(t, \delta;\,\theta) = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq X &lt; t + \Delta t, C \geq t) \right)^\delta
     \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(X \geq t, t \leq C &lt; t + \Delta t)   \right)^{1 - \delta}
-\end{align*}\]</span> We can factorize the distribution function: <span class="math display">\[\begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t)P_\theta(C \geq t \mid t \leq X &lt; t + \Delta t) P_\eta(X \geq t) \right)^\delta  \\
-    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t)P_\eta(X \geq t)   \right)^{1 - \delta}
-\end{align*}\]</span> and rearranging and subbing in <span class="math inline">\(\lambda_\eta(t)\)</span> for the hazard function: <span class="math display">\[\begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\theta(C \geq t \mid t \leq X &lt; t + \Delta t)^\delta  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t)\right)^{1 - \delta}
-\end{align*}\]</span> Assuming that <span class="math inline">\(P_\theta(C_i \geq t \mid X_i = x) = P_\phi(C_i \geq t)\)</span> leads to the following <span class="math display">\[\begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta)  &amp; = \left(\lambda_\eta(t)\right)^\delta P_\eta(X \geq t)  P_\phi(C \geq t)^\delta  \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t)\right)^{1 - \delta}
-\end{align*}\]</span> This means that we can factorize the joint density: <span class="math display">\[f_{T_i, \delta_i}(t, \delta;\,\theta) = f_{X_i, \delta_i}(t, \delta;\,\eta) f_{C_i, \delta_i}(t, \delta;\,\phi).\]</span> Thus, noninformative censoring and parameter separability yield a separable joint density. This means that when we want to do maximum likelihood for survival data, we can <em>ignore</em> the model for the censoring times, <span class="math inline">\(f_{C_i, \delta_i}(t, \delta;\,\phi)\)</span>, and focus on only the model for the failure times: <span class="math display">\[f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta P_\eta(X \geq t).\]</span> We can write this expression fully in terms of the hazard function by recalling <a href="#eq:exp-hazard" data-reference-type="ref+Label" data-reference="eq:exp-hazard">[eq:exp-hazard]</a>: <span class="math display">\[\begin{align}
-\label{eq:separable-like}
+\end{align*}\]</span> We can factorize the distribution function: <span class="math display">\[
+\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^\delta  \\
+    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^{1 - \delta}
+\end{align*}\]</span> . Let’s make the following substitutions for brevity’s sake: <span class="math display">\[
+\begin{aligned}
+\lambda_1(t) &amp; = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)\\
+\lambda_2(t) &amp; = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)\\
+\end{aligned}
+\]</span> Furthermore, let’s rewrite <span class="math inline">\(P_{\theta}(X \geq t, C \geq t)\)</span> in terms of <span class="math inline">\(\lambda_1(t)\)</span> and <span class="math inline">\(\lambda_2(t)\)</span>. This will require a bit of work. First, we can write the <span class="math inline">\(P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)\)</span> as <span class="math display">\[
+P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t) = \lambda(t)\Delta t  + o(\Delta t)
+\]</span> We’ll also assume the following: <span class="math display">\[
+P_\theta(t \leq X &lt; t + \Delta t, t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t) = o(\Delta t)
+\]</span> We’ll work with discretized time steps. Let <span class="math inline">\(t_0 = 0\)</span> and <span class="math inline">\(t_j = t_{j-1} + \Delta t\)</span>. Then <span class="math inline">\([0, \infty) = \bigcup_{j=0}^\infty [t_j, t_j + \Delta t)\)</span>.</p>
+<p>This construction means that we can write the survival function recursively for each <span class="math inline">\(t_j\)</span>: <span class="math display">\[
+\begin{aligned}
+P(X \geq t_j + \Delta t, C \geq t_j + \Delta t) &amp; = P(X \geq t_{j} + \Delta t, C \geq t_{j}  + \Delta t \mid X \geq t_{j}, C \geq t_{j}) P(X \geq t_{j}, C \geq t_{j}) \\
+&amp; =  P(X \geq t_{j} + \Delta t, C \geq t_{j}  + \Delta t \mid X \geq t_{j}, C \geq t_{j}) \\
+&amp; \times P(X \geq t_{j-1} + \Delta t, C \geq t_{j-1} + \Delta t \mid X \geq t_{j-1}, C \geq t_{j-1}) P(X \geq t_{j-1}, C \geq t_{j-1}) \\
+&amp; \vdots \\
+&amp; = \prod_{i \mid t_i \leq t_j}P(X \geq t_{i} + \Delta t, C \geq t_{i} + \Delta t \mid X \geq t_{i}, C \geq t_{i}) P(X \geq 0, C \geq 0) \\
+&amp; = \prod_{i \mid t_i \leq t_j}P(X \geq t_{i} + \Delta t, C \geq t_{i} + \Delta t \mid X \geq t_{i}, C \geq t_{i})
+\end{aligned}
+\]</span></p>
+<p>Let’s write the conditional survival function, <span class="math inline">\(P(X \geq t_i + \Delta t, C \geq t_i + \Delta t \mid X \geq t_i, C \geq t_i)\)</span>, or the probability that neither <span class="math inline">\(A_i \equiv \{t_i \leq X &lt; t_i \Delta t\}\)</span> nor <span class="math inline">\(B_i \equiv \{t \leq C &lt; t_i \Delta t\}\)</span> occur. In set notation, this is: <span class="math display">\[
+A_i\comp \cap B_i\comp = (A_i \cup B_i)\comp
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+P_\theta(X \geq t_i + \Delta t, C \geq t_i + \Delta t \mid X \geq t_i, C \geq t_i) &amp; =  P_\theta((A_i \cup B_i)\comp \mid X \geq t_i, C \geq t_i) \\
+&amp; = 1 - P_\theta(A_i \cup B_i \mid X \geq t_i, C \geq t_i) \\
+&amp; = 1 - (P_\theta(A_i \mid X \geq t_i, C \geq t_i) + P_\theta(B_i \mid X \geq t_i, C \geq t_i) - P_\theta(A_i \cap B_i \mid X \geq t_i, C \geq t_i))
+\end{aligned}
+\]</span> Recall that <span class="math display">\[
+\begin{aligned}
+P_\theta(A_i \cap B_i \mid X \geq t_i, C \geq t_i)) &amp; = P_\theta(t_i \leq X &lt; t_i + \Delta t, t_i \leq C &lt; t_i + \Delta t \mid X \geq t, C \geq t)  \\
+&amp; = o(\Delta t)
+\end{aligned}
+\]</span> and <span class="math display">\[
+\begin{aligned}
+P_\theta(A_i \mid X \geq t_i, C \geq t_i)) &amp; = P_\theta(t_i \leq X &lt; t_i + \Delta t \mid X \geq t, C \geq t)  \\
+&amp; = \lambda_1(t_i) \Delta t + o(\Delta t) \\
+P_\theta(B_i \mid X \geq t_i, C \geq t_i)) &amp; = P_\theta(t_i \leq C &lt; t_i + \Delta t \mid X \geq t, C \geq t)  \\
+&amp; = \lambda_2(t_i) \Delta t + o(\Delta t)
+\end{aligned}
+\]</span></p>
+<p>Putting this into the expression above, we get: <span class="math display">\[
+P_\theta(X \geq t_i + \Delta t, C \geq t_i + \Delta t \mid X \geq t_i, C \geq t_i) = 1 - \lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t)
+\]</span> Finally: <span class="math display">\[
+P(X \geq t_j + \Delta t, C \geq t_j + \Delta t) = \prod_{i \mid t_i \leq t_j} \lp 1 - \lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t) \rp
+\]</span> We take logs of both sides to get: <span class="math display">\[
+\log P(X \geq t_j + \Delta t, C \geq t_j + \Delta t) = \sum_{i \mid t_i \leq t_j} \log \lp 1 - \lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t) \rp
+\]</span> Suppose that <span class="math inline">\(\lambda_1(t), \lambda_2(t)\)</span> are bounded. Then we can use the Taylor series for <span class="math inline">\(\log 1 - x\)</span> as <span class="math inline">\(x \searrow 0\)</span>.: <span class="math display">\[
+\log(1 - x) = -x + o(1)
+\]</span></p>
+<p>Then <span class="math display">\[
+\begin{aligned}
+\log P(X \geq t_j + \Delta t, C \geq t_j + \Delta t) = -\sum_{i \mid t_i \leq t_j} (\lambda_1(t_i) + \lambda_2(t_i)) \Delta t  + o(\Delta t)
+\end{aligned}
+\]</span> Taking <span class="math inline">\(\Delta t \searrow 0\)</span> gives the integral: <span class="math display">\[
+\begin{aligned}
+\log P(X \geq t, C \geq t) = -\int_0^t (\lambda_1(u) + \lambda_2(u)) du \\
+P(X \geq t, C \geq t) = e^{-\int_0^t (\lambda_1(u) + \lambda_2(u)) du}
+\end{aligned}
+\]</span> This is a long way to show that <span class="math display">\[
+\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^\delta  \\
+    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^{1 - \delta} \\
+    &amp; = \lambda_1(t)^\delta \lambda_2(t)^{1-\delta} e^{-\int_0^t (\lambda_1(u) + \lambda_2(u)) du}
+\end{align*} \]</span></p>
+<p>Assuming noninformative censoring equates to:</p>
+<p><span class="math display">\[
+\begin{align*}
+    \lambda_1(t) &amp; = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t) \\
+    &amp; = \lambda_X(t)
+\end{align*}.
+\]</span> This yields: <span class="math display">\[
+\begin{align*}
+    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \lambda_1(t)^\delta \lambda_2(t)^{1-\delta} e^{-\int_0^t (\lambda_1(u) + \lambda_2(u)) du} \\
+    &amp; = \lambda_X(t)^\delta e^{-\int_0^t \lambda_X(u)du}  \lambda_2(t)^{1-\delta}e^{-\int_0^t\lambda_2(u)du}
+\end{align*}
+\]</span></p>
+<p>This means that we can factorize the joint density into a piece that Thus, noninformative censoring and parameter separability yield a separable joint density. This means that when we want to do maximum likelihood for survival data, we can <em>ignore</em> the model for the censoring times, <span class="math inline">\(f_{C_i, \delta_i}(t, \delta;\,\phi)\)</span>, and focus on only the model for the failure times: <span class="math display">\[f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta P_\eta(X \geq t).\]</span> We can write this expression fully in terms of the hazard function by recalling <a href="#eq:exp-hazard" data-reference-type="ref+Label" data-reference="eq:exp-hazard">[eq:exp-hazard]</a>: <span id="eq-separable-like"><span class="math display">\[\begin{align}
 f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta \exp\left(-\int_0^t \lambda_{X_i}(u) du \right).
-\end{align}\]</span></p>
+\end{align}
+\tag{4}\]</span></span></p>
 <div id="exmp:mle-exp" class="exmp">
-<p><strong>Example 3.3</strong>. MLE for exponential survival timeLet <span class="math inline">\(X_i \overset{\text{iid}}{\sim} \text{Exp}(\alpha)\)</span> and assume we have independent censoring (<span class="math inline">\(X_i \perp\!\!\!\perp C_i\)</span>), the parameters for the censoring process are separable from <span class="math inline">\(\alpha\)</span>, and that <span class="math inline">\(C_i\)</span> are iid such that <span class="math inline">\(\Exp{C_i} &lt; \infty\)</span>. Then our observed data are <span class="math inline">\(T_i = \min(X_i, C_i)\)</span> and <span class="math inline">\(\delta_i = \mathbbm{1}\left(X_i \leq C_i\right)\)</span>. According to <a href="#eq:partial-lik" data-reference-type="ref+Label" data-reference="eq:partial-lik">[eq:partial-lik]</a> we can write the likelihood as <span class="math display">\[\begin{align*}
+<p><strong>Example 3.3</strong>. MLE for exponential survival timeLet <span class="math inline">\(X_i \overset{\text{iid}}{\sim} \text{Exp}(\alpha)\)</span> and assume we have independent censoring (<span class="math inline">\(X_i \perp\!\!\!\perp C_i\)</span>), the parameters for the censoring process are separable from <span class="math inline">\(\alpha\)</span>, and that <span class="math inline">\(C_i\)</span> are iid such that <span class="math inline">\(\Exp{C_i} &lt; \infty\)</span>. Then our observed data are <span class="math inline">\(T_i = \min(X_i, C_i)\)</span> and <span class="math inline">\(\delta_i = \mathbbm{1}\left(X_i \leq C_i\right)\)</span>. According to <a href="#eq-separable-like" class="quarto-xref">Equation&nbsp;4</a> we can write the likelihood as <span class="math display">\[\begin{align*}
 f_\alpha(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \prod_{i=1}^n \alpha^{\delta_i} \exp(-\textstyle{\sum_{i=1}^n \int_0^{t_i} }\alpha du)\\
 &amp; = \alpha^{\sum_{i=1}^n \delta_i} \exp(-\alpha \textstyle\sum_{i=1}^n t_i)
 \end{align*}\]</span> The log-likelihood is <span class="math display">\[\log(f_\alpha(t_1, \dots, t_n, \delta_1, \dots, \delta_n) ) = \log(\alpha)\sum_{i=1}^n \delta_i -\alpha \sum_{i=1}^n t_i\]</span> which has the maximizer <span class="math display">\[\hat{\alpha} = \frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i}.\]</span> Let’s show that this converges a.s. to <span class="math inline">\(\alpha\)</span> as <span class="math inline">\(n\to\infty\)</span>. We can rewrite <span class="math inline">\(\frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i}\)</span> as <span class="math display">\[\begin{align*}
     \frac{\frac{1}{n}\sum_{i=1}^n \mathbbm{1}\left(X_i \leq C_i\right)}{\frac{1}{n}\sum_{i=1}^n X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}
 \end{align*}\]</span> The top and bottom expressions converge a.s. by Kolmogorov’s Strong Law of Large Numbers to <span class="math display">\[\begin{align*}
-\frac{1}{n}\sum_{i=1}^n \mathbbm{1}\left(X_i \leq C_i\right) &amp; \overset{\text{a.s.}}{\to} \Exp{\mathbbm{1}\left(X_i \leq C_i\right)}{(X_i, C_i)} \\
-\frac{1}{n}\sum_{i=1}^n X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right) &amp; \overset{\text{a.s.}}{\to}  \Exp{X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}{(X_i, C_i)}
+\frac{1}{n}\sum_{i=1}^n \mathbbm{1}\left(X_i \leq C_i\right) &amp; \overset{\text{a.s.}}{\to} \ExpA{\mathbbm{1}\left(X_i \leq C_i\right)}{(X_i, C_i)} \\
+\frac{1}{n}\sum_{i=1}^n X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right) &amp; \overset{\text{a.s.}}{\to}  \ExpA{X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}{(X_i, C_i)}
 \end{align*}\]</span> We can evaluate the top expression using the tower property of expectation: <span class="math display">\[\begin{align*}
-    \Exp{\mathbbm{1}\left(X_i \leq C_i\right)}{(X_i, C_i)} &amp; =  \Exp{\Exp{\mathbbm{1}\left(X_i \leq c\right)\mid C_i = c}{X_i \mid C_i}}{C_i} \\
-    &amp; = \Exp{1 - e^{-\alpha C_i}}{C_i}
+    \ExpA{\mathbbm{1}\left(X_i \leq C_i\right)}{(X_i, C_i)} &amp; =  \ExpA{\ExpA{\mathbbm{1}\left(X_i \leq c\right)\mid C_i = c}{X_i \mid C_i}}{C_i} \\
+    &amp; = \ExpA{1 - e^{-\alpha C_i}}{C_i}
 \end{align*}\]</span> where the second line follows from the independent censoring condition. The bottom expression becomes: <span class="math display">\[\begin{align*}
-\Exp{X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}{(X_i, C_i)} &amp; = \Exp{\Exp{X_i \mathbbm{1}\left(X_i \leq c\right) \mid C_i = c}{X_i \mid C_i}}{C_i} \\
-&amp; + \Exp{\Exp{c \mathbbm{1}\left(X_i &gt; c\right) \mid C_i = c}{X_i \mid C_i}}{C_i} \\
-&amp; = \Exp{\frac{1}{\alpha}(1 - (1 + \alpha C_i) e^{-\alpha C_i})}{C_i} + \Exp{C_i e^{-\alpha C_i}}{C_i} \\
-&amp; = \frac{1}{\alpha}\Exp{1 - e^{-\alpha C_i}}{C_i}
+\ExpA{X_i \mathbbm{1}\left(X_i \leq C_i\right) + C_i \mathbbm{1}\left(X_i &gt; C_i\right)}{(X_i, C_i)} &amp; = \ExpA{\ExpA{X_i \mathbbm{1}\left(X_i \leq c\right) \mid C_i = c}{X_i \mid C_i}}{C_i} \\
+&amp; + \ExpA{\ExpA{c \mathbbm{1}\left(X_i &gt; c\right) \mid C_i = c}{X_i \mid C_i}}{C_i} \\
+&amp; = \ExpA{\frac{1}{\alpha}(1 - (1 + \alpha C_i) e^{-\alpha C_i})}{C_i} + \ExpA{C_i e^{-\alpha C_i}}{C_i} \\
+&amp; = \frac{1}{\alpha}\ExpA{1 - e^{-\alpha C_i}}{C_i}
 \end{align*}\]</span> Thus <span class="math display">\[\frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i} \overset{\text{a.s.}}{\to} \alpha\]</span> To show that <span class="math inline">\(\int_0^c x \alpha e^{-\alpha x} dx = \frac{1}{\alpha}(1 - (1 + \alpha c) e^{-\alpha c})\)</span>, we can use the trick of differentiating under the integral sign. <span class="math display">\[\begin{align*}
   \alpha \int_0^c xe^{-\alpha x} dx &amp; = \alpha \int_0^c -\frac{d}{d \alpha} e^{-\alpha x} dx \\
   &amp; = \alpha \left(-\frac{d}{d \alpha}\right)\int_0^c e^{-\alpha x} dx \\

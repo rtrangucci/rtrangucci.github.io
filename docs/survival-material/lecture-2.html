@@ -316,7 +316,7 @@ S_{X_i}(t;\,\theta) = \prod_{j \mid t_j \leq t} (1 - \lambda_{X_i}(t_j)).
 <p>Recall the definition of the hazard function:</p>
 <p><span class="math display">\[
 \lambda_{X_i}(t) = \lim_{\Delta t \searrow 0}\frac{1}{\Delta t}\Prob{t \leq X &lt; t + \Delta t \mid X \geq t}{\theta}
-\]</span> Note that <span class="math inline">\(\lambda_{X_i}(t) \,\Delta t\)</span> is approximately <span class="math inline">\(\Prob{t \leq X &lt; t + \Delta t \mid X \geq t}{\theta}\)</span>. Let <span class="math inline">\(\mathcal{T}\)</span> be a partition of <span class="math inline">\((0,\infty)\)</span> with partition size <span class="math inline">\(\Delta t\)</span>, <span class="math inline">\(t_0 = 0\)</span>: <span class="math display">\[
+\]</span> Note that <span class="math inline">\(\lambda_{X_i}(t) \,\Delta t\)</span> is approximately <span class="math inline">\(\Prob{t \leq X &lt; t + \Delta t \mid X \geq t}{\theta}\)</span>. Let <span class="math inline">\(\mathcal{T}\)</span> be a partition of <span class="math inline">\((0,\infty)\)</span> with partition size <span class="math inline">\(\Delta t\)</span>, <span class="math inline">\(t_0 = 0\)</span>, <span class="math inline">\(t_j = t_{j-1} + \Delta t\)</span>: <span class="math display">\[
 \mathcal{T} = \bigcup_{j=0}^\infty [t_j, t_j + \Delta t).
 \]</span> Then we can use <a href="#eq-discrete-survival" class="quarto-xref">Equation&nbsp;1</a> to represent the survival function: <span class="math display">\[\begin{align}
 S_{X_i}(t;\,\theta) = \prod_{j \mid t_j + \Delta t \leq t} (1 - \lambda_{X_i}(t_j)\Delta t).
