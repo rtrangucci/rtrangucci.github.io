@@ -243,7 +243,7 @@ window.Quarto = {
 <div id="fig-type-i-censoring" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-type-i-censoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="lecture-3_files/figure-html/fig-type-i-censoring-1.png" class="img-fluid figure-img" width="672">
+<img src="lecture-3-alt_files/figure-html/fig-type-i-censoring-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-type-i-censoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Type I censoring
@@ -265,7 +265,7 @@ Figure&nbsp;1: Type I censoring
 <div id="fig-gen-type-i-censoring" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gen-type-i-censoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="lecture-3_files/figure-html/fig-gen-type-i-censoring-1.png" class="img-fluid figure-img" width="672">
+<img src="lecture-3-alt_files/figure-html/fig-gen-type-i-censoring-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gen-type-i-censoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Example of generalized Type I censoring, where each individual has a separate study entry time.
@@ -280,7 +280,7 @@ Figure&nbsp;2: Example of generalized Type I censoring, where each individual ha
 <div id="fig-pat-time-censoring" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-pat-time-censoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="lecture-3_files/figure-html/fig-pat-time-censoring-1.png" class="img-fluid figure-img" width="672">
+<img src="lecture-3-alt_files/figure-html/fig-pat-time-censoring-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pat-time-censoring-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Example of generalized Type I censoring, viewed in patient time.
@@ -441,8 +441,8 @@ P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t) = \lambda(t)\Delta t 
 \]</span> We’ll also assume the following: <span class="math display">\[
 P_\theta(t \leq X &lt; t + \Delta t, t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t) = o(\Delta t)
 \]</span></p>
-<p>We’ll work with discretized time steps. Let <span class="math inline">\(t_0 = 0\)</span> and <span class="math inline">\(t_n = t\)</span>. Then <span class="math inline">\([0, t) = \bigcup_{j=0}^{n-1} [\frac{j}{n}, \frac{j}{n} + \frac{1}{n})\)</span> and <span class="math inline">\(\Delta t = \frac{1}{n}\)</span>.</p>
-<p>This construction means that we can write the survival function recursively for each <span class="math inline">\(t\)</span>: <span class="math display">\[
+<p>We’ll work with discretized time steps. Let <span class="math inline">\(t_0 = 0\)</span> and <span class="math inline">\(t_n = t\)</span>. Then <span class="math inline">\([0, t) = \bigcup_{j=0}^{n-1} [\frac{j}{n}, \frac{j}{n} + \frac{1}{n})\)</span>.</p>
+<p>This construction means that we can write the survival function recursively for each <span class="math inline">\(t_j\)</span>: <span class="math display">\[
 \begin{aligned}
 P(X \geq t + \Delta t, C \geq t + \Delta t) &amp; = P(X \geq t_{n} + \Delta t, C \geq t_{n}  + \Delta t \mid X \geq t_{n}, C \geq t_{n}) P(X \geq t_{n}, C \geq t_{n}) \\
 &amp; =  P(X \geq t_{n} + \Delta t, C \geq t_{n}  + \Delta t \mid X \geq t_{n}, C \geq t_{n}) \\
@@ -480,7 +480,7 @@ P_\theta(X \geq t_i + \Delta t, C \geq t_i + \Delta t \mid X \geq t_i, C \geq t_
 \]</span> Finally: <span class="math display">\[
 P(X \geq t + \Delta t, C \geq t + \Delta t) = \prod_{i=0}^{n-1} \lp 1 - \lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t) \rp
 \]</span> We take logs of both sides to get: <span class="math display">\[
-\log P(X \geq t_j + \Delta t, C \geq t_j + \Delta t) = \sum_{i=0}^n \log \lp 1 - \lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t) \rp
+\log P(X \geq t_j + \Delta t, C \geq t_j + \Delta t) = \sum_{i \mid t_i \leq t_j} \log \lp 1 - \lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t) \rp
 \]</span> Suppose that <span class="math inline">\(\lambda_1(t), \lambda_2(t)\)</span> are bounded. Then we can use the Taylor series for <span class="math inline">\(\log 1 - x\)</span> as <span class="math inline">\(x \searrow 0\)</span>.: <span class="math display">\[
 \log(1 - x) = -x + o(x)
 \]</span></p>
