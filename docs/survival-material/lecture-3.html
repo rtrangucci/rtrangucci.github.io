@@ -429,30 +429,34 @@ S_{X_i}(x;\, \alpha, \theta) S_{C_i}(c;\, \mu, \theta) \neq \exp(-\alpha x - \mu
     \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(X \geq t, t \leq C &lt; t + \Delta t)   \right)^{1 - \delta}
 \end{align*}\]</span> We can factorize the distribution function: <span class="math display">\[
 \begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^\delta  \\
-    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^{1 - \delta}
+    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^\delta  \\
+    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^{1 - \delta}
 \end{align*}\]</span> . Let’s make the following substitutions for brevity’s sake: <span class="math display">\[
 \begin{aligned}
-\lambda_1(t) &amp; = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)\\
-\lambda_2(t) &amp; = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)\\
+\lambda_1(t; \theta) &amp; = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)\\
+\lambda_2(t; \theta) &amp; = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)\\
 \end{aligned}
-\]</span> Furthermore, let’s rewrite <span class="math inline">\(P_{\theta}(X \geq t, C \geq t)\)</span> in terms of <span class="math inline">\(\lambda_1(t)\)</span> and <span class="math inline">\(\lambda_2(t)\)</span>. This will require a bit of work. First, we can write the <span class="math inline">\(P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)\)</span> as <span class="math display">\[
-P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t) = \lambda(t)\Delta t  + o(\Delta t)
+\]</span> Furthermore, let’s rewrite <span class="math inline">\(P_{\theta}(X \geq t, C \geq t)\)</span> in terms of <span class="math inline">\(\lambda_1(t)\)</span> and <span class="math inline">\(\lambda_2(t)\)</span>. This will require a bit of work. First, we can write the <span class="math inline">\(P_\theta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)\)</span> as</p>
+<p><span class="math display">\[
+\begin{aligned}
+P_\theta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t) &amp; = \lambda_1(t;\theta)\Delta t  + o(\Delta t)\\
+P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t) &amp; = \lambda_2(t;\theta)\Delta t  + o(\Delta t)
+\end{aligned}
 \]</span> We’ll also assume the following: <span class="math display">\[
 P_\theta(t \leq X &lt; t + \Delta t, t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t) = o(\Delta t)
 \]</span></p>
 <p>We’ll work with discretized time steps. Let <span class="math inline">\(t_0 = 0\)</span> and <span class="math inline">\(t_n = t\)</span>. Then <span class="math inline">\([0, t) = \bigcup_{j=0}^{n-1} [\frac{j}{n}, \frac{j}{n} + \frac{1}{n})\)</span> and <span class="math inline">\(\Delta t = \frac{1}{n}\)</span>.</p>
 <p>This construction means that we can write the survival function recursively for each <span class="math inline">\(t\)</span>: <span class="math display">\[
 \begin{aligned}
-P(X \geq t + \Delta t, C \geq t + \Delta t) &amp; = P(X \geq t_{n} + \Delta t, C \geq t_{n}  + \Delta t \mid X \geq t_{n}, C \geq t_{n}) P(X \geq t_{n}, C \geq t_{n}) \\
-&amp; =  P(X \geq t_{n} + \Delta t, C \geq t_{n}  + \Delta t \mid X \geq t_{n}, C \geq t_{n}) \\
-&amp; \times P(X \geq t_{n-1} + \Delta t, C \geq t_{n-1} + \Delta t \mid X \geq t_{n-1}, C \geq t_{n-1}) P(X \geq t_{n-1}, C \geq t_{n-1}) \\
+P_\theta(X \geq t + \Delta t, C \geq t + \Delta t) &amp; = P_\theta(X \geq t_{n} + \Delta t, C \geq t_{n}  + \Delta t \mid X \geq t_{n}, C \geq t_{n}) P_\theta(X \geq t_{n}, C \geq t_{n}) \\
+&amp; =  P_\theta(X \geq t_{n} + \Delta t, C \geq t_{n}  + \Delta t \mid X \geq t_{n}, C \geq t_{n}) \\
+&amp; \times P_\theta(X \geq t_{n-1} + \Delta t, C \geq t_{n-1} + \Delta t \mid X \geq t_{n-1}, C \geq t_{n-1}) P_\theta(X \geq t_{n-1}, C \geq t_{n-1}) \\
 &amp; \vdots \\
-&amp; = \prod_{i=0}^{n-1} P(X \geq t_{i} + \Delta t, C \geq t_{i} + \Delta t \mid X \geq t_{i}, C \geq t_{i}) P(X \geq 0, C \geq 0) \\
-&amp; = \prod_{i=0}^{n-1} P(X \geq t_{i} + \Delta t, C \geq t_{i} + \Delta t \mid X \geq t_{i}, C \geq t_{i})
+&amp; = \prod_{i=0}^{n-1} P_\theta(X \geq t_{i} + \Delta t, C \geq t_{i} + \Delta t \mid X \geq t_{i}, C \geq t_{i}) P_\theta(X \geq 0, C \geq 0) \\
+&amp; = \prod_{i=0}^{n-1} P_\theta(X \geq t_{i} + \Delta t, C \geq t_{i} + \Delta t \mid X \geq t_{i}, C \geq t_{i})
 \end{aligned}
 \]</span></p>
-<p>Let’s write the conditional survival function, <span class="math inline">\(P(X \geq t_i + \Delta t, C \geq t_i + \Delta t \mid X \geq t_i, C \geq t_i)\)</span>, or the probability that neither <span class="math inline">\(A_i \equiv \{t_i \leq X &lt; t_i \Delta t\}\)</span> nor <span class="math inline">\(B_i \equiv \{t \leq C &lt; t_i \Delta t\}\)</span> occur. In set notation, this is: <span class="math display">\[
+<p>Let’s write the conditional survival function, <span class="math inline">\(P_\theta(X \geq t_i + \Delta t, C \geq t_i + \Delta t \mid X \geq t_i, C \geq t_i)\)</span>, or the probability that neither <span class="math inline">\(A_i \equiv \{t_i \leq X &lt; t_i \Delta t\}\)</span> nor <span class="math inline">\(B_i \equiv \{t \leq C &lt; t_i \Delta t\}\)</span> occur. In set notation, this is: <span class="math display">\[
 A_i\comp \cap B_i\comp = (A_i \cup B_i)\comp
 \]</span></p>
 <p><span class="math display">\[
@@ -470,62 +474,65 @@ P_\theta(A_i \cap B_i \mid X \geq t_i, C \geq t_i)) &amp; = P_\theta(t_i \leq X 
 \]</span> and <span class="math display">\[
 \begin{aligned}
 P_\theta(A_i \mid X \geq t_i, C \geq t_i)) &amp; = P_\theta(t_i \leq X &lt; t_i + \Delta t \mid X \geq t, C \geq t)  \\
-&amp; = \lambda_1(t_i) \Delta t + o(\Delta t) \\
+&amp; = \lambda_1(t_i; \theta) \Delta t + o(\Delta t) \\
 P_\theta(B_i \mid X \geq t_i, C \geq t_i)) &amp; = P_\theta(t_i \leq C &lt; t_i + \Delta t \mid X \geq t, C \geq t)  \\
-&amp; = \lambda_2(t_i) \Delta t + o(\Delta t)
+&amp; = \lambda_2(t_i; \theta) \Delta t + o(\Delta t)
 \end{aligned}
 \]</span></p>
 <p>Putting this into the expression above, we get: <span class="math display">\[
-P_\theta(X \geq t_i + \Delta t, C \geq t_i + \Delta t \mid X \geq t_i, C \geq t_i) = 1 - \lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t)
+P_\theta(X \geq t_i + \Delta t, C \geq t_i + \Delta t \mid X \geq t_i, C \geq t_i) = 1 - \lambda_1(t_i; \theta) \Delta t - \lambda_2(t_i; \theta)\Delta t + o(\Delta t)
 \]</span> Finally: <span class="math display">\[
-P(X \geq t + \Delta t, C \geq t + \Delta t) = \prod_{i=0}^{n-1} \lp 1 - \lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t) \rp
+P_\theta(X \geq t + \Delta t, C \geq t + \Delta t) = \prod_{i=0}^{n-1} \lp 1 - \lambda_1(t_i; \theta) \Delta t - \lambda_2(t_i; \theta)\Delta t + o(\Delta t) \rp
 \]</span> We take logs of both sides to get: <span class="math display">\[
-\log P(X \geq t_j + \Delta t, C \geq t_j + \Delta t) = \sum_{i=0}^n \log \lp 1 - \lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t) \rp
+\log P_\theta(X \geq t_j + \Delta t, C \geq t_j + \Delta t) = \sum_{i=0}^n \log \lp 1 - \lambda_1(t_i; \theta) \Delta t - \lambda_2(t_i; \theta)\Delta t + o(\Delta t) \rp
 \]</span> Suppose that <span class="math inline">\(\lambda_1(t), \lambda_2(t)\)</span> are bounded. Then we can use the Taylor series for <span class="math inline">\(\log 1 - x\)</span> as <span class="math inline">\(x \searrow 0\)</span>.: <span class="math display">\[
 \log(1 - x) = -x + o(x)
 \]</span></p>
 <p>Then</p>
 <p><span class="math display">\[
 \begin{aligned}
-&amp; \log(1 - \lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t)) \\
-&amp; = -(\lambda_1(t_i) + \lambda_2(t_i))\Delta t + o(\Delta t) + o(\lambda_1(t_i) \Delta t - \lambda_2(t_i)\Delta t + o(\Delta t)) \\
-&amp; = -(\lambda_1(t_i) + \lambda_2(t_i))\Delta t + o(\Delta t)
+&amp; \log(1 - \lambda_1(t_i; \theta) \Delta t - \lambda_2(t_i; \theta)\Delta t + o(\Delta t)) \\
+&amp; = -(\lambda_1(t_i; \theta) + \lambda_2(t_i; \theta))\Delta t + o(\Delta t) + o(\lambda_1(t_i; \theta) \Delta t - \lambda_2(t_i; \theta)\Delta t + o(\Delta t)) \\
+&amp; = -(\lambda_1(t_i; \theta) + \lambda_2(t_i; \theta))\Delta t + o(\Delta t)
 \end{aligned}
 \]</span> Putting this back into our expression gives us:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\log P(X \geq t + \Delta t, C \geq t + \Delta t) = -\sum_{i=1}^n (\lambda_1(t_i) + \lambda_2(t_i)) \Delta t  + n o(\Delta t)
+\log P_\theta(X \geq t + \Delta t, C \geq t + \Delta t) = -\sum_{i=1}^n (\lambda_1(t_i; \theta) + \lambda_2(t_i; \theta)) \Delta t  + n o(\Delta t)
 \end{aligned}
 \]</span> Taking <span class="math inline">\(n \to \infty\)</span> gives the integral: <span class="math display">\[
 \begin{aligned}
-\log P(X &gt; t, C &gt; t) = -\int_0^t (\lambda_1(u) + \lambda_2(u)) du \\
-P(X &gt; t, C &gt; t) = \exp \lp -\int_0^t (\lambda_1(u) + \lambda_2(u)) du \rp
+\log P_\theta(X &gt; t, C &gt; t) = -\int_0^t (\lambda_1(u; \theta) + \lambda_2(u; \theta)) du \\
+P_\theta(X &gt; t, C &gt; t) = \exp \lp -\int_0^t (\lambda_1(u;\theta) + \lambda_2(u;\theta)) du \rp
 \end{aligned}
 \]</span> By noting that <span class="math inline">\(\Delta t = \frac{1}{n}\)</span>, so for <span class="math inline">\(o(\Delta t)\)</span>, <span class="math inline">\(n o(\Delta t) \overset{n\to\infty}{\to} 0\)</span></p>
 <p>This is a long way to show that <span class="math display">\[
 \begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^\delta  \\
-    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\phi(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^{1 - \delta} \\
-    &amp; = \lambda_1(t)^\delta \lambda_2(t)^{1-\delta} e^{-\int_0^t (\lambda_1(u) + \lambda_2(u)) du}
+    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^\delta  \\
+    &amp;\quad  \times \left(\lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\theta(t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t)P_\theta(X \geq t,C \geq t) \right)^{1 - \delta} \\
+    &amp; = \lambda_1(t;\theta)^\delta \lambda_2(t;\theta)^{1-\delta} e^{-\int_0^t (\lambda_1(u;\theta) + \lambda_2(u;\theta)) du}
 \end{align*} \]</span></p>
 <p>Assuming noninformative censoring equates to:</p>
 <p><span class="math display">\[
 \begin{align*}
-    \lambda_1(t) &amp; = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t) \\
-    &amp; = \lambda_X(t)
+    \lambda_1(t;\theta) &amp; = \lim_{\Delta t \searrow 0} \frac{1}{\Delta t} P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t) \\
+    &amp; = \lambda_X(t;\eta)
 \end{align*}.
-\]</span> This yields: <span class="math display">\[
+\]</span> and that <span class="math inline">\(\lambda_2(t;\phi) = \lambda_2(t;\phi)\)</span>.</p>
+<p>This yields: <span class="math display">\[
 \begin{align*}
-    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \lambda_1(t)^\delta \lambda_2(t)^{1-\delta} e^{-\int_0^t (\lambda_1(u) + \lambda_2(u)) du} \\
-    &amp; = \lambda_X(t)^\delta e^{-\int_0^t \lambda_X(u)du}  \lambda_2(t)^{1-\delta}e^{-\int_0^t\lambda_2(u)du}
+    f_{T_i, \delta_i}(t, \delta;\,\theta) &amp; = \lambda_1(t;\theta)^\delta \lambda_2(t;\theta)^{1-\delta} e^{-\int_0^t (\lambda_1(u;\theta) + \lambda_2(u;\theta)) du} \\
+    &amp; = \lambda_X(t;\eta)^\delta e^{-\int_0^t \lambda_X(u;\eta)du}  \lambda_2(t;\phi)^{1-\delta}e^{-\int_0^t\lambda_2(u;\phi)du}
 \end{align*}
 \]</span></p>
-<p>This means that we can factorize the joint density into a piece that Thus, noninformative censoring and parameter separability yield a separable joint density. This means that when we want to do maximum likelihood for survival data, we can <em>ignore</em> the model for the censoring times, <span class="math inline">\(f_{C_i, \delta_i}(t, \delta;\,\phi)\)</span>, and focus on only the model for the failure times: <span class="math display">\[f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta P_\eta(X \geq t).\]</span> We can write this expression fully in terms of the hazard function by recalling <a href="#eq:exp-hazard" data-reference-type="ref+Label" data-reference="eq:exp-hazard">[eq:exp-hazard]</a>: <span id="eq-separable-like"><span class="math display">\[\begin{align}
-f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t)^\delta \exp\left(-\int_0^t \lambda_{X_i}(u) du \right).
-\end{align}
-\tag{4}\]</span></span></p>
+<p>This means that we can factorize the joint density into a piece that depends only on the distribution of <span class="math inline">\(X\)</span> and <span class="math inline">\(\eta\)</span>, and a piece that depends on <span class="math inline">\(\phi\)</span> and the rate of censoring given survival up to time <span class="math inline">\(t\)</span>. Thus, noninformative censoring and parameter separability yield a separable joint density. This means that when we want to do maximum likelihood for survival data, we can <strong>ignore</strong> the model for the censoring times, <span class="math inline">\(f_{C_i \mid X_i \geq t, \delta_i}(t, \delta;\,\phi)\)</span>, and focus on only the model for the failure times: <span class="math display">\[f_{X_i, \delta_i}(t, \delta;\,\eta) = \lambda_{X_i}(t;\eta)^\delta P_\eta(X \geq t).\]</span></p>
+<p><span class="math display">\[
+\begin{align*}
+    f_{X_i, \delta_i}(t, \delta;\,\eta) &amp; \propto \lambda_X(t;\eta)^\delta e^{-\int_0^t \lambda_X(u;\eta)du}
+\end{align*}
+\]</span></p>
 <div id="exmp:mle-exp" class="exmp">
-<p><strong>MLE for exponential survival time</strong> Let <span class="math inline">\(X_i \overset{\text{iid}}{\sim} \text{Exp}(\alpha)\)</span> and assume we have independent censoring (<span class="math inline">\(X_i \perp\!\!\!\perp C_i\)</span>), the parameters for the censoring process are separable from <span class="math inline">\(\alpha\)</span>, and that <span class="math inline">\(C_i\)</span> are iid such that <span class="math inline">\(\Exp{C_i} &lt; \infty\)</span>. Then our observed data are <span class="math inline">\(T_i = \min(X_i, C_i)\)</span> and <span class="math inline">\(\delta_i = \mathbbm{1}\left(X_i \leq C_i\right)\)</span>. According to <a href="#eq-separable-like" class="quarto-xref">Equation&nbsp;4</a> we can write the likelihood as <span class="math display">\[\begin{align*}
+<p><strong>MLE for exponential survival time</strong> Let <span class="math inline">\(X_i \overset{\text{iid}}{\sim} \text{Exp}(\alpha)\)</span> and assume we have independent censoring (<span class="math inline">\(X_i \perp\!\!\!\perp C_i\)</span>), the parameters for the censoring process are separable from <span class="math inline">\(\alpha\)</span>, and that <span class="math inline">\(C_i\)</span> are iid such that <span class="math inline">\(\Exp{C_i} &lt; \infty\)</span>. Then our observed data are <span class="math inline">\(T_i = \min(X_i, C_i)\)</span> and <span class="math inline">\(\delta_i = \mathbbm{1}\left(X_i \leq C_i\right)\)</span>. According to <strong>?@eq-separable-like</strong> we can write the likelihood as <span class="math display">\[\begin{align*}
 f_\alpha(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \prod_{i=1}^n \alpha^{\delta_i} \exp(-\textstyle{\sum_{i=1}^n \int_0^{t_i} }\alpha du)\\
 &amp; = \alpha^{\sum_{i=1}^n \delta_i} \exp(-\alpha \textstyle\sum_{i=1}^n t_i)
 \end{align*}\]</span> The log-likelihood is <span class="math display">\[\log(f_\alpha(t_1, \dots, t_n, \delta_1, \dots, \delta_n) ) = \log(\alpha)\sum_{i=1}^n \delta_i -\alpha \sum_{i=1}^n t_i\]</span> which has the maximizer <span class="math display">\[\hat{\alpha} = \frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i}.\]</span> Let’s show that this converges a.s. to <span class="math inline">\(\alpha\)</span> as <span class="math inline">\(n\to\infty\)</span>. We can rewrite <span class="math inline">\(\frac{\sum_{i=1}^n \delta_i}{\sum_{i=1}^n t_i}\)</span> as <span class="math display">\[\begin{align*}
