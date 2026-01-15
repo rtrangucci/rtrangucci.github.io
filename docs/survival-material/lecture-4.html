@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Lecture 4</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../papers.html"> 
+<span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../courses.html"> 
+<span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#chap:km" id="toc-chap:km" class="nav-link active" data-scroll-target="#chap\:km"><span class="header-section-number">1</span> Nonparametric estimator of survival function</a>
+  <ul class="collapse">
+  <li><a href="#derivation-of-nelson-aalen-and-kaplan-meier-estimators" id="toc-derivation-of-nelson-aalen-and-kaplan-meier-estimators" class="nav-link" data-scroll-target="#derivation-of-nelson-aalen-and-kaplan-meier-estimators"><span class="header-section-number">1.1</span> Derivation of Nelson-Aalen and Kaplan-Meier estimators</a>
+  <ul class="collapse">
+  <li><a href="#kaplan-meier-estimator-standard-error" id="toc-kaplan-meier-estimator-standard-error" class="nav-link" data-scroll-target="#kaplan-meier-estimator-standard-error"><span class="header-section-number">1.1.1</span> Kaplan-Meier estimator standard error</a></li>
+  </ul></li>
+  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals"><span class="header-section-number">1.2</span> Confidence intervals</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lecture 4</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="chap:km" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Nonparametric estimator of survival function</h1>
+<section id="derivation-of-nelson-aalen-and-kaplan-meier-estimators" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="derivation-of-nelson-aalen-and-kaplan-meier-estimators"><span class="header-section-number">1.1</span> Derivation of Nelson-Aalen and Kaplan-Meier estimators</h2>
+<p>When we have <span class="math inline">\((X_i, C_i) \overset{\text{iid}}{\sim} F\)</span> such that noninformative censoring and parameter separability hold, we showed in <a href="#eq:separable-like" data-reference-type="ref+Label" data-reference="eq:separable-like">[eq:separable-like]</a> that we can write the likelihood for the survival process: <span class="math display">\[f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) = \prod_{i=1}^n \lambda_\eta(t_i)^{\delta_i} \exp\left(-\int_0^{t_i} \lambda_\eta(u) du \right).\]</span> This can again be simplified by collecting terms inside the exponential: <span class="math display">\[\begin{align}
+\label{eq:partial-lik}
+f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) = \left(\prod_{i=1}^n \lambda_\eta(t_i)^{\delta_i}\right)\exp\left(-\sum_{i=1}^n \int_0^{t_i} \lambda_\eta(u) du \right).
+\end{align}\]</span></p>
+<p>Let’s make a slight change to how we write the survival function. Define the indicator function <span class="math inline">\(Y(u)\)</span> to be <span class="math display">\[Y_i(u) = \mathbbm{1}\left(t_i \geq u\right).\]</span> This function is left-continuous, with right-hand limits, an example of which is shown in <a href="#fig:example-at-risk" data-reference-type="ref+Label" data-reference="fig:example-at-risk">1.1</a>:</p>
+<div id="fig:example-at-risk" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><embed src="figures/at-risk-function.pdf" class="img-fluid"></p>
+<figcaption>Example plot of an at-risk function</figcaption>
+</figure>
+</div>
+<p>This allows us to rewrite our likelihood as follows: <span class="math display">\[\begin{align}
+f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \left(\prod_{i=1}^n \lambda_\eta(t_i)^{\delta_i}\right)\exp\left(-\sum_{i=1}^n \int_0^{\infty} Y_i(u) \lambda_\eta(u) du \right)\\
+&amp; = \left(\prod_{i=1}^n \lambda_\eta(t_i)^{\delta_i}\right)\exp\left(-\int_0^{\infty} \lambda_\eta(u) \sum_{i=1}^n Y_i(u)  du \right)
+\end{align}\]</span> For notational convenience, we’ll define the function <span class="math inline">\(\widebar{Y}(u)\)</span> as: <span class="math display">\[\widebar{Y}(u) = \sum_{i=1}^n Y_i(u).\]</span> Then our likelihood is: <span class="math display">\[\begin{align}
+f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) = \left(\prod_{i=1}^n \lambda_\eta(t_i)^{\delta_i}\right)\exp\left(-\int_0^{\infty} \lambda_\eta(u) \widebar{Y}(u)  du \right)
+\end{align}\]</span></p>
+<p>We can consider a nonparametric model for the hazard, estimating <span class="math inline">\(\lambda\)</span> at each <span class="math inline">\(t_i\)</span> as a separate parameter. An example of this is shown in <a href="#fig:example-disc-haz" data-reference-type="ref+Label" data-reference="fig:example-disc-haz">1.2</a>, which corresponds to the discrete survival function in <a href="#fig:example-disc-surv-fun" data-reference-type="ref+Label" data-reference="fig:example-disc-surv-fun">[fig:example-disc-surv-fun]</a>.</p>
+<div id="fig:example-disc-haz" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><embed src="figures/discrete-hazard-fun.pdf" class="img-fluid"></p>
+<figcaption>Example plot of a discrete hazard function</figcaption>
+</figure>
+</div>
+<p>In order to evaluate the integral <span class="math display">\[\int_0^{\infty} \lambda(u) \widebar{Y}(u)  du,\]</span> note that we can rewrite <span class="math inline">\(\lambda(t_i)\)</span> as <span class="math display">\[\lambda(t_i) = \Lambda(t_i) - \Lambda(t_i-),\]</span> where <span class="math inline">\(\Lambda(t)\)</span> is the cumulative hazard function. We’ll write as <span class="math inline">\(\lambda(u)\)</span> as <span class="math inline">\(d\Lambda(u)\)</span>. Finally, recall that because <span class="math inline">\(S(t)\)</span> is right-continuous, <span class="math inline">\(\Lambda(t)\)</span> is also right-continuous.</p>
+<div id="fig:example-disc-cumu-haz" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><embed src="figures/discrete-cumulative-hazard-fun.pdf" class="img-fluid"></p>
+<figcaption>Example plot of a discrete cumulative hazard function</figcaption>
+</figure>
+</div>
+<p>We’ll also need a bit of integration theory from Lebesgue-Stieltjies integrals. Suppose that <span class="math inline">\(G\)</span> is a right-continuous, monotone function on <span class="math inline">\([0,\infty)\)</span> with countably many discontinuities at <span class="math inline">\(a_i\)</span>, and let <span class="math inline">\(dG(a_i) = G(a_i) - G(a_i-)\)</span>. Then for a measurable function <span class="math inline">\(F\)</span> on <span class="math inline">\([0,\infty)\)</span>, the integral over a set <span class="math inline">\(B\)</span> <span class="math display">\[\int_B F(x) dG(x) = \sum_{i \mid a_i \in B} F(a_i) dG(a_i).\]</span> Using these results, the integral can be evaluated to <span class="math display">\[\int_0^{\infty} \left(\widebar{Y}(u)\right)d\Lambda(u)  du = \sum_{j = 1}^{n} \lambda(t_j) \widebar{Y}(t_j)\]</span> Let’s take the log of the expression to get a log-likelihood: <span class="math display">\[\begin{align}
+\log f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \sum_{i=1}^n \delta_i \log (\lambda_\eta(t_i)) -\sum_{j=1}^{n} \lambda_\eta(t_j) \widebar{Y}(t_j)
+\end{align}\]</span> Taking the gradient with respect to <span class="math inline">\(\lambda_\eta(t_i)\)</span> gives <span class="math display">\[\begin{align}
+\nabla \log f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \frac{\delta_i}{\lambda_\eta(t_i)} -\widebar{Y}(t_i).
+\end{align}\]</span> Note that the Hessian is also diagonal, which implies asymptotic independence of <span class="math inline">\(\lambda(t_i)\)</span>. This is solved at <span class="math display">\[\begin{align}
+  \hat{\lambda}_\eta(t_i) &amp; = \frac{\delta_i}{\widebar{Y}(t_i)}
+\end{align}\]</span> This gives an expression for <span class="math inline">\(\Lambda(t)\)</span>: <span class="math display">\[\begin{align}
+\label{eq:na}
+\Lambda^{\text{NA}}(t) =   \sum_{i \mid \delta_i = 1, t_i \leq t} \frac{1}{\widebar{Y}(t_i)}
+\end{align}\]</span> This also gives an expression for <span class="math inline">\(S(t)\)</span>: <span class="math display">\[\begin{align}
+\label{eq:survival-km}
+  S^{\text{KM}}(t) &amp; = \prod_{i \mid \delta_i = 1, t_i \leq t}(1 - \frac{1}{\widebar{Y}(t_i)}).
+\end{align}\]</span> This is also known as the <strong>Kaplan-Meier estimator</strong>. An alternative expression is: <span class="math display">\[\begin{align}
+\label{eq:surival-na}
+  S^{\text{NA}}(t) &amp; = \exp\left(-\textstyle\sum_{i \mid \delta_i = 1, t_i \leq t} \frac{1}{\widebar{Y}(t_i)}\right)
+\end{align}\]</span> We can show that the cumulative hazard as implied by <a href="#eq:survival-km" data-reference-type="ref+Label" data-reference="eq:survival-km">[eq:survival-km]</a> is asymptotically equivalent to <a href="#eq:na" data-reference-type="ref+Label" data-reference="eq:na">[eq:na]</a>. Given <a href="#eq:suvival-exp-cumulative-hazard" data-reference-type="ref+Label" data-reference="eq:suvival-exp-cumulative-hazard">[eq:suvival-exp-cumulative-hazard]</a> <span class="math display">\[\begin{align}
+\Lambda^{\text{KM}} &amp; = - \log \left(\prod_{i \mid \delta_i = 1, t_i \leq t}(1 - \frac{1}{\widebar{Y}(t_i)}) \right)\\
+&amp; = -\sum_{i \mid \delta_i = 1, t_i \leq t}\log(1 - \frac{1}{\widebar{Y}(t_i)}) \\
+&amp; \approx \sum_{i \mid \delta_i = 1, t_i \leq t}\frac{1}{\widebar{Y}(t_i)}
+\end{align}\]</span> where the last line follows from the Taylor approximation of <span class="math inline">\(\log(1 - x) \approx -x\)</span> when <span class="math inline">\(x \approx 0\)</span>.</p>
+<section id="kaplan-meier-estimator-standard-error" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="kaplan-meier-estimator-standard-error"><span class="header-section-number">1.1.1</span> Kaplan-Meier estimator standard error</h3>
+<p>In order to get the standard errors for the Kaplan-Meier estimator, we’ll use a Taylor expansion: <span class="math display">\[\begin{align}
+  \log(S^{\text{KM}}(t)) \approx \log(S(t)) + \frac{1}{S(t)}(S^{\text{KM}}(t) - S(t))
+\end{align}\]</span> which leads to <span class="math display">\[\Var{\log(S^{\text{KM}}(t))} = \frac{1}{S(t)^2}\Var{S^{\text{KM}}(t)}\]</span> or <span class="math display">\[\Var{S^{\text{KM}}(t)} = \Var{\log(S^{\text{KM}}(t))}S(t)^2.\]</span> We use the plug-in estimator for <span class="math inline">\(S(t)\)</span> here, so we get: <span class="math display">\[\Var{S^{\text{KM}}(t)} = \Var{\log(S^{\text{KM}}(t))}(S^{\text{KM}}(t))^2.\]</span> Now we need an expression for <span class="math inline">\(\Var{\log(S^{\text{KM}}(t))}\)</span>. First we write the log of the KM estimator: <span class="math display">\[\begin{align}
+  \log \hat{S}^{\text{KM}}(t) = \sum_{i \mid t_i \leq t} \log(1 - \hat{\lambda}(t_i)).
+\end{align}\]</span> First we find the Taylor expansion for each term, which is justified by the fact that <span class="math inline">\((1 - \hat{\lambda}(t_i)) \approx (1 - \lambda(t_i))\)</span> for large samples: <span class="math display">\[\begin{align}
+  \log(1 - \hat{\lambda}(t_i)) \approx  \log(1 - \lambda(t_i)) - \frac{1}{1 - \lambda(t_i)}(\hat{\lambda}(t_i) - \lambda(t_i))
+\end{align}\]</span> Then <span class="math display">\[\Var{\log(1 - \hat{\lambda}(t_i))} \approx \frac{1}{(1 - \lambda(t_i))^2}\Var{\hat{\lambda}(t_i)}\]</span> We can estimate the <span class="math inline">\(\Var{\hat{\lambda}(t_i)}\)</span> as: <span class="math display">\[\Var{\hat{\lambda}(t_i)} = \Var{\delta_i} / \bar{Y}^2(t_i)\]</span> Treating <span class="math inline">\(\delta_i\)</span> as a binomial random variable with <span class="math inline">\(\bar{Y}(t_i)\)</span> number of trials: <span class="math display">\[\delta_i \sim \text{Binomial}(\bar{Y}(t_i), p_i)\]</span> The variance of <span class="math inline">\(\delta_i\)</span> is <span class="math inline">\(p_i (1 - p_i) \bar{Y}(t_i)\)</span>. Using <span class="math inline">\(\hat{\lambda}(t_i)\)</span> as a plug-in estimator for <span class="math inline">\(p_i\)</span> as <span class="math inline">\(\hat{\lambda}(t_i)\)</span>, this gives: <span class="math display">\[\Var{\delta_i} = \hat{\lambda}(t_i)(1 - \hat{\lambda}(t_i)) \bar{Y}(t_i)\]</span> Putting this together with the <span class="math inline">\(\bar{Y}^2(t_i)\)</span> in the denominator gives the following estimate for the variance of <span class="math inline">\(\hat{\lambda}(t_i)\)</span>: <span class="math display">\[\frac{\hat{\lambda}(t_i)(1 - \hat{\lambda}(t_i))}{\bar{Y}(t_i)}.\]</span> Finally using the plug-in estimator for <span class="math inline">\((1 - \lambda(t_i))^2\)</span> in the denominator of the Taylor expansion formula gives: <span class="math display">\[\begin{align}
+\Var{\log(1 - \hat{\lambda}(t_i))}  &amp; \approx \frac{1}{(1 - \hat{\lambda}(t_i))^2}\frac{\hat{\lambda}(t_i)(1 - \hat{\lambda}(t_i))}{\bar{Y}(t_i)}\\
+                                    &amp; \approx \frac{\hat{\lambda}(t_i)}{\bar{Y}(t_i)(1 - \hat{\lambda}(t_i))} \\
+              &amp; \approx \frac{\delta_i}{\bar{Y}(t_i)(\bar{Y}(t_i) - \hat{\lambda}(t_i))}
+\end{align}\]</span> Putting this all together along with the fact that <span class="math inline">\(\lambda(t_i) \overset{\text{asymp}}{\perp\!\!\!\perp} \lambda(t_j)\)</span>, yields what is known as <strong>Greenwood’s formula</strong>: <span class="math display">\[\Var{S^{\text{KM}}(t)} = (S^{\text{KM}}(t))^2 \sum_{i \mid \delta_i = 1, t_i \leq t} \frac{\delta_i}{\widebar{Y}(t_i) (\widebar{Y}(t_i) - \delta_i)}.\]</span></p>
+</section>
+</section>
+<section id="confidence-intervals" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="confidence-intervals"><span class="header-section-number">1.2</span> Confidence intervals</h2>
+<p>If we wanted to construct asymptotic, point-wise confidence intervals for the KM estimator, we can go about it in several ways. The most straightforward way to compute confidence intervals is to directly use the estimated survival function at <span class="math inline">\(t_0\)</span> and the standard error estimator from Greenwood’s formula. Let <span class="math inline">\(\hat{\sigma}(t)\)</span> be <span class="math display">\[\sqrt{\sum_{i \mid d_i = 1, t_i \leq t} \frac{d_i}{\widebar{Y}(t_i) (\widebar{Y}(t_i) - d_i)}}.\]</span> Then our confidence interval, <span class="math inline">\(C^{\text{KM}}\)</span>, is <span class="math display">\[\begin{align*}
+    C^{\text{KM}} = \left(\hat{S}^{\text{KM}}(t_0) - z_{1-\alpha / 2} \hat{\sigma} \hat{S}^{\text{KM}}(t_0), \hat{S}^{\text{KM}}(t_0) + z_{1-\alpha / 2} \hat{\sigma} \hat{S}^{\text{KM}}(t_0)\right)
+\end{align*}\]</span> The issue with this confidence interval is that it is not guaranteed to be greater than zero or less than 1, so we may have nonsensical results for upper and lower bounds. A solution is to build a confidence set for a suitably transformed Kaplan Meier estimator, and use the inverse transformation to enforce the natural <span class="math inline">\([0,1]\)</span> bounds. One option is to use the logit transformation, another is to use the log-log transformation.</p>
+<p>We’ll walk through the log-log transformation:</p>
+<p>Note that we have the following result: <span class="math display">\[\begin{align}
+\Var{\log(\hat{S}^{\text{KM}}(t))} &amp; = \frac{1}{S(t)^2}\Var{\hat{S}^{\text{KM}}(t)}\\
+&amp; = \sum_{i \mid d_i = 1, t_i \leq t} \frac{d_i}{\widebar{Y}(t_i) (\widebar{Y}(t_i) - d_i)}.
+\end{align}\]</span> Then <span class="math display">\[\begin{align*}
+   \log(-\log(\hat{S}^\text{KM}(t))) \approx  \log(-\log(S(t))) - \frac{1}{\log(S(t))}(\log(S^{\text{KM}}(t)) - \log(S(t)))
+\end{align*}\]</span> So <span class="math display">\[\begin{align*}
+   \Var{\log(-\log(\hat{S}^\text{KM}(t)))} \approx  \frac{1}{\log(S(t))^2}\Var{\log(\hat{S}^{\text{KM}}(t)}
+\end{align*}\]</span> or <span class="math display">\[\begin{align*}
+   \text{SE}(\log(-\log(\hat{S}^\text{KM}(t)))) \approx  \frac{1}{\left| \log(S(t)) \right|}\hat{\sigma}(t)
+\end{align*}\]</span> We don’t know <span class="math inline">\(S(t)\)</span>, so we’ll plug-in KM estimator for <span class="math inline">\(S(t)\)</span>: <span class="math display">\[\begin{align*}
+   \text{SE}(\log(-\log(\hat{S}^\text{KM}(t)))) \approx  \frac{1}{\left| \log(S^{\text{KM}}(t)) \right|}\hat{\sigma}(t)
+\end{align*}\]</span></p>
+<p>Let <span class="math inline">\(u = \log(-\log S(t))\)</span>, <span class="math inline">\(\hat{u} = \log(-\log(\hat{S}^\text{KM}(t)))\)</span>, and <span class="math inline">\(\hat{\sigma}_u = \text{SE}(\log(-\log(\hat{S}^\text{KM}(t))))\)</span>. Then <span class="math display">\[\hat{S}^\text{KM}(t) = \exp(-e^{\hat{u}}).\]</span> Note that <span class="math inline">\(\exp(-e^u)\)</span> is a monotone decreasing function of its input, <span class="math inline">\(u\)</span>. This means that for a set <span class="math inline">\([a,b]\)</span> <span class="math display">\[a \leq u \leq b \implies \exp(-e^a) \geq \exp(-e^u) \geq \exp(-e^b).\]</span> We’ll take it as a given that asymptotically, <span class="math display">\[\frac{\hat{u} - u}{\hat{\sigma}_u} \overset{d}{\to} \mathcal{N}(0,1).\]</span> Then we can derive an alternative asymptotic confidence interval for the Kaplan-Meier estimator of survival at time <span class="math inline">\(t_0\)</span> by transforming a confidence interval for <span class="math inline">\(u\)</span>. Let <span class="math inline">\(z_{1 - \alpha/2}\)</span> be the <span class="math inline">\(1 - \alpha/2\)</span> quantile of a standard normal distribution with CDF <span class="math inline">\(\Phi\)</span>, or <span class="math display">\[z_{1 - \alpha/2} = \Phi^{-1}(1 - \alpha/2).\]</span> <span class="math display">\[\begin{align*}
+P(-z_{1 - \alpha/2} \leq \frac{\hat{u} - u}{\hat{\sigma}_u} \leq z_{1 - \alpha/2}) &amp; =
+P(\hat{u}-\hat{\sigma}_u z_{1 - \alpha/2} \leq u \leq \hat{u} + \hat{\sigma}_u z_{1 - \alpha/2}) \\
+&amp; = P(\exp(-e^{\hat{u}-\hat{\sigma}_u z_{1 - \alpha/2}}) \geq \exp(-e^{u}) \geq \exp(-e^{\hat{u} + \hat{\sigma}_u z_{1 - \alpha/2}}))  \\
+&amp; = P(\exp(-e^{\hat{u}}e^{-\hat{\sigma}_u z_{1 - \alpha/2}}) \geq \exp(-e^{u}) \geq \exp(-e^{\hat{u}}e^{\hat{\sigma}_u z_{1 - \alpha/2}})) \\
+&amp; = P(\exp(-e^{\hat{u}})^{e^{-\hat{\sigma}_u z_{1 - \alpha/2}}} \geq \exp(-e^{u}) \geq \exp(-e^{\hat{u}})^{e^{\hat{\sigma}_u z_{1 - \alpha/2}}}) \\
+&amp; = P((\hat{S}^\text{KM}(t))^{e^{-\text{SE}(\log(-\log(\hat{S}^\text{KM}(t)))) z_{1 - \alpha/2}}} \geq S(t) \\
+&amp;\qquad \geq (\hat{S}^\text{KM}(t))^{e^{\text{SE}(\log(-\log(\hat{S}^\text{KM}(t)))) z_{1 - \alpha/2}}}).
+\end{align*}\]</span> So <span class="math display">\[\begin{align}
+\label{eq:log-log-CI}
+P\left(S(t) \in \left((\hat{S}^\text{KM}(t))^{e^{\text{SE}(\log(-\log(\hat{S}^\text{KM}(t)))) z_{1 - \alpha/2}}},(\hat{S}^\text{KM}(t))^{e^{-\text{SE}(\log(-\log(\hat{S}^\text{KM}(t)))) z_{1 - \alpha/2}}}\right)\right)\overset{\text{asympt.}}{=} 1 - \alpha
+\end{align}\]</span></p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

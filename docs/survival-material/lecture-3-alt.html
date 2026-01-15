@@ -441,7 +441,7 @@ P_\eta(t \leq X &lt; t + \Delta t \mid X \geq t, C \geq t) = \lambda(t)\Delta t 
 \]</span> We’ll also assume the following: <span class="math display">\[
 P_\theta(t \leq X &lt; t + \Delta t, t \leq C &lt; t + \Delta t \mid X \geq t, C \geq t) = o(\Delta t)
 \]</span></p>
-<p>We’ll work with discretized time steps. Let <span class="math inline">\(t_0 = 0\)</span> and <span class="math inline">\(t_n = t\)</span>. Then <span class="math inline">\([0, t) = \bigcup_{j=0}^{n-1} [\frac{j}{n}, \frac{j}{n} + \frac{1}{n})\)</span>.</p>
+<p>We’ll work with discretized time steps. Let <span class="math inline">\(t_0 = 0\)</span> and <span class="math inline">\(t_n = t\)</span>. Then <span class="math inline">\([0, t) = \bigcup_{j=0}^{n-1} [\frac{j}{n}, \frac{j}{n} + \frac{1}{n})\)</span> and <span class="math inline">\(\Delta t = \frac{1}{n}\)</span>.</p>
 <p>This construction means that we can write the survival function recursively for each <span class="math inline">\(t_j\)</span>: <span class="math display">\[
 \begin{aligned}
 P(X \geq t + \Delta t, C \geq t + \Delta t) &amp; = P(X \geq t_{n} + \Delta t, C \geq t_{n}  + \Delta t \mid X \geq t_{n}, C \geq t_{n}) P(X \geq t_{n}, C \geq t_{n}) \\
