@@ -174,11 +174,10 @@ window.Quarto = {
   <ul>
   <li><a href="#imputation" id="toc-imputation" class="nav-link active" data-scroll-target="#imputation">Imputation</a>
   <ul class="collapse">
-  <li><a href="#last-observation-carried-forward-imputation-locf" id="toc-last-observation-carried-forward-imputation-locf" class="nav-link" data-scroll-target="#last-observation-carried-forward-imputation-locf">Last-observation-carried-forward imputation (LOCF)</a></li>
   <li><a href="#mean-imputation" id="toc-mean-imputation" class="nav-link" data-scroll-target="#mean-imputation">Mean imputation</a></li>
   <li><a href="#random-imputation" id="toc-random-imputation" class="nav-link" data-scroll-target="#random-imputation">Random imputation</a></li>
   <li><a href="#random-regression-imputation" id="toc-random-regression-imputation" class="nav-link" data-scroll-target="#random-regression-imputation">Random regression imputation</a></li>
-  <li><a href="#hot-deck-imputation" id="toc-hot-deck-imputation" class="nav-link" data-scroll-target="#hot-deck-imputation">Hot-deck imputation</a></li>
+  <li><a href="#last-observation-carried-forward-imputation-locf" id="toc-last-observation-carried-forward-imputation-locf" class="nav-link" data-scroll-target="#last-observation-carried-forward-imputation-locf">Last-observation-carried-forward imputation (LOCF)</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -229,16 +228,14 @@ Figure&nbsp;1: How do you fill in the red points?
 \end{aligned}
 \]</span> This replaces all responses within a certain value of <span class="math inline">\(x\)</span> that are unobserved with <span class="math inline">\(\mu(x,\hat{\gamma})\)</span>.</p>
 <p>This seems like a good approach at first because we’re taking into account the model for <span class="math inline">\(Y_i \mid X_i = x\)</span> when doing our imputation. The downside is that we’re understating uncertainty in our resulting estimator because all values lie exactly on the regression function.</p>
-<section id="last-observation-carried-forward-imputation-locf" class="level2">
-<h2 class="anchored" data-anchor-id="last-observation-carried-forward-imputation-locf">Last-observation-carried-forward imputation (LOCF)</h2>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-locf-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-cond-mean-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-locf-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="lecture-3-notes_files/figure-html/fig-locf-imp-1.png" class="img-fluid figure-img" width="672">
+<div aria-describedby="fig-cond-mean-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-3-notes_files/figure-html/fig-cond-mean-imp-1.png" class="img-fluid figure-img" width="672">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-locf-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cond-mean-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Conditional mean imputation
 </figcaption>
 </figure>
@@ -246,7 +243,6 @@ Figure&nbsp;2: Conditional mean imputation
 </div>
 </div>
 <p>There are other even simpler approaches to imputation:</p>
-</section>
 <section id="mean-imputation" class="level2">
 <h2 class="anchored" data-anchor-id="mean-imputation">Mean imputation</h2>
 <p><span class="math display">\[
@@ -318,8 +314,22 @@ Figure&nbsp;5: Conditional mean imputation
 </div>
 </div>
 </section>
-<section id="hot-deck-imputation" class="level2">
-<h2 class="anchored" data-anchor-id="hot-deck-imputation">Hot-deck imputation</h2>
+<section id="last-observation-carried-forward-imputation-locf" class="level2">
+<h2 class="anchored" data-anchor-id="last-observation-carried-forward-imputation-locf">Last-observation-carried-forward imputation (LOCF)</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-locf-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-locf-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-3-notes_files/figure-html/fig-locf-imp-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-locf-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Conditional mean imputation
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
 </section>

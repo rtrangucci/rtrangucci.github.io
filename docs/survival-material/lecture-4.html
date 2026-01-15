@@ -87,6 +87,7 @@ window.MathJax = {
         \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
         \newcommand{\comp}{^\mathsf{c}}
         \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
       `);
     }
   },
@@ -172,7 +173,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#chap:km" id="toc-chap:km" class="nav-link active" data-scroll-target="#chap\:km"><span class="header-section-number">1</span> Nonparametric estimator of survival function</a>
+  <li><a href="#nonparametric-estimator-of-survival-function" id="toc-nonparametric-estimator-of-survival-function" class="nav-link active" data-scroll-target="#nonparametric-estimator-of-survival-function"><span class="header-section-number">1</span> Nonparametric estimator of survival function</a>
   <ul class="collapse">
   <li><a href="#derivation-of-nelson-aalen-and-kaplan-meier-estimators" id="toc-derivation-of-nelson-aalen-and-kaplan-meier-estimators" class="nav-link" data-scroll-target="#derivation-of-nelson-aalen-and-kaplan-meier-estimators"><span class="header-section-number">1.1</span> Derivation of Nelson-Aalen and Kaplan-Meier estimators</a>
   <ul class="collapse">
@@ -205,20 +206,27 @@ window.Quarto = {
 </header>
 
 
-<section id="chap:km" class="level1" data-number="1">
+<section id="nonparametric-estimator-of-survival-function" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Nonparametric estimator of survival function</h1>
 <section id="derivation-of-nelson-aalen-and-kaplan-meier-estimators" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="derivation-of-nelson-aalen-and-kaplan-meier-estimators"><span class="header-section-number">1.1</span> Derivation of Nelson-Aalen and Kaplan-Meier estimators</h2>
-<p>When we have <span class="math inline">\((X_i, C_i) \overset{\text{iid}}{\sim} F\)</span> such that noninformative censoring and parameter separability hold, we showed in <a href="#eq:separable-like" data-reference-type="ref+Label" data-reference="eq:separable-like">[eq:separable-like]</a> that we can write the likelihood for the survival process: <span class="math display">\[f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) = \prod_{i=1}^n \lambda_\eta(t_i)^{\delta_i} \exp\left(-\int_0^{t_i} \lambda_\eta(u) du \right).\]</span> This can again be simplified by collecting terms inside the exponential: <span class="math display">\[\begin{align}
-\label{eq:partial-lik}
+<p>When we have <span class="math inline">\((X_i, C_i) \overset{\text{iid}}{\sim} F\)</span> such that noninformative censoring and parameter separability hold, we showed that we can write the likelihood for the survival process: <span class="math display">\[f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) = \prod_{i=1}^n \lambda_\eta(t_i)^{\delta_i} \exp\left(-\int_0^{t_i} \lambda_\eta(u) du \right).\]</span> This can again be simplified by collecting terms inside the exponential: <span class="math display">\[\begin{align}
 f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) = \left(\prod_{i=1}^n \lambda_\eta(t_i)^{\delta_i}\right)\exp\left(-\sum_{i=1}^n \int_0^{t_i} \lambda_\eta(u) du \right).
 \end{align}\]</span></p>
-<p>Let’s make a slight change to how we write the survival function. Define the indicator function <span class="math inline">\(Y(u)\)</span> to be <span class="math display">\[Y_i(u) = \mathbbm{1}\left(t_i \geq u\right).\]</span> This function is left-continuous, with right-hand limits, an example of which is shown in <a href="#fig:example-at-risk" data-reference-type="ref+Label" data-reference="fig:example-at-risk">1.1</a>:</p>
-<div id="fig:example-at-risk" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><embed src="figures/at-risk-function.pdf" class="img-fluid"></p>
-<figcaption>Example plot of an at-risk function</figcaption>
+<p>Let’s make a slight change to how we write the survival function. Define the indicator function <span class="math inline">\(Y(u)\)</span> to be <span class="math display">\[Y_i(u) = \mathbbm{1}\left(t_i \geq u\right).\]</span> This function is left-continuous, with right-hand limits, an example of which is shown in</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-example-at-risk" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-example-at-risk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-4_files/figure-html/fig-example-at-risk-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-example-at-risk-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Example plot of an at-risk function
+</figcaption>
 </figure>
+</div>
+</div>
 </div>
 <p>This allows us to rewrite our likelihood as follows: <span class="math display">\[\begin{align}
 f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \left(\prod_{i=1}^n \lambda_\eta(t_i)^{\delta_i}\right)\exp\left(-\sum_{i=1}^n \int_0^{\infty} Y_i(u) \lambda_\eta(u) du \right)\\
@@ -226,19 +234,35 @@ f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \left(\prod_{i=1}^n \
 \end{align}\]</span> For notational convenience, we’ll define the function <span class="math inline">\(\widebar{Y}(u)\)</span> as: <span class="math display">\[\widebar{Y}(u) = \sum_{i=1}^n Y_i(u).\]</span> Then our likelihood is: <span class="math display">\[\begin{align}
 f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) = \left(\prod_{i=1}^n \lambda_\eta(t_i)^{\delta_i}\right)\exp\left(-\int_0^{\infty} \lambda_\eta(u) \widebar{Y}(u)  du \right)
 \end{align}\]</span></p>
-<p>We can consider a nonparametric model for the hazard, estimating <span class="math inline">\(\lambda\)</span> at each <span class="math inline">\(t_i\)</span> as a separate parameter. An example of this is shown in <a href="#fig:example-disc-haz" data-reference-type="ref+Label" data-reference="fig:example-disc-haz">1.2</a>, which corresponds to the discrete survival function in <a href="#fig:example-disc-surv-fun" data-reference-type="ref+Label" data-reference="fig:example-disc-surv-fun">[fig:example-disc-surv-fun]</a>.</p>
-<div id="fig:example-disc-haz" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><embed src="figures/discrete-hazard-fun.pdf" class="img-fluid"></p>
-<figcaption>Example plot of a discrete hazard function</figcaption>
+<p>We can consider a nonparametric model for the hazard, estimating <span class="math inline">\(\lambda\)</span> at each <span class="math inline">\(t_i\)</span> as a separate parameter. An example of this is shown in <a href="#fig-example-disc-haz" class="quarto-xref">Figure&nbsp;2</a>, which corresponds to the discrete survival function in</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-example-disc-haz" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-example-disc-haz-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-4_files/figure-html/fig-example-disc-haz-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-example-disc-haz-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Example plot of a discrete hazard function
+</figcaption>
 </figure>
 </div>
+</div>
+</div>
 <p>In order to evaluate the integral <span class="math display">\[\int_0^{\infty} \lambda(u) \widebar{Y}(u)  du,\]</span> note that we can rewrite <span class="math inline">\(\lambda(t_i)\)</span> as <span class="math display">\[\lambda(t_i) = \Lambda(t_i) - \Lambda(t_i-),\]</span> where <span class="math inline">\(\Lambda(t)\)</span> is the cumulative hazard function. We’ll write as <span class="math inline">\(\lambda(u)\)</span> as <span class="math inline">\(d\Lambda(u)\)</span>. Finally, recall that because <span class="math inline">\(S(t)\)</span> is right-continuous, <span class="math inline">\(\Lambda(t)\)</span> is also right-continuous.</p>
-<div id="fig:example-disc-cumu-haz" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><embed src="figures/discrete-cumulative-hazard-fun.pdf" class="img-fluid"></p>
-<figcaption>Example plot of a discrete cumulative hazard function</figcaption>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-example-disc-cumu-haz" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-example-disc-cumu-haz-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-4_files/figure-html/fig-example-disc-cumu-haz-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-example-disc-cumu-haz-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Example plot of a discrete cumulative hazard function
+</figcaption>
 </figure>
+</div>
+</div>
 </div>
 <p>We’ll also need a bit of integration theory from Lebesgue-Stieltjies integrals. Suppose that <span class="math inline">\(G\)</span> is a right-continuous, monotone function on <span class="math inline">\([0,\infty)\)</span> with countably many discontinuities at <span class="math inline">\(a_i\)</span>, and let <span class="math inline">\(dG(a_i) = G(a_i) - G(a_i-)\)</span>. Then for a measurable function <span class="math inline">\(F\)</span> on <span class="math inline">\([0,\infty)\)</span>, the integral over a set <span class="math inline">\(B\)</span> <span class="math display">\[\int_B F(x) dG(x) = \sum_{i \mid a_i \in B} F(a_i) dG(a_i).\]</span> Using these results, the integral can be evaluated to <span class="math display">\[\int_0^{\infty} \left(\widebar{Y}(u)\right)d\Lambda(u)  du = \sum_{j = 1}^{n} \lambda(t_j) \widebar{Y}(t_j)\]</span> Let’s take the log of the expression to get a log-likelihood: <span class="math display">\[\begin{align}
 \log f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \sum_{i=1}^n \delta_i \log (\lambda_\eta(t_i)) -\sum_{j=1}^{n} \lambda_\eta(t_j) \widebar{Y}(t_j)
@@ -246,16 +270,17 @@ f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) = \left(\prod_{i=1}^n \lambda
 \nabla \log f_\eta(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \frac{\delta_i}{\lambda_\eta(t_i)} -\widebar{Y}(t_i).
 \end{align}\]</span> Note that the Hessian is also diagonal, which implies asymptotic independence of <span class="math inline">\(\lambda(t_i)\)</span>. This is solved at <span class="math display">\[\begin{align}
   \hat{\lambda}_\eta(t_i) &amp; = \frac{\delta_i}{\widebar{Y}(t_i)}
-\end{align}\]</span> This gives an expression for <span class="math inline">\(\Lambda(t)\)</span>: <span class="math display">\[\begin{align}
-\label{eq:na}
+\end{align}\]</span> This gives an expression for <span class="math inline">\(\Lambda(t)\)</span>: <span id="eq-na"><span class="math display">\[\begin{align}
 \Lambda^{\text{NA}}(t) =   \sum_{i \mid \delta_i = 1, t_i \leq t} \frac{1}{\widebar{Y}(t_i)}
-\end{align}\]</span> This also gives an expression for <span class="math inline">\(S(t)\)</span>: <span class="math display">\[\begin{align}
-\label{eq:survival-km}
+\end{align} \tag{1}\]</span></span> This also gives an expression for <span class="math inline">\(S(t)\)</span>: <span id="eq-survival-km"><span class="math display">\[\begin{align}
   S^{\text{KM}}(t) &amp; = \prod_{i \mid \delta_i = 1, t_i \leq t}(1 - \frac{1}{\widebar{Y}(t_i)}).
-\end{align}\]</span> This is also known as the <strong>Kaplan-Meier estimator</strong>. An alternative expression is: <span class="math display">\[\begin{align}
+\end{align}
+\tag{2}\]</span></span> This is also known as the <strong>Kaplan-Meier estimator</strong>. An alternative expression is: <span class="math display">\[\begin{align}
 \label{eq:surival-na}
   S^{\text{NA}}(t) &amp; = \exp\left(-\textstyle\sum_{i \mid \delta_i = 1, t_i \leq t} \frac{1}{\widebar{Y}(t_i)}\right)
-\end{align}\]</span> We can show that the cumulative hazard as implied by <a href="#eq:survival-km" data-reference-type="ref+Label" data-reference="eq:survival-km">[eq:survival-km]</a> is asymptotically equivalent to <a href="#eq:na" data-reference-type="ref+Label" data-reference="eq:na">[eq:na]</a>. Given <a href="#eq:suvival-exp-cumulative-hazard" data-reference-type="ref+Label" data-reference="eq:suvival-exp-cumulative-hazard">[eq:suvival-exp-cumulative-hazard]</a> <span class="math display">\[\begin{align}
+\end{align}\]</span> We can show that the cumulative hazard as implied by <a href="#eq-survival-km" class="quarto-xref">Equation&nbsp;2</a> is asymptotically equivalent to <a href="#eq-na" class="quarto-xref">Equation&nbsp;1</a>. Given <span class="math display">\[
+S_X(t) = \exp\lp-\Lambda_X(t) \rp
+\]</span> <span class="math display">\[\begin{align}
 \Lambda^{\text{KM}} &amp; = - \log \left(\prod_{i \mid \delta_i = 1, t_i \leq t}(1 - \frac{1}{\widebar{Y}(t_i)}) \right)\\
 &amp; = -\sum_{i \mid \delta_i = 1, t_i \leq t}\log(1 - \frac{1}{\widebar{Y}(t_i)}) \\
 &amp; \approx \sum_{i \mid \delta_i = 1, t_i \leq t}\frac{1}{\widebar{Y}(t_i)}
