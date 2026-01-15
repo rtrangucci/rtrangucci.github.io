@@ -214,11 +214,13 @@ window.Quarto = {
   <li><a href="#inverse-probability-estimators" id="toc-inverse-probability-estimators" class="nav-link" data-scroll-target="#inverse-probability-estimators">Inverse probability estimators</a>
   <ul class="collapse">
   <li><a href="#simple-estimator" id="toc-simple-estimator" class="nav-link" data-scroll-target="#simple-estimator">Simple estimator</a></li>
+  <li><a href="#ipw-z-estimators" id="toc-ipw-z-estimators" class="nav-link" data-scroll-target="#ipw-z-estimators">IPW-Z-estimators</a></li>
   </ul></li>
   <li><a href="#augmented-inverse-probability-weighted-estimators" id="toc-augmented-inverse-probability-weighted-estimators" class="nav-link" data-scroll-target="#augmented-inverse-probability-weighted-estimators">Augmented inverse probability weighted estimators</a>
   <ul class="collapse">
   <li><a href="#correctly-specified-pix_ibeta" id="toc-correctly-specified-pix_ibeta" class="nav-link" data-scroll-target="#correctly-specified-pix_ibeta">Correctly specified <span class="math inline">\(\pi(x_i,\beta)\)</span></a></li>
   <li><a href="#correctly-specified-mux_igamma" id="toc-correctly-specified-mux_igamma" class="nav-link" data-scroll-target="#correctly-specified-mux_igamma">Correctly specified <span class="math inline">\(\mu(x_i,\gamma)\)</span></a></li>
+  <li><a href="#aipwcc-z-estimators" id="toc-aipwcc-z-estimators" class="nav-link" data-scroll-target="#aipwcc-z-estimators">AIPWCC-Z-estimators</a></li>
   </ul></li>
   <li><a href="#poststratified-estimators" id="toc-poststratified-estimators" class="nav-link" data-scroll-target="#poststratified-estimators">Poststratified estimators</a></li>
   </ul>
@@ -549,6 +551,18 @@ P(M_i = 0 \mid X_i = x, \beta) = \pi(x,\beta)
 <li><p>In practice, we don’t know <span class="math inline">\(\pi(X_i, \beta)\)</span> and typically have to estimate <span class="math inline">\(\beta\)</span> with <span class="math inline">\(\hat{\beta}\)</span>. If the sample is small, even if the form <span class="math inline">\(\pi(X_i, \beta)\)</span> is right, there may be high variance. If the model for <span class="math inline">\(M_i \mid X_i\)</span> is wrong, then we have no guarantees that our IPWCC estimator will be unbiased.</p></li>
 </ul>
 </section>
+<section id="ipw-z-estimators" class="level2">
+<h2 class="anchored" data-anchor-id="ipw-z-estimators">IPW-Z-estimators</h2>
+<p>Most estimators of interest can be formulated as solutions in <span class="math inline">\(\theta\)</span> to the following system of equations: <span class="math display">\[
+\frac{1}{n} \sum_{i=1}^n \psi(\theta, y_i, x_i) = 0
+\]</span> The key property of <span class="math inline">\(\psi(\theta, Y_i, X_i)\)</span> is that the following identity holds: <span class="math display">\[
+\ExpA{\psi(\theta^\dagger, Y_i, X_i)}{(Y_i, X_i \mid \theta^\dagger)} = 0
+\]</span> We can use the same idea as above: fit the complete cases with weights: <span class="math display">\[
+\frac{1}{n} \sum_{i=1}^n \frac{(1 - m_i)}{\pi(x_i, \beta)} \psi(\theta, y_i, x_i) = 0
+\]</span> Given the inverse weighting, we’ll end up with an unbiased estimator of <span class="math display">\[
+\ExpA{\psi(\theta, Y_i, X_i)}{(Y_i, X_i \mid \theta^\dagger)}
+\]</span> which we can then use to find <span class="math inline">\(\hat{\theta}\)</span>.</p>
+</section>
 </section>
 <section id="augmented-inverse-probability-weighted-estimators" class="level1">
 <h1>Augmented inverse probability weighted estimators</h1>
@@ -594,10 +608,27 @@ P(M_i = 0 \mid X_i = x, \beta) = \pi(x,\beta)
 <p>This is great if you get one of the forms right. However, if both are wrong, there are no guarantees about the bias. <span class="citation" data-cites="kangDemystifyingDoubleRobustness2007">Kang and Schafer (<a href="#ref-kangDemystifyingDoubleRobustness2007" role="doc-biblioref">2007</a>)</span> investigates, via simulation study, how poorly AIPWCC estimators perform when both models are wrong. They find that regression imputation estimators, which are what we’ll study in the next section, perform better, both in terms of coverage and MSE, even when the regression equation is misspecified.</p>
 <p>The key is that the AIPWCC estimators have high variance because of the denominator <span class="math inline">\(\pi(X_i, \beta)\)</span>.</p>
 </section>
+<section id="aipwcc-z-estimators" class="level2">
+<h2 class="anchored" data-anchor-id="aipwcc-z-estimators">AIPWCC-Z-estimators</h2>
+<p>The same idea can be used for Z-estimators; <span class="math inline">\(\hat{\theta}^\mathrm{AIPWCC}\)</span> solves the following systems of equations: <span class="math display">\[
+\frac{1}{n} \sum_{i=1}^n \frac{1 - m_i}{\pi(x_i, \hat{\beta})}\psi(\theta, y_i, x_i) -
+\lp\frac{(1 - m_i) - \pi(x_i, \hat{\beta})}{\pi(x_i, \hat{\beta})}\rp\ExpA{\psi(y_i,x_i, \theta) \mid X_i = x_i}{Y_i \mid X_i}
+= 0
+\]</span></p>
+</section>
 </section>
 <section id="poststratified-estimators" class="level1">
 <h1>Poststratified estimators</h1>
-<p>These estimators directly exploit the law of total expectation.</p>
+<p>These estimators directly exploit the law of total expectation. Suppose we have <span class="math inline">\((y_i, x_i, m_i), i = 1, \dots, n\)</span> where <span class="math inline">\(m_i = 1\)</span> indicates missing <span class="math inline">\(y_i\)</span>. The target of inference is <span class="math inline">\(\ExpA{Y_i}{(Y_i, X_i, M_i)}\)</span>. Assuming univariate MAR conditional on covariates yields the following: <span class="math display">\[
+\ExpA{M_i \mid X_i = x, Y_i = y}{M_i \mid X_i, Y_i} = \ExpA{M_i \mid X_i = x}{M_i \mid X_i}
+\]</span> Which equates to: <span class="math display">\[
+\ExpA{Y_i \mid X_i = x, M_i = 1}{Y_i \mid X_i, M_i} = \ExpA{Y_i \mid X_i = x, M_i = 0}{Y_i \mid X_i, M_i}
+\]</span> This motivates the following estimator: <span class="math display">\[
+\bar{y}^\mathrm{ps} = \int_{\mathcal{X}} \mu(x, \hat{\gamma}) d\hat{P}(x)
+\]</span> where <span class="math display">\[
+\mu(x, \gamma^\dagger) = \ExpA{Y_i \mid X_i = x, M_i = 0}{Y_i \mid X_i, M_i}
+\]</span></p>
+<p>This technique is also subject to model misspecification issues; if <span class="math inline">\(\mu(x,\gamma) \neq \ExpA{Y_i \mid X_i = x, M_i = 0}{Y_i \mid X_i, M_i}\)</span>, then our estimator will not be consistent.</p>
 
 
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 599 - W 26: Missing data and causal inference</title>
+<title>Missing data lecture 3</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-fd68462179fdb1eb8400a3e2e38edf1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +68,64 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+      \newcommand{\R}{\mathbb{R}}
+      \newcommand{\comp}{\mathsf{c}}
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\abs}[1]{\left| #1 \right|}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +141,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -117,16 +172,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
+  <li><a href="#imputation" id="toc-imputation" class="nav-link active" data-scroll-target="#imputation">Imputation</a>
   <ul class="collapse">
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
-  <li><a href="#course-learning-outcomes" id="toc-course-learning-outcomes" class="nav-link" data-scroll-target="#course-learning-outcomes"><strong>Course learning outcomes</strong></a></li>
-  <li><a href="#schedule-and-readings" id="toc-schedule-and-readings" class="nav-link" data-scroll-target="#schedule-and-readings">Schedule and readings</a></li>
-  <li><a href="#course-syllabus" id="toc-course-syllabus" class="nav-link" data-scroll-target="#course-syllabus">Course syllabus</a></li>
-  <li><a href="#project-proposal" id="toc-project-proposal" class="nav-link" data-scroll-target="#project-proposal">Project proposal</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#hw" id="toc-hw" class="nav-link" data-scroll-target="#hw">HW</a></li>
+  <li><a href="#last-observation-carried-forward-imputation-locf" id="toc-last-observation-carried-forward-imputation-locf" class="nav-link" data-scroll-target="#last-observation-carried-forward-imputation-locf">Last-observation-carried-forward imputation (LOCF)</a></li>
+  <li><a href="#mean-imputation" id="toc-mean-imputation" class="nav-link" data-scroll-target="#mean-imputation">Mean imputation</a></li>
+  <li><a href="#random-imputation" id="toc-random-imputation" class="nav-link" data-scroll-target="#random-imputation">Random imputation</a></li>
+  <li><a href="#random-regression-imputation" id="toc-random-regression-imputation" class="nav-link" data-scroll-target="#random-regression-imputation">Random regression imputation</a></li>
+  <li><a href="#hot-deck-imputation" id="toc-hot-deck-imputation" class="nav-link" data-scroll-target="#hot-deck-imputation">Hot-deck imputation</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -136,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 599 - W 26: Missing data and causal inference</h1>
+<h1 class="title">Missing data lecture 3</h1>
 </div>
 
 
@@ -153,113 +205,121 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level2">
-<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
-<section id="textbook" class="level3">
-<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
-<ul>
-<li><p>Required: <em>Statistical Analysis with Missing Data, 3rd edition</em> Little and Rubin</p></li>
-<li><p>Required: <em>Causal Inference for Statistics, Social, and Biomedical Sciences</em>, Imbens and Rubin</p></li>
-<li><p>Optional: <em>Bayesian Inference for Partially Identified Models</em>, Gustafson</p></li>
-</ul>
+<section id="imputation" class="level1">
+<h1>Imputation</h1>
+<p>It makes a good bit of sense to fill in missing values with some sort of estimate of the missing values.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-miss" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-miss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-3-notes_files/figure-html/fig-miss-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-miss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: How do you fill in the red points?
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>This is what a version of poststratified estimators do:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\bar{y}^\mathrm{ps} &amp; = \sum_{x \in \mathcal{X}} (\bar{y}_x^{\mathrm{res}} p_x + \mu(x, \hat{\gamma})(1 - p_x)) \frac{N_x}{N}
+\end{aligned}
+\]</span> This replaces all responses within a certain value of <span class="math inline">\(x\)</span> that are unobserved with <span class="math inline">\(\mu(x,\hat{\gamma})\)</span>.</p>
+<p>This seems like a good approach at first because we’re taking into account the model for <span class="math inline">\(Y_i \mid X_i = x\)</span> when doing our imputation. The downside is that we’re understating uncertainty in our resulting estimator because all values lie exactly on the regression function.</p>
+<section id="last-observation-carried-forward-imputation-locf" class="level2">
+<h2 class="anchored" data-anchor-id="last-observation-carried-forward-imputation-locf">Last-observation-carried-forward imputation (LOCF)</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-locf-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-locf-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-3-notes_files/figure-html/fig-locf-imp-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-locf-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Conditional mean imputation
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>There are other even simpler approaches to imputation:</p>
 </section>
-<section id="course-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
-<p>Upon completion of this course, students should be able to critically evaluate how published literature handles (or does not handle) missing data, and analyze datasets that have missing values by designing models that account for missingness. Students should also be able to read published literature using randomized study designs, and assess whether researchers’ causal conclusions are reasonable.</p>
+<section id="mean-imputation" class="level2">
+<h2 class="anchored" data-anchor-id="mean-imputation">Mean imputation</h2>
+<p><span class="math display">\[
+\begin{aligned}
+\bar{y}^\mathrm{mean} &amp; = \sum_{x \in \mathcal{X}} (\bar{y}_x^{\mathrm{res}} p_x + \bar{y}^\mathrm{res} (1 - p_x)) \frac{n_x}{n}
+\end{aligned}
+\]</span></p>
+<p>This technique seems sketchy because if <span class="math inline">\(Y_i\)</span> depends on <span class="math inline">\(X_i\)</span> then we’ll incur some bias by ignoring this relationship. Furthermore, we’ll ignore the added uncertainty by the fact that we’ve used <span class="math inline">\(\bar{y}\)</span> for every missing response in the dataset.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ucond-mean-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ucond-mean-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-3-notes_files/figure-html/fig-ucond-mean-imp-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ucond-mean-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Conditional mean imputation
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="course-learning-outcomes" class="level3">
-<h3 class="anchored" data-anchor-id="course-learning-outcomes"><strong>Course learning outcomes</strong></h3>
-<ol type="1">
-<li>Differentiate between missing-completely-at-random, missing-at-random (MAR), and missing-not-at-random (MNAR) processes via assumptions about the joint distribution of missingness indicators, outcomes, and covariates.</li>
-<li>Evaluate whether estimands of interest are identifiable for a given data generating process.</li>
-<li>Derive the identification region and limiting posterior density for partially-identified models.</li>
-<li>Derive a principal causal effect using the Neyman-Rubin causal model.</li>
-<li>Construct and fit maximum likelihood (in R)/Bayesian models (in Stan) for MAR, MNAR, and causal models.</li>
-</ol>
+<section id="random-imputation" class="level2">
+<h2 class="anchored" data-anchor-id="random-imputation">Random imputation</h2>
+<p><span class="math display">\[
+\begin{aligned}
+\bar{y}^\mathrm{mean} &amp; = \sum_{x \in \mathcal{X}} (\bar{y}_x^{\mathrm{res}} p_x + \tilde{y}^\mathrm{res} (1 - p_x)) \frac{n_x}{n} \\
+\tilde{y}^\mathrm{res} &amp; \sim \text{Normal}(\bar{y}^\mathrm{res}, \frac{\hat{\sigma}^2_{\mathrm{res}}}{r_x})
+\end{aligned}
+\]</span></p>
+<p>This is a better approach than mean imputation, but we’ll still be ignoring the relationship between the covariates and our response.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-rand-mean-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rand-mean-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-3-notes_files/figure-html/fig-rand-mean-imp-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rand-mean-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Conditional mean imputation
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="schedule-and-readings" class="level3">
-<h3 class="anchored" data-anchor-id="schedule-and-readings">Schedule and readings</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 17%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Topic</th>
-<th>Reading</th>
-<th>LO</th>
-<th>Assignments</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1/6/2026</td>
-<td>Missingness mechanisms and patterns</td>
-<td>LR 1.1-1.4</td>
-<td>1,4</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>1/8/2026</td>
-<td>Missing data techniques<br> Complete case analysis <br> Weighting</td>
-<td>LR Ch. 3</td>
-<td>1</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>1/13/2026</td>
-<td>Single imputation techniques</td>
-<td>LR Ch. 4</td>
-<td>1</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>1/15/2026</td>
-<td>Multiple imputation techniques</td>
-<td>LR Ch. 5</td>
-<td>1</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>1/20/2026</td>
-<td>Likelihood theory</td>
-<td>LR Ch. 6</td>
-<td>1</td>
-<td>NA</td>
-</tr>
-</tbody>
-</table>
+<section id="random-regression-imputation" class="level2">
+<h2 class="anchored" data-anchor-id="random-regression-imputation">Random regression imputation</h2>
+<p><span class="math display">\[
+\begin{aligned}
+\bar{y}^\mathrm{mean} &amp; = \sum_{x \in \mathcal{X}} (\bar{y}_x^{\mathrm{res}} p_x + \tilde{y}_x (1 - p_x)) \frac{n_x}{n} \\
+\tilde{y}_x \mid x &amp; \overset{\text{indy}}{\sim} \text{Normal}\lp\mu(x, \hat{\gamma}), \frac{\hat{\sigma}^2_{\mathrm{res}}(x)}{r_x}\rp
+\end{aligned}
+\]</span></p>
+<p>This is the best approach, but we’ll still be ignoring the uncertainty that arises from the fact that we could have generated many different values for <span class="math inline">\(\tilde{y}_x\)</span> versus the values that we used for the estimator.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-rand-cond-mean-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rand-cond-mean-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-3-notes_files/figure-html/fig-rand-cond-mean-imp-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rand-cond-mean-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Conditional mean imputation
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 </section>
-<section id="course-syllabus" class="level3">
-<h3 class="anchored" data-anchor-id="course-syllabus">Course syllabus</h3>
-<ul>
-<li><a href="missing-data-material-W-26/missing-data-syllabus-W26.pdf">Syllabus</a></li>
-</ul>
-</section>
-<section id="project-proposal" class="level3">
-<h3 class="anchored" data-anchor-id="project-proposal">Project proposal</h3>
-<ul>
-<li><a href="pdfs/missing_data_course/project_proposal.pdf">Project proposal</a></li>
-</ul>
-</section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ul>
-<li><a href="./missing-data-material-W-26/notes/lecture-1-notes.html">Lecture 1 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-2-notes.html">Lecture 2 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-3-notes.html">Lecture 3 notes</a></li>
-</ul>
-</section>
-<section id="hw" class="level3">
-<h3 class="anchored" data-anchor-id="hw">HW</h3>
-<ul>
-<li><a href="pdfs/missing_data_course/HW-1.pdf">HW 1</a> <!-- -   [HW 2](pdfs/missing_data_course/HW-2.pdf) --> <!-- -   [HW 3](pdfs/missing_data_course/HW-3.pdf) --></li>
-</ul>
+<section id="hot-deck-imputation" class="level2">
+<h2 class="anchored" data-anchor-id="hot-deck-imputation">Hot-deck imputation</h2>
 
 
 </section>
