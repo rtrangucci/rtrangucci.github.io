@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 625 - W 26</title>
+<title>Lecture 5</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,47 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +88,65 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +162,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -117,15 +193,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
+  <li><a href="#handling-ties-in-the-nelson-aalen-estimator" id="toc-handling-ties-in-the-nelson-aalen-estimator" class="nav-link active" data-scroll-target="#handling-ties-in-the-nelson-aalen-estimator"><span class="header-section-number">1</span> Handling ties in the Nelson-Aalen estimator</a>
   <ul class="collapse">
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
-  <li><a href="#course-syllabus" id="toc-course-syllabus" class="nav-link" data-scroll-target="#course-syllabus">Course syllabus</a></li>
-  <li><a href="#project-proposal" id="toc-project-proposal" class="nav-link" data-scroll-target="#project-proposal">Project proposal</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
+  <li><a href="#handling-ties-in-the-kaplan-meier-estimator" id="toc-handling-ties-in-the-kaplan-meier-estimator" class="nav-link" data-scroll-target="#handling-ties-in-the-kaplan-meier-estimator"><span class="header-section-number">1.1</span> Handling ties in the Kaplan-Meier estimator</a></li>
   </ul></li>
+  <li><a href="#sec:nonparam-tests" id="toc-sec:nonparam-tests" class="nav-link" data-scroll-target="#sec\:nonparam-tests"><span class="header-section-number">2</span> Nonparametric tests</a></li>
   </ul>
 </nav>
     </div>
@@ -134,7 +206,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 625 - W 26</h1>
+<h1 class="title">Lecture 5</h1>
 </div>
 
 
@@ -151,56 +223,79 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level2">
-<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
-<section id="textbook" class="level3">
-<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
-<ul>
-<li><p>Required: <em>Modelling Survival Data in Medical Research, 4th Edition,</em> Collett</p></li>
-<li><p>Optional: <em>Survival and Event History Analysis</em>, Aalen, Borgan, and Gjessing</p></li>
-<li><p>Optional: <em>Counting Processes and Survival Analysis</em>, Fleming and Harrington</p></li>
-</ul>
+<section id="handling-ties-in-the-nelson-aalen-estimator" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Handling ties in the Nelson-Aalen estimator</h1>
+<p>We had assumed that no two events could occur at the same time, but for most real datasets this isn’t realistic. A distinction must be made between a) assuming that ties are present in the data because, despite the true events happening in continuous time and thus no two events exactly coincide, the data have been rounded such that this exact ordering of events is lost, or b) that the true events happen in discrete time, and so there are truly events that co-occur.</p>
+<p>In the continuous time scenario, <span class="citation" data-cites="aalen2008survival">(<a href="#ref-aalen2008survival" role="doc-biblioref">Aalen, Borgan, and Gjessing 2008</a>)</span> suggests using a modified estimator for hazard at time <span class="math inline">\(t_i\)</span> when there are multiple <span class="math inline">\(\delta_i = 1\)</span>. Let <span class="math inline">\(d_i\)</span> be the number of events observed at time <span class="math inline">\(t_i\)</span>. Then the proposed estimator for <span class="math inline">\(\hat{\lambda}(t_i)\)</span> is: <span id="eq-ties-cont"><span class="math display">\[\begin{align}
+    \hat{\lambda}(t_i) = \sum_{j=0}^{d_i - 1} \frac{1}{\widebar{Y}(t_i) - j}
+\end{align} \tag{1}\]</span></span></p>
+<p>In discrete time the proposal is to use: <span id="eq-ties-disc"><span class="math display">\[\begin{align}
+    \hat{\lambda}(t_i) = \frac{d_i}{\widebar{Y}(t_i)}
+\end{align} \tag{2}\]</span></span></p>
+<section id="handling-ties-in-the-kaplan-meier-estimator" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="handling-ties-in-the-kaplan-meier-estimator"><span class="header-section-number">1.1</span> Handling ties in the Kaplan-Meier estimator</h2>
+<p>It turns out, after some algebra, that using either <a href="#eq-ties-cont" class="quarto-xref">Equation&nbsp;1</a> or <a href="#eq-ties-disc" class="quarto-xref">Equation&nbsp;2</a> results in the following tie-corrected estimator for the KM estimator: <span class="math display">\[\begin{align}
+    \hat{S}^\text{KM}(t) = \prod_{i \mid d_i \geq 1, t_i \leq t} (1 - \frac{d_i}{\widebar{Y}(t_i)})
+\end{align}\]</span></p>
+<p>Greenwood’s formula is then <span class="math display">\[\Var{S^{\text{KM}}(t)} = (S^{\text{KM}}(t))^2 \sum_{i \mid d_i \geq 1, t_i \leq t} \frac{d_i}{\widebar{Y}(t_i) (\widebar{Y}(t_i) - d_i)}.\]</span> This is the more commonly known form.</p>
 </section>
-<section id="course-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
-<p>To highlight the unique challenges posed by the analysis of failure/survival data. To allow you to analyze survival data using parametric and nonparametric techniques in the face of these challenges. To apply these techniques to real data using R code and R packages for survival analysis. To understand the theory and methodology through math, practice and code.</p>
-<p><strong>Course content</strong></p>
-<p>Concepts to be discussed include: hazard function (failure rate function); nonparametric likeli- hood; counting processes; empirical distribution function; censoring and truncation; Kaplan-Meier estimator; Bias of the KM estimator; Cox proportional hazards model; Accelerated Failure Time Model; Partial Likelihood; log-rank test; martingales. R will be the programming language used in the course.</p>
 </section>
-<section id="course-syllabus" class="level3">
-<h3 class="anchored" data-anchor-id="course-syllabus">Course syllabus</h3>
-<ul>
-<li><a href="pdfs/survival-class/survival_analysis_syllabus_W26.pdf">Syllabus</a></li>
-</ul>
-</section>
-<section id="project-proposal" class="level3">
-<h3 class="anchored" data-anchor-id="project-proposal">Project proposal</h3>
-<ul>
-<li><a href="pdfs/survival-class/project-proposal.pdf">Project proposal</a></li>
-</ul>
-</section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ul>
-<li><a href="./survival-material/lecture-1.html">Lecture 1</a></li>
-<li><a href="./survival-material/lecture-2.html">Lecture 2</a></li>
-<li><a href="./survival-material/lecture-3.html">Lecture 3</a></li>
-<li><a href="./survival-material/lecture-4.html">Lecture 4</a></li>
-<li><a href="./survival-material/lecture-5.html">Lecture 5</a></li>
-</ul>
-</section>
-<section id="homework" class="level3">
-<h3 class="anchored" data-anchor-id="homework">Homework</h3>
-<ul>
-<li><a href="pdfs/survival-class/HW-1.pdf">HW 1</a></li>
-<li><a href="pdfs/survival-class/HW-2.pdf">HW 2</a> <!-- -   [HW 3](pdfs/survival-class/HW-3.pdf) --> <!-- -   [HW 4](pdfs/survival-class/HW-4.pdf) --> <!-- -   [HW 5](pdfs/survival-class/HW-5.pdf) --> <!-- -   [HW 6](pdfs/survival-class/HW-6.pdf) --></li>
-</ul>
+<section id="sec:nonparam-tests" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Nonparametric tests</h1>
+<p>Now that we’ve derived the nonparametric estimator for the cumulative hazard function, <span class="math inline">\(\Lambda^{\text{NA}}(t) = \sum_{i \mid \delta_i = 1, t_i \leq t} \frac{1}{\widebar{Y}(t_i)}\)</span>, we may be interested in testing the hypothesis that two populations have different cumulative hazard functions.</p>
+<p>Intuitively it would make sense to compare the difference between the two cumulative hazard functions up to some <span class="math inline">\(\tau\)</span>: <span class="math display">\[\begin{align}
+    \Lambda^{\text{NA}}_1(\tau) - \Lambda^{\text{NA}}_2(\tau)
+\end{align}\]</span> and if this difference were large relative to the standard error under the null hypothesis, reject the null in favor of the alternative.</p>
+<p>Let’s formalize this a bit more. If the null hypothesis is: <span class="math display">\[H_0: \lambda_1(t) = \lambda_2(t) \forall t \in [0,\tau]\]</span> then we can represent this common hazard function at <span class="math inline">\(\lambda(t)\)</span>. Under the null, the nonparametric estimator combines all of the event times into one dataset and estimates <span class="math inline">\(\hat{\lambda}(t)\)</span>. Let <span class="math inline">\(\widebar{Y}(t) = \widebar{Y}_1(t) + \widebar{Y}_1(t)\)</span> be the total population at risk between the two samples. Let there be <span class="math inline">\(n_1\)</span> and <span class="math inline">\(n_2\)</span> samples in each respective study set. Let <span class="math inline">\(t_1 \leq t_2 \leq &lt; \dots &lt; t_{n_1 + n_2}\)</span> be the total combined set of event times. Let <span class="math inline">\(d_{i}\)</span> be the total number of failures occurring at time <span class="math inline">\(t_i\)</span>, and let <span class="math inline">\(d_{ij}\)</span> be the total number of failures occurring at time <span class="math inline">\(t_i\)</span> for sample <span class="math inline">\(j\)</span>. Note that this could be zero.</p>
+<p>Then the Nelson-Aalen estimator, assuming discrete time ties, for the cumulative hazard under the null is <span class="math display">\[\begin{align}
+    \hat{\Lambda}^\text{NA}(\tau) = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} \frac{d_i}{\widebar{Y}(t_i)}
+\end{align}\]</span> Then let the Nelson-Aalen estimator for the <span class="math inline">\(j\)</span>-th cumulative hazard be <span class="math display">\[\begin{align}
+    \hat{\Lambda}^\text{NA}(\tau) = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} \frac{d_{ij}}{\widebar{Y}_j(t_i)}
+\end{align}\]</span> Given the common index over <span class="math inline">\(t_i\)</span> we can compare the two sums more easily: <span class="math display">\[\begin{align}
+    Z_j(\tau) = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2}  \left(\frac{d_{ij}}{\widebar{Y}_j(t_i)} - \frac{d_i}{\widebar{Y}(t_i)}\right).
+\end{align}\]</span> We can weight the comparisons differently by adding a weighting factor that is a function of <span class="math inline">\(t\)</span> and <span class="math inline">\(j\)</span>: <span class="math display">\[\begin{align}
+    Z_j(\tau) = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} W_j(t_i) \left(\frac{d_{ij}}{\widebar{Y}_j(t_i)} - \frac{d_i}{\widebar{Y}(t_i)}\right).
+\end{align}\]</span> Crucially, this weighting function has the property that <span class="math inline">\(W_j(t_i) = 0\)</span> when <span class="math inline">\(\widebar{Y}_j(t_i) = 0\)</span>, because the hazard rate estimator <span class="math inline">\(\hat{\lambda}_j(t_i)\)</span> is not defined in this case. Let’s rewrite the statistic <span class="math inline">\(Z(\tau)\)</span> a bit differently to elucidate the statistical properties, assuming that <span class="math inline">\(W_j(t_i) = W(t_i) \widebar{Y}_j(t_i)\)</span>, which satisfies the requirement that <span class="math inline">\(W_j(t_i) = 0\)</span> when <span class="math inline">\(\widebar{Y}_j(t_i) = 0\)</span>: <span class="math display">\[\begin{align}
+    Z_j(\tau) &amp; = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} W(t_i)\widebar{Y}_j(t_i) \left(\frac{d_{ij}}{\widebar{Y}_j(t_i)} - \frac{d_i}{\widebar{Y}(t_i)}\right)\\
+    &amp; = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} W(t_i) \left(d_{ij} - d_i\frac{\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\right)
+\end{align}\]</span> Now, conditional on <span class="math inline">\(d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)\)</span>, <span class="math inline">\(d_{ij}\)</span> are distributed as hypergeometric random variables. Recall the definition of a hypergeometric random variable: It defines the distribution of successes (in our case this is failures) in a sample size of <span class="math inline">\(n\)</span> from a finite population of size <span class="math inline">\(N\)</span> where the total number of successes is <span class="math inline">\(K\)</span>, with mean <span class="math inline">\(n \frac{K}{N}\)</span>. The analogy to our scenario is <span class="math inline">\(d_{ij}\)</span> is the number of failures in a samples of size <span class="math inline">\(\widebar{Y}_j(t_i)\)</span> in a population size <span class="math inline">\(\widebar{Y}(t_i)\)</span> where the total number of failures is <span class="math inline">\(d_i\)</span>. <span class="math display">\[p(d_{ij} = k \mid d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)) = \frac{{d_i \choose k}{\widebar{Y}(t_i) - d_i \choose \widebar{Y}_j(t_i) - k}}{{\widebar{Y}(t_i) \choose \widebar{Y}_j(t_i)}}.\]</span> Then <span class="math display">\[\Exp{d_{ij} \mid d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)} =  d_i\frac{\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\]</span> For notational convenience, let’s call <span class="math inline">\(A_{ij} = d_{ij} - d_i\frac{\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\)</span>. Under the null hypothesis, the mean of <span class="math inline">\(Z_j(\tau)\)</span> is zero, because <span class="math inline">\(\Exp{A_{ij} \mid d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)} = 0\)</span> so <span class="math display">\[\Exp{A_{ij}} = \Exp{\Exp{A_{ij} \mid d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)}}{d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)} = 0.\]</span> We can also compute the variance using our result. <span class="math display">\[\begin{align*}
+    \Var{Z_j(\tau)} &amp; = \sum_{i} W(t_i)^2 \Var{A_{ij}} + 2 \sum_{i &lt; k} W(t_i) W(t_j) \text{Cov}\left(A_{ij}, A_{kj} \right)
+\end{align*}\]</span> Given the hypergeometric distribution, we can read off the variance as <span class="math display">\[\Var{A_{ij}} = d_i\frac{\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)} \left(1 - \frac{\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\right)\frac{\widebar{Y}(t_i) - d_i}{\widebar{Y}(t_i) - 1 }\]</span> Now let’s compute <span class="math inline">\(\text{Cov}\left(A_{ij}, A_{kj} \right)\)</span>, noting that <span class="math inline">\(i &lt; k\)</span>. We know that <span class="math inline">\(\Exp{A_{ij}} = 0\)</span>, so we just need to compute <span class="math inline">\(\Exp{A_{ij} A_{kj}}\)</span>. We can use the tower property of expectation. First we need to define something called the history, or the <em>filtration</em>, of the process. A filtration is an increasing family of <span class="math inline">\(\sigma\)</span>-algebras, <span class="math inline">\(\{\mathcal{F}_l, 0 \leq l &lt; \infty \}\)</span> such that <span class="math inline">\(\mathcal{F}_l \subset \mathcal{F}_m\)</span> for all <span class="math inline">\(l &lt; m\)</span>. This is a way of formalizing the idea that as time progresses, information about events accrues. If an event <span class="math inline">\(E \in \mathcal{F}_l\)</span> then <span class="math inline">\(\Exp{\mathbbm{1}\left(E\right) \mid \mathcal{F}_l} = \mathbbm{1}\left(E\right)\)</span>, because we’re conditioning on the full set of information, and <span class="math inline">\(E\)</span> is part of that information. It’s analogous to saying for two random variables <span class="math inline">\(X, Y\)</span>, <span class="math inline">\(\Exp{X Y \mid X} = X \Exp{Y \mid X}\)</span>. Taking this approach below, we show that the covariance is zero. Let <span class="math inline">\(\mathcal{F}_k\)</span> be the collection of information just before <span class="math inline">\(t_k\)</span>, which means, more formally that it is <span class="math display">\[\begin{align}
+    \mathcal{F}_k = \sigma\{ d_{i1}, d_{i2}, \widebar{Y}_1(t_i), \widebar{Y}_2(t_i), i &lt; k \}
+\end{align}\]</span> Then <span class="math display">\[\begin{align}
+    \Exp{A_{ij}A_{kj}} &amp; = \Exp{\Exp{A_{ij}A_{kj} \mid \mathcal{F}_k}} \\
+    &amp; = \Exp{A_{ij}\Exp{A_{kj} \mid \mathcal{F}_k}} \\
+    &amp; = 0.
+\end{align}\]</span> Where the last line follows because <span class="math display">\[\begin{align}
+    \Exp{A_{kj} \mid \mathcal{F}_k} &amp; = \Exp{\Exp{A_{kj} \mid \mathcal{F}_k, d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)}}{d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)} \\
+    &amp; = 0
+\end{align}\]</span> as we showed above. Thus, <span class="math display">\[\begin{align}
+    \Var{Z_j(\tau)} &amp; = \sum_{i} W(t_i)^2 \Var{A_{ij}} \\
+    &amp; =\sum_{i} W(t_i)^2  \left(d_i\frac{\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)} \left(1 - \frac{\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\right)\frac{\widebar{Y}(t_i) - d_i}{\widebar{Y}(t_i) - 1 }\right)\label{eq:var-log-rank}
+\end{align}\]</span> Note that, due to <span class="math inline">\(A_{ij}\)</span> being mean zero, we have that <span class="math display">\[\begin{align*}
+    \Var{A_{ij}} &amp; = \Exp{\Var{A_{ij} \mid d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)}}{d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)} +
+    \Var{\Exp{A_{ij} \mid d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)}} \\
+    &amp; = \Exp{\Var{A_{ij} \mid d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)}}{d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)}
+\end{align*}\]</span> Then <span class="math display">\[\Var{A_{ij}} = \Exp{\Var{A_{ij} \mid d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)}}{d_i, \widebar{Y}_j(t_i), \widebar{Y}(t_i)}\]</span> This means that we can construct an unbiased estimator for <span class="math inline">\(\Var{Z_j(\tau)}\)</span> by the following: <span class="math display">\[\begin{align*}
+    \hat{\Var{Z_j(\tau)}} &amp; = \sum_{i} W(t_i)^2 \Var{A_{ij} \mid d_i, \widebar{Y}(t_i), \widebar{Y}_j(t_i)}
+\end{align*}\]</span> and <span class="math display">\[\begin{align*}
+    \Exp{\hat{\Var{Z_j(\tau)}}} &amp; = \sum_{i} W(t_i)^2 \Exp{\Var{A_{ij} \mid d_i, \widebar{Y}(t_i), \widebar{Y}_j(t_i)}}\\
+    &amp; = \sum_{i} W(t_i)^2 \Var{A_{ij}} \\
+    &amp; = \Var{Z_j(\tau)}
+\end{align*}\]</span></p>
+<p>We won’t go into the details yet, but it turns out that <span class="math display">\[\begin{align*}
+    \frac{Z_j(\tau)}{\sqrt{\hat{\Var{Z_j(\tau)}}}} \overset{\text{asympt.}}{\sim} \text{Normal}(0, 1)
+\end{align*}\]</span> One could use this result to define a rejection region that is calibrated under the null.</p>
 
 
-</section>
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-aalen2008survival" class="csl-entry" role="listitem">
+Aalen, Odd, Ornulf Borgan, and Hakon Gjessing. 2008. <em>Survival and Event History Analysis: A Process Point of View</em>. Springer Science &amp; Business Media.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
