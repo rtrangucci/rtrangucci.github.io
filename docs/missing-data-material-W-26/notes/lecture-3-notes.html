@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -84,6 +104,8 @@ window.MathJax = {
         \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
         \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
         \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Var}[1]{\text{Var} \lp #1 \rp}
+        \newcommand{\VarA}[2]{\text{Var}_{#2} \lp #1 \rp}
         \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
         \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
         \newcommand{\abs}[1]{\left| #1 \right|}
@@ -177,8 +199,15 @@ window.Quarto = {
   <li><a href="#mean-imputation" id="toc-mean-imputation" class="nav-link" data-scroll-target="#mean-imputation">Mean imputation</a></li>
   <li><a href="#random-imputation" id="toc-random-imputation" class="nav-link" data-scroll-target="#random-imputation">Random imputation</a></li>
   <li><a href="#random-regression-imputation" id="toc-random-regression-imputation" class="nav-link" data-scroll-target="#random-regression-imputation">Random regression imputation</a></li>
+  <li><a href="#implicit-imputation-models" id="toc-implicit-imputation-models" class="nav-link" data-scroll-target="#implicit-imputation-models">Implicit imputation models</a>
+  <ul class="collapse">
   <li><a href="#last-observation-carried-forward-imputation-locf" id="toc-last-observation-carried-forward-imputation-locf" class="nav-link" data-scroll-target="#last-observation-carried-forward-imputation-locf">Last-observation-carried-forward imputation (LOCF)</a></li>
+  <li><a href="#hot-deck-imputation" id="toc-hot-deck-imputation" class="nav-link" data-scroll-target="#hot-deck-imputation">Hot deck imputation</a></li>
+  <li><a href="#hot-deck-with-matching" id="toc-hot-deck-with-matching" class="nav-link" data-scroll-target="#hot-deck-with-matching">Hot deck with matching</a></li>
+  <li><a href="#predictive-mean-matching" id="toc-predictive-mean-matching" class="nav-link" data-scroll-target="#predictive-mean-matching">Predictive mean matching</a></li>
   </ul></li>
+  </ul></li>
+  <li><a href="#multiple-imputation-mi" id="toc-multiple-imputation-mi" class="nav-link" data-scroll-target="#multiple-imputation-mi">Multiple imputation (MI)</a></li>
   </ul>
 </nav>
     </div>
@@ -206,7 +235,9 @@ window.Quarto = {
 
 <section id="imputation" class="level1">
 <h1>Imputation</h1>
-<p>It makes a good bit of sense to fill in missing values with some sort of estimate of the missing values.</p>
+<p>It makes a good bit of sense to fill in missing values with some sort of estimate of the missing values. There are myriad ways to fill in unknown values with imputations.</p>
+<p>The first way to fill in missing values we’ll cover are single imputation methods, whereby we fill in each missing value with one value. The values of the missing observations can be generated from an explicit model or an implicit model. We’ll demonstrate our methods on the following example dataset.</p>
+<p>In the example shown in <a href="#fig-miss" class="quarto-xref">Figure&nbsp;1</a>, <span class="math inline">\(n=500\)</span> values of <span class="math inline">\(Y_1, Y_2\)</span> are a sample from a bivariate normal distribution; each random variable is marginally distributed as standard normal (i.e.&nbsp;mean <span class="math inline">\(0\)</span> and variance equal to <span class="math inline">\(1\)</span>), with covariance equal to <span class="math inline">\(\sqrt{0.5}\)</span>. The green values in <a href="#fig-miss" class="quarto-xref">Figure&nbsp;1</a> are observed, while the red values are missing. Visually, we can see that the values are not missing completely at random because a preponderance of values are missing from the bottom left quadrant of the plot.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-miss" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -221,13 +252,14 @@ Figure&nbsp;1: How do you fill in the red points?
 </div>
 </div>
 </div>
-<p>This is what a version of poststratified estimators do:</p>
+<p>Single imputation methods are akin to poststratified estimators:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \bar{y}^\mathrm{ps} &amp; = \sum_{x \in \mathcal{X}} (\bar{y}_x^{\mathrm{res}} p_x + \mu(x, \hat{\gamma})(1 - p_x)) \frac{N_x}{N}
 \end{aligned}
-\]</span> This replaces all responses within a certain value of <span class="math inline">\(x\)</span> that are unobserved with <span class="math inline">\(\mu(x,\hat{\gamma})\)</span>.</p>
+\]</span> The estimator <span class="math inline">\(\bar{y}^{\mathrm{ps}}\)</span> replaces all responses within a certain value of <span class="math inline">\(x\)</span> that are unobserved with <span class="math inline">\(\mu(x,\hat{\gamma})\)</span>.</p>
 <p>This seems like a good approach at first because we’re taking into account the model for <span class="math inline">\(Y_i \mid X_i = x\)</span> when doing our imputation. The downside is that we’re understating uncertainty in our resulting estimator because all values lie exactly on the regression function.</p>
+<p><a href="#fig-cond-mean-imp" class="quarto-xref">Figure&nbsp;2</a> shows conditional mean imputation applied to the dataset above. The bright red dots are imputed data.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-cond-mean-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -242,9 +274,11 @@ Figure&nbsp;2: Conditional mean imputation
 </div>
 </div>
 </div>
-<p>There are other even simpler approaches to imputation:</p>
+<p>The imputations don’t fit with the rest of the points because they lie directly on the regression line.</p>
+<p>There are other even simpler approaches to imputation.</p>
 <section id="mean-imputation" class="level2">
 <h2 class="anchored" data-anchor-id="mean-imputation">Mean imputation</h2>
+<p>There is mean imputation, whereby we impute each missing observation with the overall mean of the dataset:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \bar{y}^\mathrm{mean} &amp; = \sum_{x \in \mathcal{X}} (\bar{y}_x^{\mathrm{res}} p_x + \bar{y}^\mathrm{res} (1 - p_x)) \frac{n_x}{n}
@@ -265,6 +299,7 @@ Figure&nbsp;3: Conditional mean imputation
 </div>
 </div>
 </div>
+<p><a href="#fig-ucond-mean-imp" class="quarto-xref">Figure&nbsp;3</a> shows this technique applied to our example. This is worse than the conditional mean imputation because we are ignoring the relationship between <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_2\)</span>.</p>
 </section>
 <section id="random-imputation" class="level2">
 <h2 class="anchored" data-anchor-id="random-imputation">Random imputation</h2>
@@ -292,13 +327,14 @@ Figure&nbsp;4: Conditional mean imputation
 </section>
 <section id="random-regression-imputation" class="level2">
 <h2 class="anchored" data-anchor-id="random-regression-imputation">Random regression imputation</h2>
+<p>The most faithful single imputation method might be something like the following:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \bar{y}^\mathrm{mean} &amp; = \sum_{x \in \mathcal{X}} (\bar{y}_x^{\mathrm{res}} p_x + \tilde{y}_x (1 - p_x)) \frac{n_x}{n} \\
 \tilde{y}_x \mid x &amp; \overset{\text{indy}}{\sim} \text{Normal}\lp\mu(x, \hat{\gamma}), \frac{\hat{\sigma}^2_{\mathrm{res}}(x)}{r_x}\rp
 \end{aligned}
 \]</span></p>
-<p>This is the best approach, but we’ll still be ignoring the uncertainty that arises from the fact that we could have generated many different values for <span class="math inline">\(\tilde{y}_x\)</span> versus the values that we used for the estimator.</p>
+<p>This approach is shown in <a href="#fig-rand-cond-mean-imp" class="quarto-xref">Figure&nbsp;5</a>. The purple short-dashed line is the regression obtained from the completed dataset. We can see that despite the added uncertainty in the imputation method, the resulting complete-data estimator is still biased compared to the true relationship. We’ll still be ignoring the uncertainty that arises from the fact that we could have generated many different values for <span class="math inline">\(\tilde{y}_x\)</span> versus the values that we used for the estimator.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-rand-cond-mean-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -314,8 +350,12 @@ Figure&nbsp;5: Conditional mean imputation
 </div>
 </div>
 </section>
-<section id="last-observation-carried-forward-imputation-locf" class="level2">
-<h2 class="anchored" data-anchor-id="last-observation-carried-forward-imputation-locf">Last-observation-carried-forward imputation (LOCF)</h2>
+<section id="implicit-imputation-models" class="level2">
+<h2 class="anchored" data-anchor-id="implicit-imputation-models">Implicit imputation models</h2>
+<p>There are still more single imputation models.</p>
+<section id="last-observation-carried-forward-imputation-locf" class="level3">
+<h3 class="anchored" data-anchor-id="last-observation-carried-forward-imputation-locf">Last-observation-carried-forward imputation (LOCF)</h3>
+<p>Suppose we consider <span class="math inline">\(Y_1\)</span> the value of the first measurement in a longitudinal study with <span class="math inline">\(2\)</span> measurement occasions. A popular method of single imputation in longitudinal analyses is last-observation-carried-forward, or LOCF for short. This is shown below:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-locf-imp" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -324,18 +364,66 @@ Figure&nbsp;5: Conditional mean imputation
 <img src="lecture-3-notes_files/figure-html/fig-locf-imp-1.png" class="img-fluid figure-img" width="672">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-locf-imp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: Conditional mean imputation
+Figure&nbsp;6: LOCF imputation
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p>We have the same problem with conditional mean imputation, namely the lack of randomness in our imputations.</p>
+</section>
+<section id="hot-deck-imputation" class="level3">
+<h3 class="anchored" data-anchor-id="hot-deck-imputation">Hot deck imputation</h3>
+<p>Hot deck imputation is something that is employed by the Census Bureau to handle item nonresponse on surveys. The simplest implementation is described as follows. Let there be <span class="math inline">\(n\)</span> observations on <span class="math inline">\(y_i\)</span>, a univariate measurement, of which <span class="math inline">\(n-r\)</span> are missing. The hot deck estimator is defined as follows: <span class="math display">\[
+\begin{aligned}
+\bar{y}^{\mathrm{HD}} &amp; = \frac{1}{n} \lp r \bar{y}_{(0)} + (n-r) \bar{y}_{(1)} \rp \\
+\bar{y}_{(1)} \mid y_{(0)} &amp; = \frac{1}{n-r}\sum_{i=1}^r h_i y_{(0)i} \\
+(H_1, \dots, H_r) &amp; \sim \text{Multinomial}((n-r) \mid (1/r, \dots, 1/r))
+\end{aligned}
+\]</span> The units included in the fully observed data are called “donor” units because the set provides the values that can replace the missing values.</p>
+<p>We can get the mean and variance of these estimators by using the law of total expectation and total variance:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Exp{\bar{y}^{\mathrm{HD}}} &amp; = \ExpA{\ExpA{\bar{y}^{\mathrm{HD}}}{(H_1, \dots, H_r) \mid Y_{(0)}}}{Y_{(0)}} \\
+\Var{\bar{y}^{\mathrm{HD}}} &amp; = \VarA{\ExpA{\bar{y}^{\mathrm{HD}}}{(H_1, \dots, H_r) \mid Y_{(0)}}}{Y_{(0)}} + \ExpA{\VarA{\bar{y}^{\mathrm{HD}}}{(H_1, \dots, H_r) \mid Y_{(0)}}}{Y_{(0)}}
+\end{aligned}
+\]</span> Example 4.8 in <span class="citation" data-cites="little2019statistical">Little and Rubin (<a href="#ref-little2019statistical" role="doc-biblioref">2019</a>)</span> walks through the derivation of these expressions.</p>
+</section>
+<section id="hot-deck-with-matching" class="level3">
+<h3 class="anchored" data-anchor-id="hot-deck-with-matching">Hot deck with matching</h3>
+<p>Given that the prior example is only useful when data are MCAR (as our book mentions), one can modify the donor units for each observation such that we only choose donors from a pool that is “close” to the unit with a missing value in terms of other completely observed values. For a unit for which <span class="math inline">\(y_i\)</span> is missing but for which we have fully observed covariates <span class="math inline">\(x_{i} = x_{i1}, \dots x_{iK}\)</span>, we would choose a donor unit with observed <span class="math inline">\(y_j\)</span> and <span class="math inline">\(x_j = x_{j1}, \dots x_{jK}\)</span> such that some distance metric, <span class="math inline">\(d(x_i, x_j)\)</span> is below a threshold value, <span class="math inline">\(d_0\)</span>.</p>
+</section>
+<section id="predictive-mean-matching" class="level3">
+<h3 class="anchored" data-anchor-id="predictive-mean-matching">Predictive mean matching</h3>
+<p>In predictive mean matching, we fit a regression model on the completely observed units. Then we compute the predicted value for <span class="math inline">\(y_i\)</span>, or <span class="math inline">\(\hat{y}(x_i)\)</span> using <span class="math inline">\(x_i\)</span> and pick donors for which <span class="math inline">\((\hat{y}(x_i) - \hat{y}(x_j))^2\)</span> are below <span class="math inline">\(d_0\)</span>.</p>
+</section>
+</section>
+</section>
+<section id="multiple-imputation-mi" class="level1">
+<h1>Multiple imputation (MI)</h1>
+<p>As the above examples indicate, at a minimum, imputation methods need to at least provide for some randomness in order to fit in with the rest of the data. The problem with generating only one such set of data is that we ignore randomness that occurs from having chosen only one set of values for our missing observations. Ideally, we would generate many such complete datasets, say <span class="math inline">\(D\)</span>, and use this set of datasets to characterize the uncertainty in our imputations. This is the motivation for multiple imputation, or MI.</p>
+<p>Suppose we have a way of generating <span class="math inline">\(D\)</span> complete datasets. For each dataset <span class="math inline">\(d, d=1, \dots, D\)</span> , we compute an estimator for some quantity of interest, or <span class="math inline">\(\hat{\theta}_d\)</span>. It could be a mean, <span class="math inline">\(\bar{y}\)</span>, or a regression coefficient, or the maximum eigenvalue of a covariance matrix. For simiplicity’s sake, consider the value to be univariate for the remainder of the section, but in 5.4 in <span class="citation" data-cites="little2019statistical">Little and Rubin (<a href="#ref-little2019statistical" role="doc-biblioref">2019</a>)</span>, there is information on how to generlize to multivariate estimands. The estimate across <span class="math inline">\(D\)</span> datasets is the sample average, or <span class="math inline">\(\bar{\theta}_D = \frac{1}{D} \sum_{d=1}^D \hat{\theta}_d\)</span>.</p>
+<p>In order to get a valid variance estimate that includes variability from imputations as well as sampling uncertainty, we compute something akin to the total variance in the hot deck imputation approach to imputation. We first compute the variance within an imputation and then average across imputations to get the expected value of the within-imputation uncertainty. This would be like a standard error that is returned from a regression routine, or <span class="math inline">\(\sigma^2/n\)</span> for the mean. <span class="math display">\[
+\bar{W}_D = \frac{1}{D} \sum_{d=1}^D \Var{\hat{\theta}_d}
+\]</span></p>
+<p>We then need the between imputation variance, which is the variance of the point estimates returned from each imputation, of the form: <span class="math display">\[
+B_D = \frac{1}{D - 1} \sum_{d = 1}^D (\hat{\theta}_d - \bar{\theta}_D)^2
+\]</span></p>
+<p>Then the total variance is estimated to be: <span class="math display">\[
+T_D = \bar{W}_D + \frac{D + 1}{D} B_D
+\]</span> The multiplier <span class="math inline">\(1 + D^{-1}\)</span> is an improvement for the variance estimate to account for the fact that <span class="math inline">\(D\)</span> is finite. The quantity <span class="math inline">\(\hat{\gamma}_D\)</span>, <span class="math display">\[
+\hat{\gamma}_D = \frac{D + 1}{D} B_D / T_D
+\]</span> represents the loss of efficiency due to nonresponse.</p>
+
 
 
 </section>
-</section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-little2019statistical" class="csl-entry" role="listitem">
+Little, Roderick JA, and Donald B Rubin. 2019. <em>Statistical Analysis with Missing Data</em>. John Wiley &amp; Sons.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
