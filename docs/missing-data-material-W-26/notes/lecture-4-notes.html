@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>HW 1</title>
+<title>Missing data lecture 4</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,62 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -95,7 +40,7 @@ div.csl-indent {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-fd68462179fdb1eb8400a3e2e38edf1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -130,19 +75,20 @@ window.MathJax = {
       MathJax.startup.defaultReady();
       const {STATE} = MathJax._.core.MathItem;
       MathJax.tex2mml(String.raw`
+      \newcommand{\R}{\mathbb{R}}
+      \newcommand{\comp}{\mathsf{c}}
         \newcommand{\lp}{\left(}
         \newcommand{\rp}{\right)}
-        \newcommand{\R}{\mathbb{R}}
         \newcommand{\lb}{\left[}
         \newcommand{\rb}{\right]}
         \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
         \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
         \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
-        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\Var}[1]{\text{Var} \lp #1 \rp}
+        \newcommand{\VarA}[2]{\text{Var}_{#2} \lp #1 \rp}
         \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
-        \newcommand{\comp}{^\mathsf{c}}
-        \newcommand{\widebar}[1]{\overline{\! #1}}
-        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\abs}[1]{\left| #1 \right|}
       `);
     }
   },
@@ -228,21 +174,11 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#question-1" id="toc-question-1" class="nav-link active" data-scroll-target="#question-1"><span class="header-section-number">1</span> Question 1</a>
+  <li><a href="#likelihood-based-inference" id="toc-likelihood-based-inference" class="nav-link active" data-scroll-target="#likelihood-based-inference">Likelihood-based inference</a>
   <ul class="collapse">
-  <li><a href="#question-1a" id="toc-question-1a" class="nav-link" data-scroll-target="#question-1a"><span class="header-section-number">1.1</span> Question 1a</a></li>
-  <li><a href="#question-1b" id="toc-question-1b" class="nav-link" data-scroll-target="#question-1b"><span class="header-section-number">1.2</span> Question 1b</a></li>
-  <li><a href="#question-1c" id="toc-question-1c" class="nav-link" data-scroll-target="#question-1c"><span class="header-section-number">1.3</span> Question 1c</a></li>
-  <li><a href="#question-1d" id="toc-question-1d" class="nav-link" data-scroll-target="#question-1d"><span class="header-section-number">1.4</span> Question 1d</a></li>
-  <li><a href="#question-1e" id="toc-question-1e" class="nav-link" data-scroll-target="#question-1e"><span class="header-section-number">1.5</span> Question 1e</a></li>
-  <li><a href="#question-1f" id="toc-question-1f" class="nav-link" data-scroll-target="#question-1f"><span class="header-section-number">1.6</span> Question 1f</a></li>
-  </ul></li>
-  <li><a href="#question-3" id="toc-question-3" class="nav-link" data-scroll-target="#question-3"><span class="header-section-number">2</span> Question 3</a>
-  <ul class="collapse">
-  <li><a href="#question-3a" id="toc-question-3a" class="nav-link" data-scroll-target="#question-3a"><span class="header-section-number">2.1</span> Question 3a</a></li>
-  <li><a href="#question-3b" id="toc-question-3b" class="nav-link" data-scroll-target="#question-3b"><span class="header-section-number">2.2</span> Question 3b</a></li>
-  <li><a href="#question-3c" id="toc-question-3c" class="nav-link" data-scroll-target="#question-3c"><span class="header-section-number">2.3</span> Question 3c</a></li>
-  <li><a href="#question-3d" id="toc-question-3d" class="nav-link" data-scroll-target="#question-3d"><span class="header-section-number">2.4</span> Question 3d</a></li>
+  <li><a href="#simple-mle-example" id="toc-simple-mle-example" class="nav-link" data-scroll-target="#simple-mle-example">Simple MLE example</a></li>
+  <li><a href="#more-involved-mle-example-normal-with-unknown-mean-and-variance" id="toc-more-involved-mle-example-normal-with-unknown-mean-and-variance" class="nav-link" data-scroll-target="#more-involved-mle-example-normal-with-unknown-mean-and-variance">More involved MLE example: Normal with unknown mean and variance</a></li>
+  <li><a href="#more-complicated-still-neyman-scott-problem" id="toc-more-complicated-still-neyman-scott-problem" class="nav-link" data-scroll-target="#more-complicated-still-neyman-scott-problem">More complicated still: Neyman-Scott problem</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -252,7 +188,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">HW 1</h1>
+<h1 class="title">Missing data lecture 4</h1>
 </div>
 
 
@@ -269,109 +205,127 @@ window.Quarto = {
 </header>
 
 
-<section id="question-1" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Question 1</h1>
-<p>In this homework, you’ll be trying to replicate some of the results of the <span class="citation" data-cites="kangDemystifyingDoubleRobustness2007">Kang and Schafer (<a href="#ref-kangDemystifyingDoubleRobustness2007" role="doc-biblioref">2007</a>)</span> paper and applying these results to a dataset. In the paper, the authors test the robustness of IPW, AIPW, and regression estimators via. a simulation study. The authors simulate a survey where an outcome <span class="math inline">\(y_i\)</span> is measured for <span class="math inline">\(n\)</span> individuals, but a substantial number of observations are missing (<span class="math inline">\(\sim 50\%\)</span>). The target estimand is the population mean of <span class="math inline">\(y_i\)</span>, which is simulated to be <span class="math inline">\(210\)</span>. The <span class="math inline">\(y_i\)</span> are simulated via a linear model conditional on covariates <span class="math inline">\(Z_{i1}, Z_{i2}, Z_{i3}, Z_{i4}\)</span>; the missingness indicators are simulated via a logistic regression model, again using a linear model related to the <span class="math inline">\(Z\)</span> predictors.</p>
-<p>The catch is that it is assumed that the analyst has access only to complex transformations of the predictors, in the form of <span class="math inline">\(X_{i1}, X_{i2}, X_{i3}, X_{i4}\)</span>. These transformed predictors can be used in a linear model to produce fits that are “good enough” meaning that they predict the outcomes pretty well and don’t indicate poor fits to the data.</p>
-<p>The operating characteristics, namely bias, variance and MSE are measured for several different estimators that involve linear models and logistic regressions for <span class="math inline">\(y_i \mid x_i\)</span> and <span class="math inline">\(m_i \mid x_i\)</span>. Let <span class="math inline">\(e(x_i, \hat{\gamma})\)</span> be the fitted probabilities of not being missing, or <span class="math inline">\(P(M_i = 0 \mid X_i = x_i)\)</span> from the missingness model and let <span class="math inline">\(\mu(x_i, \hat{\beta})\)</span> be the fitted values from a linear regression of <span class="math inline">\(y_i\)</span> on <span class="math inline">\(x_i\)</span>.</p>
-<ul>
-<li><p>An IPW estimator: <span class="math display">\[
-\bar{y}^{\text{IPW}} = \frac{\sum_{i \mid m_i = 0} y_i e(x_i, \hat{\gamma})^{-1}}{\sum_{i \mid m_i = 0} e(x_i, \hat{\gamma})^{-1}}
-\]</span></p></li>
-<li><p>A regression estimator: <span class="math inline">\(\bar{y}^{\text{reg}} = \frac{1}{n} \sum_{i=1}^n \mu(x_i, \hat{\beta})\)</span></p></li>
-<li><p>An AIPW estimator: ${y}^{} = {y}^{} + $</p></li>
-</ul>
-<p>The <span class="math inline">\(\hat{\epsilon}_i\)</span> is the fitted residual from the regression on <span class="math inline">\(i\)</span> such that <span class="math inline">\(m_i = 0\)</span>.</p>
-<p>I want you to roughly recreate the results of part of the paper by running the smallest simulation study scenario. I’ve written the simulation function for you, you have to write the code to run the regressions and the code to compute the estimators.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>gen_data <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">200</span>) {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  Z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n <span class="sc">*</span> <span class="dv">4</span>), n, <span class="dv">4</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  y_hat <span class="ot">&lt;-</span> <span class="dv">210</span> <span class="sc">+</span> <span class="fl">27.4</span> <span class="sc">*</span> Z[,<span class="dv">1</span>] <span class="sc">+</span> <span class="fl">13.7</span> <span class="sc">*</span> <span class="fu">rowSums</span>(Z[,<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>])</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> y_hat <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  pi_y <span class="ot">&lt;-</span> <span class="fu">plogis</span>(<span class="sc">-</span>Z[,<span class="dv">1</span>] <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> Z[,<span class="dv">2</span>] <span class="sc">-</span> <span class="fl">0.25</span> <span class="sc">*</span> Z[,<span class="dv">3</span>] <span class="sc">-</span> <span class="fl">0.1</span> <span class="sc">*</span> Z[,<span class="dv">4</span>])</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="dv">1</span> <span class="sc">-</span> pi_y)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  X <span class="ot">&lt;-</span> Z</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  X[,<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">exp</span>(Z[,<span class="dv">1</span>] <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  X[,<span class="dv">2</span>] <span class="ot">&lt;-</span> Z[,<span class="dv">2</span>] <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(Z[,<span class="dv">1</span>])) <span class="sc">+</span> <span class="dv">10</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  X[,<span class="dv">3</span>] <span class="ot">&lt;-</span> (Z[,<span class="dv">1</span>] <span class="sc">*</span> Z[,<span class="dv">3</span>] <span class="sc">/</span> <span class="dv">25</span> <span class="sc">+</span> <span class="fl">0.6</span>)<span class="sc">^</span><span class="dv">3</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  X[,<span class="dv">4</span>] <span class="ot">&lt;-</span> (Z[,<span class="dv">2</span>] <span class="sc">+</span> Z[,<span class="dv">4</span>] <span class="sc">+</span> <span class="dv">20</span>)<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  y_o <span class="ot">&lt;-</span> y</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  y_o[m <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> y_o,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">m =</span> m,</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">x1 =</span> X[,<span class="dv">1</span>],</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">x2 =</span> X[,<span class="dv">2</span>],</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">x3 =</span> X[,<span class="dv">3</span>],</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">x4 =</span> X[,<span class="dv">4</span>]</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="question-1a" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="question-1a"><span class="header-section-number">1.1</span> Question 1a</h2>
-<p>Write functions that can take the data frame returned by <code>gen_data</code> and return a linear model for <span class="math inline">\(\Exp{Y_i \mid X_i}\)</span> and a logistic regression for <span class="math inline">\(P(M_i = 0 \mid X_i)\)</span>.</p>
+<section id="likelihood-based-inference" class="level2">
+<h2 class="anchored" data-anchor-id="likelihood-based-inference">Likelihood-based inference</h2>
+<p>This bit of the notes follows 6.1 pretty closely.</p>
+<p>For the moment, let’s forget about missing data, and move to the simpler case where we have no missing observations and we’re just focused on learning the unknown parameters <span class="math inline">\(\theta\)</span> in the density <span class="math inline">\(f_Y(y_i \mid \theta)\)</span>. This unknown parameter is going to live in the space <span class="math inline">\(\Omega_\theta\)</span>. For example, if <span class="math inline">\(\theta = (\mu, \sigma^2)\)</span> and <span class="math inline">\(f_Y(y_i \mid \theta) = \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{1}{2\sigma^2} (y_i - \mu)^2}\)</span>, then <span class="math inline">\(\Omega_\theta\)</span> would be <span class="math inline">\((\R, \R^+)\)</span>.</p>
+<p>We know densities are functions of <span class="math inline">\(y_i\)</span> for fixed values of <span class="math inline">\(\theta\)</span>. If we instead fix <span class="math inline">\(y_i\)</span> and let <span class="math inline">\(\theta\)</span> vary, we get a <em>likelihood function</em>.</p>
+<p>Let the likelihood be defined for a fixed <span class="math inline">\(y_i\)</span> as <span class="math display">\[
+L_Y(\theta \mid y_i) \propto \begin{cases}
+f(y_i \mid \theta) &amp; \theta \in \Omega_\theta \\
+0 &amp; \theta \not\in \Omega_\theta
+\end{cases}
+\]</span> This is a bit odd, because the expression means that anything proportional to the density of <span class="math inline">\(Y\)</span> such that the factor by which <span class="math inline">\(L_Y(\theta \mid y_i)\)</span> differs from <span class="math inline">\(f(y_i \mid \theta)\)</span> is constant in <span class="math inline">\(\theta\)</span>.</p>
+<p>Typically, we’ll have more than one observation, and under independence of <span class="math inline">\(y_i\)</span> we get the likelihood for the full sample: <span class="math display">\[
+L_Y(\theta \mid y_1, \dots, y_n) \propto \begin{cases}
+\prod_{i=1}^n f(y_i \mid \theta) &amp; \theta \in \Omega_\theta \\
+0 &amp; \theta \not\in \Omega_\theta
+\end{cases}
+\]</span> We’ll often work with the log-likelihood, which is denoted in our book as: <span class="math display">\[
+\ell_Y(\theta \mid y_1, \dots, y_n) = \log(L_Y(\theta \mid y_1, \dots, y_n))
+\]</span> When we have independence, we get</p>
+<p><span class="math display">\[
+\ell_Y(\theta \mid y_1, \dots, y_n) = \sum_{i=1}^n \log f(y_i \mid \theta) + C
+\]</span> where <span class="math inline">\(C\)</span> is any term that doesn’t depend on <span class="math inline">\(\theta\)</span>.</p>
+<p>Moving forward with the normal example from above, the likelihood of <span class="math inline">\(n\)</span> observations from the normal distribution is: <span class="math display">\[
+\begin{aligned}
+L_Y(\mu, \sigma^2 \mid y_1, \dots, y_n) &amp; = \prod_{i=1}^n  \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{1}{2\sigma^2} (y_i - \mu)^2} \\
+&amp; = (2\pi \sigma^2)^{-\frac{n}{2}} \exp \lp -\frac{1}{2\sigma^2} \textstyle\sum_i(y_i - \mu)^2\rp
+\end{aligned}
+\]</span> Our definition of likelihood means that we can drop the factor of <span class="math inline">\((2\pi)^{-\frac{n}{2}}\)</span> from the front of the expression. Taking logs and dropping that constant leads to the log-likelihood:</p>
+<p><span class="math display">\[
+\ell_Y(\mu, \sigma^2) = -\frac{n}{2} \log \sigma^2 -\frac{1}{2\sigma^2} \textstyle\sum_i(y_i - \mu)^2
+\]</span> which is a bivariate function of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>The way that we’ll use the likelihood is to use the intuition that for two parameter values <span class="math inline">\(\theta^\prime\)</span> and <span class="math inline">\(\theta^{\prime\prime}\)</span> if <span class="math inline">\(L(\theta^\prime \mid y) = 2L(\theta^{\prime\prime} \mid y)\)</span>, then there is evidence against <span class="math inline">\(\theta^{\prime\prime}\)</span> being the parameter that generated the dataset.</p>
+<p>If we were to find a <span class="math inline">\(\hat{\theta}\)</span> such that <span class="math inline">\(L_Y(\hat{\theta} \mid y) \geq L_Y(\theta^* \mid y)\)</span> for all <span class="math inline">\(\theta* \neq \hat{\theta}\)</span>, then this would be evidence against <span class="math inline">\(\theta\)</span> being anything other than <span class="math inline">\(\hat{theta}\)</span>. This is the intuition behind <em>maximum likelihood</em>, or finding the value of the unknown parameters <span class="math inline">\(\theta\)</span> that maximizes the likelihood function (or, equivalently, the log-likelihood).</p>
+<p>We’ll say that the maximum likelihood estimator (MLE) of <span class="math inline">\(\theta\)</span> is the value <span class="math inline">\(\hat{\theta} \in \Omega_\theta\)</span> that maximizes the log-likelihood.</p>
+<p>In order to maximize the likelihood, we need to find the point at which the gradient of the log-likelihood, also known as the score function, is zero, or <span class="math inline">\(\frac{\partial\ell_Y(\theta \mid y)}{\partial \theta}\mid_{\theta = \hat{\theta}} = 0\)</span>. If <span class="math inline">\(\theta\)</span> is <span class="math inline">\(d\)</span>-dimensional, then there are <span class="math inline">\(d\)</span> equations that need to be solved. In addition, the Hessian of the log-likelihood needs to be checked to see if it is negative semidefinite at the MLE: <span class="math display">\[
+z^T \frac{\partial^2 \ell_Y(\theta \mid y)}{\partial \theta \,\partial \theta^T}\mid_{\theta = \hat{\theta}} z \leq 0 \,\forall\, z \in \R^d
+\]</span> This ensures that we’ve found a maximum. Note that we can have several maxima, all of which lead to the same log-likelihood value.</p>
+<section id="simple-mle-example" class="level3">
+<h3 class="anchored" data-anchor-id="simple-mle-example">Simple MLE example</h3>
+<p>Let’s say that <span class="math inline">\(y_i \overset{\text{iid}}{\sim} \text{Exp}(\lambda)\)</span>. Then the likelihood will be <span class="math display">\[
+L(\lambda \mid y_1, \dots, y_n) = \lambda^{-n} e^{-\frac{1}{\lambda}\sum_i y_i}
+\]</span> Then the score equation is:</p>
+<p><span class="math display">\[
+-\frac{n}{\lambda} + \sum_i \frac{y_i}{\lambda^2} = 0
+\]</span> This leads to <span class="math inline">\(\hat{\lambda} = \bar{y}\)</span> or the sample mean.</p>
 </section>
-<section id="question-1b" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="question-1b"><span class="header-section-number">1.2</span> Question 1b</h2>
-<p>Write functions that compute <span class="math inline">\(\bar{y}^{\text{IPW}},\bar{y}^{\text{AIPW}},\bar{y}^{\text{reg}}\)</span>. These functions should take a model fit and a datatset as arguments to return the estimators.</p>
+<section id="more-involved-mle-example-normal-with-unknown-mean-and-variance" class="level3">
+<h3 class="anchored" data-anchor-id="more-involved-mle-example-normal-with-unknown-mean-and-variance">More involved MLE example: Normal with unknown mean and variance</h3>
+<p>Suppose <span class="math inline">\(y_i \overset{\text{iid}}{\sim} \text{Normal}(\mu, \sigma^2)\)</span> for <span class="math inline">\(i = 1, \dots, n\)</span>.</p>
+<p>We wrote the log-likelihood above as: <span class="math display">\[
+\ell_Y(\mu, \sigma^2) = -\frac{n}{2} \log \sigma^2 -\frac{1}{2\sigma^2} \textstyle\sum_i(y_i - \mu)^2
+\]</span></p>
+<p>This leads to two likelihood equations:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{\partial \ell}{\partial \mu } &amp; = \frac{1}{\sigma^2} \textstyle\sum_i(y_i - \mu)^2 \\
+\frac{\partial \ell}{\partial \sigma^2 } &amp; =-\frac{n}{2\sigma^2} + \frac{1}{2\sigma^4} \textstyle\sum_i(y_i - \mu)^2
+\end{aligned}
+\]</span> Setting these to zero and solving for <span class="math inline">\((\mu, \sigma^2)\)</span> gives the MLEs <span class="math inline">\(\hat{\mu} = \bar{y}\)</span> and <span class="math inline">\(\hat{\sigma}^2 = \frac{1}{n}\sum_i (y_i - \bar{y})^2\)</span>.</p>
+<p>It’s straightforward to show that <span class="math inline">\(\Exp{\hat{\mu}}\)</span> under the data generating process above is equal to <span class="math inline">\(\mu\)</span>. It is less straightforward and somewhat distressing that <span class="math inline">\(\Exp{\hat{\sigma^2}}\)</span> not equal to <span class="math inline">\(\sigma^2\)</span>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Exp{\hat{\sigma^2}} &amp; = \frac{1}{n}\Exp{\sum_i (y_i^2 - 2 y_i \bar{y} + \bar{y}^2)} \\
+&amp; = \frac{1}{n}\lp \Exp{\textstyle\sum_i y_i^2 - 2 n \bar{y}^2 + n\bar{y}^2 \rp}\\
+&amp; = \frac{1}{n}\textstyle\sum_i \Exp{y_i^2} - \Exp{\bar{y}^2} \\
+&amp; = \mu^2 + \sigma^2 - \frac{1}{n^2}\Exp{\textstyle \sum_i y_i^2 + 2 \sum_{i&lt;j} y_i y_j} \\
+&amp; = \mu^2 + \sigma^2 - \frac{1}{n^2}\lp \textstyle \sum_i \Exp{y_i^2} + 2 \sum_{i&lt;j} \Exp{y_i y_j}\rp \\
+&amp; = \mu^2 + \sigma^2 - \frac{1}{n^2} \lp n (\mu^2 + \sigma^2) + n(n-1) \mu^2\rp \\
+&amp; = \mu^2 + \sigma^2 - \mu^2 - \frac{1}{n}\sigma^2 \\
+&amp; = \frac{n-1}{n} \sigma^2
+\end{aligned}
+\]</span> Sorta odd that MLEs can give us biased estimates, but, you might say, as <span class="math inline">\(n\to\infty\)</span> all is fine and we recover <span class="math inline">\(\sigma^2\)</span>. Indeed, you can show that the MLE for <span class="math inline">\(\sigma^2\)</span> is , which means that as <span class="math inline">\(n\to\infty\)</span> <span class="math inline">\(\hat{\sigma}^2 \to \sigma\)</span> in probability.</p>
 </section>
-<section id="question-1c" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="question-1c"><span class="header-section-number">1.3</span> Question 1c</h2>
-<p>Generate 1000 simulated datasets and use the functions you wrote above to compute the three estimators for each dataset</p>
-</section>
-<section id="question-1d" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="question-1d"><span class="header-section-number">1.4</span> Question 1d</h2>
-<p>Compute the bias, root mean square error, and % bias as a function of standard deviation of the estimator.</p>
-</section>
-<section id="question-1e" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="question-1e"><span class="header-section-number">1.5</span> Question 1e</h2>
-<p>Pick your favorite machine learning method (random forests, support vector machines, gradient boosting machines, xgboost, etc.) and use your method to compute nonparametric versions of <span class="math inline">\(\mu(x_i, \beta)\)</span> and <span class="math inline">\(e(x_i, \gamma)\)</span>. Recompute the estimators using your machine learning methods and compute the same summary statistics as you did in question 1d</p>
-</section>
-<section id="question-1f" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="question-1f"><span class="header-section-number">1.6</span> Question 1f</h2>
-<p>Write several sentences summarizing your results</p>
-</section>
-</section>
-<section id="question-3" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Question 3</h1>
-<p>Load the <code>Surrogate</code> package in R and load the dataset <code>Schizo_PANSS</code>:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Surrogate)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"Schizo_PANSS"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>The dataset combines five clinical trials aimed at determining if risperidone decreases the Positive and Negative Syndrome Score (PANSS) over time compared to a control treatment for patients with schizophrenia. These are longitudinal trials where patients are assessed at weeks 1, 2, 4, 6 and 8 after being assigned to a treatment arm.</p>
-<p>Each row in the dataset is a different trial participant, and <code>Week1</code>, <code>Week2</code>, <code>Week4</code>, <code>Week6</code>, <code>Week8</code> records the change in PANSS from baseline. The variable <code>Treat</code> represents whether the patient was enrolled in the control (-1) or if the patient was in the risperidone arm (1).</p>
-<p>Subset the data to include only <code>Week1</code>, <code>Week4</code> and <code>Week8</code>:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>hw_data <span class="ot">&lt;-</span> Schizo_PANSS[,<span class="fu">c</span>(<span class="st">"Id"</span>,<span class="st">"Treat"</span>,<span class="st">"Week1"</span>,<span class="st">"Week4"</span>,<span class="st">"Week8"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<section id="question-3a" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="question-3a"><span class="header-section-number">2.1</span> Question 3a</h2>
-<p>Summarize the missingness patterns in the <code>hw_data</code> dataset. How many missingness patterns are there? What are they? What proportion of patients are associated with each missingness pattern?</p>
-</section>
-<section id="question-3b" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="question-3b"><span class="header-section-number">2.2</span> Question 3b</h2>
-<p>How would you assess whether there is evidence that treatment affects missingness? Is there evidence that treatment affects the missingness pattern?</p>
-</section>
-<section id="question-3c" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="question-3c"><span class="header-section-number">2.3</span> Question 3c</h2>
-<p>How many people dropped out of the study after Week 1, or Week 4 vs.&nbsp;had intermittent missingness? For patients who dropped out, is there evidence that PANSS at the prior measurement predicted dropout? What about for the patients with intermittent missingness?</p>
-</section>
-<section id="question-3d" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="question-3d"><span class="header-section-number">2.4</span> Question 3d</h2>
-<p>Is it reasonable to assume that missingness is MCAR for this dataset? Why or why not? What about MAR?</p>
+<section id="more-complicated-still-neyman-scott-problem" class="level3">
+<h3 class="anchored" data-anchor-id="more-complicated-still-neyman-scott-problem">More complicated still: Neyman-Scott problem</h3>
+<p>Is this always the case, that the MLE is consistent? The answer is no, and the MLE can fail pretty spectacularly. Consider the following problem:</p>
+<p><span class="math display">\[
+y_{i1}, y_{i2} \sim \text{Normal}(\mu_i, \sigma^2)
+\]</span> Let’s say that we don’t care about inferring <span class="math inline">\(\mu_i\)</span> but we care only about <span class="math inline">\(\sigma^2\)</span>. One way we could come up with an estimator is to difference the two observations for each group, so <span class="math inline">\(z_i = y_{i1} - y_{i2}\)</span> and : <span class="math display">\[
+z_i \sim \text{Normal}(0, 2\sigma^2)
+\]</span> Then we could reuse our work from above to solve for <span class="math inline">\(\sigma^2\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+2 \sigma^2 &amp; = \frac{1}{n} \textstyle \sum_i z_i^2 \\
+\end{aligned}
+\]</span> which leads to an estimator for <span class="math inline">\(\sigma^2\)</span> of: <span class="math display">\[
+\hat{\sigma}^2 = \frac{1}{2n} \textstyle \sum_i z_i^2
+\]</span></p>
+<p>But this isn’t quite maximum likelihood because we’ve transformed the data, and then used the transformed data to derive an MLE for <span class="math inline">\(\sigma^2\)</span> using <span class="math inline">\(z_i\)</span>. What if we just use <span class="math inline">\(y_{i1},y_{i2}\)</span>?</p>
+<p>The likelihood is straightforward:</p>
+<p><span class="math display">\[
+L_Y(\{\mu_i\}, \sigma^2 \mid y) = \prod_{i=1}^n \frac{1}{2 \pi \sigma^2} \exp \lp -\frac{1}{2\sigma^2} \lp (y_{i1} - \mu_i)^2 + (y_{i2} - \mu_i)^2 \rp \rp
+\]</span></p>
+<p>The likelihood equations for <span class="math inline">\(\mu_i\)</span> are <span class="math display">\[
+\frac{\partial \ell_Y(\{\mu_i\}, \sigma^2 \mid y)}{\partial \mu_i} = \frac{1}{\sigma^2}\lp (y_{i1} - \mu_i) + (y_{i2} - \mu_i) \rp
+\]</span> Which just leads to the estimator <span class="math inline">\(\hat{\mu}_i = \frac{y_{i1} + y_{i2}}{2} = \bar{y}_i\)</span>.<br>
+Let’s write out the likelihood equations for <span class="math inline">\(\sigma^2\)</span> after plugging in our <span class="math inline">\(\hat{\mu}_i = \bar{y}_i\)</span>: <span class="math display">\[
+\frac{\partial \ell_Y(\{\mu_i\}, \sigma^2 \mid y)}{\partial \sigma^2} = -\frac{n}{\sigma^2} + \frac{1}{2 \sigma^2}\textstyle\sum_i \sum_{j=1}^2 (y_{ij} - \bar{y}_i)^2
+\]</span> This leads to an MLE of</p>
+<p><span class="math display">\[
+\hat{\sigma}^2 = \frac{1}{2n}\textstyle\sum_i \sum_{j=1}^2 (y_{ij} - \bar{y}_i)^2
+\]</span> Which seems reasonable enough. But let’s write the inner sum in terms of <span class="math inline">\(z_i\)</span>: <span class="math display">\[
+\begin{aligned}
+(y_{i1} - \bar{y}_i)^2 + (y_{i2} - \bar{y}_i)^2 &amp; = y_{i1}^2 + y_{i2}^2 + 2\bar{y}_i^2 - 2 \bar{y_i}(y_{i1} + y_{i2}) \\
+&amp; = y_{i1}^2 + y_{i2}^2 + \frac{(y_{i1} + y_{i2})^2}{2} - (y_{i1} + y_{i2})^2 \\
+&amp; = y_{i1}^2 + y_{i2}^2 - \frac{(y_{i1} + y_{i2})^2}{2} \\
+&amp; = \frac{1}{2}(y_{i1}^2 + y_{i2}^2 - 2 y_{i1}y_{i2}) \\
+&amp; = \frac{1}{2} z_i^2
+\end{aligned}
+\]</span></p>
+<p>This means that the MLE is equal to <span class="math display">\[
+\hat{\sigma}^2 = \frac{1}{4n}\textstyle\sum_i z_i^2
+\]</span> This estimator will never approach <span class="math inline">\(\sigma^2\)</span>, as <span class="math inline">\(n\to\infty\)</span>.</p>
+<p>This is due to the fact that the dimension of the parameter space grows linearly with the sample size as <span class="math inline">\(n\to\infty\)</span>.</p>
+<p>The point is that MLEs (and any other sort of likelihood-based inference) can lead you astray if you’re not careful, and they are not a panacea.</p>
 
 
-
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-kangDemystifyingDoubleRobustness2007" class="csl-entry" role="listitem">
-Kang, Joseph D. Y., and Joseph L. Schafer. 2007. <span>“Demystifying <span>Double</span> <span>Robustness</span>: <span>A</span> <span>Comparison</span> of <span>Alternative</span> <span>Strategies</span> for <span>Estimating</span> a <span>Population</span> <span>Mean</span> from <span>Incomplete</span> <span>Data</span>.”</span> <em>Statistical Science</em> 22 (4). <a href="https://doi.org/10.1214/07-STS227">https://doi.org/10.1214/07-STS227</a>.
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

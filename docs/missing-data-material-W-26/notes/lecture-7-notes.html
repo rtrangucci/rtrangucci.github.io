@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Missing data lecture 7</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-fd68462179fdb1eb8400a3e2e38edf1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+      \newcommand{\R}{\mathbb{R}}
+      \newcommand{\comp}{\mathsf{c}}
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Var}[1]{\text{Var} \lp #1 \rp}
+        \newcommand{\VarA}[2]{\text{Var}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\abs}[1]{\left| #1 \right|}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../papers.html"> 
+<span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../courses.html"> 
+<span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#bayes-recap" id="toc-bayes-recap" class="nav-link active" data-scroll-target="#bayes-recap">Bayes recap</a>
+  <ul class="collapse">
+  <li><a href="#mle-invariance" id="toc-mle-invariance" class="nav-link" data-scroll-target="#mle-invariance">MLE invariance</a></li>
+  <li><a href="#frequentist-coverage" id="toc-frequentist-coverage" class="nav-link" data-scroll-target="#frequentist-coverage">Frequentist coverage?</a></li>
+  <li><a href="#bayes-computation" id="toc-bayes-computation" class="nav-link" data-scroll-target="#bayes-computation">Bayes computation</a></li>
+  </ul></li>
+  <li><a href="#linear-regression-with-conjugate-priors" id="toc-linear-regression-with-conjugate-priors" class="nav-link" data-scroll-target="#linear-regression-with-conjugate-priors">Linear regression with conjugate priors</a>
+  <ul class="collapse">
+  <li><a href="#bayesian-inference-in-repeated-measure-models" id="toc-bayesian-inference-in-repeated-measure-models" class="nav-link" data-scroll-target="#bayesian-inference-in-repeated-measure-models">Bayesian inference in repeated measure models</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Missing data lecture 7</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="bayes-recap" class="level2">
+<h2 class="anchored" data-anchor-id="bayes-recap">Bayes recap</h2>
+<section id="mle-invariance" class="level3">
+<h3 class="anchored" data-anchor-id="mle-invariance">MLE invariance</h3>
+<p>If <span class="math inline">\(\hat{\theta}\)</span> is the MLE then the MLE for a function of <span class="math inline">\(\theta\)</span>, say <span class="math inline">\(g(\theta)\)</span>, is just <span class="math inline">\(g(\hat{\theta})\)</span>.</p>
+<p>Bayesian (in)variance:</p>
+<p>Let <span class="math inline">\(\eta = g(\theta)\)</span>, and assume for simplicity’s sake that <span class="math inline">\(g\)</span> is one-to-one. Then <span class="math inline">\(\theta = g^{-1}(\eta)\)</span>. If <span class="math inline">\(\theta\)</span> has posterior <span class="math inline">\(p(\theta \mid y)\)</span>, the posterior for <span class="math inline">\(g(\theta)\)</span> is:</p>
+<p><span class="math display">\[
+p(g^{-1}(\eta) \mid y) \det \nabla_{\eta} g^{-1}(\eta)
+\]</span></p>
+<p>This can lead to contradictions under ``ignorance”.</p>
+<p>This presentation follows <span class="citation" data-cites="gelman-bayes">Gelman et al. (<a href="#ref-gelman-bayes" role="doc-biblioref">2013</a>)</span> somewhat.</p>
+<p>There are priors called Jeffreys’ priors (for Harold Jeffreys) that are invariant to reparameterizations. Remember that the Fisher information, or: <span class="math display">\[
+\mathcal{I}(\theta) = \Exp{\nabla_\theta \ell_Y(\theta \mid y)\nabla_\theta \ell_Y(\theta \mid y)^T}
+\]</span> under a reparameterization <span class="math inline">\(\eta = g(\theta)\)</span> with Jacobian <span class="math inline">\((J_{\eta,\theta})_{ij} = \frac{\partial \eta_i}{\partial \theta_j}\)</span> is: <span class="math display">\[
+\mathcal{I}(\theta(\eta)) = J_{\eta,\theta}^T\Exp{(\nabla_\theta \ell_Y(\theta \mid y))\mid_{\theta = g^{-1}(\eta)} \nabla_\theta (\ell_Y(\theta \mid y)\mid_{\theta = g^{-1}(\eta))}^T}J_{\eta,\theta}
+\]</span> For <span class="math inline">\(\eta = g(\theta)\)</span>, assume for simplicity that <span class="math inline">\(g\)</span> is one-to-one, then a prior for <span class="math inline">\(\theta\)</span> that is proportional to the square root of the determinant of the Fisher information will be invariant to reparameterization:</p>
+<p><span class="math display">\[
+p(\theta) \propto \det(\mathcal{I}(\theta))^{1/2}
+\]</span> Why is this the case? Because under the change of measure formula above the prior for <span class="math inline">\(\eta\)</span> is: <span class="math display">\[
+p(\eta) \propto p(g^{-1}(\eta)) \det J_{\eta,\theta}
+\]</span> which is <span class="math display">\[
+\begin{aligned}
+p(\eta) &amp; \propto \det \mathcal{I}(g^{-1}(\eta))^{1/2} \det J_{\eta,\theta} \\
+&amp; \propto \det (J_{\eta,\theta})^{1/2}\det \mathcal{I}(g^{-1}(\eta))^{1/2} \det (J_{\eta,\theta})^{1/2} \\
+&amp; \propto \det (J_{\eta,\theta}^T)^{1/2}\det \mathcal{I}(g^{-1}(\eta))^{1/2} \det (J_{\eta,\theta})^{1/2} \\
+&amp; \propto \det (J_{\eta,\theta}^T\mathcal{I}(g^{-1}(\eta))^{1/2}J_{\eta,\theta})^{1/2} \\
+&amp; \propto \det(\mathcal{I}(\eta))^{1/2}
+\end{aligned}
+\]</span> Thus giving some sense of invariance under a coordinate change. As stated in <span class="citation" data-cites="gelman-bayes">Gelman et al. (<a href="#ref-gelman-bayes" role="doc-biblioref">2013</a>)</span>, more or less:</p>
+<blockquote class="blockquote">
+<p>Any rule for determining the prior density <span class="math inline">\(p(\theta)\)</span> should yield an equivalent result if aplied to the transformed parameter; that is, <span class="math inline">\(p(\eta)\)</span> generated using <span class="math inline">\(p(\theta)\)</span> using the change of measure formula should yield the same prior as would have been obtained directly from the model <span class="math inline">\(p(\eta) p(y \mid \eta)\)</span></p>
+</blockquote>
+<p>One issue with Jeffreys’ prior is that it is dependent on a likelihood, which can be controversial.</p>
+<p>For the Bernoulli trial example from last class, the Jeffreys prior is <span class="math inline">\(\text{Beta}(1/2, 1/2)\)</span>.</p>
+</section>
+<section id="frequentist-coverage" class="level3">
+<h3 class="anchored" data-anchor-id="frequentist-coverage">Frequentist coverage?</h3>
+<p>Posterior probabilities are strictly ``right” under our prior assumption because of the math of Bayes’ theorem. However, if we take a Frequentist view of probability, namely that probabilities are defined as limiting proportions of events, we’ll need to think about alternative draws of our prior and of our data.</p>
+<p>The coverage of our posterior credible intervals will only match the nominal probabilities if the prior we use for our analysis matches that which generated the data. We can show this as computing the marginal posterior <span class="math inline">\(p(\theta \mid y)\)</span> under repeated draws from the prior and data distribution <span class="math inline">\(p(y \mid \theta)\)</span>, which is the distribution associated with the density <span class="math inline">\(f_Y(y \mid \theta)\)</span> we’ll use in our posterior:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\theta^\prime &amp; \sim p(\theta) \\
+y &amp; \sim p(y \mid \theta^\prime) \\
+\theta &amp; \sim p(\theta \mid y)
+\end{aligned}
+\]</span> Another way to represent this sampling diagram is through integrals:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\int_{\Omega_\theta}\int_{\mathcal{Y}} \frac{p(\theta) f_Y(y \mid \theta)}{\int_{\Omega_\theta} p(\theta) f_Y(y \mid \theta) d\theta} f_Y(y \mid \theta^\prime) p(\theta^\prime) dy \, d\theta^\prime &amp; = \int_{\mathcal{Y}} \int_{\Omega_\theta}\frac{p(\theta) f_Y(y \mid \theta)}{\int_{\Omega_\theta} p(\theta) f_Y(y \mid \theta) d\theta} f_Y(y \mid \theta^\prime) p(\theta^\prime)  d\theta^\prime \, dy \\
+&amp; = \int_{\mathcal{Y}} \frac{p(\theta) f_Y(y \mid \theta)}{\int_{\Omega_\theta} p(\theta) f_Y(y \mid \theta) d\theta} \int_{\Omega_\theta} f_Y(y \mid \theta^\prime) p(\theta^\prime)  d\theta^\prime \, dy \\
+&amp; = \int_{\mathcal{Y}} p(\theta) f_Y(y \mid \theta) \\
+&amp; = p(\theta)
+\end{aligned}
+\]</span></p>
+<p>See <span class="citation" data-cites="talts2018validating">Talts et al. (<a href="#ref-talts2018validating" role="doc-biblioref">2018</a>)</span> for more info about how we can use this identity to test whether our algorithms are working correctly.</p>
+</section>
+<section id="bayes-computation" class="level3">
+<h3 class="anchored" data-anchor-id="bayes-computation">Bayes computation</h3>
+<p>Like Frequentist confidence intervals, we can only compute <span class="math inline">\(p(\theta \mid y)\)</span> exactly under special circumstances, like conjugate priors. The reason for this is that the integral in the denominator is usually intractable.</p>
+<p>We will usually have to do approximate inference on Bayesian models by using Markov Chain Monte Carlo samplers, which iteratively generate samples that converge in distribution to the true posterior distribution. Bayesian approximate methods instead operate on an expression that is proportional to the posterior:</p>
+<p><span class="math display">\[
+p(\theta \mid y) \propto f_Y(y \mid \theta) p(\theta)
+\]</span></p>
+<p>One way to think about the MLE is that it is the posterior mode under a prior of <span class="math inline">\(p(\theta) \propto 1\)</span>: <span class="math display">\[
+p(\theta \mid y) \propto f_Y(y \mid \theta)
+\]</span> The difference between the likelihood <span class="math inline">\(L_Y(\theta \mid y)\)</span> and the posterior <span class="math inline">\(p(\theta \mid y)\)</span> lies in how we treat the expression. In MLE we’re going to maximize the likelihood. In Bayesian inference we care about the full distribution of <span class="math inline">\(\theta\)</span>.</p>
+<p>This gives some intuition about Bayesian inference. We can think of doing MLE and penalizing certain values of <span class="math inline">\(\theta\)</span>:</p>
+<p><span class="math display">\[
+\ell_Y(\theta \mid y) + \text{penalty}(\theta)
+\]</span> that will allow the maximizer to favor certain values of <span class="math inline">\(\theta\)</span> over others.</p>
+<p>If we look at the implied log-posterior ignoring the constant that doesn’t depend on <span class="math inline">\(\theta\)</span>:</p>
+<p><span class="math display">\[
+\log p(\theta \mid y) = \log f_Y(y \mid \theta) + \log p(\theta)
+\]</span></p>
+<p>If we maximize this expression we can rewrite this as <span class="math display">\[
+\log p(\theta \mid y) = \ell_Y(\theta \mid y) + \log p(\theta)
+\]</span> and we get the penalized likelihood expression where the penalty is a probability density.</p>
+<p>One question might be: ok, we have a full distribution for <span class="math inline">\(\theta\)</span>. What do we do with it? While the MLE is a single choice, we now have myriad choices for point estimates derived from Bayesian models. We could use the posterior mean: <span class="math display">\[
+\Exp{\theta \mid y}
+\]</span> We could use the posterior median, <span class="math inline">\(\theta_m\)</span>: <span class="math display">\[
+P(\theta &gt; \theta_m \mid y) = P(\theta \leq \theta_m \mid y) = 1/2.
+\]</span></p>
+<p>We could use another posterior quantile. We could use the mode of the posterior as well.</p>
+<p>Asymptotically, one might hope that the Bayesian estimates converge to the Frequentist estimates, and this is true, though one needs to be careful in scenarios where the dimensionality of the parameter space increases with sample size and about how one uses priors.</p>
+<p>In Frequentist inference, the only limits on the parameter space come from the likelihood; the normal density requires that <span class="math inline">\(\mu \in \R\)</span> and <span class="math inline">\(\sigma^2 \in (0, \infty)\)</span>. In Bayesian inference, the prior can also restrict the parameter space. For example, in the normal example, one could use a prior for <span class="math inline">\(\mu\)</span> that enforced <span class="math inline">\(\mu &gt; 0\)</span>. The posterior would then only be able to represent <span class="math inline">\(\mu &gt; 0\)</span>. If the true <span class="math inline">\(\mu\)</span> were negative, a Bayesian point-estimator wouldn’t converge to the true <span class="math inline">\(\mu\)</span>.</p>
+<p>While the prior adds an extra degree of freedom which seems dangerous, it can yield better estimates when there are small datasets, because there isn’t as much information in the data. An example of this would be a simple regression model: <span class="math display">\[
+y_i \sim \text{Normal}(X_i^T \beta, \sigma^2)
+\]</span> We might have some good information that we don’t expect <span class="math inline">\(\beta\)</span> to be nearly infinite, and in fact we expect it to be pretty well concentrated to <span class="math inline">\([-10, 10]\)</span>. Then we could use independent <span class="math inline">\(\text{Normal}(0,5^2)\)</span> priors for the regression coefficients.</p>
+</section>
+</section>
+<section id="linear-regression-with-conjugate-priors" class="level2">
+<h2 class="anchored" data-anchor-id="linear-regression-with-conjugate-priors">Linear regression with conjugate priors</h2>
+<p>This and the following section follow Chapter 2 in <span class="citation" data-cites="rossi-marketing">Rossi, Allenby, and Misra (<a href="#ref-rossi-marketing" role="doc-biblioref">2024</a>)</span> quite closely.</p>
+<p>Let’s look at the linear regression model with conjugate priors. <span class="math display">\[
+y_i = x_i^T \beta + \epsilon_i, \quad \epsilon_i \overset{\text{iid}}{\sim} \text{Normal}(0, \sigma^2)
+\]</span> where <span class="math inline">\(x_i \in \R^p\)</span>. A full model would imply a model for <span class="math inline">\(x_i\)</span> as well: <span class="math display">\[
+f_{X,Y}((x_1, y_1), \dots, (x_n, y_n) \mid \beta, \psi) = \prod_i f_{X}(x_i \mid \psi) f_Y(y_i \mid x_i,\beta, \sigma^2)
+\]</span> If we have a prior for <span class="math inline">\(\psi,\beta, \sigma^2\)</span> that is independent, <span class="math inline">\(p(\psi, \beta, \sigma^2) = p(\psi) p(\beta, \sigma^2)\)</span>, then the posterior will factorize into independent distributions as well: <span class="math display">\[
+\begin{aligned}
+p_(\beta, \psi,\sigma^2 \mid (x_1, y_1),\dots,(x_n, y_n)) &amp; \propto \prod_i f_{X}(x_i \mid \psi) p(\psi) f_Y(y_i \mid x_i,\beta, \sigma^2) p(\beta, \sigma^2) \\
+&amp; \propto (\prod_i f_{X}(x_i \mid \psi) p(\psi)) \prod_i f_Y(y_i \mid x_i,\beta, \sigma^2) p(\beta)  \\
+&amp; \propto p(\psi \mid x_1, \dots, x_n) p(\beta, \sigma^2 \mid (x_1, y_1),\dots,(x_n, y_n)) \\
+\end{aligned}
+\]</span> Remember from last class how we could intuit the form of the joint prior if we examined the likelihood for <span class="math inline">\(\theta\)</span> and chose a prior with the same functional form as that of the likelihood.</p>
+<p>In the Bernoulli example, we had a likelihood of the form: <span class="math inline">\(L_Y(\theta \mid y) = \theta^{k}(1 - \theta)^{n - k}\)</span>, where <span class="math inline">\(k = \sum_i = y\)</span>, which suggested a prior of the form <span class="math inline">\(\theta^{a}(1-\theta)^b\)</span>, which we could regonize as a Beta distribution.</p>
+<p>We’ll do the same for the regression example. The likelihood for the linear model is: <span class="math display">\[
+(2\pi \sigma^2)^{-n/2} \exp \lp\frac{1}{2 \sigma^2}\sum_i (y_i - x_i^T \beta)^2 \rp
+\]</span> which can be simplified somewhat by writing the sum as a dot product between the vector of errors, <span class="math inline">\(e = y - X \beta\)</span> where <span class="math inline">\(y = (y_1, \dots, y_n)\)</span> and <span class="math inline">\(X^T = (x_1, \dots, x_n)\)</span>. <span class="math display">\[
+(2\pi \sigma^2)^{-n/2} \exp \lp\frac{1}{2 \sigma^2} (y - X \beta)^T(y - X \beta) \rp
+\]</span></p>
+<p>We can rewrite the term <span class="math inline">\((y - X \beta)^T (y - X \beta)\)</span> in terms of the least-squares estimator for <span class="math inline">\(\beta\)</span>, <span class="math inline">\(\hat{\beta} = (X^T X)^{-1}X^T y\)</span> by decomposing <span class="math inline">\(y\)</span> as <span class="math inline">\(y = X \hat{\beta} + y - X \hat{\beta}\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+(y - X \beta)^T (y - X \beta) &amp; = (X \hat{\beta} + y - X \hat{\beta} - X \beta)^T(X \hat{\beta} + y - X \hat{\beta} - X \beta) \\
+&amp; = (y - X \hat{\beta})^T(y - X \hat{\beta}) + (X \beta - X\hat{\beta})^T(X \beta - X\hat{\beta}) - 2(X \beta - X\hat{\beta})^T (y - X \hat{\beta}) \\
+&amp; = (y - X \hat{\beta})^T(y - X \hat{\beta}) + (\beta - \hat{\beta})^T X^T X (\beta - \hat{\beta})
+\end{aligned}
+\]</span></p>
+<p>Let <span class="math inline">\(s^2 = \frac{1}{n-p}(y-X\hat{\beta})^T(y-X\hat{\beta})\)</span>, and <span class="math inline">\(\nu = n - p\)</span>, so we can rewrite the sum more compactly as: <span class="math display">\[
+(y - X \beta)^T (y - X \beta) = \nu s^2 + (\beta - \hat{\beta})^T X^T X (\beta - \hat{\beta})
+\]</span> This leads to a likelihood:</p>
+<p><span class="math display">\[
+L_Y(\beta, \sigma^2 \mid y, X) \propto (\sigma^2)^{-\nu/2} \exp\lp\frac{\nu s^2}{2 \sigma^2}\rp (\sigma^2)^{-(n - \nu) / 2} \exp\lp-\frac{1}{2 \sigma^2} (\beta - \hat{\beta})^T X^T X (\beta - \hat{\beta})\rp
+\]</span> Before we derive conjugate priors from this likelihood, we can see that the posterior under flat priors for <span class="math inline">\(\beta\)</span> and a prior for <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\sigma^{-2}\)</span>, leads to a posterior: <span class="math display">\[
+p(\beta, \sigma^2 \mid y, X) \propto (\sigma^2)^{-(\nu/2+1)} \exp\lp\frac{\nu s^2}{2 \sigma^2}\rp (\sigma^2)^{-(n - \nu) / 2} \exp\lp-\frac{1}{2 \sigma^2} (\beta - \hat{\beta})^T X^T X (\beta - \hat{\beta})\rp
+\]</span> which is a conditional normal posterior for <span class="math inline">\(\beta\)</span> with a scaled inverse chi-squared posterior for <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>This suggests a conjugate prior of the form <span class="math inline">\(p(\beta,\sigma^2) = p(\sigma^2)p(\beta \mid \sigma^2)\)</span>: <span class="math display">\[
+p(\sigma^2) \propto (\sigma^2)^{-(\nu_0/2 + 1)} \exp\lp \frac{\nu_0 s_0}{2 \sigma^2} \rp
+\]</span></p>
+<p>and a conditional normal prior for <span class="math inline">\(\beta\)</span>:</p>
+<p><span class="math display">\[
+p(\beta \mid \sigma^2) \propto (\sigma^2)^{-p / 2} \exp\lp-\frac{1}{2\sigma^2}(\beta - \mu_0)^T \Sigma_0^{-1}(\beta - \mu_0) \rp
+\]</span></p>
+<p>This can be seen as the posterior from a regression run with a prior of <span class="math inline">\(p(\sigma^2) \propto \sigma^{-2}\)</span> and a flat prior on <span class="math inline">\(\beta\)</span>.</p>
+<p>Then the posterior for <span class="math inline">\(\sigma^2, \beta\)</span> is simply the product of the priors and the likelihood, which we write as above:</p>
+<p><span class="math display">\[
+\begin{aligned}
+p(\beta, \sigma^2 \mid (x_1, y_1),\dots,(x_n, y_n)) \propto &amp; (\sigma^2)^{-(\nu_0/2 + 1)} \exp\lp \frac{\nu_0 s_0}{2 \sigma^2} \rp(\sigma^2)^{-p / 2} \exp\lp-\frac{1}{2\sigma^2}(\beta - \mu_0)^T \Sigma_0^{-1}(\beta - \mu_0) \rp \\
+&amp;(2\pi \sigma^2)^{-n/2} \exp \lp\frac{1}{2 \sigma^2} (y - X \beta)^T(y - X \beta) \rp
+\end{aligned}
+\]</span></p>
+<p>This is definitley formidable, but we can simplify things a bit by collecting the terms with <span class="math inline">\(\beta\)</span>:</p>
+<p><span class="math display">\[
+(y - X\beta)^T (y - X\beta) + (\mu_0 - \beta)^T \Sigma_0^{-1}(\mu_0 - \beta)
+\]</span> and decomposing <span class="math inline">\(\Sigma_0^{-1} = L^T L\)</span>, and noting that we can write the sum as the following inner product: <span class="math display">\[
+\begin{aligned}
+\begin{bmatrix}
+(y - X\beta)^T &amp; (L\mu_0 - L\beta)^T
+\end{bmatrix}
+\begin{bmatrix}
+(y - X\beta) \\
+L \mu_0 - L\beta)
+\end{bmatrix}
+\end{aligned}
+\]</span> This can be further simplified by constructing a vector <span class="math display">\[
+u = \begin{bmatrix} y \\ L\mu_0 \end{bmatrix}
+\]</span> and a matrix <span class="math inline">\(W\)</span> <span class="math display">\[
+W = \begin{bmatrix} X \\ L \end{bmatrix}
+\]</span> and writing the expresssion as <span class="math inline">\((u - W\beta)^T(u - W\beta)\)</span>. We can then use the same trick as above, by representing <span class="math inline">\(u\)</span> as the projection into the column space of <span class="math inline">\(W\)</span> and the residual:</p>
+<p><span class="math display">\[
+(W \bar{\beta} + u - W \bar{\beta} - W \beta)^T(W \bar{\beta} + u - W \bar{\beta} - W \beta)
+\]</span> The expression for <span class="math inline">\(\bar{\beta}\)</span> is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\bar{\beta} &amp; = (X^T X + L^T L)^{-1}(X^T y + L^T L \mu_0) \\
+&amp; = (X^T X + \Sigma_0^{-1})^{-1}(X^T y + \Sigma_0^{-1} \mu_0)
+\end{aligned}
+\]</span></p>
+<p>Which simplifies as</p>
+<p><span class="math display">\[
+(u - W \bar{\beta})^T(u - W \bar{\beta}) +(\beta - \bar{\beta})^T W^T W (\beta - \bar{\beta})
+\]</span> and after some algebra comes to <span class="math display">\[
+(y - X \bar{\beta})^T(y - X \bar{\beta}) + (\mu_0 - \bar{\beta})^T\Sigma_0^{-1}(\mu_0 - \bar{\beta}) + (\beta - \bar{\beta})^T (X^T X + \Sigma_0^{-1}) (\beta - \bar{\beta})
+\]</span> In the following, let <span class="math inline">\(n s^2 = (y - X \bar{\beta})^T(y - X \bar{\beta}) + (\mu_0 - \bar{\beta})^T\Sigma_0^{-1}(\mu_0 - \bar{\beta})\)</span>. The posterior is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+p(\beta, \sigma^2 \mid y, X) \propto &amp; (\sigma^2)^{-(n + \nu_0)/2 + 1} \exp\lp\frac{(n + \nu_0)(n s^2 + \nu_0 s_0^2)/(n + \nu_0)}{2 \sigma^2}\rp \times (\sigma^2)^{-p / 2} \\
+&amp; \exp\lp-\frac{1}{2 \sigma^2} (\beta - \bar{\beta})^T (X^T X + \Sigma_\beta^{-1})(\beta - \bar{\beta})\rp
+\end{aligned}
+\]</span> <span class="math display">\[
+\bar{\beta} = (X^T X + \Sigma_\beta^{-1})^{-1}(\Sigma_\beta^{-1} \mu_\beta + X^T X \hat{\beta})
+\]</span> Like the Bernoulli problem, the posterior mean for <span class="math inline">\(\beta\)</span> is a weighted average between the prior mean and the information from the likelihood, which in this case is the least-squared estimator for <span class="math inline">\(\beta\)</span>. This is often a consequence of using conjugate priors, that the posterior is a compromise between the prior and the likelihood.</p>
+<p>This implies the following distributions for <span class="math inline">\(\sigma^2\)</span> and <span class="math inline">\(\beta \mid \sigma^2\)</span>: <span class="math display">\[
+\begin{aligned}
+\sigma^2 &amp; \sim \text{Inv-}\chi^2\lp n + \nu_0, \frac{n s^2 + \nu_0 s^2_0}{n + \nu_0}\rp \\
+\beta \mid \sigma^2 &amp; \sim \text{Normal}(\bar{\beta}, \sigma^2 \lp X^T X + \Sigma_0^{-1} \rp^{-1})
+\end{aligned}
+\]</span></p>
+<p>The posterior mean for <span class="math inline">\(\sigma^2\)</span> is: <span class="math display">\[
+\Exp{\sigma^2 \mid y, X} = \frac{n + \nu_0}{n + \nu_0 - 2}\frac{n s^2 + \nu_0 s^2_0}{n + \nu_0}
+\]</span> The expression for <span class="math inline">\(n s^2\)</span> is interesting because it involves the squared error of the posterior linear predictor for <span class="math inline">\(y\)</span>: <span class="math display">\[
+\begin{aligned}
+(y - \Exp{X \beta \mid y, X})^T(y - \Exp{X \beta \mid y, X})^T &amp; = (y - X \Exp{\beta \mid y, X})^T(y - X \Exp{\beta \mid y, X}) \\
+&amp; = (y - X \bar{\beta})^T(y - X \bar{\beta}) \\
+\end{aligned}
+\]</span></p>
+<p>but it also involves the error in the prior mean with respect to the prior covariance matrix: <span class="math display">\[
+(\mu_0 - \bar{\beta})^T \Sigma_0^{-1}(\mu_0 - \bar{\beta})
+\]</span> The effect of this term will decrease as the number of observations increases, but it elucidates how the posterior mean of the error variance is decomposed into several pieces depending on different aspects of the prior and the data.</p>
+<section id="bayesian-inference-in-repeated-measure-models" class="level3">
+<h3 class="anchored" data-anchor-id="bayesian-inference-in-repeated-measure-models">Bayesian inference in repeated measure models</h3>
+<p>Two lectures ago we went through how to compute the MLE from this regression model:</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_{i} \mid X_{i} \, &amp; = X_{i} \beta + \epsilon_{i} \\
+\epsilon_{i} &amp; \sim \text{Normal}(0, \Sigma) \\
+\epsilon_{i} &amp; \indy \epsilon_{j} \forall i\neq j.
+\end{aligned}
+\]</span></p>
+<p>This required sequentially computing the MLE for <span class="math inline">\(\beta\)</span> given an estimate for <span class="math inline">\(\Sigma\)</span> and computing <span class="math inline">\(\hat{\Sigma}\)</span> given the last estimate for <span class="math inline">\(\hat{\beta}\)</span>.</p>
+<p>Let’s write down the likelihood for this model to see if we can come up with a conjugate prior for the problem. <span class="math display">\[
+L_{Y}(\beta, \Sigma \mid y, X) \propto \det(I_n \otimes \Sigma)^{-1/2} \exp\lp-\frac{1}{2}(y - X \beta)^T (I_n \otimes \Sigma)^{-1}(y - X \beta)\rp
+\]</span> If we start with the prior for <span class="math inline">\(\beta \mid \Sigma\)</span> we can ignore the determinant and focus on the term in the exponential:</p>
+<p><span class="math display">\[
+-\frac{1}{2}(y - X \beta)^T (I_n \otimes \Sigma)^{-1}(y - X \beta)
+\]</span></p>
+<p>Let’s try a multivariate normal prior:</p>
+<p><span class="math display">\[
+\beta \sim \text{Normal}(\mu_0, \Sigma_0)
+\]</span></p>
+<p>so we can multiply the likelihood by the prior to get</p>
+<p><span class="math display">\[
+-\frac{1}{2}\lp (y - X \beta)^T (I_n \otimes \Sigma)^{-1}(y - X \beta) + (\beta - \mu_0)^T \Sigma_0^{-1}(\beta-\mu_0) \rp
+\]</span> which we’ll rewrite for convenience as <span class="math display">\[
+-\frac{1}{2}\lp (A(y - X \beta))^T A(y - X \beta) + (L(\beta - \mu_0))^T L(\beta-\mu_0) \rp
+\]</span> where <span class="math inline">\(A^T A = (I_n \otimes \Sigma)^{-1}\)</span> and <span class="math inline">\(L^T L = \Sigma_0^{-1}\)</span>.</p>
+<p>This looks familiar! We can use the same trick as we did above: create a new vector <span class="math inline">\(u\)</span> and matrix <span class="math inline">\(W\)</span>: <span class="math display">\[
+u =
+\begin{bmatrix}
+A y \\
+L \mu_0
+\end{bmatrix},\quad
+W =
+\begin{bmatrix}
+A X \\
+L
+\end{bmatrix}
+\]</span> and can write <span class="math display">\[
+(u - W\beta)^T(u - W \beta) = \lp (A(y - X \beta))^T A(y - X \beta) + (L(\beta - \mu_0))^T L(\beta-\mu_0) \rp.
+\]</span> Furthermore, write <span class="math inline">\(u = W\bar{\beta} + u - W\bar{\beta}\)</span>, where <span class="math inline">\(\bar{\beta}\)</span> is the least-squares coeffients of the regression of <span class="math inline">\(u\)</span> on <span class="math inline">\(W\)</span>: <span class="math display">\[
+\bar{\beta} = (W^T W + L^T L)^{-1}W^T u = (X^T (I_n \otimes \Sigma)^{-1} X + \Sigma_0^{-1})^{-1}(X^T (I_n \otimes \Sigma)^{-1}y + \Sigma_0^{-1} \mu_0)
+\]</span> This leads to <span class="math inline">\((u - W\bar{\beta})^T W = 0\)</span>, which allows us to cleanly partition <span class="math inline">\((u-W\beta)^T (u-W\beta)\)</span> into two pieces: <span class="math inline">\(u - W\bar{\beta}\)</span> and <span class="math inline">\(W\beta\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+(W\bar{\beta} + u - W\bar{\beta} - &amp;W \beta)^T(W\bar{\beta} + u - W\bar{\beta} - W \beta) \\
+&amp; = (u - W\bar{\beta} + W\bar{\beta}  - W \beta)^T(u - W\bar{\beta}+ W\bar{\beta}  - W \beta) \\
+&amp; = (u - W\bar{\beta})^T(u - W\bar{\beta}) + (W\bar{\beta}  - W \beta)^T(W\bar{\beta}  - W \beta) + 2(u - W\bar{\beta})^T(W\bar{\beta}  - W \beta) \\
+&amp; = (u - W\bar{\beta})^T(u - W\bar{\beta}) + (W\bar{\beta}  - W \beta)^T(W\bar{\beta}  - W \beta)
+\end{aligned}
+\]</span> where the last line follows because <span class="math inline">\((u - W\bar{\beta})^T W = 0\)</span>. Because we’re focusing only on the posterior, which is a function of <span class="math inline">\(\beta\)</span> and not data, we can ignore the <span class="math inline">\((u - W\bar{\beta})^T(u - W\bar{\beta})\)</span> term because it does not involve <span class="math inline">\(\beta\)</span> and involves only functions of <span class="math inline">\(X,y,A,L\)</span>, which are fixed with respect to <span class="math inline">\(\beta\)</span>.</p>
+<p>We rewrite <span class="math display">\[
+(W\bar{\beta}  - W \beta)^T(W\bar{\beta}  - W \beta)
+\]</span> as <span class="math display">\[
+(\beta - \bar{\beta})^T W^T W (\beta - \bar{\beta}) = (\beta - \bar{\beta})^T(X^T (I_n \otimes \Sigma)^{-1} X + \Sigma^{-1}) (\beta - \bar{\beta})
+\]</span> This shows that <span class="math inline">\(\beta \mid \Sigma\)</span> is multivariate normal with: <span class="math display">\[
+\beta \sim \text{Normal}(\bar{\beta}, (X^T (I_n \otimes \Sigma)^{-1} X + \Sigma^{-1})^{-1})
+\]</span> Now let’s focus on the conditional distribution of <span class="math inline">\(\Sigma \mid \beta\)</span>. We’ll start with the likelihood written in simpler terms: <span class="math display">\[
+L_Y(\beta, \Sigma \mid y, X) \propto \det(\Sigma)^{-n/2} \exp\lp-\frac{1}{2}\textstyle \sum_i (y_i - X_i \beta)^T \Sigma^{-1}(y_i - X_i \beta)\rp
+\]</span></p>
+<p>We can use the trace trick to rearrange things:</p>
+<p><span class="math display">\[
+\begin{aligned}
+L_Y(\beta, \Sigma \mid y, X) &amp; \propto \det(\Sigma)^{-n/2} \exp\lp-\frac{1}{2}\textstyle \sum_i (y_i - X_i \beta)^T \Sigma^{-1}(y_i - X_i \beta)\rp \\
+&amp; \propto \det(\Sigma)^{-n/2} \exp\lp-\frac{1}{2}\textstyle \sum_i \text{tr}((y_i - X_i \beta)^T \Sigma^{-1}(y_i - X_i \beta))\rp \\
+&amp; \propto \det(\Sigma)^{-n/2} \exp\lp-\frac{1}{2}\textstyle \sum_i \text{tr}((y_i - X_i \beta) (y_i - X_i \beta)^T\Sigma^{-1})\rp  \\
+&amp; \propto \det(\Sigma)^{-n/2} \exp\lp-\frac{1}{2}\textstyle \text{tr}((\sum_i (y_i - X_i \beta) (y_i - X_i \beta)^T)\Sigma^{-1})\rp  \\
+\end{aligned}
+\]</span></p>
+<p>This suggests that a conjugate prior for <span class="math inline">\(\Sigma\)</span> has the form:</p>
+<p><span class="math display">\[
+p(\Sigma) \propto \det(\Sigma)^{-a/2} \exp\lp-\frac{1}{2}\text{tr}(V_0 \Sigma^{-1})\rp
+\]</span></p>
+<p>Fortunately, we’re in luck! The Inverse Wishart distribution has the density:</p>
+<p><span class="math display">\[
+p(\Sigma) \propto \det(\Sigma)^{-(\nu_0 + p + 1)/2} \exp\lp-\frac{1}{2}\text{tr}(V_0 \Sigma^{-1})\rp
+\]</span></p>
+<p>Combining the likelihood with the prior we get something proportional to the conditional posterior for <span class="math inline">\(\Sigma\)</span>:</p>
+<p><span class="math display">\[
+p(\Sigma \mid y, X, \beta) \propto \det(\Sigma)^{-(n + \nu_0 + p + 1)/2} \exp\lp-\frac{1}{2}\text{tr}((V_0 + \textstyle\sum_i (y_i - X_i \beta)(y_i - X_i \beta)^T) \Sigma^{-1})\rp
+\]</span></p>
+<p>Putting this together we get the following two conditional posteriors:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\beta \mid \Sigma, y, X &amp; \sim \text{Normal}(\bar{\beta}, (X^T (I_n \otimes \Sigma)^{-1} X + \Sigma^{-1})^{-1}) \\
+\Sigma \mid \beta, y, X &amp; \sim \text{Inverse-Wishart}(n + \nu_0, V_0 + \textstyle\sum_i (y_i - X_i \beta)(y_i - X_i \beta)^T)
+\end{aligned}
+\]</span></p>
+<p>We can use the theory of integral operators to show that given intial conditions <span class="math inline">\(\Sigma^0\)</span> and <span class="math inline">\(\beta^0\)</span> the following algorithm for <span class="math inline">\(t = 1, \dots, S\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\beta^{t+1} \mid \Sigma^{t}, y, X &amp; \sim \text{Normal}(\bar{\beta}, (X^T (I_n \otimes \Sigma^t)^{-1} X + (\Sigma^t)^{-1})^{-1}) \\
+\Sigma^{t+1} \mid \beta^{t}, y, X &amp; \sim \text{Inverse-Wishart}(n + \nu_0, V_0 + \textstyle\sum_i (y_i - X_i \beta^t)(y_i - X_i \beta^t)^T)
+\end{aligned}
+\]</span></p>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-gelman-bayes" class="csl-entry" role="listitem">
+Gelman, Andrew, John B Carlin, Hal S Stern, David B Dunson, Aki Vehtari, and Donald B Rubin. 2013. <em>Bayesian Data Analysis</em>. CRC Press.
+</div>
+<div id="ref-rossi-marketing" class="csl-entry" role="listitem">
+Rossi, Peter, Greg Allenby, and Sanjog Misra. 2024. <em>Bayesian Statistics and Marketing</em>. John Wiley &amp; Sons.
+</div>
+<div id="ref-talts2018validating" class="csl-entry" role="listitem">
+Talts, Sean, Michael Betancourt, Daniel Simpson, Aki Vehtari, and Andrew Gelman. 2018. <span>“Validating Bayesian Inference Algorithms with Simulation-Based Calibration.”</span> <em>arXiv Preprint arXiv:1804.06788</em>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

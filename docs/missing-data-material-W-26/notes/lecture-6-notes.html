@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Missing data lecture 6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-fd68462179fdb1eb8400a3e2e38edf1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+      \newcommand{\R}{\mathbb{R}}
+      \newcommand{\comp}{\mathsf{c}}
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Var}[1]{\text{Var} \lp #1 \rp}
+        \newcommand{\VarA}[2]{\text{Var}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\abs}[1]{\left| #1 \right|}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../papers.html"> 
+<span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../courses.html"> 
+<span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#mles-in-repeated-measure-models" id="toc-mles-in-repeated-measure-models" class="nav-link active" data-scroll-target="#mles-in-repeated-measure-models">MLEs in repeated measure models</a></li>
+  <li><a href="#inference-for-mles" id="toc-inference-for-mles" class="nav-link" data-scroll-target="#inference-for-mles">Inference for MLEs</a></li>
+  <li><a href="#bayes" id="toc-bayes" class="nav-link" data-scroll-target="#bayes">Bayes</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Missing data lecture 6</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="mles-in-repeated-measure-models" class="level2">
+<h2 class="anchored" data-anchor-id="mles-in-repeated-measure-models">MLEs in repeated measure models</h2>
+<p>Last class we talked about MLEs for a simple repeated measure model:</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_{i} \mid X_{i} \, &amp; = X_{i} \beta + \epsilon_{i} \\
+\epsilon_{i} &amp; \sim \text{Normal}(0, \Sigma) \\
+\epsilon_{i} &amp; \indy \epsilon_{j} \forall i\neq j
+\end{aligned}
+\]</span> Let <span class="math inline">\(y = (y_1^T, y_2^T, \dots, y_n^T)^T\)</span> and let <span class="math inline">\(X = (X_1^T, X_2^T, \dots, X_n^T)^T\)</span>, and let <span class="math inline">\(\epsilon = (\epsilon_1^T, \epsilon_2^T, \dots, \epsilon_n^T)^T\)</span>. Then the model can be written: <span class="math display">\[
+\begin{aligned}
+y \mid X \, &amp; = X \beta + \epsilon \\
+\epsilon &amp; \sim \text{Normal}(0, I_n \otimes \Sigma)
+\end{aligned}
+\]</span></p>
+<p>We showed that if <span class="math inline">\(\Sigma\)</span> were known, we could write the MLE for <span class="math inline">\(\beta\)</span> as: <span class="math display">\[
+\hat{\beta} = \textstyle(\sum_i X_i^T  \Sigma^{-1} X)^{-1} (\sum_i X_i \Sigma^{-1} y_i)  
+\]</span> We can also show that the MLE for <span class="math inline">\(\Sigma\)</span> if <span class="math inline">\(\beta\)</span> were known is:</p>
+<p><span class="math display">\[
+\Sigma = \frac{1}{n} \sum_i (y_i - X_i \beta) (y_i - X_i)^T
+\]</span> Combining these two fact together, we can iteratively maximize the MLE by doing:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Sigma^{(t+1)} &amp; = \frac{1}{n} \sum_i (y_i - X_i \beta^{(t)}) (y_i - X_i \beta)^T \\
+\beta^{(t+1)} &amp; = \textstyle(\sum_i X_i^T  (\Sigma^{(t)})^{-1} X_i)^{-1} (\sum_i X_i (\Sigma^{(t)})^{-1} y_i)  
+\end{aligned}
+\]</span> Which is similar to what the book has.</p>
+</section>
+<section id="inference-for-mles" class="level2">
+<h2 class="anchored" data-anchor-id="inference-for-mles">Inference for MLEs</h2>
+<p>We’ve shown that we can find a point in parameter space <span class="math inline">\(\hat{\theta}\)</span> such that there is evidence against any other point <span class="math inline">\(\theta \neq \hat{\theta}\)</span> being the parameter that generated the data under an assumed statistical model <span class="math inline">\(f_{Y}(y_i \mid \theta)\)</span>.</p>
+<p>How do assess the uncertainty in this point estimate? One way to think about this is to consider the distribution of MLEs under different hypothetical datasets.</p>
+<p>If we can characterize the distribution, we can build a confidence interval for <span class="math inline">\(\theta\)</span> that will contain the true value of <span class="math inline">\(\theta\)</span> for some prescribed proportion of our hypothetical datasets.</p>
+<p>Consider the model <span class="math inline">\(y_i \overset{\text{iid}}{\sim} \text{Normal}(\mu, \sigma^2)\)</span>, where <span class="math inline">\(\sigma^2\)</span> is known one-dimensional normal model. Then we know that <span class="math inline">\(\hat{\mu} = \bar{y}\)</span>, and that its distribution is <span class="math inline">\(\bar{y} \sim \text{Normal}(\mu, \frac{\sigma^2}{n})\)</span>. Using this distribution, we can construct a statistic whose distribution doesn’t depend on any unknown parameters. This is also known as a <em>pivotal quantity</em>. <span class="math display">\[
+\sqrt{n}(\bar{y} - \mu)/\sigma \sim \text{Normal}(0, 1)
+\]</span> We know the cumulative distribution function for <span class="math inline">\(N(0,1)\)</span>, <span class="math inline">\(\Phi(x)\)</span> and we can use this distribution to build a confidence interval for <span class="math inline">\(\mu\)</span>: <span class="math display">\[
+P(z_{\alpha/2} &lt; \sqrt{n}(\bar{y} - \mu)/\sigma &lt; z_{1-\alpha/2})
+\]</span> where <span class="math inline">\(z_{p} = \Phi^{-1}(p)\)</span> and <span class="math inline">\(\alpha\)</span> is usually <span class="math inline">\(0.05\)</span>. Now we solve the system of inequalities for <span class="math inline">\(\mu\)</span> to get our <span class="math inline">\(1 - \alpha\)</span> confidence interval:</p>
+<p><span class="math display">\[
+\begin{aligned}
+P(z_{\alpha/2} &lt; \sqrt{n}(\bar{y} - \mu)/\sigma &lt; z_{1-\alpha/2}) &amp; = P(\frac{\sigma}{\sqrt{n}} z_{\alpha/2} &lt; \bar{y} - \mu  &lt; \frac{\sigma}{\sqrt{n}}z_{1-\alpha/2}) \\
+&amp; = P(\frac{\sigma}{\sqrt{n}} z_{\alpha/2} - \bar{y} &lt; -\mu  &lt; -\bar{y} + \frac{\sigma}{\sqrt{n}}z_{1-\alpha/2}) \\
+&amp; = P(\bar{y} - \frac{\sigma}{\sqrt{n}} z_{\alpha/2} &gt; \mu  &gt; \bar{y} - \frac{\sigma}{\sqrt{n}}z_{1-\alpha/2}) \\
+\end{aligned}
+\]</span> Because the distribution is symmetric, <span class="math inline">\(z_{\alpha/2} = -z_{1-\alpha/2}\)</span> which gives us: <span class="math display">\[
+P(\bar{y} - \frac{\sigma}{\sqrt{n}} z_{1-\alpha/2} &lt; \mu  &lt; \bar{y} + \frac{\sigma}{\sqrt{n}}z_{1-\alpha/2})
+\]</span> Then the interval <span class="math inline">\((\bar{y} - \frac{\sigma}{\sqrt{n}} z_{1-\alpha/2},  \bar{y} + \frac{\sigma}{\sqrt{n}}z_{1-\alpha/2})\)</span> will contain <span class="math inline">\(\mu\)</span> in <span class="math inline">\(0.95\)</span> of datasets generated under the assumed <span class="math inline">\(N(\mu, \sigma^2)\)</span>.</p>
+<p>For all but the simplest models, the sampling distribution is intractable, but we can approximate the distribution using asymptotics.</p>
+We’ll need the multivariate central limit theorem, which we’ll just take as a given:
+<p>We can use this idea to get a pivotal quantity that involves the MLE for <span class="math inline">\(\theta\)</span> and the asymptotic variance covariance matrix of the MLE. We’ll start with some key assumptions:</p>
+<ol type="1">
+<li>The MLE is consistent for <span class="math inline">\(\theta\)</span>, which means that as we collect more samples the MLE with converge in probability to <span class="math inline">\(\theta\)</span>.</li>
+</ol>
+<p>This will rule out the Neyman-Scott problem.</p>
+<ol start="2" type="1">
+<li><p><span class="math inline">\(y_i\)</span> are iid with density <span class="math inline">\(f_Y(y_i \mid \theta)\)</span>, <span class="math inline">\(\theta \subseteq \R^d\)</span></p></li>
+<li><p>The support of the random variable <span class="math inline">\(y_i\)</span> doesn’t depend on <span class="math inline">\(\theta\)</span>.</p></li>
+</ol>
+<p>In our earlier presentation of how things can go wrong with MLE, having support that depends on the value of the parameter can make things go awry, so we’ll assume that we’re not in that scenario (like the <span class="math inline">\(y_i \sim \text{Uniform}(0, \theta)\)</span>).</p>
+<ol start="4" type="1">
+<li>The true parameter <span class="math inline">\(\theta\)</span> is in the interior of the parameter space. This ensures that the gradient of the likelihood value at the maximizer <span class="math inline">\(\hat{\theta}\)</span> will be zero.</li>
+</ol>
+<p>There are some more conditions on the gradient and hessian of the log-likelihood, but we’ll assume that those are satisfied.</p>
+<p>The gradient of the log-likelihood evaluated at the MLE <span class="math inline">\(\hat{\theta}\)</span> can be expanded around the true parameter value <span class="math inline">\(\theta^\dagger\)</span>: <span class="math display">\[
+(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \hat{\theta}} = \nabla_{\theta} \ell_Y(\theta \mid y)\mid_{\theta = \theta^{\dagger}} + \nabla^2_{\theta} \ell_Y(\theta \mid y)\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}(\hat{\theta} + \theta)
+\]</span> where <span class="math inline">\(\tilde{\theta}_j\)</span> lies on the cord between <span class="math inline">\(\hat{\theta}\)</span> and <span class="math inline">\(\theta^\dagger\)</span> and may differ by the index <span class="math inline">\(j\)</span> of the vector <span class="math inline">\(\nabla_\theta \ell_Y(\theta \mid y) \mid_{\theta = \hat{\theta}}\)</span>.</p>
+<p>To be precise, we have used the mean-value theorem on each coordinate <span class="math inline">\(j\)</span> of the gradient of the log-likelihood with respect to <span class="math inline">\(\theta\)</span> evaluated at <span class="math inline">\(\hat{\theta}\)</span>: <span class="math inline">\(\nabla_\theta \ell_Y(\theta \mid y) \mid_{\theta = \hat{\theta}}\)</span>: <span class="math display">\[
+\frac{\partial \ell_Y(\theta \mid y)}{\partial \theta_j}\Bigg\vert_{\theta=\hat{\theta}} = \frac{\partial \ell_Y(\theta \mid y)}{\partial \theta_j}\Bigg\vert_{\theta=\theta^\dagger} + \nabla_\theta \frac{\partial \ell_Y(\theta \mid y)}{\partial \theta_j}\Bigg\vert_{\theta = \tilde{\theta}_j}(\hat{\theta} - \theta)
+\]</span> and then constructed the matrix <span class="math inline">\(\nabla^2_{\theta} \ell_Y(\theta \mid y)\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}\)</span> so that row <span class="math inline">\(j\)</span> of this matrix is the vector <span class="math inline">\(\nabla_\theta \frac{\partial \ell_Y(\theta \mid y)}{\partial \theta_j}\Bigg\vert_{\theta = \tilde{\theta}_j}\)</span>.</p>
+<p>Multiply both sides by <span class="math inline">\(n^{-1/2}\)</span>:</p>
+<p><span class="math display">\[
+n^{-1/2}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \hat{\theta}} = n^{-1/2}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \theta^{\dagger}} + n^{-1/2}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}(\hat{\theta} + \theta)
+\]</span> Note that <span class="math inline">\(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \hat{\theta}} = 0\)</span>:</p>
+<p><span class="math display">\[
+0 = n^{-1/2}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \theta^{\dagger}} + \frac{\sqrt{n}}{n}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}(\hat{\theta} + \theta)
+\]</span> <span class="math display">\[
+0 = n^{-1/2}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \theta^{\dagger}} + \frac{1}{n}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}\sqrt{n}(\hat{\theta} + \theta)
+\]</span> Solving for <span class="math inline">\(\sqrt{n}(\hat{\theta} - \theta)\)</span>: <span class="math display">\[
+\sqrt{n}(\hat{\theta} + \theta) = \lp-\frac{1}{n}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}\rp^{-1}  \frac{\sqrt{n}}{n}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \theta^{\dagger}}  
+\]</span> Now that we have an expression for <span class="math inline">\(\sqrt{n}(\hat{\theta} - \theta)\)</span>, if we can derive an asymptotic distribution for the right-hand side, we’ll have some hope of generating confidence sets for <span class="math inline">\(\theta\)</span>. Because the data are iid we can write the second term on the left-hand side as: <span class="math display">\[
+\sqrt{n}\frac{1}{n}\sum_{i=1}^n (\nabla_{\theta} \ell_Y(\theta \mid y_i))\mid_{\theta = \theta^{\dagger}}
+\]</span> This is just the average of the gradient of the log-likelihood scaled by <span class="math inline">\(\sqrt{n}\)</span>. It turns out that <span class="math inline">\(\Exp{(\nabla_{\theta} \ell_Y(\theta \mid y_i))\mid_{\theta = \theta^{\dagger}}} = 0\)</span>, under <span class="math inline">\(y_i \sim f_Y(y_i \mid \theta)\)</span>, so <span class="math display">\[
+\sqrt{n}\frac{1}{n}\sum_{i=1}^n (\nabla_{\theta} \ell_Y(\theta \mid y_i))\mid_{\theta = \theta^{\dagger}} \overset{d}{\to} \text{Normal}(0, \Exp{(\nabla_{\theta} \ell_Y(\theta \mid y_i))\mid_{\theta = \theta^{\dagger}}(\nabla_{\theta} \ell_Y(\theta \mid y_i))\mid_{\theta = \theta^{\dagger}}^T})
+\]</span></p>
+<p>That expectation is a <span class="math inline">\(d\times d\)</span> matrix called the Fisher information of <span class="math inline">\(f_Y(y_i \mid \theta)\)</span>: <span class="math inline">\(\mathcal{I}(\theta^\dagger)\)</span>. It also turns out that, given conditions on the Hessian of the log-likelihood, <span class="math inline">\(\lp-\frac{1}{n}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}\rp^{-1}\)</span> converges to probability to <span class="math inline">\(\mathcal{I}(\theta^\dagger)^{-1}\)</span>, or the inverse of the Fisher information matrix.</p>
+<p>If we have <span class="math inline">\(X \sim \text{Normal}(0, C)\)</span>, and we left-multiply <span class="math inline">\(X\)</span> by a matrix <span class="math inline">\(A\)</span>, we’ll get: <span class="math inline">\(A X \sim \text{Normal}(0, ACA^T)\)</span>.</p>
+<p>This is because any linear combination of normal random variables is again normal, and the normal distribution is a function of the mean and covariance only. Expectation is linear: <span class="math display">\[
+\Exp{A X} = A \Exp{X} = 0
+\]</span> and covariance is <span class="math inline">\(\Exp{(X - \mu)(X - \mu)^T} = \Exp{(XX^T} = C\)</span>, so <span class="math display">\[
+\Exp{(A X)(A X)^T} = A \Exp{X X^T} A^T = A C A^T
+\]</span> We’ll also need the fact that for <span class="math inline">\(X_n \overset{p}{\to} X\)</span> and <span class="math inline">\(Y_n \overset{d}{\to} Y\)</span> that <span class="math inline">\(X_n Y_n \overset{d}{\to} X Y\)</span>.</p>
+<p>Putting all this together gives: <span class="math display">\[
+\lp-\frac{1}{n}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta =(\tilde{\theta}_1, \dots,\tilde{\theta}_d)}\rp^{-1} \frac{\sqrt{n}}{n}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \theta^{\dagger}} \overset{d}{\to} \text{Normal}(0, \mathcal{I}(\theta^\dagger)^{-1}\mathcal{I}(\theta^\dagger)\mathcal{I}(\theta^\dagger)^{-1})
+\]</span> the righthand side of which simplifies to: <span class="math display">\[
+\text{Normal}(0, \mathcal{I}(\theta^\dagger)^{-1})
+\]</span> Finally, putting everything together, we have the <span class="math display">\[\sqrt{n}(\hat{\theta} - \theta) \overset{d}{\to} \text{Normal}(0, \mathcal{I}(\theta^\dagger)^{-1})\]</span> Let’s say we want to get a confidence interval for a single parameter <span class="math inline">\(\theta_{1}\)</span>. Then we can build an asymptotic confidence interval using the pivotal quantity strategy we had above:</p>
+<p><span class="math display">\[
+P(\bar{y} - \frac{\sigma}{\sqrt{n}} z_{1-\alpha/2} &lt; \mu  &lt; \bar{y} + \frac{\sigma}{\sqrt{n}}z_{1-\alpha/2})
+\]</span> But with <span class="math inline">\(\bar{y}\)</span> equaling <span class="math inline">\(\hat{\theta}_1\)</span> and <span class="math inline">\(\sigma = \sqrt{\mathcal{I}(\hat{\theta})^{-1}_{1,1}}\)</span>. It is sometimes hard to calculate the Fisher information because it involves taking expectations of the negative Hessian of the log-likelihood function. If we’d prefer, we can instead use an estimator for <span class="math inline">\(\mathcal{I}(\hat{\theta})\)</span> as</p>
+<p><span class="math display">\[
+\mathcal{I}(\hat{\theta}) = -\frac{1}{n} \sum_i \nabla^2_\theta \ell_Y(\theta \mid y_i)_{\theta = \hat{\theta}}
+\]</span> The <span class="math inline">\(\mathcal{I}\)</span> should have a hat over it, but I can’t get the math to compile correctly when I add the <code>\hat</code> over it.</p>
+<p>There are ways to build multivariate confidence intervals, but I won’t go over those right now, though they are covered in the book in Chapter 6.</p>
+</section>
+<section id="bayes" class="level2">
+<h2 class="anchored" data-anchor-id="bayes">Bayes</h2>
+<p>The machinery for Frequentist inference often relies on asymptotic arguments for complex models. Bayesian inference, on the other hand, does not, and gives exact finite sample inference. There are caveats though, which we’ll cover.</p>
+<p>MLEs are concerned with finding a single point that, in some sense agrees with the dataset at hand, though our inference depends on hypothetical replications of the experiment that would generate alternative datasets. Bayesian inference requires that we characterize the distribution of parameters that agree with the dataset at hand.</p>
+<p>The idea of Bayesian inference starts with Bayes rule. Given a prior distribution <span class="math inline">\(p(\theta)\)</span> we can combine that with the observational density of data <span class="math inline">\(f_Y(y \mid \theta)\)</span> to give us an updated distribution <span class="math inline">\(p(\theta \mid y)\)</span> given the dataset at hand: <span class="math display">\[
+p(\theta \mid y) = \frac{f_Y(y \mid \theta) p(\theta)}{\int_{\Omega_\theta}f_Y(y \mid \theta) p(\theta) d \theta}
+\]</span> The nice thing about Bayesian inference is that we get a distribution over <span class="math inline">\(\theta\)</span> given the dataset that we can now use to make probability statements about <span class="math inline">\(\theta\)</span>. The statement With 0.95 probability <span class="math inline">\(\theta\)</span> is in the interval <span class="math inline">\(C\)</span> is just a manipulation of the posterior density: <span class="math inline">\(P(\theta \in C \mid y) = \int_C p(\theta \mid y) d\theta\)</span>.</p>
+<p>Let’s look at a specific example: the standard <span class="math inline">\(y_i \overset{\text{iid}}{\sim} \text{Bernuolli}(\theta)\)</span> with <span class="math inline">\(\theta \sim \text{Beta}(\alpha, \beta)\)</span>.</p>
+<p>The likelihood is:</p>
+<p><span class="math display">\[
+\prod_i \theta^{y_i}(1 - \theta)^{1 - y_i} = \theta^{\sum_i y_i}(1 - \theta)^{n - \sum_i y_i}
+\]</span> The prior for <span class="math inline">\(\theta\)</span> will be:</p>
+<p><span class="math display">\[
+\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \theta^{\alpha - 1}(1 - \theta)^{\beta - 1}
+\]</span> The numerator the posterior is the product of these two expressions, where we let <span class="math inline">\(s=\sum_i y_i\)</span> for convenience:</p>
+<p><span class="math display">\[
+\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \theta^{s + \alpha - 1}(1 - \theta)^{n - s + \beta - 1}
+\]</span> Integrating over <span class="math inline">\(\theta\)</span> will give us the denominator of our expression:</p>
+<p><span class="math display">\[
+\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \frac{\Gamma(\alpha + s)\Gamma(\beta + n - s)}{\Gamma(\alpha + \beta + n)}
+\]</span> The ratio of the numerator and the denominator gives us: <span class="math display">\[
+\frac{\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \theta^{s + \alpha - 1}(1 - \theta)^{n - s + \beta - 1}}{
+\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} \frac{\Gamma(\alpha + s)\Gamma(\beta + n - s)}{\Gamma(\alpha + \beta + n)}
+}
+\]</span> which simplifies to: <span class="math display">\[
+\frac{\Gamma(\alpha + \beta + n)}{\Gamma(\alpha + s)\Gamma(\beta + n - s)}\theta^{s + \alpha - 1}(1 - \theta)^{n - s + \beta - 1}
+\]</span> This is just the Beta distribution with updated coefficients.</p>
+<p>The prior mean is <span class="math inline">\(\frac{\alpha}{\alpha + \beta}\)</span>, while the posterior mean is <span class="math inline">\(\frac{s + \alpha}{n + \alpha + \beta}\)</span>. We can rewrite this to get a better understanding of the posterior mean represents in this circumstance: <span class="math display">\[
+\begin{aligned}
+\frac{s + \alpha}{n + \alpha + \beta} = \frac{\alpha}{\alpha + \beta}\frac{\alpha + \beta}{n + \alpha + \beta} + \lp 1 - \frac{\alpha + \beta}{n + \alpha + \beta}\rp \frac{s}{n}
+\end{aligned}
+\]</span> This shows that the posterior mean is a weighted average of the prior mean and the data mean. This sort of exemplifies what we would hope for from Bayesian inference, some adjudication between the prior and the data. The posterior distribution is a Beta distribution, so we can get probability statements easily by using <code>qbeta</code> in R.</p>
+<p>We didn’t have to go through all of the marginalization above. We could have noticed that the <em>kernel</em> of the posterior, namely the expression that depends on the unknown parmaeters, had a familiar form: <span class="math display">\[
+p(\theta \mid s) \propto \theta^{s + \alpha - 1}(1 - \theta)^{n - s + \beta - 1}
+\]</span> This is the kernel of the beta distribution, so we could have just stopped here and said that <span class="math display">\[
+p(\theta \mid s) \equiv \text{Beta}(\alpha + s, \beta + n - s)
+\]</span> This procedure is aided by conjugate priors, which match the likelihood in a way; the functional form of the prior slots into the way the parameters are expressed in the likelihood to yield a family of posteriors that are in the same family as the prior.</p>
+<p>These probabilities are strictly ``right” under our prior assumption because of the math of Bayes’ theorem. Whether or not these are useful is another question.</p>
+<p>There are some downsides to using a prior. MLEs have a nice property called invariance, namely that if <span class="math inline">\(\hat{\theta}\)</span> is the MLE then the MLE for a function of <span class="math inline">\(\theta\)</span>, say <span class="math inline">\(g(\theta)\)</span>, is just <span class="math inline">\(g(\hat{\theta})\)</span>. This isn’t true in Bayesian inference generally, because we’re now dealing with distributions rather than points. So usually the posterior for <span class="math inline">\(\theta\)</span> won’t be the same as the posterior for <span class="math inline">\(g(\theta)\)</span>: Let <span class="math inline">\(\eta = g(\theta)\)</span>, and assume for simplicity’s sake that <span class="math inline">\(g\)</span> is one-to-one. Then <span class="math inline">\(\theta = g^{-1}(\eta)\)</span>. If <span class="math inline">\(\theta\)</span> has posterior <span class="math inline">\(p(\theta \mid y)\)</span>, the posterior for <span class="math inline">\(g(\theta)\)</span> is:</p>
+<p><span class="math display">\[
+p(g^{-1}(\eta) \mid y) \det \nabla_{\eta} g^{-1}(\eta)
+\]</span> In fact, this is true of priors too! Given <span class="math inline">\(p(\theta)\)</span> and a transformation <span class="math inline">\(\eta = g(\theta)\)</span> the prior for <span class="math inline">\(\eta\)</span> is: <span class="math display">\[
+p(\eta) = p(g^{-1}(\eta)) \det \nabla_{\eta} g^{-1}(\eta)
+\]</span> This is somewhat problematic if you think about how to represent ignorance. Let’s say you want to learn about a parameter <span class="math inline">\(\theta \in [0,1]\)</span>. The simplest prior for this is the flat prior <span class="math inline">\(p(\theta) \propto 1\)</span>. That implies that <span class="math inline">\(\theta\)</span> is equally likely to be anywhere in the interval of <span class="math inline">\([0,1]\)</span>. But what does that imply about <span class="math inline">\(\eta = \theta^2\)</span>? Well on <span class="math inline">\([0,1]\)</span>, <span class="math inline">\(g(x) =x^2\)</span> is one-to-one, and the inverse is <span class="math inline">\(\sqrt{g(\eta)} = \theta\)</span>. The derivative of <span class="math inline">\(\sqrt{\eta}\)</span> is proportional to <span class="math inline">\(\eta^{-1/2}\)</span>, which implies a downward sloping distribution on <span class="math inline">\([0,1]\)</span>. But why would you have knowledge of <span class="math inline">\(\theta^2\)</span> without knowledge of <span class="math inline">\(\theta\)</span>? It seems counterintuitive.</p>
+<p>The dyed-in-the-wool Bayesian would argue that there is no such thing as true ignorance, and that the problem that you face will have consequences for where you expect your parameter to lie. Suppose you’re modeling the proportion of Corvallis residents with synovial sarcoma, which is a very rare cancer. You’re probably going to use a prior that favors small values of <span class="math inline">\(\theta\)</span>.</p>
+<p>What if instead you’re looking at the proportion of rainy days in Corvallis from November to April? You’d probably use a prior that at the very least avoided <span class="math inline">\(\theta\)</span> near 0.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

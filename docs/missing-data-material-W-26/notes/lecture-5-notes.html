@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Missing data lecture 5</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-fd68462179fdb1eb8400a3e2e38edf1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+      \newcommand{\R}{\mathbb{R}}
+      \newcommand{\comp}{\mathsf{c}}
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Var}[1]{\text{Var} \lp #1 \rp}
+        \newcommand{\VarA}[2]{\text{Var}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\abs}[1]{\left| #1 \right|}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../papers.html"> 
+<span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../courses.html"> 
+<span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#maximum-likelihood-for-multivariate-normal-distribution" id="toc-maximum-likelihood-for-multivariate-normal-distribution" class="nav-link active" data-scroll-target="#maximum-likelihood-for-multivariate-normal-distribution">Maximum likelihood for multivariate normal distribution</a></li>
+  <li><a href="#differential-with-respect-to-mu" id="toc-differential-with-respect-to-mu" class="nav-link" data-scroll-target="#differential-with-respect-to-mu">Differential with respect to <span class="math inline">\(\mu\)</span></a></li>
+  <li><a href="#normal-repeated-measures-models" id="toc-normal-repeated-measures-models" class="nav-link" data-scroll-target="#normal-repeated-measures-models">Normal repeated measures models</a></li>
+  <li><a href="#mles-in-repeated-measure-models" id="toc-mles-in-repeated-measure-models" class="nav-link" data-scroll-target="#mles-in-repeated-measure-models">MLEs in repeated measure models</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Missing data lecture 5</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="maximum-likelihood-for-multivariate-normal-distribution" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-for-multivariate-normal-distribution">Maximum likelihood for multivariate normal distribution</h3>
+<p>Let <span class="math inline">\(y_i \in \R^K\)</span>, <span class="math inline">\(y_i \overset{\text{iid}}{\sim} \text{Normal}(\mu, \Sigma)\)</span> for <span class="math inline">\(n\)</span> samples so that the density for <span class="math inline">\(y_i\)</span> is <span class="math display">\[
+f_{Y}(y_i \mid \mu, \Sigma) = (2\pi)^{-\frac{K}{2}} (\det\Sigma)^{-\frac{1}{2}} \exp\lp-\frac{1}{2}(y_i - \mu)^T \Sigma^{-1}(y_i - \mu) \rp
+\]</span></p>
+<p>The log-likelihood is: <span class="math display">\[
+\ell_{Y}(\mu, \Sigma \mid y_i) = \frac{1}{2} \log \det\Sigma -\frac{1}{2}(y_i - \mu)^T \Sigma^{-1}(y_i - \mu)
+\]</span></p>
+<p>The book gives the expressions for the MLEs of the mean and covariance matrix of the multivariate normal distribution without details. Going through the algebra can be useful for other more complicated problems. But in order to do so, we’ll need a slight change to how we’re used to thinking about partial differentiation. The following blurb on differentials is based on <span class="citation" data-cites="magnus2019matrix">Magnus and Neudecker (<a href="#ref-magnus2019matrix" role="doc-biblioref">2019</a>)</span>.</p>
+<section id="differentials-and-matrix-differentiation" class="level4">
+<h4 class="anchored" data-anchor-id="differentials-and-matrix-differentiation">Differentials and matrix differentiation</h4>
+<p>It all starts with rearranging the derivative:</p>
+<p><span class="math display">\[
+f^\prime(c)  = \lim_{u \to 0} \frac{f(c + u) - f(c)}{u},
+\]</span> to get a linear approximation to <span class="math inline">\(f\)</span> at the point <span class="math inline">\(c\)</span>:</p>
+<p><span class="math display">\[
+f(c + u)  = f(c) + f^\prime(c) u + r_c(u)
+\]</span> where <span class="math inline">\(r_c(u) = o(u)\)</span> or <span class="math inline">\(\lim_{u\to0} \frac{r_c(u)}{u} = 0\)</span>. This is the one term Taylor expansion of the function <span class="math inline">\(f\)</span> at <span class="math inline">\(c + u\)</span> about <span class="math inline">\(c\)</span>.</p>
+<p>Bringing <span class="math inline">\(f(u)\)</span> to the left-hand side gives: <span class="math inline">\(f(c + u) - f(u) = f^\prime(c) u + r_c(u)\)</span>. We can define the change in the linear approximation of <span class="math inline">\(f\)</span> from <span class="math inline">\(c\)</span> to <span class="math inline">\(c+u\)</span> as <span class="math inline">\(\mathrm{d}f(c;\,u)\)</span>, or the first differential of <span class="math inline">\(f\)</span> at <span class="math inline">\(c\)</span> with increment <span class="math inline">\(u\)</span>: <span class="math display">\[
+\mathrm{d} f(c ; u) = u f^\prime(c)
+\]</span></p>
+<p>Subbing this back into the linear approximation for <span class="math inline">\(f\)</span> gives: <span class="math display">\[
+f(c + u)  = f(c) + \mathrm{d} f(c ; u) + r_c(u)
+\]</span></p>
+<p>We can identify the differential by finding the linear approximation to a function at <span class="math inline">\(c\)</span>: <span class="math display">\[
+f(c + u)  = f(c) + \alpha u + r_c(u).
+\]</span> If we can find an <span class="math inline">\(\alpha\)</span> that depends on <span class="math inline">\(c\)</span> but not on <span class="math inline">\(u\)</span> such that <span class="math inline">\(r_c(u) = o(u)\)</span> we say that <span class="math inline">\(\alpha = f^\prime(c)\)</span>.</p>
+<p>Let <span class="math inline">\(f\)</span> now be a function <span class="math inline">\(\R^m \to \R\)</span> and let the differential be constructed via the same argument as above, but now let <span class="math inline">\(c, u \in \R^m\)</span>, and define <span class="math inline">\(r_c(u)\)</span> such that <span class="math inline">\(\lim_{u\to 0}\frac{r_c(u)}{\lVert u \rVert} = 0\)</span>: <span class="math display">\[
+f(c + u)  = f(c) + A(c) u + r_c(u).
+\]</span> If we equate the row vector <span class="math inline">\(A(c)\)</span> with the partial derivative of <span class="math inline">\(f\)</span> with respect to <span class="math inline">\(u\)</span>, we can recognize this as the multivariate Taylor expansion of <span class="math inline">\(f(c + u)\)</span> around <span class="math inline">\(f(c)\)</span>.</p>
+<p>Let’s compute the differential of <span class="math inline">\(f(x, y) = x^T y\)</span> for <span class="math inline">\(x,y \in \R^m\)</span>. <span class="math display">\[
+\mathrm{d}(x^T y)
+\]</span> We could do this via the following <span class="math display">\[
+(u_x + c_x)^T (u_y + c_y) = c_x^T c_y + c_x^T u_y + u_x^T c_y + u_x^T u_y
+\]</span> The vector <span class="math inline">\(A(c)\)</span> here is <span class="math inline">\((c_x^T, c_y^T)\)</span> assuming we’ve ordered our variables as <span class="math inline">\((u_x,u_y)\)</span>. We can see this from the fact that <span class="math inline">\(c_x^T c_y\)</span> is the evaluation of <span class="math inline">\(f\)</span> at <span class="math inline">\(c_x, c_y\)</span> and that <span class="math inline">\(\lim_{u_x, u_y \to 0} \frac{u_x^T u_y}{\sqrt{\lVert u_x \rVert^2 + \lVert u_y \rVert^2}} = 0\)</span>.</p>
+<p>We could also recognize the fact that our variables partition naturally into two vectors, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. When we have a natural partition of variables <span class="math inline">\(u\)</span> into <span class="math inline">\(u_1\)</span> and <span class="math inline">\(u_2\)</span> we can write the differential for <span class="math inline">\(f(u)\)</span> more easily in terms of two differentials: <span class="math display">\[
+\begin{aligned}
+\mathrm{d}f(c;\,u) &amp; = A(c) u \\
+&amp; = A(c_1) u_1 + A(c_2)u_2
+\end{aligned}
+\]</span> which just differentiates between the two sets of variables, so that <span class="math inline">\(A(c_1)\)</span> is the partial derivative of <span class="math inline">\(f\)</span> with respect to <span class="math inline">\(u_1\)</span> and <span class="math inline">\(A(c_2)\)</span> is the partial derivative with respect to <span class="math inline">\(u_2\)</span>.</p>
+<p>In the example above, <span class="math inline">\(f(x,y) = x^T y\)</span>, we can write: <span class="math display">\[
+\begin{aligned}
+\mathrm{d}(x^T y) &amp; = x^T u_y + u_x^T y \\
+&amp; = x^T u_y + y^T u_x \\
+\end{aligned}
+\]</span> This is important for thinking about differentials of log-likelihoods like the multivariate normal where we’ll have two sets of parameters that we’d like to find the partial derivatives with respect to, <span class="math inline">\(\Sigma\)</span> and <span class="math inline">\(\mu\)</span>: <span class="math display">\[
+\ell_Y(\mu, \Sigma \mid y) = \frac{1}{2} \log \det\Sigma -\frac{1}{2}(y_i - \mu)^T \Sigma^{-1}(y_i - \mu)
+\]</span> <span class="math display">\[
+\mathrm{d}\ell_Y(\mu, \Sigma \mid y) = \frac{1}{2} \mathrm{d}(\log \det\Sigma) -\frac{1}{2}\mathrm{d}((y_i - \mu)^T \Sigma^{-1}(y_i - \mu))
+\]</span></p>
+<p>We can generalize to vector functions: Let <span class="math inline">\(f(x): \R^m \to \R^n\)</span>: <span class="math display">\[
+f(c + u)  = f(c) + A(c) u + r_c(u).
+\]</span> for <span class="math inline">\(\lim_{u\to 0} r_c(u) / \norm{u} = 0\)</span>. Then <span class="math inline">\(\mathrm{d}f(c;u) = A(c)u\)</span> is the differential of <span class="math inline">\(f\)</span> evaluated at <span class="math inline">\(c\)</span> of increment <span class="math inline">\(u\)</span>.</p>
+<p>The same idea applies to matrices, when combined with the <span class="math inline">\(\text{vec}\)</span> function, which concatenates an <span class="math inline">\(n \times p\)</span> matrix column by column into an <span class="math inline">\(n \times p\)</span>-length vector. Let <span class="math inline">\(F\)</span> be a matrix function <span class="math inline">\(\R^{n \times q} \to \R^{m \times p}\)</span>. Let <span class="math inline">\(C\)</span> and <span class="math inline">\(U\)</span> be in <span class="math inline">\(\R^{m\times q}\)</span>. If <span class="math inline">\(A(C) \in \R^{mp \times nq}\)</span> such that: <span class="math display">\[
+\text{vec}(F(C + U))  = \text{vec}(F(C)) + A(C) \text{vec}(U) + \text{vec}(R_c(U)).
+\]</span> Then the <span class="math inline">\(m\times p\)</span> matrix <span class="math inline">\(\mathrm{d} F(C;\,U)\)</span> is defined by <span class="math inline">\(\text{vec}(\mathrm{d} F(C;\,U)) = A(C) \text{vec}(U)\)</span>.</p>
+<p>The reason to do this is because the differential generalizes to matrices a bit easier than do partial derivatives. This is because it isn’t clear along which dimensions the partial derivatives should lie: Should the partials of a matrix function become a third dimension, like a 3-d array?</p>
+<p>Under this framework, the rows of the matrices <span class="math inline">\(A(c)\)</span> and <span class="math inline">\(A(C)\)</span> correspond to a dimension of the range of the function <span class="math inline">\(f(c)\)</span> or <span class="math inline">\(F(C)\)</span>, while the columns correspond to a dimension of the domain.</p>
+<p>The power of the differentials is clear from the chain rule, which is called Cauchy’s rule of invariance in differential-land. This just means that if <span class="math inline">\(b = f(c)\)</span> and <span class="math inline">\(h = g(b)\)</span> the differential of <span class="math inline">\(h\)</span> is: <span class="math display">\[
+\begin{aligned}
+\mathrm{d}(h;\,u) &amp; = \mathrm{d}(h;\,\mathrm{d}(f;\,c)) \\
+&amp; = A_{g}(b) A_{f}(c) u
+\end{aligned}
+\]</span> if <span class="math inline">\(f: \R^m \to \R^p\)</span> and <span class="math inline">\(g: \R^p \to \R^n\)</span> so <span class="math inline">\(h: \R^m \to \R^n\)</span>, then <span class="math inline">\(A_g(b) \in R^{n \times p}\)</span> and <span class="math inline">\(A_f(c) \in R^{p \times m}\)</span> and <span class="math inline">\(u \in \R^m\)</span>.</p>
+</section>
+</section>
+<section id="differential-with-respect-to-mu" class="level3">
+<h3 class="anchored" data-anchor-id="differential-with-respect-to-mu">Differential with respect to <span class="math inline">\(\mu\)</span></h3>
+<p>First we’ll ignore the differential with respect to <span class="math inline">\(\Sigma\)</span>. We’ll expand out that quadratic form into the parts that depend only on <span class="math inline">\(\mu\)</span>: <span class="math display">\[
+\mathrm{d} \ell_{Y}(\mu, \Sigma \mid y_i) = y_i^T\Sigma^{-1}\mathrm{d}\mu - \frac{1}{2}\mathrm{d}(\mu^T\Sigma^{-1}\mu)
+\]</span></p>
+<p>Taking the gradient with respect to <span class="math inline">\(\mu\)</span> we get: <span class="math display">\[
+\begin{aligned}
+\mathrm{d} \ell_{Y}(\mu, \Sigma \mid y_i) &amp; = y_i^T\Sigma^{-1}\mathrm{d} \mu - \frac{1}{2}\mathrm{d}(\mu^T)\Sigma^{-1}\mu - \frac{1}{2}\mu^T\mathrm{d}(\Sigma^{-1}\mu) \\
+&amp; = y_i^T\Sigma^{-1}\mathrm{d} \mu - \frac{1}{2}\mathrm{d}(\mu)^T\Sigma^{-1}\mu - \frac{1}{2}\mu^T\Sigma^{-1}\mathrm{d}\mu \\
+&amp; = y_i^T\Sigma^{-1}\mathrm{d} \mu - \frac{1}{2}\mu^T\Sigma^{-1}\mathrm{d}\mu - \frac{1}{2}\mu^T\Sigma^{-1}\mathrm{d}\mu \\
+&amp; = y_i^T\Sigma^{-1}\mathrm{d} \mu - \mu^T\Sigma^{-1}\mathrm{d}\mu \\
+&amp; = (y_i - \mu)^T\Sigma^{-1}\mathrm{d} \mu  \\
+\end{aligned}
+\]</span> If we sum over the <span class="math inline">\(n\)</span> terms of the log-likelihood we get: <span class="math display">\[
+\begin{aligned}
+\frac{\partial \ell_{Y}(\mu, \Sigma \mid y_i)}{\partial \mu} &amp; = (\sum_i y_i - n \mu)^T\Sigma^{-1}
+\end{aligned}
+\]</span> leading to the MLE for <span class="math inline">\(\mu\)</span>: <span class="math display">\[
+\hat{\mu} = \frac{1}{n}\sum_i y_i
+\]</span></p>
+<p>It’ll be useful to write the log-likelihood a bit differently to find the MLE for $. Remember that <span class="math inline">\(\det A^{-1} = (\det A)^{-1}\)</span>. This will enable us to write everything in terms of <span class="math inline">\(\Sigma^{-1}\)</span> instead of <span class="math inline">\(\Sigma\)</span>: <span class="math display">\[
+\ell_{Y}(\mu, \Sigma \mid y_i) = \frac{1}{2} \log (\det\Sigma^{-1}) - \frac{1}{2}(y_i - \mu)^T \Sigma^{-1}(y_i - \mu)
+\]</span> Also remember that <span class="math inline">\(\text{tr}(A) = \sum_{i} A_{ii}\)</span>, <span class="math inline">\(\text{tr}(A + B) = \text{tr}(A) + \text{tr}(B)\)</span>, and that <span class="math inline">\(f(x) = \text{tr}(f(x))\)</span> for a univariate function <span class="math inline">\(f(x)\)</span>. Finally, recall that <span class="math inline">\(\text{tr}(ABC) = \text{tr}(CAB) = \text{tr}(BCA)\)</span>. This will let us rewrite the</p>
+<p>Putting all this together allows us to write the log-likelihood for the multivariate normal as such: <span class="math display">\[
+\ell_{Y}(\mu, \Sigma \mid y_i) = \frac{1}{2} \log (\det\Sigma^{-1}) -\frac{1}{2}\text{tr}\lp(y_i - \mu) (y_i - \mu)^T \Sigma^{-1}\rp
+\]</span></p>
+<p>For the partial derivative of <span class="math inline">\(\det \Sigma^{-1}\)</span> with respect to <span class="math inline">\(\Sigma^{-1}\)</span>, we get <span class="math display">\[
+\frac{\partial \det \Sigma^{-1}}{\partial \Sigma^{-1}} = \det \Sigma^{-1} ((\Sigma^{-1})^{-1})^{T}
+\]</span> and for the partial derivative of <span class="math inline">\(\text{tr}(AB)\)</span> with respect to <span class="math inline">\(B\)</span> we get <span class="math inline">\(A^T\)</span>, so the partial derivative with respect to <span class="math inline">\(\Sigma^{-1}\)</span> of the log-likelihood gives us: <span class="math display">\[
+\frac{\partial \ell_{Y}(\mu, \Sigma \mid y_i)}{\partial \Sigma^{-1}} = \frac{1}{2} \Sigma -\frac{1}{2}(y_i - \mu) (y_i - \mu)^T
+\]</span> Summing over the <span class="math inline">\(n\)</span> terms gives: <span class="math display">\[
+\frac{\partial \ell_{Y}(\mu, \Sigma \mid Y)}{\partial \Sigma^{-1}} = \frac{n}{2} \Sigma -\frac{1}{2}\sum_i (y_i - \mu) (y_i - \mu)^T
+\]</span> <span class="math display">\[
+\hat{\Sigma} = \frac{1}{n}\textstyle\sum_i (y_i - \hat{\mu}) (y_i - \hat{\mu})^T
+\]</span></p>
+</section>
+<section id="normal-repeated-measures-models" class="level3">
+<h3 class="anchored" data-anchor-id="normal-repeated-measures-models">Normal repeated measures models</h3>
+<p>In many longitudinal studies where some outcome of interest is measured for participants <span class="math inline">\(K\)</span> times, the following model may describe the data generating process well, where <span class="math inline">\(y_i \in \R^K\)</span> and <span class="math inline">\(X_i\)</span> is a <span class="math inline">\(K \times m\)</span> design matrix: <span class="math display">\[
+\begin{aligned}
+y_i \mid X_i \sim \text{Normal}(X_i \beta, \Sigma(\psi))
+\end{aligned}
+\]</span> The textbook lists several models that could describe different scenarios. 1. Independent-but-not-identically-distributed observations within groups: <span class="math display">\[
+\begin{aligned}
+y_{ik} \mid (X_{i})_k \, &amp; = (X_{i})_k \beta + \epsilon_{ik} \\
+\epsilon_{ik} &amp; \sim \text{Normal}(0, \sigma^2_k) \\
+\epsilon_{ik} &amp; \indy \epsilon_{jl} \forall i\neq j \cup k \neq l
+\end{aligned}
+\]</span> This implies the following simple structure for <span class="math inline">\(\Sigma(\psi)\)</span> above:</p>
+<p><span class="math inline">\(\Sigma(\psi) = \text{diag}(\sigma^2_1, \dots, \sigma^2_K)\)</span>.</p>
+<ol start="2" type="1">
+<li>Compound symmetry (I’ll call this a random intercept model): <span class="math display">\[
+\begin{aligned}
+y_{ik} \mid (X_{i})_k \, &amp; = (X_{i})_k \beta + \gamma_i + \epsilon_{ik} \\
+\epsilon_{ik} &amp; \sim \text{Normal}(0, \sigma^2) \\
+\epsilon_{ik} &amp; \indy \epsilon_{jl} \forall i\neq j \cup k \neq l \\
+\gamma_i &amp; \sim \text{Normal}(0, \tau^2) \\
+\gamma_i &amp; \indy \gamma_j \forall i \neq j \\
+\gamma_i &amp; \indy \epsilon_{ij} \forall j
+\end{aligned}
+\]</span> Conditional on <span class="math inline">\(X_i\)</span>, the covariance between <span class="math inline">\(y_{ik}\)</span> and <span class="math inline">\(y_{ij}\)</span> is: <span class="math display">\[
+\begin{aligned}
+\text{Cov}(y_{ik}, y_{ij} \mid X_i) &amp; = \text{Cov}((X_{i})_k \beta + \gamma_i + \epsilon_{ik}, (X_{i})_j \beta + \gamma_i + \epsilon_{ij} \mid X_i) \\
+&amp; = \tau^2
+\end{aligned}
+\]</span> While the variance is <span class="math inline">\(\tau^2 + \sigma^2\)</span>. This implies that we can write the variance-covariance matrix as <span class="math display">\[
+\Sigma(\psi) = \tau^2 1_{K} 1_K^T + \sigma^2 I_K.
+\]</span></li>
+<li>Autoregressive (I’ll call this a random intercept model):</li>
+</ol>
+<p><span class="math display">\[
+\begin{aligned}
+y_{ik} \mid (X_{i})_k \, &amp; = (X_{i})_k \beta + \epsilon_{ik} \\
+\epsilon_{ik} \mid \epsilon_{i,k-1} &amp; \sim \text{Normal}(\rho \epsilon_{i,k-1}, \sigma^2) \\
+\epsilon_{i1} &amp; \sim \text{Normal}(0, \frac{\sigma^2}{1 - \rho^2}) \\
+\epsilon_{ik} &amp; \indy \epsilon_{jl} \forall i\neq j \cap \forall k, l
+\end{aligned}
+\]</span></p>
+<p>This implies the following simple structure for <span class="math inline">\(\Sigma(\psi)\)</span>:</p>
+<p><span class="math display">\[\Sigma(\psi)_{ij} = \frac{\sigma^2}{1-\rho^2} \rho^{\abs{i-j}}\]</span> 4. Random effects model</p>
+<p>This is a more general version of the random intercept model. Let <span class="math inline">\(z_k \in \R^q\)</span>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_{ik} \mid (X_{i})_k \, &amp; = (X_{i})_k \beta + z_k^T \gamma_i + \epsilon_{ik} \\
+\epsilon_{ik} &amp; \sim \text{Normal}(0, \sigma^2) \\
+\epsilon_{ik} &amp; \indy \epsilon_{jl} \forall i\neq j \cup k \neq l \\
+\gamma_i &amp; \sim \text{Normal}(0, \Omega) \\
+\gamma_i &amp; \indy \gamma_j \forall i \neq j \\
+\gamma_i &amp; \indy \epsilon_{ij} \forall j
+\end{aligned}
+\]</span> We can write this in matrix form as:</p>
+<p><span class="math display">\[
+y_i \mid X_i = X_i \beta + Z \gamma + \epsilon_i
+\]</span> The conditional covariance is <span class="math display">\[
+\begin{aligned}
+\text{Cov}(y_i \mid X_i) &amp; = \text{Cov}(X_i \beta + Z \gamma + \epsilon_i \mid X_i) \\
+&amp; = Z \Omega Z^T + \sigma^2 I_K
+\end{aligned}
+\]</span></p>
+</section>
+<section id="mles-in-repeated-measure-models" class="level3">
+<h3 class="anchored" data-anchor-id="mles-in-repeated-measure-models">MLEs in repeated measure models</h3>
+<p>The book suggests the following strategy to find the MLEs in the unstructured case, which is <span class="math inline">\(1\)</span> above:</p>
+<p>Take <span class="math inline">\(\beta^{(0)}\)</span> and <span class="math inline">\(\Sigma^{(0)}\)</span> as initial guesses. Then for <span class="math inline">\(t = 1\)</span> until some termination criterion iterate:</p>
+<p><span class="math display">\[
+\beta^{(t+1)} = \left(\sum_i X_i^T (\Sigma^{(t)})^{-1}X_i\right)^{-1} \sum_i X_i^T (\Sigma^{(t)})^{-1}y_i
+\]</span> and <span class="math display">\[
+\Sigma^{(t+1)} = \frac{1}{n}\sum_i (y_i - X_i \beta^{(t+1)}) (y_i - X_i \beta^{(t+1)})^T
+\]</span> We can derive these update rules from the log-likelihood, but we’ll need to rewrite the model so that it looks a little more familiar.</p>
+<p>The model as written in matrix form by unit <span class="math inline">\(i\)</span> is: <span class="math display">\[
+\begin{aligned}
+y_{i} \mid X_{i} \, &amp; = X_{i} \beta + \epsilon_{i} \\
+\epsilon_{i} &amp; \sim \text{Normal}(0, \Sigma) \\
+\epsilon_{i} &amp; \indy \epsilon_{j} \forall i\neq j
+\end{aligned}
+\]</span> Let <span class="math inline">\(y = (y_1^T, y_2^T, \dots, y_n^T)^T\)</span> and let <span class="math inline">\(X = (X_1^T, X_2^T, \dots, X_n^T)^T\)</span>, and let <span class="math inline">\(\epsilon = (\epsilon_1^T, \epsilon_2^T, \dots, \epsilon_n^T)^T\)</span>. Then the model can be written: <span class="math display">\[
+\begin{aligned}
+y \mid X \, &amp; = X \beta + \epsilon \\
+\epsilon &amp; \sim \text{Normal}(0, I_n \otimes \Sigma)
+\end{aligned}
+\]</span> so <span class="math inline">\(\text{Cov}(\epsilon)\)</span> is block-diagonal: <span class="math display">\[
+\begin{bmatrix}
+\Sigma &amp; 0 &amp; \dots &amp; 0 \\
+0 &amp; \Sigma &amp; \dots &amp; 0 \\
+0 &amp; 0 &amp; \ddots &amp; 0 \\
+0 &amp; 0 &amp; \dots &amp; \Sigma
+\end{bmatrix}
+\]</span> The log-likelihood is:</p>
+<p><span class="math display">\[
+\ell_{Y}(\mu, \Sigma \mid y_i) = -\frac{1}{2} \log \det(I_n \otimes \Sigma) -\frac{1}{2}(y - X \beta)^T (I_n \otimes \Sigma)^{-1}(y - X \beta)
+\]</span> The determinant of <span class="math inline">\(I_n \otimes \Sigma\)</span> is <span class="math inline">\(\det(\Sigma)^n\)</span> because it’s just block-diagonal, and the inverse of <span class="math inline">\(I_n \otimes \Sigma\)</span> is similarly <span class="math inline">\(I_n \otimes \Sigma^{-1}\)</span>.</p>
+<p>Let’s focus on the <span class="math inline">\(\beta\)</span> terms. Expanding the quadratic form gives: <span class="math display">\[
+-\frac{1}{2}(y^T(I_n \otimes \Sigma)^{-1}y + y^T (I_n \otimes \Sigma)^{-1}X \beta
+-\frac{1}{2} \beta^T X^T (I_n \otimes \Sigma)^{-1}X \beta
+\]</span></p>
+<p>Taking the derivative with respect to <span class="math inline">\(\beta\)</span> gives: <span class="math display">\[
+y^T (I_n \otimes \Sigma)^{-1}X \mathrm{d}\beta
+-\frac{1}{2} \mathrm{d} \beta^T X^T (I_n \otimes \Sigma)^{-1}X \beta -\frac{1}{2}  \beta^T X^T (I_n \otimes \Sigma)^{-1}X \mathrm{d}\beta
+\]</span> Collecting terms gives: <span class="math display">\[
+(y^T (I_n \otimes \Sigma^{-1})X
+- \beta^T X^T (I_n \otimes \Sigma)^{-1}X) \mathrm{d}\beta
+\]</span> This looks more daunting than it is, we can use block matrix multiplication to get: <span class="math display">\[
+(\sum_i y_i^T \Sigma^{-1} X_i - \beta^T \sum_i X_i^T  \Sigma^{-1} X ) \mathrm{d}\beta
+\]</span> If <span class="math inline">\(\Sigma\)</span> were known, we could solve this equation simply:</p>
+<p><span class="math display">\[
+\hat{\beta} = \textstyle(\sum_i X_i^T  \Sigma^{-1} X)^{-1} (\sum_i X_i \Sigma^{-1} y_i)  
+\]</span></p>
+<p>Like we did above, we can rewrite the likelihood in terms of <span class="math inline">\(\Sigma^{-1}\)</span> to give:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\ell_{Y}(\mu, \Sigma \mid y_i) &amp; = \frac{n}{2} \log \det(\Sigma^{-1}) - \frac{1}{2}\sum_i(y_i - X_i \beta)^T\Sigma^{-1}(y_i - X_i \beta)  \\
+&amp; = \frac{n}{2} \log \det(\Sigma^{-1}) -\frac{1}{2}\sum_i \text{tr}(y_i - X_i \beta)^T\Sigma^{-1}(y_i - X_i \beta)  \\
+&amp; = \frac{n}{2} \log \det(\Sigma^{-1}) -\frac{1}{2}\sum_i \text{tr}(y_i - X_i \beta)(y_i - X_i \beta)^T\Sigma^{-1}  \\
+&amp; = \frac{n}{2} \log \det(\Sigma^{-1}) -\frac{1}{2}\lp \sum_i \text{tr}(y_i - X_i \beta)(y_i - X_i \beta)^T\rp\Sigma^{-1}  \\
+\end{aligned}
+\]</span> Taking derivatives with respect to <span class="math inline">\(\Sigma^{-1}\)</span> gives:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathrm{d} \ell_{Y}(\mu, \Sigma \mid y_i) &amp; = \frac{n}{2} \Sigma\,\mathrm{d} \Sigma^{-1} -\frac{1}{2}\sum_i (y_i - X_i \beta) (y_i - X_i \beta)^T \mathrm{d} \Sigma^{-1} \\
+&amp; = \lp \frac{n}{2} \Sigma -\frac{1}{2}\sum_i (y_i - X_i \beta) (y_i - X_i \beta)^T\rp \mathrm{d} \Sigma^{-1}
+\end{aligned}
+\]</span> Both of these derivatives have to be zero at the maximum likeihood estimate (assuming we’re not on a boundary of the parameter space), so we’ll get two sets of equations:</p>
+<p><span class="math display">\[
+\Sigma^{(t+1)} = \frac{1}{n} \sum_i (y_i - X_i \beta^{(t)}) (y_i - X_i \beta)^T
+\]</span></p>
+<p><span class="math display">\[
+\beta^{(t+1)} = \textstyle(\sum_i X_i^T  (\Sigma^{(t)})^{-1} X_i)^{-1} (\sum_i X_i (\Sigma^{(t)})^{-1} y_i)  
+\]</span></p>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-magnus2019matrix" class="csl-entry" role="listitem">
+Magnus, Jan R, and Heinz Neudecker. 2019. <em>Matrix Differential Calculus with Applications in Statistics and Econometrics</em>. John Wiley &amp; Sons.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
