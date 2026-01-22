@@ -593,5 +593,110 @@
     "title": "Weibull parameterizations",
     "section": "",
     "text": "Our course notes (and (Klein, Moeschberger, et al. 2003)) define the Weibull hazard as: \\[\\lambda(t) = \\gamma \\alpha t^{\\alpha - 1}\\] Base R defines the Weibull parameterization for rweibull(n, shape=\\(\\alpha\\), scale=\\(\\sigma\\)) as \\[\\lambda(t) = \\frac{\\alpha}{\\sigma} \\left(\\frac{t}{\\sigma}\\right)^{\\alpha - 1}\\] The survival package parameterizes the Weibull, with intercept=\\(\\mu\\), scale =\\(\\tau\\), as \\[\\lambda(t) = \\frac{1}{\\tau e^{\\mu/\\tau}} t^{1/\\tau - 1}\\] Thus, we can see that the following identities hold: \\[\\begin{align*}\n    \\gamma & = \\frac{1}{\\sigma^\\alpha} \\implies \\sigma = \\frac{1}{\\gamma^{1/\\alpha}} \\\\\n    \\gamma & = e^{-\\mu/\\tau} \\implies \\mu = -\\tau \\log(\\gamma)\n\\end{align*}\\] This also implies that regression coefficients from survreg are interpreted differently from the typical interpretation from a proportional hazards model. The proportional hazards Weibull model is typically written \\[\\gamma e^{\\boldsymbol{\\beta}^T\\mathbf{z}_i} \\alpha t^{\\alpha - 1}\\] But survreg parameterizes the model as \\[\\frac{1}{\\tau e^{(\\mu + \\boldsymbol{\\theta}^T \\mathbf{z}_i)/\\tau}} t^{1/\\tau - 1}\\] This means that: \\[\\begin{align*}\n\\boldsymbol{\\beta} & = -\\boldsymbol{\\theta} / \\tau \\\\\n\\gamma & = e^{-\\mu/\\tau}\n\\end{align*}\\] Thus, a positive coefficient in the parametric hazard which indicates that the variable increases hazard, all else being equal, will be negative in survreg’s coefficient results and vice versa.\n\n\n\n\nReferences\n\nKlein, John P, Melvin L Moeschberger, et al. 2003. Survival Analysis: Techniques for Censored and Truncated Data. Vol. 1230. Springer."
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html",
+    "title": "HW 1",
+    "section": "",
+    "text": "In this homework, you’ll be trying to replicate some of the results of the Kang and Schafer (2007) paper and applying these results to a dataset. In the paper, the authors test the robustness of IPW, AIPW, and regression estimators via. a simulation study. The authors simulate a survey where an outcome \\(y_i\\) is measured for \\(n\\) individuals, but a substantial number of observations are missing (\\(\\sim 50\\%\\)). The target estimand is the population mean of \\(y_i\\), which is simulated to be \\(210\\). The \\(y_i\\) are simulated via a linear model conditional on covariates \\(Z_{i1}, Z_{i2}, Z_{i3}, Z_{i4}\\); the missingness indicators are simulated via a logistic regression model, again using a linear model related to the \\(Z\\) predictors.\nThe catch is that it is assumed that the analyst has access only to complex transformations of the predictors, in the form of \\(X_{i1}, X_{i2}, X_{i3}, X_{i4}\\). These transformed predictors can be used in a linear model to produce fits that are “good enough” meaning that they predict the outcomes pretty well and don’t indicate poor fits to the data.\nThe operating characteristics, namely bias, variance and MSE are measured for several different estimators that involve linear models and logistic regressions for \\(y_i \\mid x_i\\) and \\(m_i \\mid x_i\\). Let \\(e(x_i, \\hat{\\gamma})\\) be the fitted probabilities of not being missing, or \\(P(M_i = 0 \\mid X_i = x_i)\\) from the missingness model and let \\(\\mu(x_i, \\hat{\\beta})\\) be the fitted values from a linear regression of \\(y_i\\) on \\(x_i\\).\n\nAn IPW estimator: \\[\n\\bar{y}^{\\text{IPW}} = \\frac{\\sum_{i \\mid m_i = 0} y_i e(x_i, \\hat{\\gamma})^{-1}}{\\sum_{i \\mid m_i = 0} e(x_i, \\hat{\\gamma})^{-1}}\n\\]\nA regression estimator: \\(\\bar{y}^{\\text{reg}} = \\frac{1}{n} \\sum_{i=1}^n \\mu(x_i, \\hat{\\beta})\\)\nAn AIPW estimator: \\(\\bar{y}^{\\text{AIPW}} =  \\bar{y}^{\\text{reg}} +  \\frac{\\sum_{i \\mid m_i = 0}\\hat{\\epsilon}_i e(x_i, \\hat{\\gamma})^{-1}}{\\sum_{i \\mid m_i = 0} e(x_i, \\hat{\\gamma})^{-1}}\\)\n\nThe \\(\\hat{\\epsilon}_i\\) is the fitted residual from the regression on \\(i\\) such that \\(m_i = 0\\).\nI want you to roughly recreate the results of part of the paper by running the smallest simulation study scenario. I’ve written the simulation function for you, you have to write the code to run the regressions and the code to compute the estimators.\n\ngen_data &lt;- function(n=200) {\n  Z &lt;- matrix(rnorm(n * 4), n, 4)\n  y_hat &lt;- 210 + 27.4 * Z[,1] + 13.7 * rowSums(Z[,2:4])\n  y &lt;- y_hat + rnorm(n)\n  pi_y &lt;- plogis(-Z[,1] + 0.5 * Z[,2] - 0.25 * Z[,3] - 0.1 * Z[,4])\n  m &lt;- rbinom(n, 1, 1 - pi_y)\n  X &lt;- Z\n  X[,1] &lt;- exp(Z[,1] / 2)\n  X[,2] &lt;- Z[,2] / (1 + exp(Z[,1])) + 10\n  X[,3] &lt;- (Z[,1] * Z[,3] / 25 + 0.6)^3\n  X[,4] &lt;- (Z[,2] + Z[,4] + 20)^2\n  y_o &lt;- y\n  y_o[m == 1] &lt;- NA\n  df &lt;- data.frame(\n    y = y_o,\n    m = m,\n    x1 = X[,1],\n    x2 = X[,2],\n    x3 = X[,3],\n    x4 = X[,4]\n  )\n  return(df)\n}\n\n\n\nWrite functions that can take the data frame returned by gen_data and return a linear model for \\(\\Exp{Y_i \\mid X_i}\\) and a logistic regression for \\(P(M_i = 0 \\mid X_i)\\).\n\n\n\nWrite functions that compute \\(\\bar{y}^{\\text{IPW}},\\bar{y}^{\\text{AIPW}},\\bar{y}^{\\text{reg}}\\). These functions should take a model fit and a datatset as arguments to return the estimators.\n\n\n\nGenerate 1000 simulated datasets and use the functions you wrote above to compute the three estimators for each dataset\n\n\n\nCompute the bias, root mean square error, and % bias as a function of standard deviation of the estimator.\n\n\n\nPick your favorite machine learning method (random forests, support vector machines, gradient boosting machines, xgboost, etc.) and use your method to compute nonparametric versions of \\(\\mu(x_i, \\beta)\\) and \\(e(x_i, \\gamma)\\). Recompute the estimators using your machine learning methods and compute the same summary statistics as you did in question 1d\n\n\n\nWrite several sentences summarizing your results"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-1a",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-1a",
+    "title": "HW 1",
+    "section": "",
+    "text": "Write functions that can take the data frame returned by gen_data and return a linear model for \\(\\Exp{Y_i \\mid X_i}\\) and a logistic regression for \\(P(M_i = 0 \\mid X_i)\\)."
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-1b",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-1b",
+    "title": "HW 1",
+    "section": "",
+    "text": "Write functions that compute \\(\\bar{y}^{\\text{IPW}},\\bar{y}^{\\text{AIPW}},\\bar{y}^{\\text{reg}}\\). These functions should take a model fit and a datatset as arguments to return the estimators."
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-1c",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-1c",
+    "title": "HW 1",
+    "section": "",
+    "text": "Generate 1000 simulated datasets and use the functions you wrote above to compute the three estimators for each dataset"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-1d",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-1d",
+    "title": "HW 1",
+    "section": "",
+    "text": "Compute the bias, root mean square error, and % bias as a function of standard deviation of the estimator."
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-1e",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-1e",
+    "title": "HW 1",
+    "section": "",
+    "text": "Pick your favorite machine learning method (random forests, support vector machines, gradient boosting machines, xgboost, etc.) and use your method to compute nonparametric versions of \\(\\mu(x_i, \\beta)\\) and \\(e(x_i, \\gamma)\\). Recompute the estimators using your machine learning methods and compute the same summary statistics as you did in question 1d"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-1f",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-1f",
+    "title": "HW 1",
+    "section": "",
+    "text": "Write several sentences summarizing your results"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-3a",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-3a",
+    "title": "HW 1",
+    "section": "2.1 Question 3a",
+    "text": "2.1 Question 3a\nSummarize the missingness patterns in the hw_data dataset. How many missingness patterns are there? What are they? What proportion of patients are associated with each missingness pattern?"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-3b",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-3b",
+    "title": "HW 1",
+    "section": "2.2 Question 3b",
+    "text": "2.2 Question 3b\nHow would you assess whether there is evidence that treatment affects missingness? Is there evidence that treatment affects the missingness pattern?"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-3c",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-3c",
+    "title": "HW 1",
+    "section": "2.3 Question 3c",
+    "text": "2.3 Question 3c\nHow many people dropped out of the study after Week 1, or Week 4 vs. had intermittent missingness? For patients who dropped out, is there evidence that PANSS at the prior measurement predicted dropout? What about for the patients with intermittent missingness?"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-3d",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-3d",
+    "title": "HW 1",
+    "section": "2.4 Question 3d",
+    "text": "2.4 Question 3d\nIs it reasonable to assume that missingness is MCAR for this dataset? Why or why not? What about MAR?"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-2a",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-2a",
+    "title": "HW 1",
+    "section": "2.1 Question 2a",
+    "text": "2.1 Question 2a\nSummarize the missingness patterns in the hw_data dataset. How many missingness patterns are there? What are they? What proportion of patients are associated with each missingness pattern?"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-2b",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-2b",
+    "title": "HW 1",
+    "section": "2.2 Question 2b",
+    "text": "2.2 Question 2b\nHow would you assess whether there is evidence that treatment affects missingness? Is there evidence that treatment affects the missingness pattern?"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-2c",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-2c",
+    "title": "HW 1",
+    "section": "2.3 Question 2c",
+    "text": "2.3 Question 2c\nHow many people dropped out of the study after Week 1, or Week 4 vs. had intermittent missingness? For patients who dropped out, is there evidence that PANSS at the prior measurement predicted dropout? What about for the patients with intermittent missingness?"
+  },
+  {
+    "objectID": "missing-data-material-W-26/homeworks/HW-1.html#question-2d",
+    "href": "missing-data-material-W-26/homeworks/HW-1.html#question-2d",
+    "title": "HW 1",
+    "section": "2.4 Question 2d",
+    "text": "2.4 Question 2d\nIs it reasonable to assume that missingness is MCAR for this dataset? Why or why not? What about MAR?"
   }
 ]
