@@ -110,6 +110,7 @@ window.MathJax = {
         \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
         \newcommand{\abs}[1]{\left| #1 \right|}
         \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+        \newcommand{\diff}[1]{{\mathrm{d}}\!\lp #1 \rp}
       `);
     }
   },
@@ -196,9 +197,16 @@ window.Quarto = {
    
   <ul>
   <li><a href="#maximum-likelihood-for-multivariate-normal-distribution" id="toc-maximum-likelihood-for-multivariate-normal-distribution" class="nav-link active" data-scroll-target="#maximum-likelihood-for-multivariate-normal-distribution">Maximum likelihood for multivariate normal distribution</a></li>
+  <li><a href="#differentials-and-matrix-differentiation" id="toc-differentials-and-matrix-differentiation" class="nav-link" data-scroll-target="#differentials-and-matrix-differentiation">Differentials and matrix differentiation</a>
+  <ul class="collapse">
+  <li><a href="#rules-for-the-differential-operatior" id="toc-rules-for-the-differential-operatior" class="nav-link" data-scroll-target="#rules-for-the-differential-operatior">Rules for the differential operatior</a></li>
+  <li><a href="#generalizing-to-vector-valued-functions" id="toc-generalizing-to-vector-valued-functions" class="nav-link" data-scroll-target="#generalizing-to-vector-valued-functions">Generalizing to vector valued functions</a></li>
+  <li><a href="#generalizing-to-matrix-valued-functions" id="toc-generalizing-to-matrix-valued-functions" class="nav-link" data-scroll-target="#generalizing-to-matrix-valued-functions">Generalizing to matrix valued functions</a></li>
+  <li><a href="#the-chain-rule" id="toc-the-chain-rule" class="nav-link" data-scroll-target="#the-chain-rule">The chain rule</a></li>
   <li><a href="#differential-with-respect-to-mu" id="toc-differential-with-respect-to-mu" class="nav-link" data-scroll-target="#differential-with-respect-to-mu">Differential with respect to <span class="math inline">\(\mu\)</span></a></li>
   <li><a href="#normal-repeated-measures-models" id="toc-normal-repeated-measures-models" class="nav-link" data-scroll-target="#normal-repeated-measures-models">Normal repeated measures models</a></li>
   <li><a href="#mles-in-repeated-measure-models" id="toc-mles-in-repeated-measure-models" class="nav-link" data-scroll-target="#mles-in-repeated-measure-models">MLEs in repeated measure models</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -224,8 +232,8 @@ window.Quarto = {
 </header>
 
 
-<section id="maximum-likelihood-for-multivariate-normal-distribution" class="level3">
-<h3 class="anchored" data-anchor-id="maximum-likelihood-for-multivariate-normal-distribution">Maximum likelihood for multivariate normal distribution</h3>
+<section id="maximum-likelihood-for-multivariate-normal-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="maximum-likelihood-for-multivariate-normal-distribution">Maximum likelihood for multivariate normal distribution</h2>
 <p>Let <span class="math inline">\(y_i \in \R^K\)</span>, <span class="math inline">\(y_i \overset{\text{iid}}{\sim} \text{Normal}(\mu, \Sigma)\)</span> for <span class="math inline">\(n\)</span> samples so that the density for <span class="math inline">\(y_i\)</span> is <span class="math display">\[
 f_{Y}(y_i \mid \mu, \Sigma) = (2\pi)^{-\frac{K}{2}} (\det\Sigma)^{-\frac{1}{2}} \exp\lp-\frac{1}{2}(y_i - \mu)^T \Sigma^{-1}(y_i - \mu) \rp
 \]</span></p>
@@ -233,8 +241,9 @@ f_{Y}(y_i \mid \mu, \Sigma) = (2\pi)^{-\frac{K}{2}} (\det\Sigma)^{-\frac{1}{2}} 
 \ell_{Y}(\mu, \Sigma \mid y_i) = \frac{1}{2} \log \det\Sigma -\frac{1}{2}(y_i - \mu)^T \Sigma^{-1}(y_i - \mu)
 \]</span></p>
 <p>The book gives the expressions for the MLEs of the mean and covariance matrix of the multivariate normal distribution without details. Going through the algebra can be useful for other more complicated problems. But in order to do so, we’ll need a slight change to how we’re used to thinking about partial differentiation. The following blurb on differentials is based on <span class="citation" data-cites="magnus2019matrix">Magnus and Neudecker (<a href="#ref-magnus2019matrix" role="doc-biblioref">2019</a>)</span>.</p>
-<section id="differentials-and-matrix-differentiation" class="level4">
-<h4 class="anchored" data-anchor-id="differentials-and-matrix-differentiation">Differentials and matrix differentiation</h4>
+</section>
+<section id="differentials-and-matrix-differentiation" class="level2">
+<h2 class="anchored" data-anchor-id="differentials-and-matrix-differentiation">Differentials and matrix differentiation</h2>
 <p>It all starts with rearranging the derivative:</p>
 <p><span class="math display">\[
 f^\prime(c)  = \lim_{u \to 0} \frac{f(c + u) - f(c)}{u},
@@ -245,51 +254,102 @@ f(c + u)  = f(c) + f^\prime(c) u + r_c(u)
 <p>Bringing <span class="math inline">\(f(u)\)</span> to the left-hand side gives: <span class="math inline">\(f(c + u) - f(u) = f^\prime(c) u + r_c(u)\)</span>. We can define the change in the linear approximation of <span class="math inline">\(f\)</span> from <span class="math inline">\(c\)</span> to <span class="math inline">\(c+u\)</span> as <span class="math inline">\(\mathrm{d}f(c;\,u)\)</span>, or the first differential of <span class="math inline">\(f\)</span> at <span class="math inline">\(c\)</span> with increment <span class="math inline">\(u\)</span>: <span class="math display">\[
 \mathrm{d} f(c ; u) = u f^\prime(c)
 \]</span></p>
-<p>Subbing this back into the linear approximation for <span class="math inline">\(f\)</span> gives: <span class="math display">\[
+<p>Subbing this back into the linear approximation for <span class="math inline">\(f\)</span> gives: <span id="eq-lin-approx"><span class="math display">\[
 f(c + u)  = f(c) + \mathrm{d} f(c ; u) + r_c(u)
-\]</span></p>
+\tag{1}\]</span></span></p>
 <p>We can identify the differential by finding the linear approximation to a function at <span class="math inline">\(c\)</span>: <span class="math display">\[
 f(c + u)  = f(c) + \alpha u + r_c(u).
 \]</span> If we can find an <span class="math inline">\(\alpha\)</span> that depends on <span class="math inline">\(c\)</span> but not on <span class="math inline">\(u\)</span> such that <span class="math inline">\(r_c(u) = o(u)\)</span> we say that <span class="math inline">\(\alpha = f^\prime(c)\)</span>.</p>
 <p>Let <span class="math inline">\(f\)</span> now be a function <span class="math inline">\(\R^m \to \R\)</span> and let the differential be constructed via the same argument as above, but now let <span class="math inline">\(c, u \in \R^m\)</span>, and define <span class="math inline">\(r_c(u)\)</span> such that <span class="math inline">\(\lim_{u\to 0}\frac{r_c(u)}{\lVert u \rVert} = 0\)</span>: <span class="math display">\[
 f(c + u)  = f(c) + A(c) u + r_c(u).
 \]</span> If we equate the row vector <span class="math inline">\(A(c)\)</span> with the partial derivative of <span class="math inline">\(f\)</span> with respect to <span class="math inline">\(u\)</span>, we can recognize this as the multivariate Taylor expansion of <span class="math inline">\(f(c + u)\)</span> around <span class="math inline">\(f(c)\)</span>.</p>
-<p>Let’s compute the differential of <span class="math inline">\(f(x, y) = x^T y\)</span> for <span class="math inline">\(x,y \in \R^m\)</span>. <span class="math display">\[
-\mathrm{d}(x^T y)
-\]</span> We could do this via the following <span class="math display">\[
-(u_x + c_x)^T (u_y + c_y) = c_x^T c_y + c_x^T u_y + u_x^T c_y + u_x^T u_y
-\]</span> The vector <span class="math inline">\(A(c)\)</span> here is <span class="math inline">\((c_x^T, c_y^T)\)</span> assuming we’ve ordered our variables as <span class="math inline">\((u_x,u_y)\)</span>. We can see this from the fact that <span class="math inline">\(c_x^T c_y\)</span> is the evaluation of <span class="math inline">\(f\)</span> at <span class="math inline">\(c_x, c_y\)</span> and that <span class="math inline">\(\lim_{u_x, u_y \to 0} \frac{u_x^T u_y}{\sqrt{\lVert u_x \rVert^2 + \lVert u_y \rVert^2}} = 0\)</span>.</p>
-<p>We could also recognize the fact that our variables partition naturally into two vectors, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. When we have a natural partition of variables <span class="math inline">\(u\)</span> into <span class="math inline">\(u_1\)</span> and <span class="math inline">\(u_2\)</span> we can write the differential for <span class="math inline">\(f(u)\)</span> more easily in terms of two differentials: <span class="math display">\[
+<p>In fact, this is exactly what <span class="math inline">\(A(c)\)</span> is, and <span class="math inline">\(A(c) \equiv \nabla_x f(x) \mid_{x = c}\)</span></p>
+<div id="exm-product" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1 (Product example)</strong></span> Let’s determine the differential of <span class="math inline">\(f(x, y) = x^T y\)</span> for <span class="math inline">\(x,y \in \R^m\)</span>, denoted as: <span class="math display">\[
+\mathrm{d}(x^T y).
+\]</span> We’re looking to use the left-hand side of in <a href="#eq-lin-approx" class="quarto-xref">Equation&nbsp;1</a> to yield something that looks like <span class="math inline">\(x^T y + \diff{x^Ty} u + r_c(u)\)</span>.</p>
+<p>Let <span class="math inline">\(c_x\)</span> and <span class="math inline">\(c_y\)</span> be the values of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> about which we’ll define our linear approximation. Specifically, we’ll define the linear approximation at the coordinates <span class="math inline">\(c_x + u_x, c_y + u_y\)</span> In other words, we’d like to approximate the function: <span class="math inline">\((c_x + u_x)^T (c_y + u_y)\)</span> with the value at <span class="math inline">\(c_x^T c_y\)</span> plus the differential and a small remainder term. We’ll accomplish this by expanding the product <span class="math inline">\((c_x + u_x)^T (c_y + u_y)\)</span> into four parts: <span class="math display">\[
+\begin{align}
+(u_x + c_x)^T (u_y + c_y) &amp; = c_x^T c_y + c_x^T u_y + u_x^T c_y + u_x^T u_y \\
+&amp; = c_x^T c_y + c_x^T u_y + c_y^T u_x  + u_x^T u_y \\
+&amp; = c_x^T c_y + \begin{bmatrix}c_x^T &amp; c_y^T \end{bmatrix}  \begin{bmatrix}u_y \\ u_x \end{bmatrix} + u_x^T u_y \tag{a}\label{eq:1}
+\end{align}
+\]</span> In line <span class="math inline">\(\eqref{eq:1}\)</span> we can see that <span class="math inline">\(f(c) \equiv c_x^T c_y\)</span>, and <span class="math inline">\(\lim_{u_x, u_y \to 0} \frac{u_x^T u_y}{\sqrt{\lVert u_x \rVert^2 + \lVert u_y \rVert^2}} = 0\)</span>, so <span class="math inline">\(u_x^T u_y\)</span> is our <span class="math inline">\(r_c(u)\)</span>. That means that the vector <span class="math inline">\(A(c)\)</span> here is <span class="math inline">\((c_x^T, c_y^T)\)</span> as we’ve ordered our variables as <span class="math inline">\((u_y,u_x)\)</span>.</p>
+</div>
+<section id="rules-for-the-differential-operatior" class="level3">
+<h3 class="anchored" data-anchor-id="rules-for-the-differential-operatior">Rules for the differential operatior</h3>
+<ol type="1">
+<li><p>The differential operator is denote <span class="math inline">\(\diff{\cdot}\)</span>. It is linear: <span class="math display">\[
+\diff{a x + b y} = a\diff{x} + b\diff{y}
+\]</span></p></li>
+<li><p>The differential of a constant is zero: <span class="math display">\[
+\diff{a} = 0
+\]</span></p></li>
+<li><p>The differential of a transposed variable is the transpose of the differential <span class="math display">\[
+\diff{x^T} = \diff{x}^T
+\]</span></p></li>
+<li><p>The differential of a product is the sum of the differential applied to each variable (as shown in <a href="#exm-product" class="quarto-xref">Example&nbsp;1</a>) <span class="math display">\[
+\diff{XY} = \diff{X}Y + X\diff{Y}
+\]</span></p></li>
+</ol>
+<p><a href="#exm-product" class="quarto-xref">Example&nbsp;1</a> demonstrates another useful property of differentials. We recognize the fact that our variables partition naturally into two vectors, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. When we have a natural partition of variables <span class="math inline">\(u\)</span> into <span class="math inline">\(u_1\)</span> and <span class="math inline">\(u_2\)</span> we can write the differential for <span class="math inline">\(f(u)\)</span> more easily in terms of two differentials: <span class="math display">\[
 \begin{aligned}
 \mathrm{d}f(c;\,u) &amp; = A(c) u \\
 &amp; = A(c_1) u_1 + A(c_2)u_2
 \end{aligned}
-\]</span> which just differentiates between the two sets of variables, so that <span class="math inline">\(A(c_1)\)</span> is the partial derivative of <span class="math inline">\(f\)</span> with respect to <span class="math inline">\(u_1\)</span> and <span class="math inline">\(A(c_2)\)</span> is the partial derivative with respect to <span class="math inline">\(u_2\)</span>.</p>
-<p>In the example above, <span class="math inline">\(f(x,y) = x^T y\)</span>, we can write: <span class="math display">\[
+\]</span> which just differentiates between the two sets of variables, so that <span class="math inline">\(A(c_1)\)</span> is the partial derivative of <span class="math inline">\(f\)</span> with respect to <span class="math inline">\(u_1\)</span> and <span class="math inline">\(A(c_2)\)</span> is the partial derivative with respect to <span class="math inline">\(u_2\)</span>. In <a href="#exm-product" class="quarto-xref">Example&nbsp;1</a>, <span class="math inline">\(u_1\)</span> is <span class="math inline">\(u_y\)</span> and <span class="math inline">\(u_2\)</span> is <span class="math inline">\(u_x\)</span>, so we can write the differnetial above in the equivalent form:</p>
+<p><span class="math display">\[
 \begin{aligned}
 \mathrm{d}(x^T y) &amp; = x^T u_y + u_x^T y \\
-&amp; = x^T u_y + y^T u_x \\
+&amp; = x^T u_y + y^T u_x
 \end{aligned}
-\]</span> This is important for thinking about differentials of log-likelihoods like the multivariate normal where we’ll have two sets of parameters that we’d like to find the partial derivatives with respect to, <span class="math inline">\(\Sigma\)</span> and <span class="math inline">\(\mu\)</span>: <span class="math display">\[
-\ell_Y(\mu, \Sigma \mid y) = \frac{1}{2} \log \det\Sigma -\frac{1}{2}(y_i - \mu)^T \Sigma^{-1}(y_i - \mu)
-\]</span> <span class="math display">\[
-\mathrm{d}\ell_Y(\mu, \Sigma \mid y) = \frac{1}{2} \mathrm{d}(\log \det\Sigma) -\frac{1}{2}\mathrm{d}((y_i - \mu)^T \Sigma^{-1}(y_i - \mu))
+\]</span> In order to simplify the notation, we’ll write <span class="math inline">\(\diff{x}\)</span> instead of <span class="math inline">\(u_x\)</span>, so the above would be: <span class="math display">\[
+\begin{aligned}
+\mathrm{d}(x^T y) &amp; = x^T \diff{y} + y^T \diff{x}
+\end{aligned}
 \]</span></p>
+<p>This expression shows that we can read off <span class="math inline">\(\nabla_y x^T y\)</span> as <span class="math inline">\(x^T\)</span> and <span class="math inline">\(\nabla_x x^T y\)</span> as <span class="math inline">\(y^T\)</span>. In fact, if we cared only about <span class="math inline">\(\diff{y}\)</span> then we could ignore the differential <span class="math inline">\(\diff{x}\)</span>, essentially treating <span class="math inline">\(x\)</span> as a constant so <span class="math inline">\(\diff{x} = 0\)</span>.</p>
+<p>This is important for thinking about differentials of log-likelihoods like the multivariate normal where we’ll have two sets of parameters that we’d like to find the partial derivatives with respect to, <span class="math inline">\(\Sigma\)</span> and <span class="math inline">\(\mu\)</span>: <span class="math display">\[
+\ell_Y(\mu, \Sigma \mid y) = \frac{1}{2} \log \det\Sigma -\frac{1}{2}(y_i - \mu)^T \Sigma^{-1}(y_i - \mu)
+\]</span> <span id="eq-diff-norm"><span class="math display">\[
+\mathrm{d}\ell_Y(\mu, \Sigma \mid y) = \frac{1}{2} \mathrm{d}(\log \det\Sigma) -\frac{1}{2}\mathrm{d}((y_i - \mu)^T \Sigma^{-1}(y_i - \mu))
+\tag{2}\]</span></span></p>
+<p>To the extent we’d prefer to focus only on <span class="math inline">\(\diff{\mu}\)</span> for example, we would ignore the first term on the RHS of <a href="#eq-diff-norm" class="quarto-xref">Equation&nbsp;2</a>, and focus only on the second term.</p>
+</section>
+<section id="generalizing-to-vector-valued-functions" class="level3">
+<h3 class="anchored" data-anchor-id="generalizing-to-vector-valued-functions">Generalizing to vector valued functions</h3>
 <p>We can generalize to vector functions: Let <span class="math inline">\(f(x): \R^m \to \R^n\)</span>: <span class="math display">\[
 f(c + u)  = f(c) + A(c) u + r_c(u).
 \]</span> for <span class="math inline">\(\lim_{u\to 0} r_c(u) / \norm{u} = 0\)</span>. Then <span class="math inline">\(\mathrm{d}f(c;u) = A(c)u\)</span> is the differential of <span class="math inline">\(f\)</span> evaluated at <span class="math inline">\(c\)</span> of increment <span class="math inline">\(u\)</span>.</p>
+<p>In fact, this is the multivariate Taylor expansion. Each row of <span class="math inline">\(A(c)\)</span> is the term <span class="math inline">\(\nabla_x f_i(x) \mid_{x = c}\)</span> where <span class="math inline">\(f_i\)</span> is the <span class="math inline">\(i^\mathrm{th}\)</span> entry of the length-<span class="math inline">\(n\)</span> vector <span class="math inline">\(f(x)\)</span>.</p>
+</section>
+<section id="generalizing-to-matrix-valued-functions" class="level3">
+<h3 class="anchored" data-anchor-id="generalizing-to-matrix-valued-functions">Generalizing to matrix valued functions</h3>
 <p>The same idea applies to matrices, when combined with the <span class="math inline">\(\text{vec}\)</span> function, which concatenates an <span class="math inline">\(n \times p\)</span> matrix column by column into an <span class="math inline">\(n \times p\)</span>-length vector. Let <span class="math inline">\(F\)</span> be a matrix function <span class="math inline">\(\R^{n \times q} \to \R^{m \times p}\)</span>. Let <span class="math inline">\(C\)</span> and <span class="math inline">\(U\)</span> be in <span class="math inline">\(\R^{m\times q}\)</span>. If <span class="math inline">\(A(C) \in \R^{mp \times nq}\)</span> such that: <span class="math display">\[
 \text{vec}(F(C + U))  = \text{vec}(F(C)) + A(C) \text{vec}(U) + \text{vec}(R_c(U)).
 \]</span> Then the <span class="math inline">\(m\times p\)</span> matrix <span class="math inline">\(\mathrm{d} F(C;\,U)\)</span> is defined by <span class="math inline">\(\text{vec}(\mathrm{d} F(C;\,U)) = A(C) \text{vec}(U)\)</span>.</p>
 <p>The reason to do this is because the differential generalizes to matrices a bit easier than do partial derivatives. This is because it isn’t clear along which dimensions the partial derivatives should lie: Should the partials of a matrix function become a third dimension, like a 3-d array?</p>
 <p>Under this framework, the rows of the matrices <span class="math inline">\(A(c)\)</span> and <span class="math inline">\(A(C)\)</span> correspond to a dimension of the range of the function <span class="math inline">\(f(c)\)</span> or <span class="math inline">\(F(C)\)</span>, while the columns correspond to a dimension of the domain.</p>
-<p>The power of the differentials is clear from the chain rule, which is called Cauchy’s rule of invariance in differential-land. This just means that if <span class="math inline">\(b = f(c)\)</span> and <span class="math inline">\(h = g(b)\)</span> the differential of <span class="math inline">\(h\)</span> is: <span class="math display">\[
+</section>
+<section id="the-chain-rule" class="level3">
+<h3 class="anchored" data-anchor-id="the-chain-rule">The chain rule</h3>
+<p>The power of the differentials is laid bare when working through the chain rule, which is called Cauchy’s rule of invariance in differential-land. Let <span class="math inline">\(f: \R^m \to \R^p\)</span> and <span class="math inline">\(g: \R^p \to \R^n\)</span>, and let <span class="math inline">\(h = g \circ f\)</span>. Then <span class="math inline">\(h: \R^m \to \R^n\)</span>. If <span class="math inline">\(b = f(c)\)</span> and <span class="math inline">\(h = g(b)\)</span> the differential of <span class="math inline">\(h\)</span> is: <span class="math display">\[
 \begin{aligned}
 \mathrm{d}(h;\,u) &amp; = \mathrm{d}(h;\,\mathrm{d}(f;\,c)) \\
 &amp; = A_{g}(b) A_{f}(c) u
 \end{aligned}
-\]</span> if <span class="math inline">\(f: \R^m \to \R^p\)</span> and <span class="math inline">\(g: \R^p \to \R^n\)</span> so <span class="math inline">\(h: \R^m \to \R^n\)</span>, then <span class="math inline">\(A_g(b) \in R^{n \times p}\)</span> and <span class="math inline">\(A_f(c) \in R^{p \times m}\)</span> and <span class="math inline">\(u \in \R^m\)</span>.</p>
-</section>
+\]</span> where <span class="math inline">\(A_g(b) \in R^{n \times p}\)</span> and <span class="math inline">\(A_f(c) \in R^{p \times m}\)</span> and <span class="math inline">\(u \in \R^m\)</span>.</p>
+<p>We can show this rigorously with our previous definitions. <span class="math display">\[
+\begin{align}
+h(c + u) &amp; = g(f(c + u)) \\
+&amp; = g(f(c) + A_f(c)u + r_c(u))  \\
+&amp; = g(b + v) \tag{$v = A_f(c)u + r_c(u)$}\\
+&amp; = g(b) + A_g(b) v + r_b(v) \\
+&amp; = g(b) + A_g(b) \lp A_f(c) u  + r_c(u) \rp + r_b(A_f(c) u + r_c(u)) \\
+&amp; = h(c) + A_g(b) A_f(c) u  + A_g(b) r_c(u) + r_c(u) \\
+&amp; = h(c) + A_g(b) A_f(c) u  + r_c(u)
+\end{align}
+\]</span></p>
 </section>
 <section id="differential-with-respect-to-mu" class="level3">
 <h3 class="anchored" data-anchor-id="differential-with-respect-to-mu">Differential with respect to <span class="math inline">\(\mu\)</span></h3>
@@ -480,6 +540,7 @@ y^T (I_n \otimes \Sigma)^{-1}X \mathrm{d}\beta
 
 
 
+</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
