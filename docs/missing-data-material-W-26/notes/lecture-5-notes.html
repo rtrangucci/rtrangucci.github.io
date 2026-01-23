@@ -331,18 +331,21 @@ f(c + u)  = f(c) + A(c) u + r_c(u).
 <h3 class="anchored" data-anchor-id="normal-repeated-measures-models">Normal repeated measures models</h3>
 <p>In many longitudinal studies where some outcome of interest is measured for participants <span class="math inline">\(K\)</span> times, the following model may describe the data generating process well, where <span class="math inline">\(y_i \in \R^K\)</span> and <span class="math inline">\(X_i\)</span> is a <span class="math inline">\(K \times m\)</span> design matrix: <span class="math display">\[
 \begin{aligned}
-y_i \mid X_i \sim \text{Normal}(X_i \beta, \Sigma(\psi))
+y_i \mid X_i \sim \text{MultiNormal}(X_i \beta, \Sigma(\psi))
 \end{aligned}
-\]</span> The textbook lists several models that could describe different scenarios. 1. Independent-but-not-identically-distributed observations within groups: <span class="math display">\[
+\]</span> The textbook lists several models that could describe different scenarios.</p>
+<ol type="1">
+<li>Independent-but-not-identically-distributed observations within groups: <span class="math display">\[
 \begin{aligned}
 y_{ik} \mid (X_{i})_k \, &amp; = (X_{i})_k \beta + \epsilon_{ik} \\
 \epsilon_{ik} &amp; \sim \text{Normal}(0, \sigma^2_k) \\
 \epsilon_{ik} &amp; \indy \epsilon_{jl} \forall i\neq j \cup k \neq l
 \end{aligned}
-\]</span> This implies the following simple structure for <span class="math inline">\(\Sigma(\psi)\)</span> above:</p>
+\]</span> This implies the following simple structure for <span class="math inline">\(\Sigma(\psi)\)</span> above:</li>
+</ol>
 <p><span class="math inline">\(\Sigma(\psi) = \text{diag}(\sigma^2_1, \dots, \sigma^2_K)\)</span>.</p>
 <ol start="2" type="1">
-<li>Compound symmetry (I’ll call this a random intercept model): <span class="math display">\[
+<li><p>Compound symmetry (I’ll call this a random intercept model): <span class="math display">\[
 \begin{aligned}
 y_{ik} \mid (X_{i})_k \, &amp; = (X_{i})_k \beta + \gamma_i + \epsilon_{ik} \\
 \epsilon_{ik} &amp; \sim \text{Normal}(0, \sigma^2) \\
@@ -358,8 +361,8 @@ y_{ik} \mid (X_{i})_k \, &amp; = (X_{i})_k \beta + \gamma_i + \epsilon_{ik} \\
 \end{aligned}
 \]</span> While the variance is <span class="math inline">\(\tau^2 + \sigma^2\)</span>. This implies that we can write the variance-covariance matrix as <span class="math display">\[
 \Sigma(\psi) = \tau^2 1_{K} 1_K^T + \sigma^2 I_K.
-\]</span></li>
-<li>Autoregressive (I’ll call this a random intercept model):</li>
+\]</span></p></li>
+<li><p>Autoregressive (I’ll call this a random intercept model):</p></li>
 </ol>
 <p><span class="math display">\[
 \begin{aligned}
@@ -370,7 +373,10 @@ y_{ik} \mid (X_{i})_k \, &amp; = (X_{i})_k \beta + \epsilon_{ik} \\
 \end{aligned}
 \]</span></p>
 <p>This implies the following simple structure for <span class="math inline">\(\Sigma(\psi)\)</span>:</p>
-<p><span class="math display">\[\Sigma(\psi)_{ij} = \frac{\sigma^2}{1-\rho^2} \rho^{\abs{i-j}}\]</span> 4. Random effects model</p>
+<p><span class="math display">\[\Sigma(\psi)_{ij} = \frac{\sigma^2}{1-\rho^2} \rho^{\abs{i-j}}\]</span></p>
+<ol start="4" type="1">
+<li>Random effects model</li>
+</ol>
 <p>This is a more general version of the random intercept model. Let <span class="math inline">\(z_k \in \R^q\)</span>.</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -388,6 +394,18 @@ y_i \mid X_i = X_i \beta + Z \gamma + \epsilon_i
 \begin{aligned}
 \text{Cov}(y_i \mid X_i) &amp; = \text{Cov}(X_i \beta + Z \gamma + \epsilon_i \mid X_i) \\
 &amp; = Z \Omega Z^T + \sigma^2 I_K
+\end{aligned}
+\]</span></p>
+<ol start="5" type="1">
+<li>Hierarchical Gaussian process model</li>
+</ol>
+<p>Suppose we have time points <span class="math inline">\(t_{i1}, \dots, t_{iK}\)</span> associated with each measurement <span class="math inline">\(y_{i1}, \dots, y_{iK}\)</span>.</p>
+<p>Let’s define the function <span class="math inline">\(\Omega\)</span>, which is from <span class="math inline">\(\R^K \to \Sigma\)</span> where <span class="math inline">\(\Sigma\)</span> is the space of positive definite <span class="math inline">\(m\times m\)</span> matrices. Let <span class="math inline">\(t_i \in \R^K\)</span> and let <span class="math inline">\(\Omega(\mathbf{t} \mid \ell, \sigma^2)\)</span> be defined <span class="math display">\[
+\Omega(t_i \mid \ell, \sigma^2)_{jk} = \sigma^2 \exp(-\lp t_{ij} - t_{ik} \rp^2/(2\ell^2))
+\]</span> Then the following model is a hierarchical Gaussian process model</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_{i} \mid X_{i} \, &amp; \sim \text{MultiNormal} \lp X_{i} \beta, \Omega(t_i \mid \ell, \sigma^2)\rp
 \end{aligned}
 \]</span></p>
 </section>
