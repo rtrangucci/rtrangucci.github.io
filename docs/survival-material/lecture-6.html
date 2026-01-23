@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 625 - W 26</title>
+<title>Lecture 6</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +68,65 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +142,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -117,15 +173,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
-  <ul class="collapse">
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
-  <li><a href="#course-syllabus" id="toc-course-syllabus" class="nav-link" data-scroll-target="#course-syllabus">Course syllabus</a></li>
-  <li><a href="#project-proposal" id="toc-project-proposal" class="nav-link" data-scroll-target="#project-proposal">Project proposal</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
-  </ul></li>
+  <li><a href="#more-on-log-rank-tests" id="toc-more-on-log-rank-tests" class="nav-link active" data-scroll-target="#more-on-log-rank-tests"><span class="header-section-number">1</span> More on log-rank tests</a></li>
   </ul>
 </nav>
     </div>
@@ -134,7 +182,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 625 - W 26</h1>
+<h1 class="title">Lecture 6</h1>
 </div>
 
 
@@ -151,56 +199,41 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level2">
-<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
-<section id="textbook" class="level3">
-<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
-<ul>
-<li><p>Required: <em>Modelling Survival Data in Medical Research, 4th Edition,</em> Collett</p></li>
-<li><p>Optional: <em>Survival and Event History Analysis</em>, Aalen, Borgan, and Gjessing</p></li>
-<li><p>Optional: <em>Counting Processes and Survival Analysis</em>, Fleming and Harrington</p></li>
-</ul>
-</section>
-<section id="course-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
-<p>To highlight the unique challenges posed by the analysis of failure/survival data. To allow you to analyze survival data using parametric and nonparametric techniques in the face of these challenges. To apply these techniques to real data using R code and R packages for survival analysis. To understand the theory and methodology through math, practice and code.</p>
-<p><strong>Course content</strong></p>
-<p>Concepts to be discussed include: hazard function (failure rate function); nonparametric likeli- hood; counting processes; empirical distribution function; censoring and truncation; Kaplan-Meier estimator; Bias of the KM estimator; Cox proportional hazards model; Accelerated Failure Time Model; Partial Likelihood; log-rank test; martingales. R will be the programming language used in the course.</p>
-</section>
-<section id="course-syllabus" class="level3">
-<h3 class="anchored" data-anchor-id="course-syllabus">Course syllabus</h3>
-<ul>
-<li><a href="pdfs/survival-class/survival_analysis_syllabus_W26.pdf">Syllabus</a></li>
-</ul>
-</section>
-<section id="project-proposal" class="level3">
-<h3 class="anchored" data-anchor-id="project-proposal">Project proposal</h3>
-<ul>
-<li><a href="pdfs/survival-class/project-proposal.pdf">Project proposal</a></li>
-</ul>
-</section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ul>
-<li><a href="./survival-material/lecture-1.html">Lecture 1</a></li>
-<li><a href="./survival-material/lecture-2.html">Lecture 2</a></li>
-<li><a href="./survival-material/lecture-3.html">Lecture 3</a></li>
-<li><a href="./survival-material/lecture-4.html">Lecture 4</a></li>
-<li><a href="./survival-material/lecture-5.html">Lecture 5</a></li>
-<li><a href="./survival-material/lecture-6.html">Lecture 6</a></li>
-</ul>
-</section>
-<section id="homework" class="level3">
-<h3 class="anchored" data-anchor-id="homework">Homework</h3>
-<ul>
-<li><p><a href="./survival-material/weibull-mappings.html">Maps between Weibull parameterizations</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-1.pdf">HW 1</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-2.pdf">HW 2</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-3.pdf">HW 3</a> <!-- -   [HW 4](pdfs/survival-class/HW-4.pdf) --> <!-- -   [HW 5](pdfs/survival-class/HW-5.pdf) --> <!-- -   [HW 6](pdfs/survival-class/HW-6.pdf) --></p></li>
-</ul>
+<section id="more-on-log-rank-tests" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> More on log-rank tests</h1>
+<p>I motivated the log-rank test by stating that we wanted to compare estimates of the hazard function. Let’s do a quick derivation to show why this is the case: We start with the weighted log-rank test as we have derived it: <span class="math display">\[\begin{align}
+    Z_j(\tau) &amp; = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} W(t_i) \left(d_{ij} - d_i\frac{\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\right)
+\end{align}\]</span> We can express this in terms of hazard estimators <span class="math inline">\(\hat{\lambda}_j(t_i) = \frac{d_{ij}}{\widebar{Y}_j(t_i)}\)</span>: Let’s let <span class="math inline">\(j \in \{1,2\}\)</span>. Then <span class="math display">\[\begin{align*}
+    \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} W(t_i) \left(d_{ij} - d_i\frac{\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\right)&amp; = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} W(t_i) \left(\frac{d_{ij}\widebar{Y}(t_i)-d_i\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\right)\\
+    &amp; = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} W(t_i) \left(\frac{d_{ij}\widebar{Y}(t_i)-(d_{ij} + d_{ij^\prime})\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\right)\\
+    &amp; = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} W(t_i) \left(\frac{d_{ij}\widebar{Y}_{j^\prime}(t_i)-d_{ij^\prime}\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\right)\\
+    &amp; = \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} W(t_i) \frac{\widebar{Y}_{j^\prime}(t_i)\widebar{Y}_{j}(t_i)}{\widebar{Y}(t_i)}\left(\frac{d_{ij}}{\widebar{Y}_j(t_i)}-\frac{d_{ij^\prime}}{\widebar{Y}_{j^\prime}(t_i)}\right)
+\end{align*}\]</span> Thus we can see that <span class="math inline">\(Z_1(\tau) = -Z_2(\tau)\)</span>. Let’s rewrite this in terms of integrals over the positive reals <span class="math display">\[\begin{align*}
+    \sum_{i=1 \mid t_i \leq \tau}^{n_1 + n_2} W(t_i) \frac{\widebar{Y}_{j^\prime}(t_i)\widebar{Y}_{j}(t_i)}{\widebar{Y}(t_i)}\left(\frac{d_{ij}}{\widebar{Y}_j(t_i)}-\frac{d_{ij^\prime}}{\widebar{Y}_{j^\prime}(t_i)}\right)&amp; = \int_0^\infty W(u) \frac{\widebar{Y}_{j^\prime}(u)\widebar{Y}_{j}(u)}{\widebar{Y}(u)} \left(d\hat{\Lambda}_1(u) - d\hat{\Lambda}_2(u)\right)\\
+    &amp; = \int_0^\infty W(u) \frac{\widebar{Y}_{j^\prime}(u)\widebar{Y}_{j}(u)}{\widebar{Y}(u)}  d\left(\hat{\Lambda}_1(u) - \hat{\Lambda}_2(u) \right)
+\end{align*}\]</span> A more general Lebesgue-Stieltjies theory will show that the integral above is well-defined. More on this later...</p>
+<p>Let’s say we’re going to test multiple groups for equality of hazard rates. Then we will write the log-rank statistic like so, with <span class="math inline">\(n = \sum_{j=1}^J n_j\)</span>: <span class="math display">\[\begin{align}
+    Z_j(\tau) &amp; = \sum_{i=1 \mid t_i \leq \tau}^{n} W(t_i) \left(d_{ij} - d_i\frac{\widebar{Y}_j(t_i)}{\widebar{Y}(t_i)}\right)
+\end{align}\]</span> The variance of <span class="math inline">\(Z_j(\tau)\)</span> is as was derived. We can show, and I mentioned, that <span class="math inline">\(d_{i1}, \dots, d_{iJ} \mid d_i, \widebar{Y}_1(t_i), \dots, \widebar{Y}_J(t_i)\)</span> is multivariate hypergeometric distributed. That means we can derive the variance and the covariance for these random variables. I’ll spare the details here. Given the result that in the two-group test, <span class="math inline">\(Z_1(\tau) = -Z_2(\tau)\)</span>, we might expect the <span class="math inline">\(Z_j(\tau)\)</span> to be linearly dependent. This is indeed the case, which we can see from the fact that the sum of all <span class="math inline">\(Z_j(\tau)\)</span> is zero. Then we might ask how do we construct a test statistic from a degenerate random variable. The answer is that we choose <span class="math inline">\(J-1\)</span> of the statistics, and it doesn’t matter which statistics we choose. Given the covariance matrix <span class="math inline">\(\Sigma\)</span>, we can construct a quadratic form: <span class="math display">\[\begin{align}
+    \chi^2 &amp; = (Z_1(\tau), Z_2(\tau), \dots, Z_{J-1}(\tau)) \Sigma^{-1} (Z_1(\tau), Z_2(\tau), \dots, Z_{J-1}(\tau))^T
+\end{align}\]</span> which, under <span class="math inline">\(H_0\)</span>, is asymptotically distributed <span class="math inline">\(\chi^2\)</span> with <span class="math inline">\(J-1\)</span> degrees of freedom.</p>
+<p>Let <span class="math inline">\(\mathbf{Z}(\tau) = (Z_1(\tau), Z_2(\tau), \dots, Z_{J}(\tau))^T\)</span> and let <span class="math inline">\(\Sigma = \text{Cov}(\mathbf{Z}(\tau))\)</span>. To show why it doesn’t matter which groups we choose, imagine we have two matrices <span class="math inline">\(A\in\R^{J-1 \times J}\)</span> and <span class="math inline">\(B\in\R^{J-1 \times J}\)</span> which, when left multiplying the vector<span class="math inline">\(\mathbf{Z}(\tau)\)</span> select subsets of the <span class="math inline">\(J-1\)</span> groups. An example of <span class="math inline">\(A\)</span> for <span class="math inline">\(J = 3\)</span> might be: <span class="math display">\[\begin{align}
+    \begin{bmatrix}
+        1 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0
+    \end{bmatrix}
+\end{align}\]</span> Let both <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> be rank <span class="math inline">\(J - 1\)</span>. We define <span class="math inline">\(\chi^2_A\)</span> to be <span class="math display">\[\begin{align}
+    \chi^2_A &amp; = (A \mathbf{Z}(\tau))^T (A \Sigma A^T)^{-1} A\mathbf{Z}(\tau) \\
+    \chi^2_B &amp; = (B \mathbf{Z}(\tau))^T (B \Sigma B^T)^{-1} B\mathbf{Z}(\tau)
+\end{align}\]</span> As <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are full-row-rank there exists an invertible matrix <span class="math inline">\(C\)</span> such that <span class="math inline">\(B = C A\)</span>. Then <span class="math display">\[\begin{align}
+    \chi^2_B &amp; = (C A \mathbf{Z}(\tau))^T (C A \Sigma A^T C^T)^{-1} C A \mathbf{Z}(\tau) \\
+    &amp; = \mathbf{Z}(\tau))^T A^T C^T (C^T)^{-1}(A \Sigma A^T)^{-1} C^{-1} C A \mathbf{Z}(\tau)  \\
+    &amp; = \mathbf{Z}(\tau))^T A^T (A \Sigma A^T)^{-1} A \mathbf{Z}(\tau)   \\
+    &amp; = (A \mathbf{Z}(\tau))^T (A \Sigma A^T)^{-1} A \mathbf{Z}(\tau)    \\
+    &amp; = \chi^2_A
+\end{align}\]</span></p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

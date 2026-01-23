@@ -371,7 +371,7 @@ h(c + u) &amp; = g(f(c + u)) \\
 \]</span> leading to the MLE for <span class="math inline">\(\mu\)</span>: <span class="math display">\[
 \hat{\mu} = \frac{1}{n}\sum_i y_i
 \]</span></p>
-<p>It’ll be useful to write the log-likelihood a bit differently to find the MLE for $. Remember that <span class="math inline">\(\det A^{-1} = (\det A)^{-1}\)</span>. This will enable us to write everything in terms of <span class="math inline">\(\Sigma^{-1}\)</span> instead of <span class="math inline">\(\Sigma\)</span>: <span class="math display">\[
+<p>It’ll be useful to write the log-likelihood a bit differently to find the MLE for <span class="math inline">\(\Sigma\)</span>. Remember that <span class="math inline">\(\det A^{-1} = (\det A)^{-1}\)</span>. This will enable us to write everything in terms of <span class="math inline">\(\Sigma^{-1}\)</span> instead of <span class="math inline">\(\Sigma\)</span>: <span class="math display">\[
 \ell_{Y}(\mu, \Sigma \mid y_i) = \frac{1}{2} \log (\det\Sigma^{-1}) - \frac{1}{2}(y_i - \mu)^T \Sigma^{-1}(y_i - \mu)
 \]</span> Also remember that <span class="math inline">\(\text{tr}(A) = \sum_{i} A_{ii}\)</span>, <span class="math inline">\(\text{tr}(A + B) = \text{tr}(A) + \text{tr}(B)\)</span>, and that <span class="math inline">\(f(x) = \text{tr}(f(x))\)</span> for a univariate function <span class="math inline">\(f(x)\)</span>. Finally, recall that <span class="math inline">\(\text{tr}(ABC) = \text{tr}(CAB) = \text{tr}(BCA)\)</span>. This will let us rewrite the</p>
 <p>Putting all this together allows us to write the log-likelihood for the multivariate normal as such: <span class="math display">\[
