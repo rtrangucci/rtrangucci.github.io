@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 625 - W 26</title>
+<title>Lecture 7</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,47 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +88,65 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +162,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -117,15 +193,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
-  <ul class="collapse">
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
-  <li><a href="#course-syllabus" id="toc-course-syllabus" class="nav-link" data-scroll-target="#course-syllabus">Course syllabus</a></li>
-  <li><a href="#project-proposal" id="toc-project-proposal" class="nav-link" data-scroll-target="#project-proposal">Project proposal</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
-  </ul></li>
+  <li><a href="#parametric-and-nonparametric-regression-models" id="toc-parametric-and-nonparametric-regression-models" class="nav-link active" data-scroll-target="#parametric-and-nonparametric-regression-models"><span class="header-section-number">1</span> Parametric and nonparametric regression models</a></li>
   </ul>
 </nav>
     </div>
@@ -134,7 +202,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 625 - W 26</h1>
+<h1 class="title">Lecture 7</h1>
 </div>
 
 
@@ -151,61 +219,103 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level2">
-<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
-<section id="textbook" class="level3">
-<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
-<ul>
-<li><p>Required: <em>Modelling Survival Data in Medical Research, 4th Edition,</em> Collett</p></li>
-<li><p>Optional: <em>Survival and Event History Analysis</em>, Aalen, Borgan, and Gjessing</p></li>
-<li><p>Optional: <em>Counting Processes and Survival Analysis</em>, Fleming and Harrington</p></li>
-</ul>
-</section>
-<section id="course-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
-<p>To highlight the unique challenges posed by the analysis of failure/survival data. To allow you to analyze survival data using parametric and nonparametric techniques in the face of these challenges. To apply these techniques to real data using R code and R packages for survival analysis. To understand the theory and methodology through math, practice and code.</p>
-<p><strong>Course content</strong></p>
-<p>Concepts to be discussed include: hazard function (failure rate function); nonparametric likeli- hood; counting processes; empirical distribution function; censoring and truncation; Kaplan-Meier estimator; Bias of the KM estimator; Cox proportional hazards model; Accelerated Failure Time Model; Partial Likelihood; log-rank test; martingales. R will be the programming language used in the course.</p>
-</section>
-<section id="course-syllabus" class="level3">
-<h3 class="anchored" data-anchor-id="course-syllabus">Course syllabus</h3>
-<ul>
-<li><a href="pdfs/survival-class/survival_analysis_syllabus_W26.pdf">Syllabus</a></li>
-</ul>
-</section>
-<section id="project-proposal" class="level3">
-<h3 class="anchored" data-anchor-id="project-proposal">Project proposal</h3>
-<ul>
-<li><a href="pdfs/survival-class/project-proposal.pdf">Project proposal</a></li>
-</ul>
-</section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ul>
-<li><a href="./survival-material/lecture-1.html">Lecture 1</a></li>
-<li><a href="./survival-material/lecture-2.html">Lecture 2</a></li>
-<li><a href="./survival-material/lecture-3.html">Lecture 3</a></li>
-<li><a href="./survival-material/lecture-4.html">Lecture 4</a></li>
-<li><a href="./survival-material/lecture-5.html">Lecture 5</a></li>
-<li><a href="./survival-material/lecture-6.html">Lecture 6</a></li>
-<li><a href="./survival-material/lecture-7.html">Lecture 7</a></li>
-<li><a href="./survival-material/lecture-8.html">Lecture 8</a></li>
-</ul>
-</section>
-<section id="homework" class="level3">
-<h3 class="anchored" data-anchor-id="homework">Homework</h3>
-<ul>
-<li><p><a href="./survival-material/weibull-mappings.html">Maps between Weibull parameterizations</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-1.pdf">HW 1</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-2.pdf">HW 2</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-3.pdf">HW 3</a> <!-- -   [HW 4](pdfs/survival-class/HW-4.pdf) --> <!-- -   [HW 5](pdfs/survival-class/HW-5.pdf) --> <!-- -   [HW 6](pdfs/survival-class/HW-6.pdf) --></p></li>
-</ul>
+<section id="parametric-and-nonparametric-regression-models" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Parametric and nonparametric regression models</h1>
+<p>This chapter combines content from <span class="citation" data-cites="aalen2008survival">(<a href="#ref-aalen2008survival" role="doc-biblioref">Aalen, Borgan, and Gjessing 2008</a>)</span>, <span class="citation" data-cites="klein2003survival">(<a href="#ref-klein2003survival" role="doc-biblioref">Klein, Moeschberger, et al. 2003</a>)</span>, <span class="citation" data-cites="harrell2001regression">(<a href="#ref-harrell2001regression" role="doc-biblioref">Harrell et al. 2001</a>)</span>, <span class="citation" data-cites="collett1994modelling">(<a href="#ref-collett1994modelling" role="doc-biblioref">Collett 1994</a>)</span>, and <span class="citation" data-cites="keener_theoretical_2010">(<a href="#ref-keener_theoretical_2010" role="doc-biblioref">Keener 2010</a>)</span>.</p>
+<p>Thus far we have dealt exclusively with simple univariate estimation. More often than not, we will also have covariates associated with our failure time observations. Let the observed failure data, be, as usual <span class="math inline">\(X_i\)</span> is time to failure, <span class="math inline">\(C_i\)</span> is time to censoring, <span class="math inline">\(T_i = \min(X_i, C_i)\)</span>, is the observed event time, and <span class="math inline">\(\delta = \mathbbm{1}\left(X_i \leq C_i\right)\)</span> is the censoring indicator. Suppose we also have covariates for each individual <span class="math inline">\(i\)</span> <span class="math inline">\(\mathbf{z}_i \in \R^k\)</span>. These could be age, sex at birth, comorbidities. Over a short enough timespan, these covariates can be considered fixed over time. Other covariates, like blood pressure, or time since last colonoscopy, would be time varying covariates, which we’ll denote as <span class="math inline">\(\mathbf{z}(x)_i\)</span>.</p>
+<p>Much of our study has been on the hazard function <span class="math inline">\(\lambda(t)\)</span>. We’ll consider this parameterized by a vector of parameters <span class="math inline">\(\boldsymbol{\theta}\)</span>, so we’ll write <span class="math inline">\(\lambda(t \mid \boldsymbol{\theta})\)</span> for the hazard function. In order to incorporate covariates into the hazard rate, we’ll work with relative risk regression, or <span class="math display">\[\lambda_i(t) = \lambda_0(t \mid \boldsymbol{\theta}) r(\boldsymbol{\beta}, \mathbf{z}_i)\]</span> where <span class="math inline">\(r\)</span> is a function <span class="math inline">\(\R \to \R^+\)</span>. Note that this assumes that all individuals share a common baseline hazard, <span class="math inline">\(\lambda_0(t \mid \boldsymbol{\theta})\)</span>, and have time-invariant, individual relative risk contributions <span class="math inline">\(r(\boldsymbol{\beta},\boldsymbol{z}_i)\)</span>. A common choice is that <span class="math inline">\(r(\boldsymbol{\beta},\boldsymbol{z}_i) \equiv \exp(\boldsymbol{z}_i^T \boldsymbol{\beta})\)</span>.</p>
+<p>The function is called the relative risk function because when we compare the hazard rates for two individuals <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>, the common baseline hazard drops out of the comparison: <span class="math display">\[\frac{\lambda_i(t)}{\lambda_j(t)} = \exp(\boldsymbol{z}_i)^T \boldsymbol{\beta}) / \exp(\boldsymbol{z}_j^T \boldsymbol{\beta}).\]</span> Of course, the above holds with general <span class="math inline">\(r(\boldsymbol{\beta},\boldsymbol{z}_i)\)</span>. Let’s see what this implies for the survival function for <span class="math inline">\(i\)</span> vs.&nbsp;<span class="math inline">\(j\)</span>: <span class="math display">\[\begin{align*}
+    S_i(t) &amp; = \exp\left(-\int_0^t  e^{\mathbf{z}_i^T \boldsymbol{\beta}} \lambda_0(u \mid \boldsymbol{\theta}) du\right)\\
+    &amp; = \exp\left(-\int_0^t \lambda_0(u \mid \boldsymbol{\theta}) du \right)^{e^{\mathbf{z}_i^T \boldsymbol{\beta}}} \\
+    &amp; = \left(\exp\left(-\int_0^t \lambda_0(u \mid \boldsymbol{\theta}) du\right)^{e^{\mathbf{z}_j^T \boldsymbol{\beta}}}\right)^{\frac{e^{\mathbf{z}_i^T \boldsymbol{\beta}}}{e^{\mathbf{z}_j^T \boldsymbol{\beta}}}}  \\
+    &amp; = \left(\exp\left(-\int_0^t \lambda_0(u \mid \boldsymbol{\theta}) du\right)^{e^{\mathbf{z}_j^T \boldsymbol{\beta}}}\right)^{e^{(\mathbf{z}_i^T - \mathbf{z}_j^T) \boldsymbol{\beta}}}  \\
+    &amp; = S_j(t)^{e^{(\mathbf{z}_i^T - \mathbf{z}_j^T) \boldsymbol{\beta}}}
+\end{align*}\]</span> What this means is that the survival curves never cross. To see why, note that <span class="math inline">\(S_i(0) = S_j(0) = 1\)</span>, and WLOG, suppose <span class="math inline">\((\mathbf{z}_i^T - \mathbf{z}_j^T) \boldsymbol{\beta} \leq 0\)</span>. Then <span class="math inline">\(S_i(t) \geq S_j(t)\)</span> for all <span class="math inline">\(t\)</span>. See (<a href="#fig-prop-hazard" class="quarto-xref">Figure&nbsp;1</a>) for a demonstration of proportional hazards.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-prop-hazard" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-prop-hazard-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-7_files/figure-html/fig-prop-hazard-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-prop-hazard-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Example of survival functions with proportional
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>See (<a href="#fig-prop-hazard" class="quarto-xref">Figure&nbsp;1</a>) for a demonstration of proportional hazards and (<a href="#fig-non-prop" class="quarto-xref">Figure&nbsp;2</a>) for a demonstration of survival functions which do not exhibit proportional hazards.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-non-prop" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-non-prop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="lecture-7_files/figure-html/fig-non-prop-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-non-prop-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Example of survival functions that do not adhere to proportional hazards
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Proportional hazards (or relative risk) models assume that the survival functions never cross, which is a strong assumption.</p>
+<p>Let’s do a simple example.</p>
+<div id="exmp:simple-exp-reg" class="exmp">
+<p><strong>Example 1.1</strong>. Simple exponential regressionThe following example is adapted from <span class="citation" data-cites="collett1994modelling">(<a href="#ref-collett1994modelling" role="doc-biblioref">Collett 1994</a>)</span>. Suppose we have individuals grouped into two groups, groups 1 and 2, and let <span class="math inline">\(\mathbf{z}_i\)</span> equal <span class="math inline">\(1\)</span> for those in group 2 and <span class="math inline">\(0\)</span> for those in group 1. Suppose further we have noninformative censoring, parameter separability, and exponentially distributed survival times with common baseline hazard of <span class="math inline">\(\lambda\)</span>, so we have observed the following dataset: <span class="math display">\[\{(t_i, \delta_i, z_i), i = 1, \dots, n\}\]</span> Then the hazard rate for group <span class="math inline">\(1\)</span> is <span class="math inline">\(\lambda\)</span>, while the hazard in group <span class="math inline">\(2\)</span> is <span class="math inline">\(\lambda e^\beta\)</span>. Let <span class="math inline">\(n_1 = \sum_i (1 - z_i)\)</span> and <span class="math inline">\(n_2 = \sum_i z_i\)</span>. Then the likelihood contribution for the individuals for whom <span class="math inline">\(z_i = 0\)</span> is <span class="math display">\[\prod_{i \mid z_i = 0} \lambda^{\delta_i} e^{-\lambda t_i}\]</span> and the likelihood contribution for individuals in group 2 is <span class="math display">\[\prod_{i \mid z_i = 1} (\lambda e^\beta)^{\delta_i} e^{-\lambda e^{\beta} t_i}\]</span> We can simplify this. Let <span class="math inline">\(r_1 = \sum_i (1 - z_i) \delta_i\)</span>, and let <span class="math inline">\(r_2 = \sum_i z_i \delta_i\)</span>. Let <span class="math inline">\(T_1 = \sum_i (1 - z_i) t_i\)</span>, and <span class="math inline">\(T_2 = \sum_i z_i t_i\)</span>. Then the joint likelihood may be written: <span class="math display">\[\lambda^{r_1} e^{-\lambda T_1} (\lambda e^{\beta})^{r_2} e^{-\lambda e^\beta T_2} = \lambda^{r_1 + r_2} e^{-\lambda T_1} e^{r_2 \beta} e^{-\lambda e^\beta T_2}.\]</span> Let <span class="math inline">\(\ell(\lambda, \beta)\)</span> be the log-likelihood function. Then the score equations are <span class="math display">\[\begin{align*}
+\frac{\partial}{\partial \lambda} \ell(\lambda, \beta) &amp;: \frac{r_1 + r_2}{\lambda} - T_1 - e^\beta T_2 \\
+\frac{\partial}{\partial \beta} \ell(\lambda, \beta) &amp;: r_2 - \lambda e^\beta T_2
+\end{align*}\]</span> solving these for the unknowns is <span class="math display">\[\begin{align*}
+\frac{r_1 + r_2}{T_1 + e^\beta T_2} = \lambda \\
+\frac{r_2}{\lambda T_2} = e^\beta
+\end{align*}\]</span> which simplifies to <span class="math display">\[\begin{align*}
+\hat{\lambda} &amp; = \frac{r_1}{T_1} \\
+\hat{e^\beta} &amp; = \frac{T_1/r_1}{T_2/r_2} \\
+&amp; = \frac{r_2}{T_2}\frac{T_1}{r_1}
+\end{align*}\]</span> These estimates make sense: The first is the reciprocal of the average survival time for those in Group 1, and the second is the ratio of the average survival times in each group.</p>
+<p>We can show using <a href="#exmp:mle-exp" data-reference-type="ref+Label" data-reference="exmp:mle-exp">[exmp:mle-exp]</a> that both of these estimators converge a.s. to the true values. <span class="math inline">\(\frac{r_2}{T_2} \overset{\text{a.s.}}{\to} \lambda e^{\beta}\)</span>, <span class="math inline">\(\frac{T_1}{r_1} \overset{\text{a.s.}}{\to} \frac{1}{\lambda}\)</span></p>
+<p>Let’s find the asymptotic variance of the estimand <span class="math inline">\(\beta\)</span></p>
+<p><span class="math display">\[\begin{align}
+\frac{\partial}{\partial \lambda}\left(\frac{\partial}{\partial \lambda}\ell(\lambda, \psi)\right)&amp; = -\frac{r_1 + r_2}{\lambda^2} \\
+\frac{\partial}{\partial \beta}\left(\frac{\partial}{\partial \lambda}\ell(\lambda, \psi)\right)&amp; = -e^\beta T_2 \\
+\frac{\partial}{\partial \beta}\left(\frac{\partial}{\partial \beta}\ell(\lambda, \psi)\right)&amp; = -\lambda e^\beta T_2
+\end{align}\]</span> Then the observed information matrix is <span class="math display">\[\begin{align}
+    \begin{bmatrix}
+        \frac{r_1 + r_2}{\lambda^2} &amp; e^\beta T_2 \\
+        e^\beta T_2 &amp; \lambda e^\beta T_2
+    \end{bmatrix}
+\end{align}\]</span> which has the inverse: <span class="math display">\[\begin{align}
+    \frac{1}{\frac{(r_1 + r_2)e^\beta T_2}{\lambda} - e^{2 \beta} T_2^2}\begin{bmatrix}
+      \lambda e^\beta T_2  &amp; -e^\beta T_2 \\
+        -e^\beta T_2 &amp; \frac{r_1 + r_2}{\lambda^2}
+    \end{bmatrix}
+\end{align}\]</span> So the plug-in standard error for <span class="math inline">\(\beta\)</span> is <span class="math display">\[\sqrt{\frac{\frac{r_1 + r_2}{\lambda^2}}{\frac{(r_1 + r_2)e^\beta T_2}{\lambda} - e^{2 \beta} T_2^2}}\]</span> Plugging in the MLEs gives <span class="math display">\[\sqrt{\frac{\frac{r_1 + r_2}{(r_1 / T_1)^2}}{\frac{(r_1 + r_2)\frac{T_1r_2}{r_1}}{r_1 / T_1} - (\frac{T_1r_2}{r_1})^2 }} = \sqrt{\frac{r_1 + r_2}{r_1 r_2}}\]</span> We can use this expression to generate an asymptotic confidence interval for <span class="math inline">\(\beta\)</span>: <span class="math display">\[\begin{align*}
+    P(\beta \in C^\beta) = P\left(\beta \in \left(e^{\hat{\beta}} - z_{1-\alpha/2} \sqrt{\frac{r_1 + r_2}{r_1 r_2}}, e^{\hat{\beta}} + z_{1-\alpha/2} \sqrt{\frac{r_1 + r_2}{r_1 r_2}}\right)\right)
+\end{align*}\]</span></p>
+</div>
 
 
-</section>
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-aalen2008survival" class="csl-entry" role="listitem">
+Aalen, Odd, Ornulf Borgan, and Hakon Gjessing. 2008. <em>Survival and Event History Analysis: A Process Point of View</em>. Springer Science &amp; Business Media.
+</div>
+<div id="ref-collett1994modelling" class="csl-entry" role="listitem">
+Collett, David. 1994. <em>Modelling Survival Data in Medical Research</em>. Chapman &amp; Hall.
+</div>
+<div id="ref-harrell2001regression" class="csl-entry" role="listitem">
+Harrell, Frank E et al. 2001. <em>Regression Modeling Strategies: With Applications to Linear Models, Logistic Regression, and Survival Analysis</em>. Vol. 608. Springer.
+</div>
+<div id="ref-keener_theoretical_2010" class="csl-entry" role="listitem">
+Keener, Robert W. 2010. <em>Theoretical <span>Statistics</span></em>. Springer <span>Texts</span> in <span>Statistics</span>. New York, NY: Springer New York. <a href="https://doi.org/10.1007/978-0-387-93839-4">https://doi.org/10.1007/978-0-387-93839-4</a>.
+</div>
+<div id="ref-klein2003survival" class="csl-entry" role="listitem">
+Klein, John P, Melvin L Moeschberger, et al. 2003. <em>Survival Analysis: Techniques for Censored and Truncated Data</em>. Vol. 1230. Springer.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
