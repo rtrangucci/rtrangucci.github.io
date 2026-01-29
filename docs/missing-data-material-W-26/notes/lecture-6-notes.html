@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -251,8 +271,14 @@ P(z_{\alpha/2} &lt; \sqrt{n}(\bar{y} - \mu)/\sigma &lt; z_{1-\alpha/2}) &amp; = 
 P(\bar{y} - \frac{\sigma}{\sqrt{n}} z_{1-\alpha/2} &lt; \mu  &lt; \bar{y} + \frac{\sigma}{\sqrt{n}}z_{1-\alpha/2})
 \]</span> Then the interval <span class="math inline">\((\bar{y} - \frac{\sigma}{\sqrt{n}} z_{1-\alpha/2},  \bar{y} + \frac{\sigma}{\sqrt{n}}z_{1-\alpha/2})\)</span> will contain <span class="math inline">\(\mu\)</span> in <span class="math inline">\(0.95\)</span> of datasets generated under the assumed <span class="math inline">\(N(\mu, \sigma^2)\)</span>.</p>
 <p>For all but the simplest models, the sampling distribution is intractable, but we can approximate the distribution using asymptotics.</p>
-We’ll need the multivariate central limit theorem, which we’ll just take as a given:
-<p>We can use this idea to get a pivotal quantity that involves the MLE for <span class="math inline">\(\theta\)</span> and the asymptotic variance covariance matrix of the MLE. We’ll start with some key assumptions:</p>
+<p>We’ll need the multivariate central limit theorem, which we’ll just take as a given:</p>
+<p>We can use this idea to get a pivotal quantity that involves the MLE for <span class="math inline">\(\theta\)</span> and the asymptotic variance covariance matrix of the MLE.</p>
+<p>Let the log-likelihood be denoted <span class="math inline">\(\ell(\theta)\)</span>, in which we suppress the dependence of the likelihood on the data. If we need to indicate the dependence on data, we’ll write it as <span class="math inline">\(\ell(\theta; y)\)</span>. Finally, denote the gradient of the log-likelihood with respect to <span class="math inline">\(\theta\)</span> evaluated at <span class="math inline">\(\theta^\prime\)</span> as: <span class="math display">\[
+\ell_{\theta}(\theta^\prime; y) \equiv \nabla_\theta \log f_\theta(y)\mid_{\theta = \theta^\prime}
+\]</span> and the Hessian of the log-likelihood (i.e.&nbsp;the matrix of second derivatives of the log-likelihood) be: <span class="math display">\[
+\ell_{\theta\theta}(\theta^\prime; y) \equiv \nabla^2_\theta \log f_\theta(y)\mid_{\theta = \theta^\prime}
+\]</span> Given that <span class="math inline">\(\theta \in \R^p\)</span>, we’ll denote an element of the vector <span class="math inline">\(\ell_\theta(\theta^\prime)\)</span> as <span class="math inline">\((\ell_\theta(\theta^\prime))_j\)</span> and a row of <span class="math inline">\(\ell_{\theta\theta}(\theta^\prime; y)\)</span> as <span class="math inline">\((\ell_{\theta\theta}(\theta^\prime; y))_j\)</span>.</p>
+<p>We’ll start with some key assumptions:</p>
 <ol type="1">
 <li>The MLE is consistent for <span class="math inline">\(\theta\)</span>, which means that as we collect more samples the MLE with converge in probability to <span class="math inline">\(\theta\)</span>.</li>
 </ol>
@@ -263,47 +289,76 @@ We’ll need the multivariate central limit theorem, which we’ll just take as 
 </ol>
 <p>In our earlier presentation of how things can go wrong with MLE, having support that depends on the value of the parameter can make things go awry, so we’ll assume that we’re not in that scenario (like the <span class="math inline">\(y_i \sim \text{Uniform}(0, \theta)\)</span>).</p>
 <ol start="4" type="1">
-<li>The true parameter <span class="math inline">\(\theta\)</span> is in the interior of the parameter space. This ensures that the gradient of the likelihood value at the maximizer <span class="math inline">\(\hat{\theta}\)</span> will be zero.</li>
+<li><p>The true parameter <span class="math inline">\(\theta\)</span> is in the interior of the parameter space. This ensures that the gradient of the likelihood value at the maximizer <span class="math inline">\(\hat{\theta}\)</span> will be zero.</p></li>
+<li><p>Local boundedness of second derivatives for all <span class="math inline">\(j\)</span>: <span class="math display">\[
+\sup_{\norm{\theta^\prime - \theta^\dagger} \leq r} \norm{(\ell_{\theta\theta}(\theta^\prime; x))_j - (\ell_{\theta\theta}(\theta^\dagger; x))_j} \leq H_r(x, \theta^\dagger),\, \lim_{r\to 0}\Exp{H_r(X, \theta^\dagger)} = 0
+\]</span></p></li>
 </ol>
-<p>There are some more conditions on the gradient and hessian of the log-likelihood, but we’ll assume that those are satisfied.</p>
+<p>The following proof is cobbled together from <span class="citation" data-cites="schervish2012theory">Schervish (<a href="#ref-schervish2012theory" role="doc-biblioref">2012</a>)</span> and <span class="citation" data-cites="lehmann1998theory">Lehmann and Casella (<a href="#ref-lehmann1998theory" role="doc-biblioref">1998</a>)</span>.</p>
 <p>The gradient of the log-likelihood evaluated at the MLE <span class="math inline">\(\hat{\theta}\)</span> can be expanded around the true parameter value <span class="math inline">\(\theta^\dagger\)</span>: <span class="math display">\[
-(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \hat{\theta}} = \nabla_{\theta} \ell_Y(\theta \mid y)\mid_{\theta = \theta^{\dagger}} + \nabla^2_{\theta} \ell_Y(\theta \mid y)\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}(\hat{\theta} + \theta)
-\]</span> where <span class="math inline">\(\tilde{\theta}_j\)</span> lies on the cord between <span class="math inline">\(\hat{\theta}\)</span> and <span class="math inline">\(\theta^\dagger\)</span> and may differ by the index <span class="math inline">\(j\)</span> of the vector <span class="math inline">\(\nabla_\theta \ell_Y(\theta \mid y) \mid_{\theta = \hat{\theta}}\)</span>.</p>
-<p>To be precise, we have used the mean-value theorem on each coordinate <span class="math inline">\(j\)</span> of the gradient of the log-likelihood with respect to <span class="math inline">\(\theta\)</span> evaluated at <span class="math inline">\(\hat{\theta}\)</span>: <span class="math inline">\(\nabla_\theta \ell_Y(\theta \mid y) \mid_{\theta = \hat{\theta}}\)</span>: <span class="math display">\[
-\frac{\partial \ell_Y(\theta \mid y)}{\partial \theta_j}\Bigg\vert_{\theta=\hat{\theta}} = \frac{\partial \ell_Y(\theta \mid y)}{\partial \theta_j}\Bigg\vert_{\theta=\theta^\dagger} + \nabla_\theta \frac{\partial \ell_Y(\theta \mid y)}{\partial \theta_j}\Bigg\vert_{\theta = \tilde{\theta}_j}(\hat{\theta} - \theta)
-\]</span> and then constructed the matrix <span class="math inline">\(\nabla^2_{\theta} \ell_Y(\theta \mid y)\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}\)</span> so that row <span class="math inline">\(j\)</span> of this matrix is the vector <span class="math inline">\(\nabla_\theta \frac{\partial \ell_Y(\theta \mid y)}{\partial \theta_j}\Bigg\vert_{\theta = \tilde{\theta}_j}\)</span>.</p>
-<p>Multiply both sides by <span class="math inline">\(n^{-1/2}\)</span>:</p>
+(\ell_\theta(\hat{\theta}))_j = (\ell_\theta(\theta^\dagger))_j + (\ell_{\theta\theta}(\tilde{\theta}_j))_j(\hat{\theta} + \theta)
+\]</span> where <span class="math inline">\(\tilde{\theta}_j \in \R^p\)</span> and lies on the cord between <span class="math inline">\(\hat{\theta}\)</span> and <span class="math inline">\(\theta^\dagger\)</span> and may differ by the row <span class="math inline">\(j\)</span> of <span class="math inline">\(\ell_\theta(\hat{\theta})\)</span> of which we’re expanding.</p>
+<p>We multiply each side by <span class="math inline">\(\frac{\sqrt{n}}{n}\)</span>:</p>
 <p><span class="math display">\[
-n^{-1/2}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \hat{\theta}} = n^{-1/2}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \theta^{\dagger}} + n^{-1/2}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}(\hat{\theta} + \theta)
-\]</span> Note that <span class="math inline">\(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \hat{\theta}} = 0\)</span>:</p>
-<p><span class="math display">\[
-0 = n^{-1/2}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \theta^{\dagger}} + \frac{\sqrt{n}}{n}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}(\hat{\theta} + \theta)
-\]</span> <span class="math display">\[
-0 = n^{-1/2}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \theta^{\dagger}} + \frac{1}{n}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}\sqrt{n}(\hat{\theta} + \theta)
-\]</span> Solving for <span class="math inline">\(\sqrt{n}(\hat{\theta} - \theta)\)</span>: <span class="math display">\[
-\sqrt{n}(\hat{\theta} + \theta) = \lp-\frac{1}{n}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}\rp^{-1}  \frac{\sqrt{n}}{n}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \theta^{\dagger}}  
-\]</span> Now that we have an expression for <span class="math inline">\(\sqrt{n}(\hat{\theta} - \theta)\)</span>, if we can derive an asymptotic distribution for the right-hand side, we’ll have some hope of generating confidence sets for <span class="math inline">\(\theta\)</span>. Because the data are iid we can write the second term on the left-hand side as: <span class="math display">\[
-\sqrt{n}\frac{1}{n}\sum_{i=1}^n (\nabla_{\theta} \ell_Y(\theta \mid y_i))\mid_{\theta = \theta^{\dagger}}
-\]</span> This is just the average of the gradient of the log-likelihood scaled by <span class="math inline">\(\sqrt{n}\)</span>. It turns out that <span class="math inline">\(\Exp{(\nabla_{\theta} \ell_Y(\theta \mid y_i))\mid_{\theta = \theta^{\dagger}}} = 0\)</span>, under <span class="math inline">\(y_i \sim f_Y(y_i \mid \theta)\)</span>, so <span class="math display">\[
-\sqrt{n}\frac{1}{n}\sum_{i=1}^n (\nabla_{\theta} \ell_Y(\theta \mid y_i))\mid_{\theta = \theta^{\dagger}} \overset{d}{\to} \text{Normal}(0, \Exp{(\nabla_{\theta} \ell_Y(\theta \mid y_i))\mid_{\theta = \theta^{\dagger}}(\nabla_{\theta} \ell_Y(\theta \mid y_i))\mid_{\theta = \theta^{\dagger}}^T})
+\frac{\sqrt{n}}{n}(\ell_\theta(\hat{\theta}))_j = \frac{1}{n}(\ell_\theta(\theta^\dagger))_j + (\ell_{\theta\theta}(\tilde{\theta}_j))_j\sqrt{n}(\hat{\theta} + \theta)
 \]</span></p>
-<p>That expectation is a <span class="math inline">\(d\times d\)</span> matrix called the Fisher information of <span class="math inline">\(f_Y(y_i \mid \theta)\)</span>: <span class="math inline">\(\mathcal{I}(\theta^\dagger)\)</span>. It also turns out that, given conditions on the Hessian of the log-likelihood, <span class="math inline">\(\lp-\frac{1}{n}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = (\tilde{\theta}_1, \dots,\tilde{\theta}_d)}\rp^{-1}\)</span> converges to probability to <span class="math inline">\(\mathcal{I}(\theta^\dagger)^{-1}\)</span>, or the inverse of the Fisher information matrix.</p>
-<p>If we have <span class="math inline">\(X \sim \text{Normal}(0, C)\)</span>, and we left-multiply <span class="math inline">\(X\)</span> by a matrix <span class="math inline">\(A\)</span>, we’ll get: <span class="math inline">\(A X \sim \text{Normal}(0, ACA^T)\)</span>.</p>
-<p>This is because any linear combination of normal random variables is again normal, and the normal distribution is a function of the mean and covariance only. Expectation is linear: <span class="math display">\[
-\Exp{A X} = A \Exp{X} = 0
-\]</span> and covariance is <span class="math inline">\(\Exp{(X - \mu)(X - \mu)^T} = \Exp{(XX^T} = C\)</span>, so <span class="math display">\[
-\Exp{(A X)(A X)^T} = A \Exp{X X^T} A^T = A C A^T
-\]</span> We’ll also need the fact that for <span class="math inline">\(X_n \overset{p}{\to} X\)</span> and <span class="math inline">\(Y_n \overset{d}{\to} Y\)</span> that <span class="math inline">\(X_n Y_n \overset{d}{\to} X Y\)</span>.</p>
-<p>Putting all this together gives: <span class="math display">\[
-\lp-\frac{1}{n}(\nabla^2_{\theta} \ell_Y(\theta \mid y))\mid_{\theta =(\tilde{\theta}_1, \dots,\tilde{\theta}_d)}\rp^{-1} \frac{\sqrt{n}}{n}(\nabla_{\theta} \ell_Y(\theta \mid y))\mid_{\theta = \theta^{\dagger}} \overset{d}{\to} \text{Normal}(0, \mathcal{I}(\theta^\dagger)^{-1}\mathcal{I}(\theta^\dagger)\mathcal{I}(\theta^\dagger)^{-1})
-\]</span> the righthand side of which simplifies to: <span class="math display">\[
-\text{Normal}(0, \mathcal{I}(\theta^\dagger)^{-1})
-\]</span> Finally, putting everything together, we have the <span class="math display">\[\sqrt{n}(\hat{\theta} - \theta) \overset{d}{\to} \text{Normal}(0, \mathcal{I}(\theta^\dagger)^{-1})\]</span> Let’s say we want to get a confidence interval for a single parameter <span class="math inline">\(\theta_{1}\)</span>. Then we can build an asymptotic confidence interval using the pivotal quantity strategy we had above:</p>
+<p>We can show the following given assumption 5: <span class="math display">\[
+\frac{1}{n}(\ell_{\theta\theta}(\tilde{\theta}_j))_j \overset{p}{\to}\Exp{(\ell_{\theta\theta}(\theta^\dagger; Y))_j} \forall j
+\]</span> <span class="math display">\[
+\begin{aligned}
+\frac{1}{n}(\ell_{\theta\theta}(\tilde{\theta}_j))_j &amp; = \frac{1}{n}(\ell_{\theta\theta}(\theta^\dagger))_j + \frac{1}{n}\lp(\ell_{\theta\theta}(\tilde{\theta}_j))_j - (\ell_{\theta\theta}(\theta^\dagger))_j\rp
+\end{aligned}
+\]</span> In order to show that <span class="math inline">\(\Delta_{n,j} = \frac{1}{n}(\ell_{\theta\theta}(\tilde{\theta}_j))_j - (\ell_{\theta\theta}(\theta^\dagger))_j \overset{p}{\to} 0\)</span>, we need to show that <span class="math inline">\(P(\Delta_{n,j} &gt; \epsilon) \overset{n\to\infty}{\to} 0\)</span>.</p>
+<p><span class="math inline">\(\Delta_{n,j} &gt; \epsilon\)</span> when <span class="math inline">\(\hat{\theta}_{n}\)</span> is not in <span class="math inline">\(B_r(\theta^\dagger)\)</span>, or the ball centered at <span class="math inline">\(\theta^\dagger\)</span> of size <span class="math inline">\(r\)</span> or when <span class="math inline">\(\frac{1}{n} \sum_{i=1}^n H_r(x_i,\theta^\dagger) &gt; \epsilon\)</span>. If we pick <span class="math inline">\(r\)</span> small enough, we can ensure <span class="math inline">\(\Exp{H_r(X, \theta^\dagger)} &lt; \epsilon / 2\)</span>.</p>
+<p>Then <span class="math display">\[
+\begin{aligned}
+\Prob{\Delta_{n,j} &gt; \epsilon}{\theta^\dagger} &amp; \leq \Prob{\norm{\theta - \hat{\theta}_n} &gt; r \cup \frac{1}{n}\sum_{i=1}^n H_r(X_i, \theta^\dagger) &gt; \epsilon}{\theta^\dagger} \\
+&amp; \leq \Prob{\norm{\theta - \hat{\theta}_n} &gt; r}{\theta^\dagger} \\
+&amp; + \Prob{\frac{1}{n}\sum_{i=1}^n H_r(X_i, \theta^\dagger) &gt; \epsilon}{\theta^\dagger} \\
+&amp; = \Prob{\norm{\theta - \hat{\theta}_n} &gt; r}{\theta^\dagger} \\
+&amp; + \Prob{\frac{1}{n}\sum_{i=1}^n H_r(X_i, \theta^\dagger) - \Exp{H_r(X_i, \theta^\dagger)} &gt; \epsilon - \Exp{H_r(X_i, \theta^\dagger)}}{\theta^\dagger} \\
+&amp; \leq \Prob{\norm{\theta - \hat{\theta}_n} &gt; r}{\theta^\dagger} \\
+&amp; + \Prob{\abs{\frac{1}{n}\sum_{i=1}^n H_r(X_i, \theta^\dagger) - \Exp{H_r(X_i, \theta^\dagger)}} &gt; \epsilon - \Exp{H_r(X_i, \theta^\dagger)}}{\theta^\dagger} \\
+&amp; \leq \Prob{\norm{\theta - \hat{\theta}_n} &gt; r}{\theta^\dagger} \\
+&amp; + \Prob{\abs{\frac{1}{n}\sum_{i=1}^n H_r(X_i, \theta^\dagger) - \Exp{H_r(X_i, \theta^\dagger)}} &gt; \epsilon / 2}{\theta^\dagger} \\
+\end{aligned}
+\]</span> By the weak law of large numbers, the second term goes to zero, and the first term goes to zero by consistency. This leaves <span class="math inline">\(\frac{1}{n}(\ell_{\theta\theta}(\theta^\dagger))_j\)</span> which <span class="math inline">\(\overset{p}{\to} \Exp{(\ell_{\theta\theta}(\theta^\dagger))_j}\)</span> by the WLLN.</p>
+<p>Collecting our <span class="math inline">\(p\)</span> equations into one set of equations yields: <span id="eq-lin-eqs"><span class="math display">\[
+\sqrt{n}\lp\frac{1}{n} \ell_\theta(\theta^\dagger)\rp = (-\Exp{\ell_{\theta\theta}(\theta^\dagger))} + o_p(1)) \sqrt{n}(\hat{\theta}_n - \theta^\dagger)
+\tag{1}\]</span></span></p>
+<p>Writing out the expressions as explicit sums: <span id="eq-grad-sum"><span class="math display">\[\begin{align*}
+\frac{\sqrt{n}}{n}  \sum_{i=1}^n \ell_\theta(\theta^\dagger; x_i) = (-\Exp{\ell_{\theta\theta}(\theta^\dagger))} + o_p(1)) \sqrt{n}(\hat{\theta}_n - \theta^\dagger)
+\end{align*} \tag{2}\]</span></span></p>
+<p>The left-hand side of <a href="#eq-grad-sum" class="quarto-xref">Equation&nbsp;2</a> will be amenable to a multivariate version of the CLT. We’ll take the following multivariate CLT as given:</p>
+<div class="theorem">
+<p><strong>Theorem 1</strong>. Multivariate CLT, <span class="citation" data-cites="keener_theoretical_2010">(<a href="#ref-keener_theoretical_2010" role="doc-biblioref">Keener 2010</a>)</span> Let <span class="math inline">\(X_1, X_2, \dots\)</span> be i.i.d random vectors in <span class="math inline">\(\R^k\)</span> with a common mean <span class="math inline">\(\Exp{X_i} = \mu\)</span> and common covariance matrix <span class="math inline">\(\Sigma = \Exp{(X_i - \mu)(X_i - \mu)^T}\)</span>. If <span class="math inline">\(\bar{X} = \frac{\sum_{i=1}^n X_i}{n}\)</span>, then <span class="math display">\[\sqrt{n}(\bar{X} - \mu) \overset{d}{\to} \text{Normal}(0, \Sigma)\]</span></p>
+</div>
+<p>Recall that <span class="math display">\[
+\Exp{\ell_\theta(\theta; X_i)} = 0
+\]</span> By the multivariate central limit (MCLT) theorem, <a href="#eq-grad-sum" class="quarto-xref">Equation&nbsp;2</a> converges in distribution to a multivariate normal distribution with mean zero and covariance matrix <span class="math inline">\(\Exp{\ell_\theta(\theta;X_i)\ell_\theta(\theta;X_i)^T}\)</span>.</p>
+<p>We’ll also need a lemma about the solutions to random linear equations:</p>
+<div id="lem-eqs" class="theorem lemma">
+<p><span class="theorem-title"><strong>Lemma 1 (Lemma 5.2 in <span class="citation" data-cites="lehmann1998theory">(<a href="#ref-lehmann1998theory" role="doc-biblioref">Lehmann and Casella 1998</a>)</span>)</strong></span> Suppose there are a set of <span class="math inline">\(p\)</span> equations, <span class="math inline">\(j = 1, \dots, p\)</span>: <span class="math display">\[\sum_{k=1}^p A_{jkn} Y_{kn} = T_{jn}.\]</span> Let <span class="math inline">\(T_{1n}, \dots, T_{pn}\)</span> converge in distribution to <span class="math inline">\(T_1, \dots, T_p\)</span>. Furthermore, suppose that for each <span class="math inline">\(j,k\)</span>, <span class="math inline">\(A_{jkn} \overset{p}{\to} a_{jk}\)</span> such that the matrix <span class="math inline">\(A\)</span> with <span class="math inline">\((j,k)^{\mathrm{th}}\)</span> element <span class="math inline">\(a_{jk}\)</span> is nonsingular. Then if the distribution of <span class="math inline">\(T_1, \dots, T_p\)</span> has a disitribution with repsect to the Lebesgue measure over <span class="math inline">\(\R^p\)</span>, <span class="math inline">\(Y_{1n}, \dots, Y_{pn}\)</span> tend in probability to <span class="math inline">\(A^{-1} T\)</span>.</p>
+<p>Written in matrix form and using the fact that convergence in probability implies convergence in distribution: <span class="math display">\[
+T_n = A_n Y_n  \implies Y_n \overset{d}{\to} A^{-1}T  
+\]</span></p>
+</div>
+<p>We have that the left-hand side of <a href="#eq-lin-eqs" class="quarto-xref">Equation&nbsp;1</a> converges in distribtuion to a multivariate normal distribution, and we have that the matrix on the RHS of <a href="#eq-lin-eqs" class="quarto-xref">Equation&nbsp;1</a> convegens in probability to <span class="math inline">\(-\Exp{\ell_{\theta\theta}(\theta^\dagger))}\)</span>, which by assumption is invertble. Thus by <a href="#lem-eqs" class="quarto-xref">Lemma&nbsp;1</a> <span class="math inline">\(\sqrt{n}(\hat{\theta}_n - \theta^\dagger)\)</span> converges in probability to <span class="math display">\[\begin{align*}
+\sqrt{n}(\hat{\theta}_n - \theta^\dagger) \overset{p}{\to} (-\Exp{\ell_{\theta\theta}(\theta^\dagger; X_i)})^{-1} \Exp{\ell_\theta(\theta;X_i)\ell_\theta(\theta;X_i)^T}^{1/2}\mathcal{Z}
+\end{align*}\]</span> where <span class="math inline">\(\mathcal{Z} \sim \text{Normal}(0, I_p)\)</span>, or <span class="math display">\[\begin{align*}
+&amp;\sqrt{n}(\hat{\theta}_n - \theta^\dagger)  \overset{d}{\to} \mathcal{N}\left(0, (-\Exp{\ell_{\theta\theta}(\theta^\dagger; X_i)})^{-1} \Exp{\ell_\theta(\theta;X_i)\ell_\theta(\theta;X_i)^T}(-\Exp{\ell_{\theta\theta}(\theta^\dagger; X_i)})^{-1}\right)
+\end{align*}\]</span></p>
+<p>Assuming further that <span class="math display">\[
+\Exp{\ell_{\theta\theta}(\theta^\dagger; X_i)} + \Exp{\ell_\theta(\theta;X_i)\ell_\theta(\theta;X_i)^T}=0 \implies (-\Exp{\ell_{\theta\theta}(\theta^\dagger; X_i)})^{-1}\Exp{\ell_\theta(\theta;X_i)\ell_\theta(\theta;X_i)^T} = I_p
+\]</span> Putting this all together shows that <span class="math display">\[\begin{align*}
+     \sqrt{n}(\hat{\theta}_n - \theta^\dagger) \overset{d}{\to} \mathcal{N}(0, \mathcal{I}(\theta^\dagger)^{-1})
+\end{align*}\]</span> where <span class="math inline">\(\mathcal{I}(\theta^\dagger) = -\Exp{\ell_{\theta\theta}(\theta^\dagger; X_i)}\)</span></p>
+<p>Then we can build an asymptotic confidence interval using the pivotal quantity strategy we had above:</p>
 <p><span class="math display">\[
 P(\bar{y} - \frac{\sigma}{\sqrt{n}} z_{1-\alpha/2} &lt; \mu  &lt; \bar{y} + \frac{\sigma}{\sqrt{n}}z_{1-\alpha/2})
 \]</span> But with <span class="math inline">\(\bar{y}\)</span> equaling <span class="math inline">\(\hat{\theta}_1\)</span> and <span class="math inline">\(\sigma = \sqrt{\mathcal{I}(\hat{\theta})^{-1}_{1,1}}\)</span>. It is sometimes hard to calculate the Fisher information because it involves taking expectations of the negative Hessian of the log-likelihood function. If we’d prefer, we can instead use an estimator for <span class="math inline">\(\mathcal{I}(\hat{\theta})\)</span> as</p>
 <p><span class="math display">\[
-\mathcal{I}(\hat{\theta}) = -\frac{1}{n} \sum_i \nabla^2_\theta \ell_Y(\theta \mid y_i)_{\theta = \hat{\theta}}
+\mathcal{I}(\hat{\theta}) = -\frac{1}{n} \sum_i \ell_{\theta\theta}(\hat{\theta}; y_i)
 \]</span> The <span class="math inline">\(\mathcal{I}\)</span> should have a hat over it, but I can’t get the math to compile correctly when I add the <code>\hat</code> over it.</p>
 <p>There are ways to build multivariate confidence intervals, but I won’t go over those right now, though they are covered in the book in Chapter 6.</p>
 </section>
@@ -344,7 +399,7 @@ p(\theta \mid s) \propto \theta^{s + \alpha - 1}(1 - \theta)^{n - s + \beta - 1}
 \]</span> This is the kernel of the beta distribution, so we could have just stopped here and said that <span class="math display">\[
 p(\theta \mid s) \equiv \text{Beta}(\alpha + s, \beta + n - s)
 \]</span> This procedure is aided by conjugate priors, which match the likelihood in a way; the functional form of the prior slots into the way the parameters are expressed in the likelihood to yield a family of posteriors that are in the same family as the prior.</p>
-<p>These probabilities are strictly ``right” under our prior assumption because of the math of Bayes’ theorem. Whether or not these are useful is another question.</p>
+<p>These probabilities are strictly “right” under our prior assumption because of the math of Bayes’ theorem. Whether or not these are useful is another question.</p>
 <p>There are some downsides to using a prior. MLEs have a nice property called invariance, namely that if <span class="math inline">\(\hat{\theta}\)</span> is the MLE then the MLE for a function of <span class="math inline">\(\theta\)</span>, say <span class="math inline">\(g(\theta)\)</span>, is just <span class="math inline">\(g(\hat{\theta})\)</span>. This isn’t true in Bayesian inference generally, because we’re now dealing with distributions rather than points. So usually the posterior for <span class="math inline">\(\theta\)</span> won’t be the same as the posterior for <span class="math inline">\(g(\theta)\)</span>: Let <span class="math inline">\(\eta = g(\theta)\)</span>, and assume for simplicity’s sake that <span class="math inline">\(g\)</span> is one-to-one. Then <span class="math inline">\(\theta = g^{-1}(\eta)\)</span>. If <span class="math inline">\(\theta\)</span> has posterior <span class="math inline">\(p(\theta \mid y)\)</span>, the posterior for <span class="math inline">\(g(\theta)\)</span> is:</p>
 <p><span class="math display">\[
 p(g^{-1}(\eta) \mid y) \det \nabla_{\eta} g^{-1}(\eta)
@@ -355,9 +410,20 @@ p(\eta) = p(g^{-1}(\eta)) \det \nabla_{\eta} g^{-1}(\eta)
 <p>What if instead you’re looking at the proportion of rainy days in Corvallis from November to April? You’d probably use a prior that at the very least avoided <span class="math inline">\(\theta\)</span> near 0.</p>
 
 
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-keener_theoretical_2010" class="csl-entry" role="listitem">
+Keener, Robert W. 2010. <em>Theoretical <span>Statistics</span></em>. Springer <span>Texts</span> in <span>Statistics</span>. New York, NY: Springer New York. <a href="https://doi.org/10.1007/978-0-387-93839-4">https://doi.org/10.1007/978-0-387-93839-4</a>.
+</div>
+<div id="ref-lehmann1998theory" class="csl-entry" role="listitem">
+Lehmann, Erich Leo, and George Casella. 1998. <em>Theory of Point Estimation</em>. Springer.
+</div>
+<div id="ref-schervish2012theory" class="csl-entry" role="listitem">
+Schervish, Mark J. 2012. <em>Theory of Statistics</em>. Springer Science &amp; Business Media.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
