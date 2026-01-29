@@ -290,7 +290,7 @@ P(\bar{y} - \frac{\sigma}{\sqrt{n}} z_{1-\alpha/2} &lt; \mu  &lt; \bar{y} + \fra
 <p>In our earlier presentation of how things can go wrong with MLE, having support that depends on the value of the parameter can make things go awry, so we’ll assume that we’re not in that scenario (like the <span class="math inline">\(y_i \sim \text{Uniform}(0, \theta)\)</span>).</p>
 <ol start="4" type="1">
 <li><p>The true parameter <span class="math inline">\(\theta\)</span> is in the interior of the parameter space. This ensures that the gradient of the likelihood value at the maximizer <span class="math inline">\(\hat{\theta}\)</span> will be zero.</p></li>
-<li><p>Local boundedness of second derivatives for all <span class="math inline">\(j\)</span>: <span class="math display">\[
+<li><p>Local uniform continuity in <span class="math inline">\(\theta\)</span> of second derivatives for all <span class="math inline">\(j\)</span>: <span class="math display">\[
 \sup_{\norm{\theta^\prime - \theta^\dagger} \leq r} \norm{(\ell_{\theta\theta}(\theta^\prime; x))_j - (\ell_{\theta\theta}(\theta^\dagger; x))_j} \leq H_r(x, \theta^\dagger),\, \lim_{r\to 0}\Exp{H_r(X, \theta^\dagger)} = 0
 \]</span></p></li>
 </ol>
