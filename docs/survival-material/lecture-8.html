@@ -108,6 +108,7 @@ window.MathJax = {
         \newcommand{\comp}{^\mathsf{c}}
         \newcommand{\widebar}[1]{\overline{\! #1}}
         \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
       `);
     }
   },
@@ -193,15 +194,19 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#sec:asymptotics" id="toc-sec:asymptotics" class="nav-link active" data-scroll-target="#sec\:asymptotics"><span class="header-section-number">1</span> Asymptotic interlude</a>
+  <li><a href="#example-continued" id="toc-example-continued" class="nav-link active" data-scroll-target="#example-continued"><span class="header-section-number">1</span> Example continued</a>
   <ul class="collapse">
-  <li><a href="#estimators-of-variance-covariance-matrix" id="toc-estimators-of-variance-covariance-matrix" class="nav-link" data-scroll-target="#estimators-of-variance-covariance-matrix"><span class="header-section-number">1.0.1</span> Estimators of variance-covariance matrix</a></li>
-  <li><a href="#asymptotic-confidence-intervals" id="toc-asymptotic-confidence-intervals" class="nav-link" data-scroll-target="#asymptotic-confidence-intervals"><span class="header-section-number">1.1</span> Asymptotic confidence intervals</a></li>
-  <li><a href="#asymptotic-tests" id="toc-asymptotic-tests" class="nav-link" data-scroll-target="#asymptotic-tests"><span class="header-section-number">1.2</span> Asymptotic tests</a>
+  <li><a href="#fisher-information" id="toc-fisher-information" class="nav-link" data-scroll-target="#fisher-information"><span class="header-section-number">1.1</span> Fisher information</a></li>
+  </ul></li>
+  <li><a href="#sec:asymptotics" id="toc-sec:asymptotics" class="nav-link" data-scroll-target="#sec\:asymptotics"><span class="header-section-number">2</span> Asymptotic interlude</a>
   <ul class="collapse">
-  <li><a href="#wald-test" id="toc-wald-test" class="nav-link" data-scroll-target="#wald-test"><span class="header-section-number">1.2.1</span> Wald test</a></li>
-  <li><a href="#raos-score-test" id="toc-raos-score-test" class="nav-link" data-scroll-target="#raos-score-test"><span class="header-section-number">1.2.2</span> Rao’s score test</a></li>
-  <li><a href="#likelihood-ratio-test" id="toc-likelihood-ratio-test" class="nav-link" data-scroll-target="#likelihood-ratio-test"><span class="header-section-number">1.2.3</span> Likelihood ratio test</a></li>
+  <li><a href="#estimators-of-variance-covariance-matrix" id="toc-estimators-of-variance-covariance-matrix" class="nav-link" data-scroll-target="#estimators-of-variance-covariance-matrix"><span class="header-section-number">2.0.1</span> Estimators of variance-covariance matrix</a></li>
+  <li><a href="#asymptotic-confidence-intervals" id="toc-asymptotic-confidence-intervals" class="nav-link" data-scroll-target="#asymptotic-confidence-intervals"><span class="header-section-number">2.1</span> Asymptotic confidence intervals</a></li>
+  <li><a href="#asymptotic-tests" id="toc-asymptotic-tests" class="nav-link" data-scroll-target="#asymptotic-tests"><span class="header-section-number">2.2</span> Asymptotic tests</a>
+  <ul class="collapse">
+  <li><a href="#wald-test" id="toc-wald-test" class="nav-link" data-scroll-target="#wald-test"><span class="header-section-number">2.2.1</span> Wald test</a></li>
+  <li><a href="#raos-score-test" id="toc-raos-score-test" class="nav-link" data-scroll-target="#raos-score-test"><span class="header-section-number">2.2.2</span> Rao’s score test</a></li>
+  <li><a href="#likelihood-ratio-test" id="toc-likelihood-ratio-test" class="nav-link" data-scroll-target="#likelihood-ratio-test"><span class="header-section-number">2.2.3</span> Likelihood ratio test</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -229,9 +234,13 @@ window.Quarto = {
 </header>
 
 
+<section id="example-continued" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Example continued</h1>
 <p>In the preceding example, we shied away from using the Fisher information because <span class="math inline">\(T_2\)</span> was not easily accessible. But we can use the results from [[exmp:mle-exp]] to derive an exact expression for the asymptotic sampling variance for the MLE.</p>
-<div class="exmp">
-<p><strong>Example 1</strong>. Continued example This is an expansion of the example in <span class="citation" data-cites="collett1994modelling">(<a href="#ref-collett1994modelling" role="doc-biblioref">Collett 1994</a>)</span>. <span class="math display">\[\begin{align}
+<div id="exmp-fisher">
+<section id="fisher-information" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="fisher-information"><span class="header-section-number">1.1</span> Fisher information</h2>
+<p>Continued example This is an expansion of the example in <span class="citation" data-cites="collett1994modelling">(<a href="#ref-collett1994modelling" role="doc-biblioref">Collett 1994</a>)</span>. <span class="math display">\[\begin{align}
 \frac{\partial}{\partial \lambda}\left(\frac{\partial}{\partial \lambda}\ell(\lambda, \psi)\right)&amp; = -\frac{r_1 + r_2}{\lambda^2} \\
 \frac{\partial}{\partial \beta}\left(\frac{\partial}{\partial \lambda}\ell(\lambda, \psi)\right)&amp; = -e^\beta T_2 \\
 \frac{\partial}{\partial \beta}\left(\frac{\partial}{\partial \beta}\ell(\lambda, \psi)\right)&amp; = -\lambda e^\beta T_2
@@ -253,9 +262,11 @@ We know that <span class="math display">\[\Exp{r_1} = n_1\Exp{1 - e^{-\lambda C_
 \frac{n_1\Exp{r_{i1}} + n_2\Exp{r_{i2}}}{n_1 n_2 \Exp{r_{i1}}\Exp{r_{i2}}}
     \end{bmatrix}
 \end{align}\]</span> So the asymptotic standard error for <span class="math inline">\(\beta\)</span> is <span class="math display">\[\sqrt{\frac{n_1\Exp{1 - e^{-\lambda C_i}}{C_i} + n_2\Exp{1 - e^{-\lambda e^\beta C_i}}{C_i}}{n_1 n_2\Exp{1 - e^{-\lambda C_i}}{C_i}\Exp{1 - e^{-\lambda e^\beta C_i}}{C_i}}}\]</span></p>
+</section>
 </div>
-<section id="sec:asymptotics" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Asymptotic interlude</h1>
+</section>
+<section id="sec:asymptotics" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Asymptotic interlude</h1>
 <p>As you’ve already no doubt gathered, many of the results for inference and hypothesis testing in survival analysis rely on asymptotic normality of the MLE. Before we get too much further into the quarter, I thought it would be a good idea to review the asymptotic results for maximum likelihood. This outline of results is from <span class="citation" data-cites="keener_theoretical_2010">(<a href="#ref-keener_theoretical_2010" role="doc-biblioref">Keener 2010</a>)</span>.</p>
 <p>Let <span class="math inline">\(X_i, i = 1, 2, \dots\)</span> be distributed <span class="math inline">\(i.i.d.\)</span> with density <span class="math inline">\(f_\theta\)</span> where <span class="math inline">\(\theta \in \R^p\)</span>. We suppose that the support of <span class="math inline">\(X_i\)</span> does not depend on <span class="math inline">\(\theta\)</span>, and that our MLE’s are consistent for <span class="math inline">\(\theta\)</span>. This is pretty mild, and only requires that likelihood ratios are integrable and our model is identifiable.</p>
 <p>Let the log-likelihood be denoted <span class="math inline">\(\ell(\theta)\)</span>, in which we suppress the dependence of the likelihood on the data. If we need to indicate the dependence on data, we’ll write it as <span class="math inline">\(\ell(\theta; x)\)</span>. Finally, denote the gradient of the log-likelihood with respect to <span class="math inline">\(\theta\)</span> evaluated at <span class="math inline">\(\theta^\prime\)</span> as: <span class="math display">\[
@@ -283,8 +294,28 @@ We know that <span class="math display">\[\Exp{r_1} = n_1\Exp{1 - e^{-\lambda C_
 \end{align*}
 \]</span> The term <span class="math inline">\(\frac{1}{n}(\ell_{\theta\theta}(\theta^\dagger))_j \overset{p}{\to} \Exp{(\ell_{\theta\theta}(\theta^\dagger))_j}\)</span> by the WLLN, while <span class="math display">\[
 \frac{1}{2}(\hat{\theta}_n - \theta^\dagger)^T \lp \frac{1}{n}(\ell_{\theta\theta\theta}(\tilde{\theta}_{n,j}))_j\rp \overset{p}{\to} 0
-\]</span> by the WLLN, the boundedness condition of the third-order derivatives and the consistency of our estimator. By Slutsky’s theorem, <span class="math display">\[
--\left(\frac{1}{n}(\ell_{\theta\theta}(\theta^\dagger))_j\right) - \frac{1}{2}(\hat{\theta}_n - \theta^\dagger)^T \lp \frac{1}{n}(\ell_{\theta\theta\theta}(\tilde{\theta}_{n,j}))_j\rp \overset{p}{\to}\Exp{(\ell_{\theta\theta}(\theta^\dagger))_j}
+\]</span> by the WLLN, the boundedness condition of the third-order derivatives and the consistency of our estimator.</p>
+<p>To be precise, we want to show that <span class="math display">\[
+\lim_{n\to\infty}\Prob{\norm{(\hat{\theta}_n - \theta^\dagger)^T \lp \frac{1}{n}(\ell_{\theta\theta\theta}(\tilde{\theta}_{n,j}))_j\rp} &gt; \epsilon}{} = 0
+\]</span> <span class="math display">\[
+\begin{aligned}
+\Prob{\norm{(\hat{\theta}_n - \theta^\dagger)^T \lp \frac{1}{n}(\ell_{\theta\theta\theta}(\tilde{\theta}_{n,j}))_j\rp} &gt; \epsilon}{} &amp; \leq \Prob{\norm{(\hat{\theta}_n - \theta^\dagger)^T} \norm{ \frac{1}{n}(\ell_{\theta\theta\theta}(\tilde{\theta}_{n,j}))_j} &gt; \epsilon}{} \\
+&amp; \leq \Prob{\norm{(\hat{\theta}_n - \theta^\dagger)^T} \norm{\frac{1}{n}\sum_{i=1}^n g(Y_i)} &gt; \epsilon}{} \\
+&amp; \leq \Prob{\norm{(\hat{\theta}_n - \theta^\dagger)^T} \norm{\frac{1}{n}\sum_{i=1}^n g(Y_i) - \Exp{g(Y_1)}} &gt; \frac{\epsilon}{2}}{} \\
+&amp; \quad + \Prob{\norm{(\hat{\theta}_n - \theta^\dagger)^T} \norm{\Exp{g(Y_1)}} &gt; \frac{\epsilon}{2}}{}
+\end{aligned}
+\]</span> The last line follows from a trick used in a proof in § 6.3 in <span class="citation" data-cites="resnick2019probability">Resnick (<a href="#ref-resnick2019probability" role="doc-biblioref">2019</a>)</span>. If the following holds</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp; \left\{\norm{(\hat{\theta}_n - \theta^\dagger)^T} \norm{\frac{1}{n}\sum_{i=1}^n g(Y_i) - \Exp{g(Y_1)}} \leq \frac{\epsilon}{2}\right\}  \bigcap\\
+&amp; \left\{\norm{(\hat{\theta}_n - \theta^\dagger)^T} \norm{\Exp{g(Y_1)}} \leq \frac{\epsilon}{2}\right\}
+\end{aligned}
+\]</span></p>
+<p>Then the triangle inequality implies that <span class="math display">\[
+\norm{(\hat{\theta}_n - \theta^\dagger)^T} \norm{\frac{1}{n}\sum_{i=1}^n g(Y_i)} \leq \epsilon.
+\]</span> Taking complements and using Boole’s inequality (<span class="math inline">\(P(A \cup B) \leq P(A) + P(B)\)</span>) yields the final inequality. Both terms converge to zero due to the convergence in probability of the MLE, and the WLLN applied to the empirical average of <span class="math inline">\(g(Y_i)\)</span>.</p>
+<p>By Slutsky’s theorem, <span class="math display">\[
+-\left(\frac{1}{n}(\ell_{\theta\theta}(\theta^\dagger))_j\right) - \frac{1}{2}(\hat{\theta}_n - \theta^\dagger)^T \lp \frac{1}{n}(\ell_{\theta\theta\theta}(\tilde{\theta}_{n,j}))_j\rp \overset{p}{\to}-\Exp{(\ell_{\theta\theta}(\theta^\dagger))_j}
 \]</span> Collecting our <span class="math inline">\(p\)</span> equations into one set of equations yields: <span id="eq-lin-eqs"><span class="math display">\[
 \sqrt{n}\lp\frac{1}{n} \ell_\theta(\theta^\dagger)\rp = (-\Exp{\ell_{\theta\theta}(\theta^\dagger))} + o_p(1)) \sqrt{n}(\hat{\theta}_n - \theta^\dagger)
 \tag{1}\]</span></span></p>
@@ -315,8 +346,8 @@ T_n = A_n Y_n  \implies Y_n \overset{d}{\to} A^{-1}T
 \]</span> Putting this all together shows that <span class="math display">\[\begin{align*}
      \sqrt{n}(\hat{\theta}_n - \theta^\dagger) \overset{d}{\to} \mathcal{N}(0, \mathcal{I}(\theta^\dagger)^{-1})
 \end{align*}\]</span> where <span class="math inline">\(\mathcal{I}(\theta^\dagger) = -\Exp{\ell_{\theta\theta}(\theta^\dagger; X_i)}\)</span></p>
-<section id="estimators-of-variance-covariance-matrix" class="level3" data-number="1.0.1">
-<h3 data-number="1.0.1" class="anchored" data-anchor-id="estimators-of-variance-covariance-matrix"><span class="header-section-number">1.0.1</span> Estimators of variance-covariance matrix</h3>
+<section id="estimators-of-variance-covariance-matrix" class="level3" data-number="2.0.1">
+<h3 data-number="2.0.1" class="anchored" data-anchor-id="estimators-of-variance-covariance-matrix"><span class="header-section-number">2.0.1</span> Estimators of variance-covariance matrix</h3>
 <p>In the previous section, we encountered several consistent estimators of the variance covariance matrix: <span class="math display">\[\begin{align*}
   -\frac{1}{n} \nabla^2_\theta \ell(\theta)\mid_{\theta = \theta^\dagger} &amp; \overset{p}{\to} \mathcal{I}(\theta^\dagger) \\
   \frac{1}{n} \sum_{i=1}^n (\nabla_\theta \log f_\theta(X_i))\mid_{\theta = \theta^\dagger}(\nabla_\theta \log f_\theta(X_i))\mid_{\theta = \theta^\dagger}^T  &amp; \overset{p}{\to} \mathcal{I}(\theta^\dagger)
@@ -328,8 +359,8 @@ T_n = A_n Y_n  \implies Y_n \overset{d}{\to} A^{-1}T
     &amp; \overset{p}{\to} \text{Var}\left(\sqrt{n}(\hat{\theta}_n - \theta^\dagger)\right)
 \end{align}\]</span> where <span class="math inline">\(\hat{\theta}\)</span> is the MLE.</p>
 </section>
-<section id="asymptotic-confidence-intervals" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="asymptotic-confidence-intervals"><span class="header-section-number">1.1</span> Asymptotic confidence intervals</h2>
+<section id="asymptotic-confidence-intervals" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="asymptotic-confidence-intervals"><span class="header-section-number">2.1</span> Asymptotic confidence intervals</h2>
 <p>For the most part, we’ll be concerned with univariate confidence intervals, but in multivariate models like the Weibull distribution we’ll need to compute the full inverse of the Fisher information. WLOG, let the index of the parameter of interest be <span class="math inline">\(1\)</span>, so the asymptotic variance of our MLE for the parameter of interest is <span class="math inline">\(\sigma_1^2(\theta^\dagger) = \mathcal{I}(\theta^\dagger)^{-1}_{1,1}\)</span>. We can also define <span class="math display">\[\sigma_1^2(\hat{\theta}) = \mathcal{I}(\hat{\theta})^{-1}_{1,1}.\]</span> I’ll also ditch the <span class="math inline">\(n\)</span> subscript and just let <span class="math inline">\(\hat{\theta}\)</span> be our MLE based on <span class="math inline">\(n\)</span> observations. By <a href="#eq:cont-map" data-reference-type="ref+Label" data-reference="eq:cont-map">[eq:cont-map]</a>, <span class="math display">\[\frac{\sigma_1^2(\hat{\theta})}{\sigma_1^2(\theta^\dagger)} \overset{p}{\to} 1.\]</span> This allows us to use a plug-in estimator for <span class="math inline">\(\mathcal{I}(\theta^\dagger)^{-1}\)</span>, <span class="math inline">\(\mathcal{I}(\hat{\theta})^{-1}\)</span>. <span class="math display">\[\begin{align*}
      \frac{\sqrt{n}(\hat{\theta}_1 - \theta_1^\dagger)}{\sigma_1(\hat{\theta})} &amp; = \frac{\sigma_1(\theta^\dagger)}{\sigma_1(\hat{\theta})}\frac{\sqrt{n}(\hat{\theta}_1 - \theta_1^\dagger)}{\sigma_1(\theta^\dagger)} \\
      &amp; \overset{d}{\to} \mathcal{N}(0, 1)
@@ -338,20 +369,20 @@ T_n = A_n Y_n  \implies Y_n \overset{d}{\to} A^{-1}T
 P\left(\frac{\sqrt{n}(\hat{\theta}_1 - \theta^\dagger_1)}{\sigma_1(\hat{\theta}_1)} \in (-z_{1-\alpha/2},z_{1-\alpha/2})\right) &amp; = P\left(\theta_1^\dagger \in \left(\hat{\theta}_1 - z_{1-\alpha/2} \frac{\sigma_1(\hat{\theta}_1)}{\sqrt{n}}, \hat{\theta}_1 + z_{1-\alpha/2} \frac{\sigma_1(\hat{\theta}_1)}{\sqrt{n}}\right)\right)
 \end{align*}\]</span></p>
 </section>
-<section id="asymptotic-tests" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="asymptotic-tests"><span class="header-section-number">1.2</span> Asymptotic tests</h2>
-<section id="wald-test" class="level3" data-number="1.2.1">
-<h3 data-number="1.2.1" class="anchored" data-anchor-id="wald-test"><span class="header-section-number">1.2.1</span> Wald test</h3>
+<section id="asymptotic-tests" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="asymptotic-tests"><span class="header-section-number">2.2</span> Asymptotic tests</h2>
+<section id="wald-test" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="wald-test"><span class="header-section-number">2.2.1</span> Wald test</h3>
 <p>The Wald test is derived directly from the asymptotic distribution of the MLE. Under the null hypothesis <span class="math inline">\(\theta^\dagger = \theta_0\)</span>, the test statistic: <span class="math display">\[\begin{align*}
      \sqrt{n}(\hat{\theta}_n - \theta_0) \overset{d}{\to} \mathcal{N}(0, \mathcal{I}(\theta_0)^{-1})
 \end{align*}\]</span> so <span class="math display">\[n (\hat{\theta}_n - \theta_0)^T \mathcal{I}(\theta_0) (\hat{\theta}_n - \theta_0) \sim \chi^2(p)\]</span> This follows from the simple fact that if a random vector in <span class="math inline">\(\R^n\)</span>, <span class="math inline">\(Z\)</span>, is distributed multivariate normal, or <span class="math inline">\(Z \sim \mathcal{N}(0, \Sigma)\)</span>, then <span class="math inline">\(\Sigma^{-1/2} Z \sim \mathcal{N}(0, I)\)</span>, so <span class="math inline">\(Z^T\Sigma^{-1/2}\Sigma^{-1/2}Z = \sum_{i=1}^n X_i^2\)</span> where <span class="math inline">\(X_i \sim \mathcal{N}(0,1)\)</span>.</p>
 </section>
-<section id="raos-score-test" class="level3" data-number="1.2.2">
-<h3 data-number="1.2.2" class="anchored" data-anchor-id="raos-score-test"><span class="header-section-number">1.2.2</span> Rao’s score test</h3>
+<section id="raos-score-test" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="raos-score-test"><span class="header-section-number">2.2.2</span> Rao’s score test</h3>
 <p>In our proof of the asymptotic distribution of the MLE, we used the fact that <span class="math display">\[\sqrt{n}\frac{1}{n} \sum_{i=1}^n (\nabla_\theta \log f_\theta(X_i))\mid_{\theta = \theta^\dagger} \overset{d}{\to} \mathcal{N}(0, \mathcal{I}(\theta^\dagger)).\]</span> This idea can be used to derive the Rao’s Score test, which uses the fact that under <span class="math inline">\(H_0: \theta \in \Theta_0\)</span>, the gradient evaluated at the restricted MLE (i.e.&nbsp;the MLE restricted to the parameter space <span class="math inline">\(\Theta_0\)</span>) is nearly zero, and we can recover a similar limiting distribution. As above let <span class="math display">\[\frac{1}{\sqrt{n}} \nabla_\theta \ell(\theta) \mid_{\theta = \theta^\dagger} = \sqrt{n}\frac{1}{n} \sum_{i=1}^n (\nabla_\theta \log f_\theta(X_i))\mid_{\theta = \theta^\dagger}\]</span> Assuming that under the null distribution the restrited MLE <span class="math inline">\(\hat{\theta}_0\)</span> is consistent for <span class="math inline">\(\theta^\dagger \in \Theta_0\)</span>, then <span class="math display">\[\frac{1}{\sqrt{n}} \nabla_\theta \ell(\theta) \mid_{\theta = \hat{\theta}_0} \overset{d}{\to} \mathcal{N}(0, \mathcal{I}(\theta^\dagger))\]</span> The Score test statistic is: <span class="math display">\[T_S = \left(\frac{1}{\sqrt{n}} \nabla_\theta \ell(\theta) \mid_{\theta = \hat{\theta}_0} \right)^T \mathcal{I}(\hat{\theta}_0)^{-1}\frac{1}{\sqrt{n}} \nabla_\theta \ell(\theta) \mid_{\theta = \hat{\theta}_0}\]</span> This test statistic is distribution <span class="math inline">\(\chi^2(p)\)</span> under <span class="math inline">\(H_0\)</span>.</p>
 </section>
-<section id="likelihood-ratio-test" class="level3" data-number="1.2.3">
-<h3 data-number="1.2.3" class="anchored" data-anchor-id="likelihood-ratio-test"><span class="header-section-number">1.2.3</span> Likelihood ratio test</h3>
+<section id="likelihood-ratio-test" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="likelihood-ratio-test"><span class="header-section-number">2.2.3</span> Likelihood ratio test</h3>
 <p>The LRT comes from a two-term asymptotic expansion of the log-likelihood, as opposed to the one term expansion: <span class="math display">\[\begin{align*}
     -\ell(\theta_0) &amp; = -\ell(\hat{\theta}) - \nabla_\theta \ell(\theta)\mid_{\theta=\hat{\theta}}(\hat{\theta}-\theta_0) - \frac{1}{2}(\hat{\theta}-\theta_0)^T\nabla^2_\theta \ell(\theta)\mid_{\theta=\tilde{\theta}}(\hat{\theta}-\theta_0) \\
     \ell(\hat{\theta}) - \ell(\theta_0)  &amp; = -\frac{1}{2}(\hat{\theta}-\theta_0)^T\nabla^2_\theta \ell(\theta)\mid_{\theta=\tilde{\theta}}(\hat{\theta}-\theta_0) \\
@@ -373,6 +404,9 @@ Keener, Robert W. 2010. <em>Theoretical <span>Statistics</span></em>. Springer <
 </div>
 <div id="ref-lehmann-casella" class="csl-entry" role="listitem">
 Lehmann, E. L., and George Casella. 1998. <em>Theory of Point Estimation</em>. 2nd ed. Springer Texts in Statistics. New York: Springer.
+</div>
+<div id="ref-resnick2019probability" class="csl-entry" role="listitem">
+Resnick, Sidney. 2019. <em>A Probability Path</em>. Springer.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
