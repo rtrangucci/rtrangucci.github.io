@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Missing data lecture 7: Metropolis and Hamiltonian Monte Carlo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-fd68462179fdb1eb8400a3e2e38edf1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+      \newcommand{\R}{\mathbb{R}}
+      \newcommand{\comp}{\mathsf{c}}
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Var}[1]{\text{Var} \lp #1 \rp}
+        \newcommand{\VarA}[2]{\text{Var}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\abs}[1]{\left| #1 \right|}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../papers.html"> 
+<span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../courses.html"> 
+<span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#mcmc-and-gibbs-sampling-recap" id="toc-mcmc-and-gibbs-sampling-recap" class="nav-link active" data-scroll-target="#mcmc-and-gibbs-sampling-recap">MCMC and Gibbs sampling recap</a>
+  <ul class="collapse">
+  <li><a href="#metropolis-sampler" id="toc-metropolis-sampler" class="nav-link" data-scroll-target="#metropolis-sampler">Metropolis sampler</a></li>
+  <li><a href="#hamiltonian-monte-carlo" id="toc-hamiltonian-monte-carlo" class="nav-link" data-scroll-target="#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Missing data lecture 7: Metropolis and Hamiltonian Monte Carlo</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="mcmc-and-gibbs-sampling-recap" class="level2">
+<h2 class="anchored" data-anchor-id="mcmc-and-gibbs-sampling-recap">MCMC and Gibbs sampling recap</h2>
+<p>Suppose we want to sample from a distribution <span class="math inline">\(\pi(\theta)\)</span> (for the rest of the lecture I’ll suppress the dependence on <span class="math inline">\(y\)</span> unless otherwise noted), but we can’t easily do so, we might be able to create a Markov Chain whose stationary distribution is <span class="math inline">\(\pi(\theta)\)</span>.</p>
+<p>The Markov Chain has the property that <span class="math display">\[
+P(\theta^{(n)} \in A \mid \theta^{(n-1)} = c_{n-1}, \dots, \theta^{(n-1)} = c_{1}) = P(\theta^{(n)} \in A \mid \theta^{(n-1)} = c_{n-1})
+\]</span> and that <span class="math display">\[
+P(\theta^{(n)} \in A \mid \theta^{(n-1)} = c)
+\]</span> doesn’t depend on <span class="math inline">\(n\)</span>.</p>
+<p>This transition function has the property that for any value <span class="math inline">\(c\)</span> of <span class="math inline">\(\theta^{(n-1)}\)</span>, the function <span class="math inline">\(P(\theta^{n} \in A \mid \theta^{(n-1)} = c)\)</span> is a probability measure over whatever space <span class="math inline">\(A\)</span> is in, and for any fixed <span class="math inline">\(A\)</span>, <span class="math inline">\(P(\theta^{n} \in A \mid \theta^{(n-1)} = x)\)</span> is a measurable function of <span class="math inline">\(x\)</span>.</p>
+<p>In finite spaces, the transition function is just a matrix with <span class="math inline">\((i,j)^\mathrm{th}\)</span> entry</p>
+<p>What the proof from <span class="citation" data-cites="tanner1987calculation">Tanner and Wong (<a href="#ref-tanner1987calculation" role="doc-biblioref">1987</a>)</span> shows is that we can create a Markov Chain with the stationary distribution <span class="math inline">\(p(\theta)\)</span> if we have a transition function <span class="math inline">\(P(\theta \mid \theta^\prime)\)</span> with the following properties:</p>
+<ol type="1">
+<li><p><span class="math inline">\(\pi(\theta) = \int_{\theta^\prime} P(\theta \mid \theta^\prime) \pi(\theta^\prime) d\theta^\prime\)</span></p></li>
+<li><p><span class="math inline">\(P(\theta \mid \theta^\prime) \leq M &lt; \infty\)</span> for all <span class="math inline">\(\theta, \theta^\prime\)</span>.</p></li>
+<li><p>For every <span class="math inline">\(\theta_0 \in \Omega_{\theta}\)</span> there is an open neighborhood <span class="math inline">\(U\)</span> of <span class="math inline">\(\theta_0\)</span> so that: <span class="math display">\[
+P(\theta \mid \theta^\prime) &gt; 0, \forall (\theta, \theta^\prime) \in U
+\]</span></p></li>
+</ol>
+<p>and an initial distribution <span class="math inline">\(g(\theta)\)</span> that satisfies:</p>
+<p><span class="math display">\[
+\sup_\theta g(\theta) / \pi(\theta) &lt; \infty
+\]</span> One way of showing condition 1 is by showing that a chain is reversible, namely that for two sets <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>: <span class="math display">\[
+\int_{A} \pi(\theta^\prime) \int_B p(\theta \mid \theta^\prime) d\theta\, d\theta^\prime =  \int_{B} \pi(\theta^\prime) \int_A p(\theta \mid \theta^\prime) d\theta\, d\theta^\prime
+\]</span> We can represent <span class="math inline">\(\int_B p(\theta \mid \theta^\prime) d\theta\)</span> as <span class="math inline">\(P(B \mid \theta^\prime)\)</span> When <span class="math inline">\(A\)</span> is the whole parameter space, <span class="math inline">\(\Omega_\theta\)</span> this says something more interpretable: <span class="math display">\[
+\int_{\Omega_\theta} \pi(\theta^\prime) \int_B p(\theta \mid \theta^\prime) d\theta\, d\theta^\prime =  \int_{B} \pi(\theta^\prime) d\theta^\prime
+\]</span> This says: If I draw a value from the stationary distribution, and then draw a value from the transition function, my probability of landing in the set <span class="math inline">\(B\)</span> is the same as if I had just measured whether the first draw was in set <span class="math inline">\(B\)</span>.</p>
+<section id="metropolis-sampler" class="level3">
+<h3 class="anchored" data-anchor-id="metropolis-sampler">Metropolis sampler</h3>
+<p>This is all from Geyer’s notes on MCMC, <span class="citation" data-cites="geyerMCMC">Geyer (<a href="#ref-geyerMCMC" role="doc-biblioref">2005</a>)</span>.</p>
+<p>One way to construct a transition function that has this behavior is by using the Metropolis algorithm.</p>
+<ol type="1">
+<li>Sample a new point <span class="math inline">\(\theta^{(2)} \mid \theta^{(1)}\)</span> with a proposal distribution that we can draw from, <span class="math inline">\(J(\theta^{(2)} \mid \theta^{(1)})\)</span>, such that <span class="math inline">\(J(\theta^{(1)} \mid \theta^{(2)})\)</span> = <span class="math inline">\(J(\theta^{(2)} \mid \theta^{(1)})\)</span>.</li>
+<li>Accept the new point with probability <span class="math inline">\(\min(r,1)\)</span>: <span class="math display">\[
+r = \frac{\pi(\theta^{(2)})}{\pi(\theta^{(1)})}
+\]</span> else set the next step of the Markov Chain to <span class="math inline">\(\theta^{(1)}\)</span>.</li>
+</ol>
+<p>Crucially, this acceptance probability, which is called the <em>Metropolis acceptance rate</em>, can be computed without regards to the normalizing constant of the probability density.</p>
+<p>We can see this easily because it’s a ratio of the same density evaluated at two different parameters. Let <span class="math inline">\(\pi(\theta) = p(\theta \mid y)\)</span> where <span class="math inline">\(p(\theta)\)</span> is the prior for <span class="math inline">\(\theta\)</span>, <span class="math inline">\(f_Y(y \mid \theta)\)</span> is the density of the observations, and <span class="math inline">\(p(y) = \int_\theta p(\theta) f_Y(y \mid \theta) d \theta\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+r &amp; = \frac{p(\theta^{(2)} \mid y)}{p(\theta^{(1)} \mid y)} \\
+&amp; = \frac{p(\theta^{(2)}, y)/p(y)}{p(\theta^{(1)}, y)/p(y)} \\
+&amp; = \frac{p(\theta^{(2)}, y)}{p(\theta^{(1)}, y)} \\
+&amp; = \frac{p(\theta^{(2)}) f_Y(y \mid \theta^{(2)})}{p(\theta^{(1)}) f_Y(y \mid \theta^{(1)})}
+\end{aligned}
+\]</span> This is helpful, because we don’t know the normalizing constant <span class="math inline">\(p(y)\)</span> for most models we’re interested in fitting.</p>
+<p>What does the Metropolis algorithm imply for the transition density?</p>
+<p>We need to compute the conditional measure <span class="math inline">\(P(A \mid \theta^{(1)})\)</span>, which gives the probability of landing in set <span class="math inline">\(A\)</span>, or of drawing a value <span class="math inline">\(\theta^{(2)}\)</span> that is in set <span class="math inline">\(A\)</span> from the algorithm above.</p>
+<p>There are two ways we can get to set <span class="math inline">\(A\)</span>. The first way is if the proposed point <span class="math inline">\(\theta^{(2)}\)</span> is in set <span class="math inline">\(A\)</span> and the draw is accepted. The other way is if <span class="math inline">\(\theta^{(1)}\)</span> is in set <span class="math inline">\(A\)</span> and we reject the proposal from <span class="math inline">\(\theta^{(1)} \to \theta^{(2)}\)</span>.</p>
+<p>The probability of acceptance for a single point <span class="math inline">\(\theta^{(2)}\)</span> given we started at <span class="math inline">\(\theta^{(1)}\)</span> is <span class="math inline">\(h(\theta^{(1)}, \theta^{(2)}) = \min(r(\theta^{(1)},\theta^{(2)}),1)\)</span>. The probability that we transition from <span class="math inline">\(\theta^{(1)}\to \theta^{(2)}\)</span> is given by <span class="math display">\[
+\int_A J(\theta \mid \theta^{(1)}) h(\theta^{(1)}, \theta) d\theta
+\]</span> The probability we accept any jump is the integral over the whole space, <span class="math inline">\(\Omega_\theta\)</span>: <span class="math display">\[
+a(\theta^{(1)}) = \int_{\Omega_\theta} J(\theta \mid \theta^{(1)}) h(\theta^{(1)}, \theta) d\theta
+\]</span> Then the probability that we reject the proposal at <span class="math inline">\(\theta^{(1)}\)</span> is <span class="math inline">\(1 - a(\theta^{(1)})\)</span>. The total probability of landing in set <span class="math inline">\(A\)</span> if we reject the draw is <span class="math inline">\(1\)</span> if <span class="math inline">\(\theta^{(1)} \in A\)</span>, or 0 if it isn’t in <span class="math inline">\(A\)</span>, which we can represent as <span class="math inline">\(\ind{\theta^{(1)} \in A}\)</span>.</p>
+<p>This means that <span class="math display">\[
+P(A \mid \theta^{(1)}) = (1 - a(\theta^{(1)})) \ind{\theta^{(1)} \in A} + \int_A h(\theta^{(1)}, \theta) J(\theta \mid \theta^{(1)}) d\theta
+\]</span> Now we need to show that this is a reversible transition, namely:</p>
+<p><span class="math display">\[
+\int_B \pi(\theta^{(1)}) P(A \mid \theta^{(1)}) d\theta^{(1)}  = \int_A \pi(\theta^{(1)}) P(B \mid \theta^{(1)}) d\theta^{(1)}
+\]</span> crucially, for a density <span class="math inline">\(\pi(\theta) \equiv p(\theta \mid y)\)</span> with an unnormalized joint density <span class="math inline">\(p(\theta, y)\)</span> with the property:</p>
+<p><span class="math display">\[
+p(\theta^{(1)}, y)h(\theta^{(1)}, \theta) J(\theta \mid \theta^{(1)}) = p(\theta, y)h(\theta, \theta^{(1)}) J(\theta^{(1)} \mid \theta)
+\]</span> This is true because, assuming <span class="math inline">\(p(\theta^{(1)}, y) \leq p(\theta, y)\)</span>, <span class="math display">\[
+\begin{aligned}
+p(\theta^{(1)}, y)h(\theta^{(1)}, \theta) J(\theta \mid \theta^{(1)}) &amp; = p(\theta, y)\frac{p(\theta^{(1)}, y)}{p(\theta, y)} J(\theta^{(1)} \mid \theta) \\
+&amp; = p(\theta^{(1)}, y) J(\theta \mid \theta^{(1)}) \\
+\end{aligned}
+\]</span> <span class="math inline">\(h(\theta^{(1)}, \theta) = \min(p(\theta, y)/p(\theta^{(1)}, y), 1) = 1\)</span>. We’ll start with the LHS above and we can show that it equals the RHS. First we start with the first term on the LHS:</p>
+<p><span class="math display">\[
+\small
+\begin{aligned}
+\int_B p(\theta^{(1)} \mid y) (1 - a(\theta^{(1)})) \ind{\theta^{(1)} \in A}d\theta^{(1)} &amp; = \int_{\Omega_\theta} \ind{\theta^{(1)} \in B} p(\theta^{(1)} \mid y) (1 - a(\theta^{(1)})) \ind{\theta^{(1)} \in A}d\theta^{(1)} \\
+&amp; = \int_{\Omega_\theta} \ind{\theta^{(1)} \in A} p(\theta^{(1)} \mid y) (1 - a(\theta^{(1)})) \ind{\theta^{(1)} \in B}d\theta^{(1)} \\
+&amp; = \int_Ap(\theta^{(1)} \mid y)(1 - a(\theta^{(1)})) \ind{\theta^{(1)} \in B} d \theta^{(1)}.
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\small
+\begin{aligned}
+\int_B p(\theta^{(1)} \mid y) \int_{A} h(\theta,\theta^{(1)}) J(\theta \mid \theta^{(1)})d\theta d\theta^{(1)} &amp; = \int_{\Omega_\theta}\ind{\theta^{(1)} \in B} p(\theta^{(1)} \mid y)  \int_{\Omega_\theta}\ind{\theta \in A} h(\theta,\theta^{(1)}) J(\theta \mid \theta^{(1)}) d\theta d\theta^{(1)} \\
+&amp; = \int_{\Omega_\theta}\int_{\Omega_\theta}\ind{\theta \in A} \ind{\theta^{(1)} \in B} p(\theta^{(1)} \mid y)  h(\theta^{(1)},\theta) J(\theta \mid \theta^{(1)}) d\theta d\theta^{(1)} \\
+&amp; = \frac{1}{p(y)}\int_{\Omega_\theta}\int_{\Omega_\theta}\ind{\theta \in A} \ind{\theta^{(1)} \in B} p(\theta^{(1)}, y)  h(\theta^{(1)},\theta) J(\theta \mid \theta^{(1)}) d\theta d\theta^{(1)} \\
+&amp; = \frac{1}{p(y)}\int_{\Omega_\theta}\int_{\Omega_\theta}\ind{\theta \in A} \ind{\theta^{(1)} \in B} p(\theta, y)  h(\theta,\theta^{(1)}) J(\theta^{(1)}\mid \theta) d\theta^{(1)}d\theta  \\
+&amp; = \frac{1}{p(y)}\int_{\Omega_\theta}\ind{\theta \in A}p(\theta, y)  \int_{\Omega_\theta} \ind{\theta^{(1)} \in B}  h(\theta,\theta^{(1)}) J(\theta^{(1)}\mid \theta) d\theta^{(1)}d\theta  \\
+&amp; = \int_{A} p(\theta \mid y)  \int_{B} h(\theta,\theta^{(1)}) J(\theta^{(1)}\mid \theta) d\theta^{(1)}d\theta  
+\end{aligned}
+\]</span></p>
+<p>Putting these together, we’ve shown that: <span class="math display">\[
+\int_B p(\theta^{(1)} \mid y) P(A \mid \theta^{(1)}) d\theta^{(1)}  = \int_A \pi(\theta^{(1)} \mid y) P(B \mid \theta^{(1)}) d\theta^{(1)}
+\]</span> A default Metropolis sampler can be generated using a multivariate normal distribution for <span class="math inline">\(J_t(\theta^b \mid \theta^a)\)</span> <span class="math display">\[
+\theta^b \sim N(\theta^a, \Sigma)
+\]</span></p>
+<p>where we tune <span class="math inline">\(\Sigma\)</span> to be about the scale we expect the posterior to be. That means that when we’re in regions of high density, we’ll have a good chance of jumping to a point that has reasonable posterior density, which means we won’t reject the proposal with high probability.</p>
+</section>
+<section id="hamiltonian-monte-carlo" class="level3">
+<h3 class="anchored" data-anchor-id="hamiltonian-monte-carlo">Hamiltonian Monte Carlo</h3>
+<p>One way to generate a proposal distribution with this property is with an idea from physics using parameter expansion, namely if we have a distribution we’d like to sample from, <span class="math inline">\(\pi(\theta)\)</span>, we can introduce 1-to-1 auxiliary variables <span class="math inline">\(\varphi\)</span> (i.e.&nbsp;if we have <span class="math inline">\(d\)</span> <span class="math inline">\(\theta\)</span>, we’ll have <span class="math inline">\(d\)</span> <span class="math inline">\(\varphi\)</span>) with a multivariate normal distribution so our joint target density is <span class="math inline">\(\pi(\theta)\mathcal{N}(\varphi \mid 0, M)\)</span>.</p>
+<p>If we represent the marginal target density as <span class="math inline">\(\exp(- (-\log\pi(\theta) - \log\mathcal{N}(\varphi \mid 0, M)))\)</span>, and call <span class="math inline">\(U(\theta) -\log\pi(\theta)\)</span>, <span class="math inline">\(K(\varphi) = - \log\mathcal{N}(\varphi \mid 0, M)))\)</span>, we get the following representation: <span class="math display">\[
+\exp(-(U(\theta) + K(\varphi))) \equiv \pi(\theta)\mathcal{N}(\varphi \mid 0, M)
+\]</span> We can think of <span class="math inline">\(\theta\)</span> as representing the positions of <span class="math inline">\(d\)</span> particles and <span class="math inline">\(\varphi\)</span> as representing the momentum. In this sense, <span class="math inline">\(U(\theta)\)</span> is a potential energy, and <span class="math inline">\(K(\varphi)\)</span> is a kinetic energy term. The total energy in the system is <span class="math inline">\(U(\theta) + K(\varphi)\)</span> and this is called the Hamiltonian, or <span class="math inline">\(H(\theta, \varphi)\)</span>. It turns out that given an initial starting point <span class="math inline">\((\theta_0, \varphi_0)\)</span> we can simulate the trajectories of these particles for any time <span class="math inline">\(t\)</span> in the future using the Hamiltonian and what are called Hamilton’s system of equations:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d \theta}{d t} &amp; = \frac{\partial H(\theta, \varphi)}{\partial \varphi} \\
+\frac{d \varphi}{d t} &amp; = -\frac{\partial H(\theta, \varphi)}{\partial \theta}
+\end{aligned}
+\]</span> We can write this in matrix notation if we define the matrix <span class="math inline">\(J^{-1}\)</span> as: <span class="math display">\[
+\begin{bmatrix}
+0 &amp; I_d\\
+-I_d &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p><span class="math display">\[
+\nabla_t \begin{bmatrix} \theta \\
+\varphi
+\end{bmatrix} = J \nabla_{\theta,\varphi} H(\theta, \varphi)
+\]</span></p>
+<p>Then for a small time step <span class="math inline">\(\Delta t\)</span> we get <span class="math display">\[
+\begin{aligned}
+\theta_{\Delta t} &amp; = \theta_{0} + \frac{d \theta}{d t}(\theta, \varphi) \Delta t\\
+\varphi_{\Delta t} &amp; = \varphi_{0} + \frac{d \varphi}{d t}(\theta, \varphi)\Delta dt\\
+\end{aligned}
+\]</span> This seems straightforward, but <span class="math display">\[
+\begin{bmatrix}
+0 &amp; -I_d\\
+I_d &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p><span class="math display">\[
+\begin{bmatrix} \theta_{\Delta t} \\
+\varphi_{\Delta t}
+\end{bmatrix}  =
+\begin{bmatrix} \theta \\
+\varphi
+\end{bmatrix} +  
+\begin{bmatrix}
+0 &amp; I_d\\
+-I_d &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+\nabla_\theta H(\theta, \varphi) \\
+\nabla_\varphi H(\theta, \varphi)
+\end{bmatrix}  \Delta t
+\]</span> What’s the Jacobian of this transformation?</p>
+<p><span class="math display">\[
+\nabla_{\theta,\varphi} \begin{bmatrix} \theta_{\Delta t} \\
+\varphi_{\Delta t}
+\end{bmatrix}  =
+\begin{bmatrix} I_d &amp; 0\\
+0 &amp; I_d
+\end{bmatrix} +  
+\begin{bmatrix}
+0 &amp; I_d\\
+-I_d &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+\nabla^2_{\theta} H(\theta, \varphi) &amp; \nabla^2_{\theta, \varphi} H(\theta, \varphi)\\
+\nabla^2_{\varphi, \theta} H(\theta, \varphi) &amp; \nabla^2_\varphi H(\theta, \varphi)
+\end{bmatrix} \Delta t
+\]</span> This simplifies to <span class="math display">\[
+\nabla_{\theta,\varphi} \begin{bmatrix} \theta_{\Delta t} \\
+\varphi_{\Delta t}
+\end{bmatrix}  =
+\begin{bmatrix} I_d + \Delta t \nabla^2_{\theta, \varphi} H(\theta, \varphi)  &amp; \Delta t \nabla^2_{\theta} H(\theta, \varphi)\\
+-\Delta t \nabla^2_{\varphi} H(\theta, \varphi) &amp; I_d- \Delta t \nabla^2_{\theta, \varphi} H(\theta, \varphi)
+\end{bmatrix}
+\]</span></p>
+<p>It turns out that the determinant of this matrix is <span class="math inline">\(I_d\)</span> plus terms that involve <span class="math inline">\((\Delta t)^2\)</span>. If we make <span class="math inline">\(\Delta t\)</span> small, this means that the determinant of the transformation is <span class="math inline">\(1\)</span>.</p>
+<p>Another nice property of these equations is that the Hamiltonian is constant in time: <span class="math display">\[
+\begin{aligned}
+\frac{d H(\theta, \phi)}{d t} &amp; = \sum_j \frac{d \theta}{dt} \frac{\partial H}{\partial \theta} + \frac{d \varphi}{dt} \frac{\partial H}{\partial \varphi}  \\
+&amp; = \sum_j \frac{\partial H}{\partial \varphi} \frac{\partial H}{\partial \theta} - \frac{\partial H}{\partial \theta} \frac{\partial H}{\partial \varphi} \\
+&amp; = 0
+\end{aligned}
+\]</span> This means that if we sample <span class="math inline">\((\theta_0, \varphi_0)\)</span> from the density <span class="math inline">\(\exp(-H(\theta, \varphi))\)</span> and compute the final position and momentum of the particles after <span class="math inline">\(t\)</span> time <span class="math inline">\((\theta_t, \varphi_t)\)</span>, we’ll get the same density over <span class="math inline">\(\theta_0, \varphi_0\)</span> that we started with: Let <span class="math inline">\(F_t(\theta_0, \varphi_0) = (\theta_t, \varphi_t)\)</span>. This has an inverse, such that <span class="math inline">\(F^{-1}_t(\theta_t, \varphi_t) = (\theta_0, \varphi_0)\)</span>. In fact, this inverse is equal to <span class="math inline">\(F^{-1}_t(\theta_t, \varphi_t) = F_{-t}(\theta_t, \varphi_t)\)</span> Let’s compute the density under this transformation, starting with the density:</p>
+<p><span class="math display">\[
+\exp(-H(\theta_0, \varphi_0)) d\theta_0 d\varphi_0
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\exp(-H(F^{-1}_{t}(\theta_t \varphi_t))) \det \nabla_{\theta_t, \varphi_t} F^{-1}_{t}(\theta_t \varphi_t) &amp; = \exp(-H(F_{-t}(\theta_t \varphi_t))) \det \nabla_{\theta_t, \varphi_t} F^{-1}_{t}(\theta_t \varphi_t) \\
+&amp; = \exp(-H(\theta_t \varphi_t)) d\theta_t  d\varphi_t
+\end{aligned}
+\]</span> where the second line follows from the fact that the change in time for the Hamiltonian is zero, and that the determinant of the transformation is 1. Thus, plugging in <span class="math inline">\(\theta_t, \varphi_t\)</span> to the Hamiltonian has no effect on the value of the function; the Hamiltonian is constant.</p>
+<p>This means that the starting values define the total energy for the system.</p>
+<p>The algorithm for ex</p>
+<p>One key point from above is that we can take gradients without worrying about the normalizing constant! <span class="math display">\[
+\begin{aligned}
+\frac{\partial H(\theta, \varphi)}{\partial \theta} &amp; = -\frac{d }{d \theta}\log(p(\theta \mid y)) \\
+&amp; = -\frac{d}{d\theta} \lp \log p(\theta) + \log(f_Y(y \mid \theta)) - \log(f_Y(y))\rp \\
+&amp; = -\frac{d}{d\theta} \lp \log p(\theta) + \log(f_Y(y \mid \theta))\rp \\
+\end{aligned}
+\]</span> because the marginal density of the data is not dependent on <span class="math inline">\(\theta\)</span>. Thus we can use this algorithm to sample from densities with intractable normalizing constants, which is pretty much any interesting statitsical model.</p>
+<p>The idea is to draw an initial value for <span class="math inline">\(\varphi\)</span> from a multivariate normal distribution, and then to run Hamilton’s equations to get draws for the final <span class="math inline">\(\theta^t\)</span> and <span class="math inline">\(\varphi^t\)</span></p>
+<p>The problem with this idea is that we can’t solve Hamilton’s equations for any non-trivial problem. What we do instead is to discretize the equations and solve them approximately. If our Hamiltonian allows for <span class="math inline">\(p(\varphi \mid \theta)\)</span>, we’ll need to use complex numerical integration schemes. If, as is typical, we use a distribution for <span class="math inline">\(\varphi\)</span> that is independent of <span class="math inline">\(\theta\)</span> (something like a multivariate normal distribution with a fixed covariance matrix, <span class="math inline">\(M\)</span>, for the density <span class="math inline">\(p(\varphi)\)</span>), we can use the leapfrog integrator to approximately solve the equations of motion.</p>
+<p>Let’s define <span class="math inline">\(L\)</span> as the number of steps of the integrator, and <span class="math inline">\(\epsilon\)</span> as the step-size, or how finely discretized our equations of motion are. Start with <span class="math inline">\(\theta^{(0)}\)</span>, and <span class="math inline">\(\varphi^{(0)} \sim \text{Normal}(0, M)\)</span> and Then for each step <span class="math inline">\(l = 1, \dots, L\)</span>, repeat: <span class="math display">\[
+\begin{aligned}
+\varphi^{(\epsilon(l - 1/2))} &amp; = \varphi^{(\epsilon(l-1))} + \frac{\epsilon}{2} \frac{d \log(p(\theta \mid y))}{d \theta} \\
+\theta^{(\epsilon l)} &amp; = \theta^{(\epsilon(l-1))} + \epsilon M^{-1} \varphi^{(\epsilon(l-1))} \\
+\varphi^{(\epsilon l)} &amp; = \varphi^{(\epsilon (l-1/2))} + \frac{\epsilon}{2} \frac{d \log(p(\theta \mid y))}{d \theta} \\
+\end{aligned}
+\]</span> Here is the expression for the final proposal for <span class="math inline">\(\theta^{(L\epsilon)}\)</span>: <span class="math display">\[
+\theta^{(L\epsilon)} = \theta^{(0)} + \frac{L \epsilon^2}{2} \nabla_\theta U(\theta^{(0)}) - \epsilon^2 \sum_{l=1}^L (L - l) \nabla_\theta U(\theta^{(\epsilon l)}) + L \epsilon \varphi^{(0)}
+\]</span> where <span class="math inline">\(\varphi^{(0)} \sim \text{Normal}(0, M)\)</span>.</p>
+<p>One problem with this implementation is that the Hamiltonian isn’t exactly conserved, so we do have to do a Metropolis step at the end of the <span class="math inline">\(L\)</span> steps to determine if we accept the proposal.</p>
+<p>Finally, after we run the algorithm, we have a new set of parameters <span class="math inline">\(\theta^{(L\epsilon)}, \varphi^{(L\epsilon)}\)</span>. We then compute the ratio of the exponentiated Hamiltonian at the start and end of the algorithm: <span class="math display">\[
+r = \frac{p(\theta^{(0)} \mid y) p(\varphi^{(0)})}{p(\theta^{(L \epsilon)} \mid y) p(\varphi^{(L \epsilon)})}
+\]</span> and set <span class="math inline">\(\theta^{(1)} = \theta^{(L \epsilon)}\)</span> with probability <span class="math inline">\(\min(r, 1)\)</span>, or <span class="math inline">\(\theta^{(1)} = \theta^{(0)}\)</span> otherwise.</p>
+<p>This algorithm has three tuning parameters, <span class="math inline">\(L,\epsilon, M\)</span>. One way to set <span class="math inline">\(L\)</span> is to run the algorithm until you detect that the particles have begun to move back towards the starting point, <span class="math inline">\(\theta^{(0)}\)</span>. That way, you’ll minimize the autocorrelation between draws, and boost your effective sample size.</p>
+<p>That suggests a heuristic to measure the dot-product of <span class="math inline">\((\theta^{(l\epsilon)} - \theta^{(0)})\)</span> and <span class="math inline">\(\varphi\)</span>. When this becomes negative, it means that the momentum is pointing in a different direction than the difference between the current step and the initial point.</p>
+<p>This is the idea behind the No-U-Turn-Sampler, which stops the leapfrog integrator when <span class="math display">\[
+\sum_j (\theta^{(l\epsilon)}_j - \theta^{(0)}_j) \varphi^{(l\epsilon)}_j &lt; 0
+\]</span> We can’t exactly use this as an exact stopping rule because just choosing <span class="math inline">\(\theta^{(l\epsilon)}\)</span> as the final draw in the trajectory would not lead to a sampler with detailed balance.</p>
+<p>See <span class="citation" data-cites="hoffman2014no">Hoffman, Gelman, et al. (<a href="#ref-hoffman2014no" role="doc-biblioref">2014</a>)</span> for more information.</p>
+<p>Another parameter that needs to be set is <span class="math inline">\(\epsilon\)</span>, which is the discretization size of the numerical integrator.</p>
+<p>If this is set to be too small, you’ll need many leapfrog steps to make measurable progress. If it is set too large, the numerical error in the integrator will add up too quickly and you won’t be approximating the solution to the diff-eqs well anymore. This can lead to something called divergences, where the integrator diverges.</p>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-geyerMCMC" class="csl-entry" role="listitem">
+Geyer, Charles J. 2005. <span>“Markov <span>Chain Monte Carlo Lecture Notes</span>.”</span>
+</div>
+<div id="ref-hoffman2014no" class="csl-entry" role="listitem">
+Hoffman, Matthew D, Andrew Gelman, et al. 2014. <span>“The No-u-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo.”</span> <em>J. Mach. Learn. Res.</em> 15 (1): 1593–623.
+</div>
+<div id="ref-tanner1987calculation" class="csl-entry" role="listitem">
+Tanner, Martin A, and Wing Hung Wong. 1987. <span>“The Calculation of Posterior Distributions by Data Augmentation.”</span> <em>Journal of the American Statistical Association</em> 82 (398): 528–40.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

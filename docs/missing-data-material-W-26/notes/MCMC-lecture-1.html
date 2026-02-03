@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Missing data lecture 8: Likelihood-based inference with incomplete data</title>
+<title>MCMC and diagnostics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -175,11 +195,11 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#likelihood-inference-with-incomplete-data" id="toc-likelihood-inference-with-incomplete-data" class="nav-link active" data-scroll-target="#likelihood-inference-with-incomplete-data">Likelihood inference with incomplete data</a></li>
-  <li><a href="#example-incomplete-exponential-sample" id="toc-example-incomplete-exponential-sample" class="nav-link" data-scroll-target="#example-incomplete-exponential-sample">Example: Incomplete exponential sample</a></li>
-  <li><a href="#missing-data-example-parameter-distinctness" id="toc-missing-data-example-parameter-distinctness" class="nav-link" data-scroll-target="#missing-data-example-parameter-distinctness">Missing data example: Parameter distinctness</a></li>
-  <li><a href="#partial-mar" id="toc-partial-mar" class="nav-link" data-scroll-target="#partial-mar">Partial MAR</a></li>
-  <li><a href="#example-regression-with-missing-data" id="toc-example-regression-with-missing-data" class="nav-link" data-scroll-target="#example-regression-with-missing-data">Example: Regression with missing data</a></li>
+  <li><a href="#gibbs-sampling" id="toc-gibbs-sampling" class="nav-link active" data-scroll-target="#gibbs-sampling">Gibbs sampling</a>
+  <ul class="collapse">
+  <li><a href="#quantifying-uncertainty-in-mcmc-estimates" id="toc-quantifying-uncertainty-in-mcmc-estimates" class="nav-link" data-scroll-target="#quantifying-uncertainty-in-mcmc-estimates">Quantifying Uncertainty in MCMC estimates</a></li>
+  <li><a href="#convergence-diagnostics" id="toc-convergence-diagnostics" class="nav-link" data-scroll-target="#convergence-diagnostics">Convergence diagnostics</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -188,7 +208,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Missing data lecture 8: Likelihood-based inference with incomplete data</h1>
+<h1 class="title">MCMC and diagnostics</h1>
 </div>
 
 
@@ -205,132 +225,167 @@ window.Quarto = {
 </header>
 
 
-<section id="likelihood-inference-with-incomplete-data" class="level3">
-<h3 class="anchored" data-anchor-id="likelihood-inference-with-incomplete-data">Likelihood inference with incomplete data</h3>
-<p>We said that the likelihood function is really a set of functions that are proportional the probability density such that the constant of proportionality doesn’t depend the parameters.</p>
-<p>Missing data methods distinguish themselves from other methods by modeling the joint distribution of <span class="math inline">\(Y\)</span> and <span class="math inline">\(M\)</span>. Let <span class="math inline">\(y\)</span> represent a possible set of values for <span class="math inline">\(Y\)</span> and let <span class="math inline">\(m\)</span> represent an element in the space <span class="math inline">\(\{0,1\}^{n \times K}\)</span>, the missingness indicators for all <span class="math inline">\(i\)</span> units. Let <span class="math inline">\(\theta \in \Omega_\theta\)</span> be parameters that govern the marginal distribution of the data: <span class="math inline">\(f_Y(y \mid \theta)\)</span> and <span class="math inline">\(\phi \in \Omega_\phi\)</span> be parameters that govern the missingness mechanism: <span class="math inline">\(f_{M \mid Y}(M = m \mid Y = y, \phi)\)</span>.</p>
-<p>Then the joint distribution for these RVs, <span class="math inline">\(f_{Y,M}(y,m \mid \theta, \phi)\)</span> can be written as the product of the marginal distribution for the data and the conditional distribution :</p>
+<section id="gibbs-sampling" class="level2">
+<h2 class="anchored" data-anchor-id="gibbs-sampling">Gibbs sampling</h2>
+<p>See <span class="citation" data-cites="tanner1987calculation">Tanner and Wong (<a href="#ref-tanner1987calculation" role="doc-biblioref">1987</a>)</span> for more details; what follows is an abbreviated presentation of their work, with bits of <span class="citation" data-cites="gelfand1990sampling">Gelfand and Smith (<a href="#ref-gelfand1990sampling" role="doc-biblioref">1990</a>)</span> thrown in.</p>
+<p>Let <span class="math inline">\(p(\theta_1, \theta_2 \mid y)\)</span> be the posterior of interest.</p>
+<p>We can represent the marginal posterior for <span class="math inline">\(\theta_1\)</span> as: <span class="math display">\[
+p(\theta_1 \mid y) = \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) p(\theta_2 \mid y) d\theta_2,
+\]</span> and similarly for <span class="math inline">\(\theta_2\)</span>: <span class="math display">\[
+p(\theta_2 \mid y) = \int_{\Omega_{\theta_1}} p(\theta_2 \mid y, \theta_1) p(\theta_1 \mid y) d\theta_1
+\]</span></p>
+<p>Plugging the second expression into the first yields:</p>
 <p><span class="math display">\[
-f_{Y,M}(y, M = m \mid \theta, \phi) = f_{Y}(y \mid \theta) f_{M \mid Y}(M = m \mid Y = y, \phi)
-\]</span> When we have missing data, we can partition the matrix <span class="math inline">\(y\)</span> into <span class="math inline">\(y_{(1)}\)</span> and <span class="math inline">\(y_{(0)}\)</span>, representing the components of <span class="math inline">\(y\)</span> that are missing and observed, respectively.</p>
-<p>Let <span class="math inline">\(\mathcal{Y}\)</span> be the sample space for <span class="math inline">\(y_i\)</span> and let <span class="math inline">\(\mathcal{Y}_{(1)}\)</span> and <span class="math inline">\(\mathcal{Y}_{(0)}\)</span> be the sample space for the missing and observed components of <span class="math inline">\(y\)</span>.</p>
-<p>Then the distribution of the observed data is: <span class="math display">\[
-\int_{\mathcal{Y}_{(1)}} f_{Y,M}(y, M = m \mid \theta, \phi) dy_{(1)} = \int_{\mathcal{Y}_{(1)}} f_{Y}(y_{(0)},y_{(1)}  \mid \theta) f_{M \mid Y}(M = m \mid Y_{(0)} = y_{(0)},Y_{(1)} = y_{(1)}, \phi)dy_{(1)}
-\]</span> This joint density is proportional to what we’ll call the full-data likelihood:</p>
+p(\theta_1 \mid y) = \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) \int_{\Omega_{\theta_1}} p(\theta_2 \mid y, \theta_1^\prime) p(\theta_1^\prime \mid y) d\theta^\prime_1 d\theta_2,
+\]</span></p>
+<p>which we can rearrange into:</p>
 <p><span class="math display">\[
-L_{\text{full}}(\theta, \phi \mid \tilde{y}_{(0)}, \tilde{m}) = \int_{\mathcal{Y}_{(1)}} f_{Y}(\tilde{y}_{(0)},y_{(1)}  \mid \theta) f_{M \mid Y}(M = \tilde{m} \mid Y_{(0)} = \tilde{y}_{(0)},Y_{(1)} = y_{(1)}, \phi)dy_{(1)}
-\]</span> We can also compute the likelihood the missingness process:</p>
+p(\theta_1 \mid y) = \int_{\Omega_{\theta_1}} \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) p(\theta_2 \mid y, \theta_1^\prime) d\theta_2 p(\theta_1^\prime \mid y) d\theta^\prime_1,
+\]</span> Let <span class="math inline">\(P(\theta \mid \theta^prime)\)</span> be the proposal distribution, which conditions on <span class="math inline">\(\theta^\prime\)</span>: <span class="math display">\[
+P(\theta \mid \theta^\prime) = \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) p(\theta_2 \mid y, \theta_1^\prime) d\theta_2
+\]</span> Then the equation <span class="math display">\[
+g(\theta_1) = \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  g(\theta_1^\prime) d\theta^\prime_1,
+\]</span> is an integral equation. Given weak conditions on <span class="math inline">\(P(\theta_1 \mid \theta^\prime_1)\)</span>, <span class="math inline">\(p(\theta_1 \mid y)\)</span> is a unique solution for the equation.</p>
+<p>We can define the integral transformation: <span class="math inline">\(T g = \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  g(\theta_1^\prime) d\theta^\prime_1\)</span>, which takes an <span class="math inline">\(L_1\)</span> integrable function, <span class="math inline">\(\lVert g \rVert_1 = \int_{\Omega_{\theta_1}} \abs{g(\theta_1)} d\theta_1 &lt; \infty\)</span> and yields another <span class="math inline">\(L_1\)</span> integrable function.</p>
+<p>One thing to note is that <span class="math inline">\(\lVert T g \rVert_1 = \lVert g \rVert_1\)</span>, and, because <span class="math inline">\(P(\theta \mid \theta^\prime)\)</span> is a probability density in <span class="math inline">\(\theta\)</span> for each <span class="math inline">\(\theta^\prime\)</span>, it integrates to <span class="math inline">\(1\)</span>, <span class="math display">\[
+\begin{aligned}
+\int_{\Omega_{\theta_1}} \abs{(T g)(\theta_1)} d\theta_1 &amp; = \int_{\Omega_{\theta_1}} \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  g(\theta_1^\prime) d\theta^\prime_1 d\theta_1 \\
+&amp; = \int_{\Omega_{\theta_1}} \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)d\theta_1  g(\theta_1^\prime) d\theta^\prime_1  \\
+&amp; = \int_{\Omega_{\theta_1}} 1  g(\theta_1^\prime) d\theta^\prime_1  \\
+&amp; = \int_{\Omega_{\theta_1}} \abs{g(\theta_1^\prime)} d\theta^\prime_1  \\
+&amp; = \lVert g \rVert_1
+\end{aligned}
+\]</span> Also note that if <span class="math inline">\(f(\theta) \geq g(\theta)\)</span> for all <span class="math inline">\(\theta\)</span>, then <span class="math inline">\(T f \geq T g\)</span> for all <span class="math inline">\(\theta\)</span>.</p>
 <p><span class="math display">\[
-L_{\text{ign}}(\theta \mid \tilde{y}_{(0)}) = \int_{\mathcal{Y}_{(1)}} f_{Y}(\tilde{y}_{(0)},y_{(1)}  \mid \theta) dy_{(1)}
-\]</span> We’ll say that the missingness mechanism is if inferences based on <span class="math inline">\(L_{\text{ign}}(\theta \mid \tilde{y}_{(0)})\)</span> and <span class="math inline">\(L_{\text{full}}(\theta, \phi \mid \tilde{y}_{(0)}, \tilde{m})\)</span> are the same given <span class="math inline">\(\tilde{m}, \tilde{y}_{(0)}\)</span>.</p>
-<p>Formally, the missingness mechanism is ignorable for direct likelihood inference if the likelihood ratios for any two <span class="math inline">\(\theta, \theta^*\)</span> given <span class="math inline">\(\tilde{m}, \tilde{y}_{(0)}\)</span> are equal: <span class="math display">\[
-\frac{L_{\text{full}}(\theta, \phi \mid \tilde{y}_{(0)}, \tilde{m})}{L_{\text{full}}(\theta^*, \phi \mid \tilde{y}_{(0)}, \tilde{m})} = \frac{L_{\text{ign}}(\theta \mid \tilde{y}_{(0)})}{L_{\text{ign}}(\theta^* \mid \tilde{y}_{(0)})} \forall \theta, \theta^*, \phi
-\]</span> There are two sufficient conditions that ensure ignorability:</p>
+\begin{aligned}
+T f - T g &amp; =  \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  f(\theta_1^\prime) d\theta^\prime_1 - \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  g(\theta_1^\prime) d\theta^\prime_1 \\
+&amp; = \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime) (f(\theta_1^\prime) - g(\theta_1^\prime)) d\theta^\prime_1 \\
+&amp; \geq 0
+\end{aligned}
+\]</span> With these two facts, we can show that given a function <span class="math inline">\(g_i\)</span>, <span class="math inline">\(g_{i+1} = T g_i\)</span> and a solution, which we’ll call <span class="math inline">\(g^\star \equiv p(\theta_1 \mid y)\)</span>, which solves the integral equation, that <span class="math inline">\(\lVert g_{i+1} - g^\star \rVert \leq  \lVert g_{i} - g^\star \rVert\)</span>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\norm{g_{i+1} - g^\star} &amp; = \norm{T (g_{i} - g^\star)} \\
+&amp; \leq \norm{T \abs{g_{i} - g^\star}} \\
+&amp; = \norm{g_{i} - g^\star}
+\end{aligned}
+\]</span> There are two more conditions that lead to <span class="math inline">\(g^\star\)</span> being the unique solution to the equation, and to another desirable characteristic for our computational schemes, which is called geometric ergodicity: <span class="math display">\[
+\norm{g_{i+1} - g^\star} \leq \alpha^{i}(g_0) \norm{g_{0} - g^\star}, \, \alpha \in (0, 1)
+\]</span> as long as <span class="math inline">\(\sup_\theta g_0(\theta) / g^\star(\theta) &lt; \infty\)</span>.</p>
+<p>This condition is the following: For every <span class="math inline">\(\theta_0 \in \Omega_{\theta}\)</span> there is an open neighborhood <span class="math inline">\(U\)</span> of <span class="math inline">\(\theta_0\)</span> so that: <span class="math display">\[
+P(\theta \mid \theta^\prime) &gt; 0, \forall (\theta, \theta^\prime) \in U
+\]</span></p>
+<p><span class="math display">\[
+P(\theta \mid \theta^\prime) \leq M &lt; \infty \,\, \forall (\theta, \theta^\prime) \in \Omega_\theta
+\]</span></p>
+<p>We can use this fact to show that the scheme will converge to <span class="math inline">\(p(\theta_1 \mid y)\)</span>, the unique posterior for <span class="math inline">\(\theta_1\)</span>, and the stationary distribution for the proposal <span class="math inline">\(P(\theta \mid \theta^\prime\)</span>. I won’t go over the proof, but you can see it in section 6 of <span class="citation" data-cites="tanner1987calculation">Tanner and Wong (<a href="#ref-tanner1987calculation" role="doc-biblioref">1987</a>)</span>.</p>
+<p>This suggests the following algorithm, which we’ll call Gibbs sampling, to generate draws from an unknown posterior:</p>
 <ol type="1">
-<li><p>Parameters <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\phi\)</span> are <em>variationally independent</em>, i.e.&nbsp;the joint parameter space <span class="math inline">\(\Omega_{\theta,\phi} = \Omega_\theta \times \Omega_\phi\)</span></p></li>
-<li><p>The full likelihood factorizes as <span class="math display">\[
-L_{\text{full}}(\theta, \phi \mid \tilde{y}_{(0)}, \tilde{m}) = L_{\text{ign}}(\theta \mid \tilde{y}_{(0)}) L_\text{rest}(\phi \mid \tilde{y}_{(0)}, \tilde{m})
-\]</span> The first condition is sufficient to ensure that the value of <span class="math inline">\(\phi\)</span> doesn’t lead to a different likelihood value for <span class="math inline">\(\theta\)</span> vs.&nbsp;<span class="math inline">\(\theta^*\)</span>.</p></li>
+<li><p>Determine starting values <span class="math inline">\(\theta_1^0, \theta_2^0\)</span></p></li>
+<li><p>For <span class="math inline">\(t=1, \dots, S\)</span></p>
+<ol type="a">
+<li><p>Draw <span class="math inline">\(\theta_1^{t+1} \sim p(\theta_1 \mid \theta_2^t, y)\)</span></p></li>
+<li><p>Draw <span class="math inline">\(\theta_2^{t+1} \sim p(\theta_2 \mid \theta_1^{t+1}, y)\)</span></p></li>
+</ol></li>
+<li><p>Discard <span class="math inline">\(S/2\)</span> iterations, and keep the set of draws <span class="math inline">\(\{ (\theta_1^s, \theta_2^s) \mid s = S/2+1, ,\dots, S\}\)</span>.</p></li>
 </ol>
-<p>If the data are MAR, then we will satisfy the second condition:</p>
+<p>The final set of draws <span class="math inline">\(S/2\)</span> draws are approximately distributed according to <span class="math inline">\(p(\theta_1, \theta_2 \mid y)\)</span></p>
+<p>The assumptions that make the algorithm work are key. <span class="citation" data-cites="tanner1987calculation">Tanner and Wong (<a href="#ref-tanner1987calculation" role="doc-biblioref">1987</a>)</span> note that <span class="math inline">\(\alpha\)</span> is dependent on the starting distribution, and <span class="math inline">\(\alpha\)</span> can be arbitrarily close to <span class="math inline">\(1\)</span> for unbounded parameter spaces.</p>
+<p>The condition on the starting distribution mean that a <span class="math inline">\(g_0\)</span> with compact support might be a good choice, because we avoid a situation where <span class="math inline">\(\sup_\theta g_0(\theta) / g^\star(\theta)\)</span> is large because <span class="math inline">\(g_0\)</span> has tails that are heavier than those of <span class="math inline">\(g^\star(\theta)\)</span> as <span class="math inline">\(\norm{\theta} \to \infty\)</span>.</p>
+<p>The problem with Gibbs is that it often moves slowly in high dimensions when there is high correlation between components.</p>
+<section id="quantifying-uncertainty-in-mcmc-estimates" class="level3">
+<h3 class="anchored" data-anchor-id="quantifying-uncertainty-in-mcmc-estimates">Quantifying Uncertainty in MCMC estimates</h3>
+<p>Given a set of draws <span class="math inline">\(\{\theta_s, s = 1, \dots, S\}\)</span> from a Gibbs sampler, we want a way to assess how well our empirical average: <span class="math display">\[
+\bar{f} = \frac{1}{S} \sum_{s = 1}^S f(\theta_s)
+\]</span> approximates the true expectation: <span class="math display">\[
+\Exp{f(\theta)}{p(\theta \mid y)}
+\]</span> Under fairly general conditions, <span class="math display">\[
+\sqrt{n}(\bar{f} - \Exp{f}) \overset{d}{\to} N(0, \sigma^2)
+\]</span> The wrinkle is that <span class="math inline">\(\sigma^2\)</span> wont equal <span class="math inline">\(\text{Var}_{p(\theta \mid y)}(f(\theta))\)</span> because our draws aren’t independent. In fact, as shown in <span class="citation" data-cites="geyerMCMC">Geyer (<a href="#ref-geyerMCMC" role="doc-biblioref">2005</a>)</span>, we can compute the variance of the left-hand side: <span class="math display">\[
+\begin{aligned}
+\text{Var}(\sqrt{n}(\bar{f} - \Exp{f})) &amp; = n \text{Var}(\bar{f}) \\
+&amp; = \frac{1}{n}\sum_{s=1}^n \text{Var}(f(\theta_s)) + \frac{2}{n} \sum_{i=1}^{n-1} \sum_{j={i+1}}^{n} \text{Cov}(f(\theta_i),f(\theta_j))
+\end{aligned}
+\]</span> We’ll assume we have a stationary chain, so <span class="math inline">\(\text{Var}(f(\theta_s)) = \gamma_0\)</span>, and <span class="math inline">\(\gamma_k = \text{Cov}(f(\theta_{i}),f(\theta_{i+k}))\)</span>, which leads to</p>
 <p><span class="math display">\[
-f_{M \mid Y} (M = \tilde{m} \mid Y_{(0)} = \tilde{y}_{(0)}, Y_{(1)} = y_{(1)}, \phi) = f_{M \mid Y} (M = \tilde{m} \mid Y_{(0)} = \tilde{y}_{(0)}, Y_{(1)} = y_{(1)}^*, \phi)
-\]</span> for all <span class="math inline">\(y_{(1)}, y_{(1)}^*, \phi\)</span>. Then we can write the full-likelihood as: <span class="math display">\[
-f_{M \mid Y}(M = \tilde{m} \mid Y_{(0)}=\tilde{y}_{(0)}, \phi) \int_{\mathcal{Y}_{(1)}} f_{Y}(\tilde{y}_{(0)},y_{(1)}  \mid \theta) dy_{(1)} = f_{M \mid Y}(M = \tilde{m} \mid Y_{(0)} = \tilde{y}_{(0)}, \phi)  f_{Y}(\tilde{y}_{(0)}  \mid \theta)
-\]</span> Then by the above theorem, parameter distinctness and MAR are sufficient for ignorability.</p>
-<p>When we do Bayesian inference we need to ensure that the posterior for <span class="math inline">\(\theta\)</span> when using the ignorable likelihood is equal to the posterior for <span class="math inline">\(\theta\)</span> when using the full likelihood. Under the full likleihood, the posterior for <span class="math inline">\((\theta, \phi)\)</span> is:</p>
-<p><span class="math display">\[
-p(\theta, \phi \mid y_{(0)},m) \propto p(\theta, \phi) L_{\text{full}}(\theta, \phi \mid y_{(0)}, m)
-\]</span> and under the ignorable likelihood we have:</p>
-<p><span class="math display">\[
-p(\theta \mid \tilde{y}_{(0)},\tilde{m}) \propto p(\theta) L_{\text{ign}}(\theta \mid \tilde{y}_{(0)})
-\]</span> Thus, sufficient conditions for the posteriors to be equal is that</p>
-<ol type="1">
-<li><p><span class="math inline">\(p(\theta, \phi) = p(\theta)p(\phi)\)</span>, or the prior independence of <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\phi\)</span></p></li>
-<li><p>The full likelihood factorizes as <span class="math display">\[
-L_{\text{full}}(\theta, \phi \mid \tilde{y}_{(0)}, \tilde{m}) = L_{\text{ign}}(\theta \mid \tilde{y}_{(0)}) L_\text{rest}(\phi \mid \tilde{y}_{(0)}, \tilde{m})
-\]</span></p></li>
-</ol>
+\begin{aligned}
+\frac{1}{n}\sum_{s=1}^n \text{Var}(f(\theta_s)) + \frac{2}{n} \sum_{i=1}^{n-1} \sum_{j={i+1}}^{n} \text{Cov}(f(\theta_i),f(\theta_j)) &amp; = \gamma_0 + \frac{2}{n} \sum_{i=1}^{n-1} \sum_{j={i+1}}^{n} \gamma_{j - i} \\
+&amp; = \gamma_0 + \frac{2}{n} \sum_{i=1}^{n-1} (n - i) \gamma_i
+\end{aligned}
+\]</span> If things are well-behaved, the series on the right converges to: <span class="math display">\[
+\begin{aligned}
+\sigma^2 = \gamma_0 + 2 \sum_{i=1}^{\infty} \gamma_i
+\end{aligned}
+\]</span> Thus, <span class="math display">\[
+\sqrt{n}(\bar{f} - \Exp{f}) \overset{d}{\to} N(0, \gamma_0 + 2 \sum_{i=1}^{\infty} \gamma_i)
+\]</span> If we had independent draws of <span class="math inline">\(\theta_i\)</span>, we would instead have <span class="math display">\[
+\sqrt{n}(\bar{f} - \Exp{f}) \overset{d}{\to} N(0, \gamma_0)
+\]</span> The ratio of these variances: <span class="math display">\[
+\frac{\gamma_0}{\gamma_0 + 2 \sum_{i=1}^{\infty} \gamma_i} = \frac{1}{1 + 2 \sum_{i=1}^{\infty} \frac{\gamma_i}{\gamma_0}}
+\]</span> Can be used to compute something called the effective sample size from an MCMC sample of <span class="math inline">\(S\)</span> draws: <span class="math display">\[
+n_\text{eff} = \frac{n}{1 + 2 \sum_{i=1}^{\infty} \rho_k}
+\]</span> where <span class="math inline">\(\rho_k\)</span> is the autocorrelation at the <span class="math inline">\(k^\text{th}\)</span> lag. The effective sample size represents the number of independent draws with an equivalent variance to the samples from an MCMC chain.</p>
+<p>These figures can be used to benchmark MCMC algorithms by computing <span class="math inline">\(n_\text{eff}/\text{sec}\)</span> of computing time, or <span class="math inline">\(n_\text{eff}/\text{flop}\)</span>, where flop is floating point operation.</p>
 </section>
-<section id="example-incomplete-exponential-sample" class="level3">
-<h3 class="anchored" data-anchor-id="example-incomplete-exponential-sample">Example: Incomplete exponential sample</h3>
-<p>Let <span class="math inline">\(y_i \overset{\text{iid}}{\sim} \text{Exponential}(\theta)\)</span> for <span class="math inline">\(i = 1, \dots, n\)</span>. Let <span class="math inline">\(m_i\)</span> be the missingness indicators, and suppose <span class="math inline">\(r = \sum_{i=1}^n m_i\)</span>. The full likelihood is <span class="math display">\[
-f_Y(y \mid \theta) = \theta^{-n}\exp\lp-\sum_{i=1}^n y_i / \theta \rp
-\]</span> Let <span class="math inline">\(y_{(0)} = (y_1, \dots, y_r)\)</span> and <span class="math inline">\(y_{(1)} = (y_{r+1}, \dots, y_n)\)</span>. The likelihood that ignores the likelihood is <span class="math display">\[
-L_{\text{ign}}(\theta \mid y_{(0)}) = \theta^{-r} \exp\lp-\sum_{i=1}^r y_i / \theta \rp
-\]</span> Let <span class="math inline">\(m_i \overset{\text{iid}}{\sim} \text{Bernoulli}(\phi)\)</span>, so <span class="math display">\[
-f_{M \mid Y}(m \mid y, \phi) = \phi^{r}(1 - \phi)^{n-r}
-\]</span> Then <span class="math inline">\(f(y_{(0)}, m \mid \theta, \phi) = \phi^{r}(1 - \phi)^{n-r}\theta^{-r} \exp\lp-\sum_{i=1}^r y_i / \theta \rp\)</span>, which factorizes into a factor related to <span class="math inline">\(\theta\)</span> and a factor related to <span class="math inline">\(\phi\)</span>. This means we can base inferences on <span class="math inline">\(\theta\)</span> on <span class="math inline">\(L_{\text{ign}}(\theta \mid y_{(0)}\)</span> instead of the full likelihood. The MLE is <span class="math inline">\(\hat{\theta} = \sum_{i=1}^n y_i / r\)</span>.</p>
-<p>Now suppose we observe only observations for which <span class="math inline">\(y_i \leq c\)</span>, so <span class="math display">\[
-f(m_i \mid y_i, \phi) = \ind{y_i \geq c}^{m_i}\ind{y_i &lt; c}^{1 - m_i}
-\]</span> Putting this together, the full likelihood is: <span class="math display">\[
-\prod_{i=1}^r f_{Y}(y_i \mid \theta) \ind{y_i &lt; c} \prod_{i={r+1}}^n \int_{\R^+} \ind{y_i \geq c} f(y \mid \theta) dy
-\]</span></p>
-<p>Which of course simplifies to <span class="math display">\[
-\theta^{-r} \exp\lp-\sum_{i=1}^r y_i / \theta \rp\exp(-(n - r) c / \theta)
-\]</span> This shows that the missingness is nonignorable, because the full likelihood isn’t equal to the ignorable likelihood we used in the first part of the problem.</p>
-<p>The log-likelihood is: <span class="math display">\[
-\ell(\theta \mid y_{(0)}, m) = -r \log \theta - \sum_{i=1}^r y_i / \theta - (n - r) c / \theta
-\]</span></p>
-<p><span class="math display">\[
-\frac{\partial \ell(\theta \mid y_{(0)}, m)}{\partial \theta} = -r/\theta + \sum_{i=1}^r y_i / \theta^2 + (n - r) c / \theta^2
-\]</span> Setting this equal to zero and solving for <span class="math inline">\(\theta\)</span> gives the MLE: <span class="math display">\[
-\hat{\theta} = \frac{\sum_{i=1}^r y_i + (n - r) c}{r}
-\]</span> This of course doesn’t equal the ignorable MLE, <span class="math inline">\(\bar{y}\)</span> for the observed values.</p>
-</section>
-<section id="missing-data-example-parameter-distinctness" class="level3">
-<h3 class="anchored" data-anchor-id="missing-data-example-parameter-distinctness">Missing data example: Parameter distinctness</h3>
-<p>Let the model be defined as <span class="math display">\[
-\begin{aligned}
-y_{ij} \mid \mu_i, \theta &amp; \sim \text{Normal}(\alpha_i, \sigma^2) \\
-\alpha_i \mid \theta &amp; \sim \text{Normal}(\mu, \tau^2)
-\end{aligned}
-\]</span> Let the missingness mechanism be: <span class="math display">\[
-f_{M \mid Y}(m_{ij} \mid y, \alpha_i, \phi) = \pi(\alpha_i, \phi) = (1 + e^{-(\phi_0 + \phi_1 \alpha_i)})^{-1}
-\]</span> The joint density of the observations and parameters, also known as the complete data likelihood, is: <span class="math display">\[
-\begin{aligned}
-\prod_{i=1}^I \prod_{j=1}^{n_i} \frac{1}{\sqrt{2 \pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(y_{ij} - \alpha_i)^2} \pi(\alpha_i,\phi)^{m_{ij}}(1 - \pi(\alpha_i,\phi))^{1-m_{ij}} \frac{1}{\sqrt{2 \pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(\alpha_i - \mu)^2}
-\end{aligned}
-\]</span> Because the <span class="math inline">\(\alpha_i\)</span> aren’t observed, but do have a density, we need to integrate over them to compute the full likelihood: <span class="math display">\[
-\begin{aligned}
-\prod_{i=1}^I \int_{\R} \prod_{j=1}^{n_i} \lp \frac{1}{\sqrt{2 \pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(y_{ij} - \alpha_i)^2}\rp^{1 - m_{ij}} \pi(\alpha_i,\phi)^{m_{ij}}(1 - \pi(\alpha_i,\phi))^{1-m_{ij}} \frac{1}{\sqrt{2 \pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(\alpha_i - \mu)^2}d\alpha_i
-\end{aligned}
-\]</span> This shows that the missingness process isn’t ignorable here, even though we don’t technically have the distribution of missingness depending on missing obesrvable data, per se. This shows that in some sense, <span class="math inline">\(\alpha_i\)</span> is missing data, and, indeed, this is what our textbook considers missing data; namely anything that has a distribution that is unobserved. This makes the problem MNAR.</p>
-<p>Compare this to the ANOVA model with the same missingness mechanism: <span class="math display">\[
-\begin{aligned}
-y_{ij} \mid \alpha_i, \theta &amp; \sim \text{Normal}(\alpha_i, \sigma^2)
-\end{aligned}
-\]</span> Then the joint likelihood is <span class="math display">\[
-\begin{aligned}
-\prod_{i=1}^I \prod_{j=1}^{n_i} \frac{1}{\sqrt{2 \pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(y_{ij} - \alpha_i)^2} \pi(\alpha_i,\phi)^{m_{ij}}(1 - \pi(\alpha_i,\phi))^{1-m_{ij}}
-\end{aligned}
-\]</span> This shows that the data are MAR, because the missingness mechanism doesn’t depend on missing data. However, the parameters for the missingness mechanism and the observations don’t satisfy the distinctness condition, so the missingness is nonignorable.</p>
-</section>
-<section id="partial-mar" class="level3">
-<h3 class="anchored" data-anchor-id="partial-mar">Partial MAR</h3>
-<p>Suppose we can partition <span class="math inline">\(\theta\)</span> into two pieces, <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span> so that the parameter of interest is <span class="math inline">\(\theta_1\)</span>. The data are partially MAR for <span class="math inline">\(\theta_1\)</span> if we can factorize the full likelihood: <span class="math display">\[
-L_{\text{full}}(\theta_1, \theta_2, \phi \mid y_{(0)}, m) = L_1(\theta \mid y_{(0)}) L_{\text{rest}}(\theta_2, \phi \mid y_{(0)}, m)
-\]</span></p>
-</section>
-<section id="example-regression-with-missing-data" class="level3">
-<h3 class="anchored" data-anchor-id="example-regression-with-missing-data">Example: Regression with missing data</h3>
-<p>An example of this is when we have covariates paired with each observation so that the complete data is <span class="math inline">\((y_i, x_i), i = 1, \dots, n\)</span> where <span class="math inline">\(y_i \in \R^d\)</span> and <span class="math inline">\(x_i \in \R^p\)</span>. let <span class="math inline">\(y_{(0)},y_{(1)}\)</span> be the observed and missing elements of <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_{(0)},x_{(1)}\)</span> are the observed and missing elements of <span class="math inline">\(x_i\)</span>. Let <span class="math inline">\(m^X_{i}\)</span> be the missingness indicators for the covariates, <span class="math inline">\(X\)</span>, and let <span class="math inline">\(m^Y_i\)</span> be the missingness indicators for the observations <span class="math inline">\(y_i\)</span>. Let <span class="math inline">\(m_i = (m^Y_{i},m^X_{i})\)</span> be the combined missingness indicators for unit <span class="math inline">\(i\)</span>. Suppose that for <span class="math inline">\(i=1, \dots, r\)</span> <span class="math inline">\(x_i\)</span> is fully observed, while at least one component of <span class="math inline">\(y_i\)</span> is observed, and for the remaining <span class="math inline">\(i = r+1, \dots, n\)</span> <span class="math inline">\(y_i\)</span> is completely missing and each <span class="math inline">\(x_i\)</span> has at least one missing component. Let <span class="math inline">\(y_i, x_i, m_i\)</span> be unit iid, so: <span class="math display">\[
-f_{Y,X,M} (y_i, x_i, m_i \mid \theta_1, \theta_2, \phi) = f_{Y \mid X}(y_i \mid x_i, \theta_1) f_{X}(x_i \mid \theta_2) f_{M \mid Y, X}(m_i \mid y_i, x_i, \phi)
-\]</span> We’ll assume the missingness mechanism takes the following form: <span class="math display">\[
-f_{M\mid Y, X}(m_i \mid x_{i(1)}, x_{i(0)}, y_i, \phi) = f_{M\mid Y, X}(m_i \mid x_{i(1)}, x_{i(0)}, y_i^{\star}, \phi)
-\]</span> for all <span class="math inline">\(y_i, y_i^\star, x_{i(0)}, i = 1, \dots, n\)</span>.</p>
-<p>This missingness mechanism is MNAR because it depends on unobserved components of <span class="math inline">\(x_{i(1)}\)</span>. Luckily we’ll be able to factorize our likelihood so inference <span class="math inline">\(\theta_1\)</span> is partially ignorable: <span class="math display">\[
-L_{\text{full}}(\theta_1, \theta_2, \phi \mid y_{(0)}, x_{(0)}, m) = L_{\text{p-ign}}(\theta_1 \mid y_{(0)}, x_{(0)}) L_{\text{rest}}(\theta_2, \phi \mid m, x_{(0)})
-\]</span> Let <span class="math inline">\(\mathcal{Y}_i\)</span> be the sample space corresponding to the missing <span class="math inline">\(y_{i(1)}\)</span>. Then we can write the ignorable part of the likelihood: <span class="math display">\[
-L_{\text{p-ign}}(\theta_1 \mid y_{(0)}, x_{(0)}) = \prod_{i=1}^r \int_{\mathcal{Y}_i} f_{Y\mid X}(y_{i(0)}, y_{i(1)} \mid x_i, \theta_1) dy_{i(1)}
-\]</span> Let <span class="math inline">\(\mathcal{X}_i\)</span> be the sample space of the missing covariates for the <span class="math inline">\(i^\mathrm{th}\)</span> unit. Then the rest of the likelihood can be written as <span class="math display">\[
-L_{\text{rest}}(\theta_2, \phi \mid x_{i(0)}, m) =\prod_{i=1}^r f_X(x_i \mid \theta_2) f_{M \mid X}(m_i \mid x_i, \phi) \prod_{i=r+1}^n \int_{\mathcal{X}_i} f_{X}(x_{i(0)}, x_{i(1)} \mid \theta_2) f_{M \mid X} (m_i \mid x_{i(1)}, x_{i(0)}, \phi) dx_{i(1)}
-\]</span> Note the book has a typo here.</p>
+<section id="convergence-diagnostics" class="level3">
+<h3 class="anchored" data-anchor-id="convergence-diagnostics">Convergence diagnostics</h3>
+<p>One question we might have is how to assess if we’ve run enough iterations so that we’re drawing from the stationary distribution. We won’t ever truly reach the stationary distribution, because, as we can see above, we only ``reach” the stationary distribution asymptotically.</p>
+<p>However, we can use diagnostics to determine if there is any evidence that we haven’t converged. The most common heuristic for this is called <span class="math inline">\(\hat{R}\)</span>, which was proposed in <span class="citation" data-cites="gelman1992inference">Gelman and Rubin (<a href="#ref-gelman1992inference" role="doc-biblioref">1992</a>)</span>, and is thus called the Gelman-Rubin statistic, or R-hat.</p>
+<p>The statistic relies on the fact that asymptotically, running the MCMC chain long enough from any starting distribution will yield samples from the stationary distribution. Thus, if we choose many well-dispersed starting points, and run our sampler for each starting point, the samples generated from each starting point should be indistinguishable from each other.</p>
+<p>TK: draw one example on the board of chains that would look stationary for a single chain, but are not if we have two</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MCMC-lecture-1_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>One way to assess differences between chains is to compare the within-chain variance for a parameter of interest, say <span class="math inline">\(\theta\)</span> to the combined variance of all the chains. Let <span class="math inline">\(\theta^{(sm)}\)</span> be the draw for <span class="math inline">\(\theta\)</span> from the <span class="math inline">\(m^\mathrm{th}\)</span> chain out of <span class="math inline">\(M\)</span> chains at the <span class="math inline">\(s^\mathrm{th}\)</span> iteration. Let <span class="math inline">\(\bar{\theta}^{(.m)} = \frac{1}{S}\sum_{s=1}^S \theta^{(sm)}\)</span>, <span class="math inline">\(\bar{\theta}^{(..)} = \frac{1}{M}\sum_{m=1}^M \bar{\theta}^{(.m)}\)</span>. Let <span class="math inline">\(v_m = \frac{1}{S-1}\sum_{s=1}^S (\theta^{(sm)} - \bar{\theta}^{(.m)})^2\)</span>, and let <span class="math inline">\(W = \frac{1}{M}\sum_{m=1}^M v_m\)</span>. We also compute the between-chain variance, so <span class="math inline">\(B = \frac{S}{M-1}\sum_{m=1}^M (\bar{\theta}^{(.m)} - \bar{\theta}^{(..)})^2\)</span></p>
+<p>Then we estimate the variance of the posterior with the following consistent but biased estimator: <span class="math display">\[
+\widehat{\text{var}}(\theta \mid y) = \frac{S-1}{S} W + \frac{B}{S}
+\]</span> We can see that this is likely an oversetimate of the variance because as <span class="math inline">\(S\to\infty\)</span>, <span class="math inline">\(v_m \to \text{var}(\theta \mid y)\)</span>, and the first factor converges to the same, while the second factor goes to zero.</p>
+<p>The term <span class="math inline">\(W\)</span> underestimates the posterior variance for any finite <span class="math inline">\(S\)</span> because each chain hasn’t explored the full extent of the tails of the distribution, and thus will have a smaller variance than the true variance.</p>
+<p>The final expression for <span class="math inline">\(\hat{R}\)</span> is <span class="math display">\[
+\hat{R} = \sqrt{\frac{\widehat{\text{var}}(\theta \mid y)}{W}}
+\]</span> The statistic is calculated so that each chain in the above calculation is the first or second half of a single chain. Thus, if we ran two MCMC chains, <span class="math inline">\(M=4\)</span> above.</p>
+<p>The reason for this is to catch scenarios where each chain is nonstationary, but the chains are marginally indistinguishable.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MCMC-lecture-1_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The version that Stan uses is outlined here: <span class="citation" data-cites="vehtari2021rank">Vehtari et al. (<a href="#ref-vehtari2021rank" role="doc-biblioref">2021</a>)</span>. It uses an <span class="math inline">\(\hat{R}\)</span> that is computed using normlized ranks, which means we compute the rank <span class="math inline">\(r^{(sm)}\)</span> of each draw of a parameter with respect to the pooled draws from all the chains. Then the ranks are trasnformed to z-scores using: <span class="math display">\[
+z^{(sm)} = \Phi^{-1}\lp\frac{r^{(sm)} - 3/8}{S M + 1/4}\rp
+\]</span> Then the <span class="math inline">\(\hat{R}\)</span> is computed using <span class="math inline">\(z^{(sm)}\)</span> in place of <span class="math inline">\(\theta^{(sm)}\)</span> above. This has the effect of making the statistic useful in scenarios where there is an infinite mean (e.g.&nbsp;when we’re sampling from a Cauchy distribution, or something with similarly heavy tails).</p>
+
 
 
 </section>
+</section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-gelfand1990sampling" class="csl-entry" role="listitem">
+Gelfand, Alan E, and Adrian FM Smith. 1990. <span>“Sampling-Based Approaches to Calculating Marginal Densities.”</span> <em>Journal of the American Statistical Association</em> 85 (410): 398–409.
+</div>
+<div id="ref-gelman1992inference" class="csl-entry" role="listitem">
+Gelman, Andrew, and Donald B Rubin. 1992. <span>“Inference from Iterative Simulation Using Multiple Sequences.”</span> <em>Statistical Science</em> 7 (4): 457–72.
+</div>
+<div id="ref-geyerMCMC" class="csl-entry" role="listitem">
+Geyer, Charles J. 2005. <span>“Markov <span>Chain Monte Carlo Lecture Notes</span>.”</span>
+</div>
+<div id="ref-tanner1987calculation" class="csl-entry" role="listitem">
+Tanner, Martin A, and Wing Hung Wong. 1987. <span>“The Calculation of Posterior Distributions by Data Augmentation.”</span> <em>Journal of the American Statistical Association</em> 82 (398): 528–40.
+</div>
+<div id="ref-vehtari2021rank" class="csl-entry" role="listitem">
+Vehtari, Aki, Andrew Gelman, Daniel Simpson, Bob Carpenter, and Paul-Christian Bürkner. 2021. <span>“Rank-Normalization, Folding, and Localization: An Improved r ̂ for Assessing Convergence of MCMC (with Discussion).”</span> <em>Bayesian Analysis</em> 16 (2): 667–718.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
