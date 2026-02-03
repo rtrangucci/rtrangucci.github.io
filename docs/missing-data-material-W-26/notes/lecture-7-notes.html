@@ -256,12 +256,12 @@ p(\eta) \propto p(g^{-1}(\eta)) \det J_{\eta,\theta}
 p(\eta) &amp; \propto \det \mathcal{I}(g^{-1}(\eta))^{1/2} \det J_{\eta,\theta} \\
 &amp; \propto \det (J_{\eta,\theta})^{1/2}\det \mathcal{I}(g^{-1}(\eta))^{1/2} \det (J_{\eta,\theta})^{1/2} \\
 &amp; \propto \det (J_{\eta,\theta}^T)^{1/2}\det \mathcal{I}(g^{-1}(\eta))^{1/2} \det (J_{\eta,\theta})^{1/2} \\
-&amp; \propto \det (J_{\eta,\theta}^T\mathcal{I}(g^{-1}(\eta))^{1/2}J_{\eta,\theta})^{1/2} \\
+&amp; \propto \det (J_{\eta,\theta}^T\mathcal{I}(g^{-1}(\eta))J_{\eta,\theta})^{1/2} \\
 &amp; \propto \det(\mathcal{I}(\eta))^{1/2}
 \end{aligned}
 \]</span> Thus giving some sense of invariance under a coordinate change. As stated in <span class="citation" data-cites="gelman-bayes">Gelman et al. (<a href="#ref-gelman-bayes" role="doc-biblioref">2013</a>)</span>, more or less:</p>
 <blockquote class="blockquote">
-<p>Any rule for determining the prior density <span class="math inline">\(p(\theta)\)</span> should yield an equivalent result if aplied to the transformed parameter; that is, <span class="math inline">\(p(\eta)\)</span> generated using <span class="math inline">\(p(\theta)\)</span> using the change of measure formula should yield the same prior as would have been obtained directly from the model <span class="math inline">\(p(\eta) p(y \mid \eta)\)</span></p>
+<p>Any rule for determining the prior density <span class="math inline">\(p(\theta)\)</span> should yield an equivalent result if applied to the transformed parameter; that is, <span class="math inline">\(p(\eta)\)</span> generated using <span class="math inline">\(p(\theta)\)</span> using the change of measure formula should yield the same prior as would have been obtained directly from the model <span class="math inline">\(p(\eta) p(y \mid \eta)\)</span></p>
 </blockquote>
 <p>One issue with Jeffreys’ prior is that it is dependent on a likelihood, which can be controversial.</p>
 <p>For the Bernoulli trial example from last class, the Jeffreys prior is <span class="math inline">\(\text{Beta}(1/2, 1/2)\)</span>.</p>
