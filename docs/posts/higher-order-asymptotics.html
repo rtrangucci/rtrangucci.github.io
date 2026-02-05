@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -204,6 +224,7 @@ window.Quarto = {
 </header>
 
 
+<p>These notes are an expansion of § 5.1 in <span class="citation" data-cites="severini2000likelihood">Severini (<a href="#ref-severini2000likelihood" role="doc-biblioref">2000</a>)</span> to multivariate parameters <span class="math inline">\(\theta \in \R^p\)</span>; § 5.3.2 does derive higher-order cumulants for <span class="math inline">\(\sqrt{n}(\hat{\psi} - \psi^\dagger)\)</span> in the presence of nuisance parameters <span class="math inline">\(\lambda\)</span>, but the resulting approximations incur extra error due to the use of asymptotic expansions of the profile likelihood function, which is not a proper likelihood (at least not to first order).</p>
 <section id="higher-order-taylor-series-of-score-function" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Higher-order Taylor series of score function</h1>
 <p>Let <span class="math inline">\(\theta \in \R^p\)</span>.</p>
@@ -238,9 +259,9 @@ D =
 \vdots \\
 \asvec(\frac{\ell_{\theta\theta\theta}(\theta^\dagger)_p}{n})^T
 \end{bmatrix}
-\]</span> Then we write the system of equations: <span class="math display">\[
+\]</span> Then we write the system of equations: <span id="eq-sys"><span class="math display">\[
 0  = \sqrt{n}\frac{\ell_\theta(\theta^\dagger)}{n} + \frac{\ell_{\theta\theta}(\theta^\dagger)}{n}\sqrt{n}(\hat{\theta}_n - \theta^\dagger) + \frac{1}{2}D\asvec(\sqrt{n}(\hat{\theta}_n - \theta^\dagger)\sqrt{n}(\hat{\theta}_n - \theta^\dagger)^T) / \sqrt{n} + O_p(n^{-1})
-\]</span></p>
+\tag{1}\]</span></span></p>
 <p>We’ll assume the following asymptotic representations of the sample means of the matrices of derivatives, where <span class="math inline">\(Z_j = O_p(1)\)</span>, <span class="math inline">\(Z_{1j} \in \R, Z_{2j} \in \R^p, Z_{3j} \in \R^{p\times p}\)</span> .</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -252,11 +273,199 @@ D =
 <p>Finally, we would like to find an asymptotic expansion of the form: <span class="math display">\[
 \sqrt{n}(\hat{\theta}_n - \theta^\dagger) = B + C / \sqrt{n} + O_p(n^{-1})
 \]</span></p>
+<p>First, we substitute the asymptotic representations for the likelihood derivatives into <a href="#eq-sys" class="quarto-xref">Equation&nbsp;1</a> and keep track of the orders. In order to economize on notation, let <span class="math inline">\(X = \sqrt{n}(\hat{\theta}_n - \theta^\dagger)\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp; Z_1 + (-\mathcal{I}(\theta^\dagger) + \frac{Z_{2}}{\sqrt{n}})X + \frac{1}{2}
+\begin{bmatrix}
+\asvec\lp V_1 + \frac{Z_{31}}{\sqrt{n}}\rp \\
+\asvec\lp V_2 + \frac{Z_{32}}{\sqrt{n}}\rp \\
+\vdots  \\
+\asvec\lp V_p + \frac{Z_{3p}}{\sqrt{n}}\rp \\
+\end{bmatrix}
+\asvec(XX^T) / \sqrt{n} + O_p(n^{-1})  \\
+\end{aligned}
+\]</span> Then we plug in <span class="math inline">\(X = B + C / \sqrt{n})\)</span>. We can ignore the <span class="math inline">\(O_p(n^{-1})\)</span> term because everything that multiplies <span class="math inline">\(X\)</span> is at most <span class="math inline">\(O_p(1)\)</span>, so the terms multiplied by <span class="math inline">\(O_p(n^{-1})\)</span> get relegated to the <span class="math inline">\(O_p(n^{-1})\)</span> term:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp; Z_1 + (-\mathcal{I}(\theta^\dagger) + \frac{Z_{2}}{\sqrt{n}})(B + C / \sqrt{n}) \\
+&amp; \quad + \frac{1}{2}
+\begin{bmatrix}
+\asvec\lp V_1 + \frac{Z_{31}}{\sqrt{n}}\rp \\
+\asvec\lp V_2 + \frac{Z_{32}}{\sqrt{n}}\rp \\
+\vdots  \\
+\asvec\lp V_p + \frac{Z_{3p}}{\sqrt{n}}\rp \\
+\end{bmatrix}
+\asvec(((B + C / \sqrt{n})((B + C / \sqrt{n})^T) / \sqrt{n} + O_p(n^{-1})  \\
+\end{aligned}
+\]</span></p>
+<p>Rearranging and grouping by orders of <span class="math inline">\(n\)</span> gives:</p>
+<p><span class="math display">\[
+\begin{align}
+&amp; Z_1 -\mathcal{I}(\theta^\dagger) B + \frac{Z_{2}}{\sqrt{n}} B  -\frac{\mathcal{I}(\theta^\dagger) C}{\sqrt{n}} + \frac{Z_2 C}{n} \tag{A}\\
+&amp; \quad + \frac{1}{2}
+\begin{bmatrix}
+\asvec\lp V_1\rp \\
+\asvec\lp V_2\rp \\
+\vdots  \\
+\asvec\lp V_p\rp \\
+\end{bmatrix}
+\asvec(((B + C / \sqrt{n})((B + C / \sqrt{n})^T) / \sqrt{n}  \tag{B}\\
+&amp; \quad + \frac{1}{2}
+\begin{bmatrix}
+\asvec\lp\frac{Z_{31}}{\sqrt{n}}\rp \\
+\asvec\lp\frac{Z_{32}}{\sqrt{n}}\rp \\
+\vdots  \\
+\asvec\lp\frac{Z_{3p}}{\sqrt{n}}\rp \\
+\end{bmatrix}
+\asvec(((B + C / \sqrt{n})((B + C / \sqrt{n})^T) / \sqrt{n} + O_p(n^{-1}) \tag{C} \\
+\end{align}
+\]</span> Before going further, we can see some simplifications. The first <span class="math inline">\(Z_2 C / n\)</span> term in line (A) is <span class="math inline">\(O_p(n^{-1})\)</span> so we can ignore it as we move forward. Further, in line (B), we can ignore the terms involving <span class="math inline">\(C/\sqrt{n}\)</span> because distributing the <span class="math inline">\(n^{-1/2}\)</span> at the end of the line will move each term to <span class="math inline">\(O_p{n^{-1}}\)</span>. Finally, the entirety of line (C) is <span class="math inline">\(O_p(n^{-1})\)</span> because the left-hand matrix is <span class="math inline">\(O_p(n^{-1/2})\)</span> and will move to <span class="math inline">\(O_p(n^{-1})\)</span> after we multiply by the right-hand <span class="math inline">\(n^{-1/2}\)</span>.</p>
+<p>This yields, after collecting terms together: <span class="math display">\[
+\begin{align}
+&amp; Z_1 -\mathcal{I}(\theta^\dagger) B + \frac{1}{\sqrt{n}}\lp Z_{2}B  -\mathcal{I}(\theta^\dagger) C
++ \frac{1}{2}
+\begin{bmatrix}
+\asvec\lp V_1\rp \\
+\asvec\lp V_2\rp \\
+\vdots  \\
+\asvec\lp V_p\rp \\
+\end{bmatrix}
+\asvec(B B^T) \rp  + O_p(n^{-1})
+\end{align}
+\]</span> Setting each coefficient for the order equal to zero and solving for the unknown <span class="math inline">\(B,C\)</span> will give the higher-order expansion. <span class="math display">\[
+B = \mathcal{I}^{-1}(\theta^\dagger)Z_1
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+0 &amp; = Z_{2}B  -\mathcal{I}(\theta^\dagger) C
++ \frac{1}{2}
+\begin{bmatrix}
+\asvec\lp V_1\rp \\
+\asvec\lp V_2\rp \\
+\vdots  \\
+\asvec\lp V_p\rp \\
+\end{bmatrix}
+\asvec(B B^T) \\
+&amp; =  Z_{2}\mathcal{I}^{-1}(\theta^\dagger)Z_1  -\mathcal{I}(\theta^\dagger) C
++ \frac{1}{2}
+\begin{bmatrix}
+\asvec\lp V_1\rp \\
+\asvec\lp V_2\rp \\
+\vdots  \\
+\asvec\lp V_p\rp \\
+\end{bmatrix}
+\asvec((\mathcal{I}^{-1}(\theta^\dagger)Z_1Z_1^T \mathcal{I}^{-1}(\theta^\dagger))
+\end{aligned}
+\]</span> This gives: <span class="math display">\[
+C = \mathcal{I}^{-1}(\theta^\dagger)Z_{2}\mathcal{I}^{-1}(\theta^\dagger)Z_1 + \frac{1}{2}\mathcal{I}^{-1}(\theta^\dagger)
+\begin{bmatrix}
+\asvec\lp V_1\rp \\
+\asvec\lp V_2\rp \\
+\vdots  \\
+\asvec\lp V_p\rp \\
+\end{bmatrix}
+\asvec((\mathcal{I}^{-1}(\theta^\dagger)Z_1Z_1^T \mathcal{I}^{-1}(\theta^\dagger))
+\]</span> Finally, we get the asymptotic expansion for <span class="math inline">\(\sqrt{n}(\hat{\theta}_n - \theta^\dagger)\)</span> to <span class="math inline">\(O_p(n^{-1})\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sqrt{n}(\hat{\theta}_n - \theta^\dagger) &amp; = \mathcal{I}^{-1}(\theta^\dagger)Z_1 \\
+&amp; + \frac{1}{\sqrt{n}}\mathcal{I}^{-1}(\theta^\dagger)Z_{2}\mathcal{I}^{-1}(\theta^\dagger)Z_1 \\
+&amp; + \frac{1}{2\sqrt{n}}\mathcal{I}^{-1}(\theta^\dagger)
+\begin{bmatrix}
+\asvec\lp V_1\rp \\
+\asvec\lp V_2\rp \\
+\vdots  \\
+\asvec\lp V_p\rp \\
+\end{bmatrix}
+\asvec((\mathcal{I}^{-1}(\theta^\dagger)Z_1Z_1^T \mathcal{I}^{-1}(\theta^\dagger)) + O_p(n^{-1})
+\end{aligned}
+\]</span> In order to get the asymptotic bias for <span class="math inline">\(\hat{\theta}_n\)</span>, we need to take the expectation of the RHS.</p>
+<p>In the expression above, we have that <span class="math display">\[
+\begin{aligned}
+Z_1 &amp; = \ell_{\theta}(\theta^\dagger) / \sqrt{n} \\
+Z_2 &amp; = (\ell_{\theta\theta}(\theta^\dagger) - \ExpA{\ell_{\theta\theta}(\theta^\dagger)}{\theta^\dagger}) / \sqrt{n}
+\end{aligned}
+\]</span> Let’s vectorize <span class="math inline">\(Z_2\)</span> to get a better handle on it’s asymptotic distribution: <span class="math display">\[
+\begin{aligned}
+\asvec(Z_2) &amp; = \sqrt{n}\frac{1}{n} \asvec\lp (\ell_{\theta\theta}(\theta^\dagger) - \ExpA{\ell_{\theta\theta}(\theta^\dagger)}{\theta^\dagger})\rp
+\end{aligned}
+\]</span></p>
+<p>By the multivariate CLT, we get the following limiting distribution: <span class="math display">\[
+\begin{align}
+\asvec(Z_2) &amp; \overset{d}{\to} \mathcal{N}(0, \Sigma) \\
+\Sigma &amp; = \Exp{\asvec\lp (\ell_{\theta\theta}(\theta^\dagger) - \ExpA{\ell_{\theta\theta}(\theta^\dagger)}{\theta^\dagger})\rp\asvec\lp (\ell_{\theta\theta}(\theta^\dagger) - \ExpA{\ell_{\theta\theta}(\theta^\dagger)}{\theta^\dagger})\rp^T}
+\end{align}
+\]</span></p>
+<p>Of course, both of these have mean zero, so our asymptotic bias can be derived from <span class="math display">\[
+\begin{aligned}
+\Exp{\sqrt{n}(\hat{\theta}_n - \theta^\dagger)}  &amp; = \frac{1}{\sqrt{n}}\mathcal{I}^{-1}(\theta^\dagger)\Exp{Z_{2}\mathcal{I}^{-1}(\theta^\dagger)Z_1} \\
+&amp; + \frac{1}{2\sqrt{n}}\mathcal{I}^{-1}(\theta^\dagger)
+\begin{bmatrix}
+\asvec\lp V_1\rp \\
+\asvec\lp V_2\rp \\
+\vdots  \\
+\asvec\lp V_p\rp \\
+\end{bmatrix}
+\asvec((\mathcal{I}^{-1}(\theta^\dagger)\Exp{Z_1Z_1^T} \mathcal{I}^{-1}(\theta^\dagger)) + O_p(n^{-1})
+\end{aligned}
+\]</span></p>
+<p>Given that <span class="math inline">\(Z_1 \overset{d}{\to} \mathcal{N}(0, \mathcal{I}(\theta^\dagger))\)</span>, we have that <span class="math display">\[
+\begin{aligned}
+\Exp{Z_1 Z_1^T} &amp; = \mathcal{I}(\theta^\dagger)
+\end{aligned}
+\]</span> Leading to the simplified</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Exp{\sqrt{n}(\hat{\theta}_n - \theta^\dagger)}  &amp; = \frac{1}{\sqrt{n}}\mathcal{I}^{-1}(\theta^\dagger)\Exp{Z_{2}\mathcal{I}^{-1}(\theta^\dagger)Z_1} \\
+&amp; + \frac{1}{2\sqrt{n}}\mathcal{I}^{-1}(\theta^\dagger)
+\begin{bmatrix}
+\asvec\lp V_1\rp \\
+\asvec\lp V_2\rp \\
+\vdots  \\
+\asvec\lp V_p\rp \\
+\end{bmatrix}
+\asvec(\mathcal{I}^{-1}(\theta^\dagger)) + O_p(n^{-1})
+\end{aligned}
+\]</span></p>
+<p>Writing out <span class="math inline">\(Z_2 I^{-1} Z_1\)</span> gives:</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp; (\ell_{\theta\theta}(\theta^\dagger) - \ExpA{\ell_{\theta\theta}(\theta^\dagger)}{\theta^\dagger}) / \sqrt{n} \mathcal{I}^{-1}(\theta^\dagger) \ell_{\theta}(\theta^\dagger) / \sqrt{n} \\
+&amp; =(\ell_{\theta\theta}(\theta^\dagger)\mathcal{I}^{-1}(\theta^\dagger)\ell_{\theta}(\theta^\dagger) / n + \ell_{\theta}(\theta^\dagger) / n
+\end{aligned}
+\]</span></p>
+<p>Which leads to calculating the following expectation, noting that <span class="math inline">\(\Exp{\ell_\theta(\theta^\dagger)} = 0\)</span>:</p>
+<p><span class="math display">\[
+\Exp{\ell_{\theta\theta}(\theta^\dagger)\mathcal{I}^{-1}(\theta^\dagger)\ell_{\theta}(\theta^\dagger)} / n
+\]</span> We can rewrite this in terms of a Kronecker product:</p>
+<p><span class="math display">\[
+\Exp{\ell_{\theta}(\theta^\dagger)^T \otimes \ell_{\theta\theta}(\theta^\dagger)}\asvec(\mathcal{I}^{-1}(\theta^\dagger)) / n
+\]</span></p>
+<p>This yields a somewhat tidy expression for the bias correction:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Exp{\sqrt{n}(\hat{\theta}_n - \theta^\dagger)}  &amp; = \frac{1}{\sqrt{n}}\mathcal{I}^{-1}(\theta^\dagger) \Exp{\ell_{\theta}(\theta^\dagger)^T \otimes \ell_{\theta\theta}(\theta^\dagger)}\asvec(\mathcal{I}^{-1}(\theta^\dagger)) / n\\
+&amp; + \frac{1}{2\sqrt{n}}\mathcal{I}^{-1}(\theta^\dagger)
+\begin{bmatrix}
+\asvec\lp V_1\rp \\
+\asvec\lp V_2\rp \\
+\vdots  \\
+\asvec\lp V_p\rp \\
+\end{bmatrix}
+\asvec(\mathcal{I}^{-1}(\theta^\dagger)) + O_p(n^{-1})
+\end{aligned}
+\]</span></p>
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-severini2000likelihood" class="csl-entry" role="listitem">
+Severini, Thomas A. 2000. <em>Likelihood Methods in Statistics</em>. Oxford University Press.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

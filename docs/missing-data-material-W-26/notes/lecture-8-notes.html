@@ -254,7 +254,7 @@ L_{\text{full}}(\theta, \phi \mid \tilde{y}_{(0)}, \tilde{m}) = L_{\text{ign}}(\
 </section>
 <section id="example-incomplete-exponential-sample" class="level3">
 <h3 class="anchored" data-anchor-id="example-incomplete-exponential-sample">Example: Incomplete exponential sample</h3>
-<p>Let <span class="math inline">\(y_i \overset{\text{iid}}{\sim} \text{Exponential}(\theta)\)</span> for <span class="math inline">\(i = 1, \dots, n\)</span>. Let <span class="math inline">\(m_i\)</span> be the missingness indicators, and suppose <span class="math inline">\(r = \sum_{i=1}^n m_i\)</span>. The full likelihood is <span class="math display">\[
+<p>Let <span class="math inline">\(y_i \overset{\text{iid}}{\sim} \text{Exponential}(\theta)\)</span> for <span class="math inline">\(i = 1, \dots, n\)</span>. Let <span class="math inline">\(m_i\)</span> be the missingness indicators, and suppose <span class="math inline">\(r = \sum_{i=1}^n (1 - m_i)\)</span>. The full likelihood is <span class="math display">\[
 f_Y(y \mid \theta) = \theta^{-n}\exp\lp-\sum_{i=1}^n y_i / \theta \rp
 \]</span> Let <span class="math inline">\(y_{(0)} = (y_1, \dots, y_r)\)</span> and <span class="math inline">\(y_{(1)} = (y_{r+1}, \dots, y_n)\)</span>. The likelihood that ignores the likelihood is <span class="math display">\[
 L_{\text{ign}}(\theta \mid y_{(0)}) = \theta^{-r} \exp\lp-\sum_{i=1}^r y_i / \theta \rp
@@ -280,16 +280,16 @@ f(m_i \mid y_i, \phi) = \ind{y_i \geq c}^{m_i}\ind{y_i &lt; c}^{1 - m_i}
 </section>
 <section id="missing-data-example-parameter-distinctness" class="level3">
 <h3 class="anchored" data-anchor-id="missing-data-example-parameter-distinctness">Missing data example: Parameter distinctness</h3>
-<p>Let the model be defined as <span class="math display">\[
+<p>Suppose <span class="math inline">\(y_{ij}, \{i = 1, \dots, n\}, \{j = 1, \dots, n_i\}\)</span> are univariate normal with mean <span class="math inline">\(\alpha_i\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. Let <span class="math inline">\(\theta = (\sigma^2, \tau^2, \mu)\)</span>: <span class="math display">\[
 \begin{aligned}
-y_{ij} \mid \mu_i, \theta &amp; \sim \text{Normal}(\alpha_i, \sigma^2) \\
+y_{ij} \mid \alpha_i, \theta &amp; \sim \text{Normal}(\alpha_i, \sigma^2) \\
 \alpha_i \mid \theta &amp; \sim \text{Normal}(\mu, \tau^2)
 \end{aligned}
 \]</span> Let the missingness mechanism be: <span class="math display">\[
 f_{M \mid Y}(m_{ij} \mid y, \alpha_i, \phi) = \pi(\alpha_i, \phi) = (1 + e^{-(\phi_0 + \phi_1 \alpha_i)})^{-1}
 \]</span> The joint density of the observations and parameters, also known as the complete data likelihood, is: <span class="math display">\[
 \begin{aligned}
-\prod_{i=1}^I \prod_{j=1}^{n_i} \frac{1}{\sqrt{2 \pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(y_{ij} - \alpha_i)^2} \pi(\alpha_i,\phi)^{m_{ij}}(1 - \pi(\alpha_i,\phi))^{1-m_{ij}} \frac{1}{\sqrt{2 \pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(\alpha_i - \mu)^2}
+\prod_{i=1}^I \lp\prod_{j=1}^{n_i} \frac{1}{\sqrt{2 \pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(y_{ij} - \alpha_i)^2} \pi(\alpha_i,\phi)^{m_{ij}}(1 - \pi(\alpha_i,\phi))^{1-m_{ij}}\rp \frac{1}{\sqrt{2 \pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(\alpha_i - \mu)^2}
 \end{aligned}
 \]</span> Because the <span class="math inline">\(\alpha_i\)</span> aren’t observed, but do have a density, we need to integrate over them to compute the full likelihood: <span class="math display">\[
 \begin{aligned}
