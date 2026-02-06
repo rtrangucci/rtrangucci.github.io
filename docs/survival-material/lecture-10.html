@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Lecture 10</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+        \newcommand{\ddtA}[1]{\frac{\partial^2}{\partial #1^2}}
+        \newcommand{\ddtB}[2]{\frac{\partial^2}{\partial #1 \partial #2}}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../papers.html"> 
+<span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../courses.html"> 
+<span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#more-on-parametric-regression-models" id="toc-more-on-parametric-regression-models" class="nav-link active" data-scroll-target="#more-on-parametric-regression-models"><span class="header-section-number">1</span> More on parametric regression models</a></li>
+  <li><a href="#weibull-regression" id="toc-weibull-regression" class="nav-link" data-scroll-target="#weibull-regression"><span class="header-section-number">2</span> Weibull regression</a>
+  <ul class="collapse">
+  <li><a href="#model-fit-check" id="toc-model-fit-check" class="nav-link" data-scroll-target="#model-fit-check"><span class="header-section-number">2.0.1</span> Model fit check</a></li>
+  <li><a href="#parametric-proportional-hazards-models" id="toc-parametric-proportional-hazards-models" class="nav-link" data-scroll-target="#parametric-proportional-hazards-models"><span class="header-section-number">2.1</span> Parametric proportional hazards models</a></li>
+  <li><a href="#testing-for-proportional-hazards" id="toc-testing-for-proportional-hazards" class="nav-link" data-scroll-target="#testing-for-proportional-hazards"><span class="header-section-number">2.2</span> Testing for proportional hazards</a></li>
+  <li><a href="#accelerated-failure-time-formulation" id="toc-accelerated-failure-time-formulation" class="nav-link" data-scroll-target="#accelerated-failure-time-formulation"><span class="header-section-number">2.3</span> Accelerated failure time formulation</a></li>
+  </ul></li>
+  <li><a href="#aft-models" id="toc-aft-models" class="nav-link" data-scroll-target="#aft-models"><span class="header-section-number">3</span> AFT models</a>
+  <ul class="collapse">
+  <li><a href="#model-checking-in-aft-models" id="toc-model-checking-in-aft-models" class="nav-link" data-scroll-target="#model-checking-in-aft-models"><span class="header-section-number">3.1</span> Model checking in AFT models</a></li>
+  <li><a href="#cox-snell-residuals" id="toc-cox-snell-residuals" class="nav-link" data-scroll-target="#cox-snell-residuals"><span class="header-section-number">3.2</span> Cox-Snell residuals</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lecture 10</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="more-on-parametric-regression-models" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> More on parametric regression models</h1>
+<p>Information is from <span class="citation" data-cites="collett1994modelling">(<a href="#ref-collett1994modelling" role="doc-biblioref">Collett 1994</a>)</span>, <span class="citation" data-cites="harrell2001regression">(<a href="#ref-harrell2001regression" role="doc-biblioref">Harrell et al. 2001</a>)</span>, <span class="citation" data-cites="aalen_heterogeneity_1988">(<a href="#ref-aalen_heterogeneity_1988" role="doc-biblioref">O. O. Aalen 1988</a>)</span>, <span class="citation" data-cites="aalen2008survival">(<a href="#ref-aalen2008survival" role="doc-biblioref">O. Aalen, Borgan, and Gjessing 2008</a>)</span>.</p>
+</section>
+<section id="weibull-regression" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Weibull regression</h1>
+<p>A common parametric proportional hazards model is the Weibull, which we encountered way back in lecture 2. The baseline hazard has functional form: <span class="math display">\[\lambda_0(t \mid \alpha, \gamma) = \gamma \alpha t^{\alpha - 1}.\]</span> so the full regression model has the form <span class="math display">\[\lambda_i(t \mid \alpha, \gamma, \boldsymbol{\beta}) = \gamma \alpha t^{\alpha - 1}\exp(\mathbf{z}_i^T \boldsymbol{\beta}),\]</span> with survival function: <span class="math display">\[S(t) = \exp(-\gamma t^\alpha \exp(\mathbf{z}_i^T \boldsymbol{\beta}))\]</span> The interesting thing about the Weibull is that it isn’t just a parametric model for survival time; it can be justified using extreme value theory as the minimum of iid nonnegative random variables. Aalen writes in <span class="citation" data-cites="aalen_heterogeneity_1988">(<a href="#ref-aalen_heterogeneity_1988" role="doc-biblioref">O. O. Aalen 1988</a>)</span>:</p>
+<blockquote class="blockquote">
+<p>Hence, if cancer may result from one of the first cells to undergo malignant transformation, then the time to appearance of cancer might very well follow a Weibull distribution, when lime is measured from an appropriate point. This principle has more general validity. An individual is subject to the risk of several different causes of death and the one which first causes fatality determines the life time. Hence the life time might be supposed to follow an extreme distribution for each individual.</p>
+</blockquote>
+<section id="model-fit-check" class="level3" data-number="2.0.1">
+<h3 data-number="2.0.1" class="anchored" data-anchor-id="model-fit-check"><span class="header-section-number">2.0.1</span> Model fit check</h3>
+<p>For any survival model the following identity holds: <span class="math display">\[S^{-1}(S(t)) = t.\]</span> Thus an effective model check is to use a nonparametric estimate of the survival function, either <span class="math inline">\(\hat{S}^\text{KM}(t)\)</span> or <span class="math inline">\(\hat{S}^\text{NA}(t)\)</span>, apply the parametric form of <span class="math inline">\(S^{-1}_{\theta}\)</span> to the nomnparamtetric survival function estimate, and to plot this function against <span class="math inline">\(t\)</span>. The graph should be roughly linear in <span class="math inline">\(t\)</span>.</p>
+<div class="exmp">
+<p><strong>Example 1</strong>. Weibull model check Assuming <span class="math inline">\(X_i \sim \text{Weibull}(\gamma, \alpha)\)</span>, the survival function is <span class="math display">\[S(t) = \exp(-\gamma t^\alpha).\]</span> The inverse function is found as follows: <span class="math display">\[\begin{align*}
+   p &amp; = \exp(-\gamma t^\alpha) \\
+   -\log p &amp; = \gamma t^\alpha \\
+   (\frac{-\log p}{\gamma})^{1/\alpha} = t
+\end{align*}\]</span> Then we can check the following plot: Under noninformative sampling with observed data <span class="math inline">\((t_i, d_i), i = 1, \dots, n\)</span>, <span class="math inline">\(\hat{S}^\text{KM}(t) = \prod_{i \mid t_i \leq t}(1 - \frac{d_i}{\widebar{Y}(t)})\)</span> is the nonparametric estimator of the survival function. a plot of <span class="math display">\[(\frac{-\log \hat{S}^\text{KM}(t)}{\gamma})^{1/\alpha} \text{v.s.} t\]</span> should be roughly linear.</p>
+</div>
+<p>Another implication in the Weibull distribution case case is the following: <span class="math display">\[S(t) = \exp(-\gamma t^\alpha) \implies \log(-\log p)  = \log(\gamma) + \alpha \log(t).\]</span> This leads to an alternative way to do a model check: <span class="math display">\[\log(-\log \hat{S}^\text{KM}(t)) \text{v.s. } \log(t)\]</span> should be roughly linear with slope <span class="math inline">\(\alpha\)</span>.</p>
+</section>
+<section id="parametric-proportional-hazards-models" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="parametric-proportional-hazards-models"><span class="header-section-number">2.1</span> Parametric proportional hazards models</h2>
+<p>Recall our definition of proportional hazards employing an exponential function with <span class="math inline">\(\mathbf{z}_i \in \R^k\)</span>: <span class="math display">\[\begin{align}
+    \lambda(t \mid \mathbf{z}_i) = \lambda_0(t \mid \boldsymbol{\theta}) \exp(\boldsymbol{\beta}^T \mathbf{z}_i)
+\end{align}\]</span> This implies the following properties for our model: <span class="math display">\[\begin{align}
+   \log \lambda(t \mid \mathbf{z}_i) &amp; = \log \lambda_0(t \mid \boldsymbol{\theta}) + \boldsymbol{\beta}^T \mathbf{z}_i \\
+   \log \Lambda(t \mid \mathbf{z}_i) &amp; = \log \Lambda_0(t \mid \boldsymbol{\theta}) + \boldsymbol{\beta}^T \mathbf{z}_i
+\end{align}\]</span> This means that the predictors act linearly on the log scale for both the hazard ratio and the cumulative hazard, and that the effect of the predictors is constant over time.</p>
+<p>The interpretation of coefficients is as the change in the log hazard, or log cumulative hazard: <span class="math display">\[\beta_j = \log \lambda(t\mid z_1, \dots z_{j-1}, z_j + 1, z_{j+1}, \dots z_k) - \log \lambda(t\mid z_1, \dots z_{j-1}, z_j, z_{j+1}, \dots z_k).\]</span> Alternatively, we have <span class="math display">\[e^{\beta_j} =  \frac{\lambda(t\mid z_1, \dots z_{j-1}, z_j + 1, z_{j+1}, \dots z_k)}{\lambda(t\mid z_1, \dots z_{j-1}, z_j, z_{j+1}, \dots z_k)}.\]</span> Increasing <span class="math inline">\(z_j\)</span> by <span class="math inline">\(1\)</span> has the effect of increasing the hazard of an event by <span class="math inline">\(e^{\beta_j}\)</span>.</p>
+<p>As discussed previously and shown in <a href="#fig:prop-hazard" data-reference-type="ref+Label" data-reference="fig:prop-hazard">[fig:prop-hazard]</a>, When we have a single categorical predictor, we can assess the validity of proportional hazards by plotting the <span class="math inline">\(\log(-\log)\)</span> of the KM estimate of survival within each subgroup, and determining if the lines are roughly linear in <span class="math inline">\(\log t\)</span> and if they are parallel. If they are not parallel, but are straight, this may be an indication that one could fit separate the groups with separate shape, or <span class="math inline">\(\alpha\)</span>, parameters.</p>
+</section>
+<section id="testing-for-proportional-hazards" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="testing-for-proportional-hazards"><span class="header-section-number">2.2</span> Testing for proportional hazards</h2>
+<p>Following <span class="citation" data-cites="collett1994modelling">(<a href="#ref-collett1994modelling" role="doc-biblioref">Collett 1994</a>)</span>, in the Weibull model we may test the proportional hazards assumption by fitting a more flexible model and using a composite likelihood ratio test. Suppose we have patients categorized into 3 age groups, and we use dummy coding for our design matrix: <span class="math display">\[\begin{alignat*}
+{2}
+&amp; \text{{\bf Group}} \quad &amp;&amp; \text{{\bf Predictors}}\\
+&amp; \text{Youngest group} \quad  &amp;&amp; \mathbf{z}_i = (0, 0)^T \\
+&amp; \text{Middle group} \quad  &amp;&amp; \mathbf{z}_i  = (1, 0)^T \\
+&amp; \text{Oldest group} \quad  &amp;&amp; \mathbf{z}_i  = (0, 1)^T
+\end{alignat*}\]</span> and we want to test whether fitting the following proportional hazards Weibull regression model: <span class="math display">\[X_i \sim \text{Weibull}(\gamma e^{\boldsymbol{\beta}^T \mathbf{z}_i},\alpha)\]</span> is sufficient. An alternative model that allows for hazards that are not proportional is <span class="math display">\[X_i \sim \text{Weibull}(\gamma e^{\boldsymbol{\beta}^T \mathbf{z}_i},\alpha e^{\boldsymbol{\theta}^T \mathbf{z}_i})\]</span> Note that this alternative model is equivalent to fitting separate Weibull models to each group. Then the null hypothesis we’d like to test is whether <span class="math inline">\(\boldsymbol{\theta}_1 = \boldsymbol{\theta}_2 = 0\)</span>. We can use the composite likelihood ratio test to determine whether the data contradict this null hypothesis. The test statistic would be distributed as <span class="math inline">\(\chi^2_2\)</span> given the constraints in the null hypothesis.</p>
+<p>The test statistic in the case where we fit separate models to each subgroup is <span class="math display">\[2(\ell_1(\hat{\psi}_1,\hat{\phi}_1) + \ell_2(\hat{\psi}_2,\hat{\phi}_2) + \ell_3(\hat{\psi}_3,\hat{\phi}_3) - \ell(\psi_0,\hat{\phi}(\psi_0)))\]</span> where <span class="math inline">\(\ell_j(\hat{\psi}_j,\hat{\phi}_j), j = 1,2,3\)</span> is the log-likelihood from the fitted Weibull model to each age group.</p>
+</section>
+<section id="accelerated-failure-time-formulation" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="accelerated-failure-time-formulation"><span class="header-section-number">2.3</span> Accelerated failure time formulation</h2>
+<p>There is an alternative way to specify the Weibull model, wherein we model the log of the survival times as being a linear function of covariates. <span class="math display">\[\log (X_i) = \mu + \mathbf{z}_i^T \boldsymbol{\eta} + \sigma \epsilon_i\]</span> Let <span class="math inline">\(\epsilon_i\)</span> be Gumbel distributed with a probability density function <span class="math display">\[f(\epsilon) = \exp(\epsilon - e^\epsilon)\]</span> If we let <span class="math inline">\(\nu = e^\epsilon\)</span>, then we can compute the density over <span class="math inline">\(\nu\)</span>. <span class="math inline">\(\epsilon(\nu) = \log(\nu)\)</span>. <span class="math inline">\(f(\nu) = f(\epsilon(\nu)) \frac{d}{d\nu} \epsilon(\nu)\)</span> <span class="math display">\[\begin{align}
+    \exp(\log(\nu) - e^{\log(\nu)}) / \nu = e^{-\nu}
+\end{align}\]</span> This shows that <span class="math inline">\(e^{\epsilon} \sim \text{Exponential}(1)\)</span>. Now we can write the survival function of <span class="math inline">\(X_i\)</span>: <span class="math display">\[\begin{align*}
+   S(t) &amp; = P(X_i &gt; t) \\
+   &amp; = P(\log(X_i) &gt; \log(t)) \\
+   &amp; = P(\mu + \mathbf{z}_i^T \boldsymbol{\eta} + \sigma \epsilon_i &gt; \log(t)) \\
+   &amp; = P(\epsilon_i &gt; (\log(t) - \mu - \mathbf{z}_i^T \boldsymbol{\eta})/\sigma) \\
+   &amp; = P(e^{\epsilon_i} &gt; \exp(\log(t) - \mu - \mathbf{z}_i^T \boldsymbol{\eta})^{1/\sigma}) \\
+   &amp; = \exp\left(-\exp(\log(t) - \mu - \mathbf{z}_i^T \boldsymbol{\eta})^{1/\sigma}\right)\\
+   &amp; = \exp\left(-e^{-\mu/\sigma} t^{1/\sigma}  \exp(\mathbf{z}_i^T (-\boldsymbol{\eta}/\sigma)) \right)
+\end{align*}\]</span> Recall the survival function of a Weibull with hazard function <span class="math inline">\(\gamma \alpha t^{\alpha - 1} \exp(\mathbf{z}_i^T \boldsymbol{\beta})\)</span>: <span class="math display">\[S(t) = \exp(-\gamma t^\alpha\exp(\mathbf{z}_i^T \boldsymbol{\beta})).\]</span> Then there are the following correspondences between our parameters for the log-linear model and the original proportional hazards model: <span class="math display">\[\begin{align*}
+    \alpha &amp; = \frac{1}{\sigma} \\
+    \gamma &amp; = e^{-\mu / \sigma} \\
+    \boldsymbol{\beta} &amp; = -\boldsymbol{\eta} / \sigma
+\end{align*}\]</span></p>
+<p>In general, the correspondence between the model for the log-failure time and the proportional hazards will not hold, but it does in the Weibull model.</p>
+</section>
+</section>
+<section id="aft-models" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> AFT models</h1>
+<p>This information is from Chapter 12 in <span class="citation" data-cites="klein2003survival">(<a href="#ref-klein2003survival" role="doc-biblioref">Klein, Moeschberger, et al. 2003</a>)</span>. Generally, AFT models are specified by modeling the survival function as follows: <span class="math display">\[\begin{align*}
+    S(t \mid \mathbf{z}) &amp; = S_0(t \exp(\boldsymbol{\theta}^T \mathbf{z})) \\
+    &amp; = P(X_i &gt; t \exp(\boldsymbol{\theta}^T \mathbf{z})) \\
+    &amp; = P(\frac{X_i}{\exp(\boldsymbol{\theta}^T \mathbf{z})} &gt; t)
+\end{align*}\]</span> where <span class="math inline">\(S_0\)</span> is the survival function for an individual with <span class="math inline">\(\mathbf{z} = \mathbf{0}\)</span>. Thus, we take a population model for <span class="math inline">\(S\)</span>, <span class="math inline">\(S_0\)</span>, and for an individual with covariates <span class="math inline">\(\mathbf{z}\)</span>, and <span class="math inline">\(\exp(\boldsymbol{\theta}^T \mathbf{z}) &gt; 1\)</span>, survival time is shrunk towards zero. We might also say that for an individual with <span class="math inline">\(\exp(\boldsymbol{\theta}^T \mathbf{z})\)</span>, their probability of survival at time <span class="math inline">\(t\)</span> is as if they were an individual with a survival function evaluated at <span class="math inline">\(t_0 = t \exp(\boldsymbol{\theta}^T \mathbf{z})\)</span>. Recall that the survival function and the hazard function are related via the following equation: <span class="math display">\[-\frac{\partial}{\partial t} \log(S(t)) = \lambda(t).\]</span> Note that when <span class="math inline">\(S(t) = S(g(t))\)</span> for a known differentiable function <span class="math inline">\(g(t)\)</span>, the following will hold: <span id="eq-chain-rule"><span class="math display">\[\begin{align}
+-\frac{\partial}{\partial t} \log S(g(t)) = -\left(\frac{\partial}{\partial g} \log(S(g))\right)\mid_{g = g(t)} \frac{\partial}{\partial t} g(t) \implies -\frac{\partial}{\partial t} \log S(g(t)) = \lambda(g(t)) \frac{\partial}{\partial t} g(t)
+\end{align} \tag{1}\]</span></span> When we use an AFT model for <span class="math inline">\(X_i\)</span>, this implies the following about the hazard rate, using the result in <a href="#eq-chain-rule" class="quarto-xref">Equation&nbsp;1</a>: <span class="math display">\[\begin{align}
+    -\frac{\partial}{\partial t} \log S(t \mid \mathbf{z}) &amp; = \exp(\boldsymbol{\theta}^T \mathbf{z}) \lambda_0(t \exp(\boldsymbol{\theta}^T \mathbf{z}))
+\end{align}\]</span> Of course, sometimes this corresponds to a proportional hazards model, as in the Weibull case, but most times it does not.</p>
+<p>For the Weibull, recall that <span class="math inline">\(\lambda_0(t) = \gamma \alpha t^{\alpha - 1}\)</span> so writing the hazard as above would lead to: <span class="math display">\[\begin{align}
+  \exp(\boldsymbol{\theta}^T \mathbf{z}) \lambda_0(t \exp(\boldsymbol{\theta}^T \mathbf{z})) &amp; = \exp(\boldsymbol{\theta}^T \mathbf{z})\gamma \alpha (t\exp(\boldsymbol{\theta}^T \mathbf{z}))^{\alpha - 1} \\
+  &amp; = \exp(\boldsymbol{\theta}^T \mathbf{z})^\alpha \gamma \alpha t^{\alpha - 1}
+\end{align}\]</span></p>
+<p>This formulation allows us to write <span class="math inline">\(\log(X_i)\)</span> as a linear model: <span class="math display">\[\log(X_i) = \mu + \mathbf{z}_i^T \boldsymbol{\eta} + \sigma \epsilon_i.\]</span> Note that <span class="math inline">\(-\boldsymbol{\theta} = \boldsymbol{\eta}\)</span>. The distribution of <span class="math inline">\(\epsilon_i\)</span> is a modeling choice. We saw that the extreme value distribution is equivalent to the Weibull proportional hazards regression. Any distribution over <span class="math inline">\(\R\)</span> will work, though common choices are normally distributed <span class="math inline">\(\epsilon_i\)</span>, leading to <span class="math inline">\(X_i \sim \text{LogNormal}\)</span>, and log-logistic distributed <span class="math inline">\(\epsilon_i\)</span>.</p>
+<p>The log-logistic model uses the following density for <span class="math inline">\(\epsilon_i\)</span>: <span class="math display">\[\begin{align}
+   f_{\epsilon}(x) = \frac{e^x}{(1 + e^x)^2},
+\end{align}\]</span> which leads to survival function of: <span class="math display">\[\begin{align}
+    S(t) &amp; = \frac{1}{1 + \lambda t^\alpha} \\
+    \Lambda(t) &amp; = -\log(S(t)) \\
+    &amp; = \log(1 + \lambda t^\alpha)
+\end{align}\]</span> The log-logistic model has the unique property that the odds of survival for an individual at time <span class="math inline">\(t\)</span> are proportional to the odds of survival for the base population: <span class="math display">\[\frac{S(t \mid \mathbf{z})}{1 - S(t \mid \mathbf{z})} = \exp(\boldsymbol{\beta}^T \mathbf{z})\frac{S_0(t)}{1 - S_0(t)}\]</span> where <span class="math inline">\(\boldsymbol{\beta} = -\boldsymbol{\gamma}{\sigma}\)</span>.</p>
+<p>Of course, we can’t just fit these models to the log of the observed failure times because we have censoring. Thus we’ll need to do numerical maximum likelihood as we did for other survival models.</p>
+<section id="model-checking-in-aft-models" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="model-checking-in-aft-models"><span class="header-section-number">3.1</span> Model checking in AFT models</h2>
+<p>The relationships that held for the Weibull regressions can be ported to other AFT models. <span class="citation" data-cites="klein2003survival">(<a href="#ref-klein2003survival" role="doc-biblioref">Klein, Moeschberger, et al. 2003</a>)</span> suggest checking a function of the cumulative hazard against a function of <span class="math inline">\(t\)</span> to assess adequacy of model fit. We can use the (tie-corrected) Nelson-Aalen estimator of the cumulative hazard function: <span class="math display">\[\begin{align*}
+   \hat{\Lambda}^\text{NA}(t) = \sum_{i \mid t_i \leq t} \frac{d_i}{\widebar{Y}(t)}
+\end{align*}\]</span> and examine transformations thereof against appropriate transformations of <span class="math inline">\(t\)</span>.</p>
+<p>For the log-logistic model, <span class="math inline">\(\Lambda(t) = \log(1 + \lambda t^\alpha)\)</span>. This implies that <span class="math display">\[\log(\exp(\hat{\Lambda}^\text{NA}(t)) - 1) \approx \log \lambda + \alpha \log t\]</span> We can compute similar expressions for the Weibull and the log-normal model.</p>
+</section>
+<section id="cox-snell-residuals" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="cox-snell-residuals"><span class="header-section-number">3.2</span> Cox-Snell residuals</h2>
+<p>Recall from <a href="#sec:cumu-haz" data-reference-type="ref+Label" data-reference="sec:cumu-haz">[sec:cumu-haz]</a> that the following relationship holds: When <span class="math inline">\(X_i \sim F\)</span> with cumulative hazard function <span class="math inline">\(\Lambda(t)\)</span> <span class="math display">\[\Lambda(X_i) \sim \text{Exp}(1).\]</span> We can use this idea to generate graphical checks for our models.</p>
+<p>Continuing with the log-logistic model, we could graphically assess whether the following Cox-Snell residual, denoted <span class="math inline">\(r^C_i\)</span>: <span class="math display">\[r^C_i = \log(1 + e^{\mathbf{z}_i^T \hat{\boldsymbol{\theta}}} \hat{\lambda} t_i^{\hat{\alpha}})\]</span> is exponentially distributed with unit rate. The issue with plotting these residuals directly against the quantiles of an exponential distribution is that for the censored observations, <span class="math inline">\(\Lambda(C_i)\)</span> won’t be exponentially distributed. But we can use the properties of the cumulative hazard function to our advantage, namely that it is nondecreasing in <span class="math inline">\(t\)</span>. Thus for censored observations where <span class="math inline">\(t_i = c_i\)</span>, this implies that <span class="math inline">\(x_i \geq t_i\)</span>. Thus, <span class="math inline">\(\Lambda(t_i) \leq \Lambda(x_i)\)</span>, so we can say that when <span class="math inline">\(\delta_i = 0\)</span>, <span class="math inline">\(\Lambda(x_i)\)</span> is censored at <span class="math inline">\(\Lambda(t_i)\)</span>.</p>
+<p>The solution is to use the Kaplan-Meier estimator again! We can form the censored cumulative hazard sample: <span id="eq-cox-snell-data"><span class="math display">\[\begin{align}
+    \{(\tilde{t}_i = \min(\Lambda(x_i), \Lambda(c_i))&amp;, \delta_i = \mathbbm{1}\left(x_i \leq c_i\right)), i = 1, \dots, n\} =  \\
+   &amp; \{(\tilde{t}_i = \Lambda(t_i), \delta_i = \mathbbm{1}\left(x_i \leq c_i\right)), i = 1, \dots, n\}
+\end{align} \tag{2}\]</span></span> where the second line follows from the nondecreasing characteristic of <span class="math inline">\(\Lambda(t)\)</span>.</p>
+<p>Then we can fit the Kaplan Meier estimator to the dataset <span class="math inline">\((\tilde{t}_i, \delta_i)\)</span> observations to infer the non-censored distribution of <span class="math inline">\(\Lambda(x_i)\)</span>. The procedure is as outlined below:</p>
+<ol type="1">
+<li><p>Fit a parametric survival model to <span class="math inline">\(\{(t_i, \delta_i, \mathbf{z}_i), i = 1, \dots, n\}\)</span></p></li>
+<li><p>Calculate the Cox-Snell residuals using the estimated survival model: <span class="math inline">\(\{(\tilde{t}_i = \hat{\Lambda}(t_i), \delta_i = \mathbbm{1}\left(x_i \leq c_i\right)), i = 1, \dots, n\}\)</span></p></li>
+<li><p>Fit a Kaplan-Meier estimator to the datatset comprising observations of <a href="#eq-cox-snell-data" class="quarto-xref">Equation&nbsp;2</a></p></li>
+<li><p>Plot the <span class="math inline">\(\log(-\log(\hat{S}^\text{KM}(t)))\)</span> vs.&nbsp;<span class="math inline">\(\log t\)</span> to see whether a line with zero intercept and slope <span class="math inline">\(1\)</span> fits in the confidence intervals</p></li>
+</ol>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-aalen_heterogeneity_1988" class="csl-entry" role="listitem">
+Aalen, Odd O. 1988. <span>“Heterogeneity in Survival Analysis.”</span> <em>Statistics in Medicine</em> 7 (11): 1121–37. <a href="https://doi.org/10.1002/sim.4780071105">https://doi.org/10.1002/sim.4780071105</a>.
+</div>
+<div id="ref-aalen2008survival" class="csl-entry" role="listitem">
+Aalen, Odd, Ornulf Borgan, and Hakon Gjessing. 2008. <em>Survival and Event History Analysis: A Process Point of View</em>. Springer Science &amp; Business Media.
+</div>
+<div id="ref-collett1994modelling" class="csl-entry" role="listitem">
+Collett, David. 1994. <em>Modelling Survival Data in Medical Research</em>. Chapman &amp; Hall.
+</div>
+<div id="ref-harrell2001regression" class="csl-entry" role="listitem">
+Harrell, Frank E et al. 2001. <em>Regression Modeling Strategies: With Applications to Linear Models, Logistic Regression, and Survival Analysis</em>. Vol. 608. Springer.
+</div>
+<div id="ref-klein2003survival" class="csl-entry" role="listitem">
+Klein, John P, Melvin L Moeschberger, et al. 2003. <em>Survival Analysis: Techniques for Censored and Truncated Data</em>. Vol. 1230. Springer.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
