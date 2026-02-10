@@ -382,7 +382,7 @@
     "href": "survival-material/lecture-3.html#generalized-type-ii-censoring",
     "title": "Lecture 3",
     "section": "2.4 Generalized Type II censoring",
-    "text": "2.4 Generalized Type II censoring\nYou may be wondering, what happens when units have differing start times but we want to end the trial after the \\(r\\)-th failure? It turns out that this was not a solved problem until , which was quite surprising to me."
+    "text": "2.4 Generalized Type II censoring\nYou may be wondering, what happens when units have differing start times but we want to end the trial after the \\(r\\)-th failure? It turns out that this was not a solved problem until Rühl, Beyersmann, and Friedrich (2023), which was quite surprising to me."
   },
   {
     "objectID": "survival-material/lecture-3.html#independent-censoring",

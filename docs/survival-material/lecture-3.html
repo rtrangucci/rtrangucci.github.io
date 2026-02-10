@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -305,7 +325,7 @@ Figure&nbsp;3: Example of generalized Type I censoring, viewed in patient time.
 </section>
 <section id="generalized-type-ii-censoring" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="generalized-type-ii-censoring"><span class="header-section-number">2.4</span> Generalized Type II censoring</h2>
-<p>You may be wondering, what happens when units have differing start times but we want to end the trial after the <span class="math inline">\(r\)</span>-th failure? It turns out that this was not a solved problem until , which was quite surprising to me.</p>
+<p>You may be wondering, what happens when units have differing start times but we want to end the trial after the <span class="math inline">\(r\)</span>-th failure? It turns out that this was not a solved problem until <span class="citation" data-cites="ruhl_general_2023">Rühl, Beyersmann, and Friedrich (<a href="#ref-ruhl_general_2023" role="doc-biblioref">2023</a>)</span>, which was quite surprising to me.</p>
 </section>
 <section id="independent-censoring" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="independent-censoring"><span class="header-section-number">2.5</span> Independent censoring</h2>
@@ -557,10 +577,15 @@ f_\alpha(t_1, \dots, t_n, \delta_1, \dots, \delta_n) &amp; = \prod_{i=1}^n \alph
 </div>
 
 
+
 </section>
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-ruhl_general_2023" class="csl-entry" role="listitem">
+Rühl, Jasmin, Jan Beyersmann, and Sarah Friedrich. 2023. <span>“General Independent Censoring in Event‐driven Trials with Staggered Entry.”</span> <em>Biometrics</em> 79 (3): 1737–48. <a href="https://doi.org/10.1111/biom.13710">https://doi.org/10.1111/biom.13710</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
