@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 625 - W 26</title>
+<title>Lecture 12</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,47 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +88,68 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+        \newcommand{\ddtA}[1]{\frac{\partial^2}{\partial #1^2}}
+        \newcommand{\ddtB}[2]{\frac{\partial^2}{\partial #1 \partial #2}}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +165,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -112,29 +191,15 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
-  <ul class="collapse">
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
-  <li><a href="#course-syllabus" id="toc-course-syllabus" class="nav-link" data-scroll-target="#course-syllabus">Course syllabus</a></li>
-  <li><a href="#project-proposal" id="toc-project-proposal" class="nav-link" data-scroll-target="#project-proposal">Project proposal</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 625 - W 26</h1>
+<h1 class="title">Lecture 12</h1>
 </div>
 
 
@@ -151,68 +216,93 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level2">
-<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
-<section id="textbook" class="level3">
-<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
-<ul>
-<li><p>Required: <em>Modelling Survival Data in Medical Research, 4th Edition,</em> Collett</p></li>
-<li><p>Optional: <em>Survival and Event History Analysis</em>, Aalen, Borgan, and Gjessing</p></li>
-<li><p>Optional: <em>Counting Processes and Survival Analysis</em>, Fleming and Harrington</p></li>
-</ul>
-</section>
-<section id="course-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
-<p>To highlight the unique challenges posed by the analysis of failure/survival data. To allow you to analyze survival data using parametric and nonparametric techniques in the face of these challenges. To apply these techniques to real data using R code and R packages for survival analysis. To understand the theory and methodology through math, practice and code.</p>
-<p><strong>Course content</strong></p>
-<p>Concepts to be discussed include: hazard function (failure rate function); nonparametric likeli- hood; counting processes; empirical distribution function; censoring and truncation; Kaplan-Meier estimator; Bias of the KM estimator; Cox proportional hazards model; Accelerated Failure Time Model; Partial Likelihood; log-rank test; martingales. R will be the programming language used in the course.</p>
-</section>
-<section id="course-syllabus" class="level3">
-<h3 class="anchored" data-anchor-id="course-syllabus">Course syllabus</h3>
-<ul>
-<li><a href="pdfs/survival-class/survival_analysis_syllabus_W26.pdf">Syllabus</a></li>
-</ul>
-</section>
-<section id="project-proposal" class="level3">
-<h3 class="anchored" data-anchor-id="project-proposal">Project proposal</h3>
-<ul>
-<li><a href="pdfs/survival-class/project-proposal.pdf">Project proposal</a></li>
-</ul>
-</section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ul>
-<li><a href="./survival-material/lecture-1.html">Lecture 1</a></li>
-<li><a href="./survival-material/lecture-2.html">Lecture 2</a></li>
-<li><a href="./survival-material/lecture-3.html">Lecture 3</a></li>
-<li><a href="./survival-material/lecture-4.html">Lecture 4</a></li>
-<li><a href="./survival-material/lecture-5.html">Lecture 5</a></li>
-<li><a href="./survival-material/lecture-6.html">Lecture 6</a></li>
-<li><a href="./survival-material/lecture-7.html">Lecture 7</a></li>
-<li><a href="./survival-material/lecture-8.html">Lecture 8</a></li>
-<li><a href="./survival-material/lecture-9.html">Lecture 9</a></li>
-<li><a href="./survival-material/lecture-10.html">Lecture 10</a></li>
-<li><a href="./survival-material/lecture-11.html">Lecture 11</a></li>
-<li><a href="./survival-material/lecture-12.html">Lecture 12</a></li>
-</ul>
-</section>
-<section id="homework" class="level3">
-<h3 class="anchored" data-anchor-id="homework">Homework</h3>
-<ul>
-<li><p><a href="./survival-material/weibull-mappings.html">Maps between Weibull parameterizations</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-1.pdf">HW 1</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-2.pdf">HW 2</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-3.pdf">HW 3</a></p></li>
-<li><p><a href="survival-material/HW-4.pdf">HW 4</a></p></li>
-</ul>
-<!-- -   [HW 5](pdfs/survival-class/HW-5.pdf) -->
-<!-- -   [HW 6](pdfs/survival-class/HW-6.pdf) -->
+<p>Another thing to note is that if the information matrix is block diagonal, then the gradients corresponding to one parameter block can’t influence the MLE of the opposing parameter block.</p>
+<p>For notational ease: <span class="math display">\[\Delta \hat{\boldsymbol{\theta}}_j = \hat{\boldsymbol{\theta}}(\mathbf{1}) - \hat{\boldsymbol{\theta}}(\mathbf{w}_{(j)}).\]</span></p>
+<p><span class="citation" data-cites="collett1994modelling">(<a href="#ref-collett1994modelling" role="doc-biblioref">Collett 1994</a>)</span>, citing <span class="citation" data-cites="hall1982outliers">(<a href="#ref-hall1982outliers" role="doc-biblioref">Hall, Rogers, and Pregibon 1982</a>)</span>, suggests standardizing the sensitivity to the control for the inverse of the variance-covariance of the estimated <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span>, namely: <span class="math display">\[(\Delta \hat{\boldsymbol{\theta}}_j)^T j(\hat{\boldsymbol{\theta}}) (\Delta \hat{\boldsymbol{\theta}}_j).\]</span> Recall that <span class="math display">\[j(\hat{\boldsymbol{\theta}}) = -\ell_{\boldsymbol{\theta}\boldsymbol{\theta}}(\hat{\boldsymbol{\theta}})\]</span> and from the last lecture:</p>
+<p><span class="math display">\[
+\Delta \hat{\boldsymbol{\theta}}_j \approx \left(-\ell_{\boldsymbol{\theta}\boldsymbol{\theta}}(\hat{\boldsymbol{\theta}})\right)^{-1} \ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i)
+\]</span></p>
+<p>This leads to the tidy expression: <span id="eq-tidy"><span class="math display">\[\begin{align}
+\ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i)^T \left(-\ell_{\boldsymbol{\theta}\boldsymbol{\theta}}(\hat{\boldsymbol{\theta}})\right)^{-1} \ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i).
+\end{align} \tag{1}\]</span></span> Alternatively, we can use the sandwich estimator for the asymptotic variance covariance matrix: <span class="math display">\[\begin{align*}
+\hat{\Sigma}_{R} &amp; = \left(-\frac{1}{n}\ell_{\boldsymbol{\theta}\boldsymbol{\theta}}(\hat{\boldsymbol{\theta}})\right)^{-1} \left(\frac{1}{n}\sum_{i=1}^n\ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i)\ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i)^T\right)\left(-\frac{1}{n}\ell_{\boldsymbol{\theta}\boldsymbol{\theta}}(\hat{\boldsymbol{\theta}})\right)^{-1}
+\end{align*}\]</span> Note that this is variance/covariance matrix for <span class="math inline">\(\sqrt{n}(\hat{\theta}_n - \theta^\dagger)\)</span>. We instead want to get a sense for the variance/covariance matrix for <span class="math inline">\(\hat{\theta}_n\)</span>, so we divide the expression by <span class="math inline">\(\sqrt{n}\)</span>, leading to a variance estimate that is scaled by <span class="math inline">\(n^{-1}\)</span>. Using the statistic <span class="math display">\[(\Delta \hat{\boldsymbol{\theta}}_j)^T (n^{-1}\hat{\Sigma}_{R})^{-1} (\Delta \hat{\boldsymbol{\theta}}_j)\]</span> and noting the following equality: <span class="math display">\[\begin{align*}
+(n^{-1} \hat{\Sigma}_{R})^{-1} &amp; = -\ell_{\boldsymbol{\theta}\boldsymbol{\theta}}(\hat{\boldsymbol{\theta}}) \left(\sum_{i=1}^n\ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i)\ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i)^T\right)^{-1}\left(-\ell_{\boldsymbol{\theta}\boldsymbol{\theta}}(\hat{\boldsymbol{\theta}})\right)
+\end{align*}\]</span> yields: <span class="math display">\[\ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i)^T\left(\sum_{i=1}^n\ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i)\ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i)^T\right)^{-1}\ell_\boldsymbol{\theta}(\hat{\boldsymbol{\theta}};\mathbf{y}_i).\]</span> Let’s do an example where we can analytically calculate the influence score for a single observation on the parameter vector:</p>
+<div class="exmp">
+<p><strong>Example 1</strong>. Influence of datapoints in exponential regression model The inverse of the observed information is: <span class="math display">\[\begin{align}
+\hat{\mathcal{I}}^{-1}(\hat{\lambda}, \hat{\beta}) =  \frac{1}{\frac{(r_1 + r_2)e^{\hat{\beta}} T_2}{\hat{\lambda}} - e^{2 \hat{\beta}} T_2^2}\begin{bmatrix}
+      \hat{\lambda} e^{\hat{\beta}} T_2  &amp; -e^{\hat{\beta}} T_2 \\
+        -e^{\hat{\beta}} T_2 &amp; \frac{r_1 + r_2}{\hat{\lambda}^2}
+    \end{bmatrix}
+\end{align}\]</span> which simplifies to: <span class="math display">\[\begin{align}
+    \begin{bmatrix}
+        \frac{r_1}{T_1^2} &amp; -\frac{1}{T_1}\\
+        -\frac{1}{T_1} &amp; \frac{r_1 + r_2}{r_1 r_2}
+    \end{bmatrix}
+\end{align}\]</span> and the score equations are: <span class="math display">\[\begin{align}
+\frac{\partial}{\partial \lambda} \ell(\lambda, \beta) &amp; = \frac{\delta_i}{\lambda} - e^{z_i \beta} t_i\\
+\frac{\partial}{\partial \beta} \ell(\lambda, \beta) &amp; = \delta_i z_i  - z_i \lambda e^{z_i \beta} t_i
+\end{align}\]</span> which we evaluate at the MLE: <span class="math display">\[\begin{align*}
+\hat{\lambda} &amp; = \frac{r_1}{T_1} \\
+\hat{e^\beta} &amp; = \frac{r_2}{T_2}\frac{T_1}{r_1}
+\end{align*}\]</span> to yield <span class="math display">\[\begin{align}
+\frac{\partial}{\partial \lambda} \ell(\lambda, \beta) &amp; = \frac{\delta_i T_1 }{r_1} - \left(\frac{r_2}{T_2}\frac{T_1}{r_1}\right)^{z_i} t_i\\
+\frac{\partial}{\partial \beta} \ell(\lambda, \beta) &amp; = \delta_i z_i  -\left(\frac{r_2}{T_2}\right)z_i t_i
+\end{align}\]</span></p>
+<p>For an individual with <span class="math inline">\(z_i = 0\)</span>, this gives the sensitivities: <span class="math display">\[\begin{align}
+\begin{bmatrix}
+\frac{\delta_i - t_i \frac{r_1}{T_1}}{T_1}\\
+    \frac{t_i}{T_1} - \frac{\delta_i}{r_1}
+\end{bmatrix}  =
+\begin{bmatrix}
+\frac{\delta_i - t_i \frac{r_1}{T_1}}{T_1}\\
+    \frac{t_i \frac{r_1}{T_1} - \delta_i}{r_1}
+\end{bmatrix}
+\end{align}\]</span> These expressions make sense. At a mathematical level, they agree with the total derivatives for each function: <span class="math inline">\(\frac{r_1}{T_1}\)</span> and <span class="math inline">\(-\log(r_1 / T_1)\)</span>. Our expression for the sensitivity of the MLE to the omission of one datapoint is in terms of the difference between the MLE of the full model and the MLE of the leave-one-observation-out model: <span class="math display">\[\hat{\boldsymbol{\theta}}(\mathbf{1}) - \hat{\boldsymbol{\theta}}(\mathbf{w}_{(j)})\]</span> This means that the change in total time at risk for a group <span class="math inline">\(j = 1, 2\)</span>, or <span class="math inline">\(T_j\)</span>, is positive, as is the change in total failures for each group: <span class="math display">\[\begin{align}
+T_j - (T_j)_{(i)} &amp; = t_i \\
+r_j - (r_j)_{(i)} &amp; = \delta_i
+\end{align}\]</span></p>
+<p>Then the expression the <span class="math display">\[\begin{align}
+    \mathrm{d} \frac{r_1}{T_1} &amp; = \frac{\partial}{\partial r_1} \frac{r_1}{T_1} \mathrm{d}r_1 + \frac{\partial}{\partial T_1} \frac{r_1}{T_1} \mathrm{d}T_1 \\
+    &amp; = \frac{\mathrm{d}r_1}{T_1} - \mathrm{d}T_1\frac{r_1}{T_1^2} \\
+    &amp; \approx \frac{\delta_i - t_i\frac{r_1}{T_1}}{T_1}
+\end{align}\]</span> and <span class="math display">\[\begin{align}
+    \mathrm{d} -\log(r_1 / T_1) &amp; = -\frac{\partial}{\partial r_1} \log(r_1 / T_1) \mathrm{d}r_1 - \frac{\partial}{\partial T_1} \log(r_1 / T_1) \mathrm{d}T_1 \\
+    &amp; = \frac{\mathrm{d}T_1}{T_1} - \frac{\mathrm{d}r_1}{r_1} \\
+    &amp; \approx \frac{t_i\frac{r_1}{T_1}-\delta_i}{r_1}
+\end{align}\]</span></p>
+<p>It helps to think about the units of the parameter estimates. <span class="math inline">\(\lambda\)</span> measures the rate of failures per unit time, while <span class="math inline">\(\beta\)</span> measures the log of the relative rates of failure. Thus <span class="math inline">\(\beta\)</span> is unitless. Remember that <span class="math display">\[\delta_i - t_i \frac{r_j}{T_j}\]</span> is the residual for an individual <span class="math inline">\(i\)</span> in group <span class="math inline">\(j\)</span>. It compares the observed failure to the expected failure rate, which in the exponential model is just the estimated rate of failure times the time at risk for <span class="math inline">\(i\)</span>, or <span class="math inline">\(t_i\)</span>. When one removes an individual from group 1 the estimate for the rate of failure in group 1 declines by the residual expected failure per unit time. At the same time, the log relative rate of failure must increase by the residual failure per unit failure because the estimator for <span class="math inline">\(\beta\)</span> is <span class="math inline">\(\log(r_2 / T_2) - \log(\hat{\lambda})\)</span>. Thus any change in <span class="math inline">\(\hat{\lambda}\)</span> has an opposite change for <span class="math inline">\(\hat{\beta}\)</span>.</p>
+<p>For an individual with <span class="math inline">\(z_i = 1\)</span>, the sensitivities are: <span class="math display">\[\begin{align}
+\begin{bmatrix}
+0\\
+  \frac{\delta_i}{r_2} -  \frac{t_i}{T_2}
+\end{bmatrix} =
+\begin{bmatrix}
+0\\
+    \frac{\delta_i - t_i \frac{r_2}{T_2}}{r_2}
+\end{bmatrix}
+\end{align}\]</span> Again, this makes sense; <span class="math inline">\(\hat{\lambda} = \frac{r_1}{T_1}\)</span>, so omitting an individual in group <span class="math inline">\(2\)</span> can’t change the MLE for <span class="math inline">\(\lambda\)</span>. Finally, given <span class="math inline">\(\hat{\beta} = \log(r_2 / T_2) - \log(\hat{\lambda})\)</span>, omitting a datapoint will decrease the failure rate estimate within group <span class="math inline">\(2\)</span> by the residual scaled by the failure rate. Note the total derivative of <span class="math inline">\(\log(r_2 / T_2)\)</span>, as above, is: <span class="math display">\[\begin{align}
+    \mathrm{d} \log(r_2 / T_2) &amp; = \frac{\mathrm{d}r_2}{r_2} - \frac{\mathrm{d}T_2}{T_2}
+\end{align}\]</span></p>
+<p>We can also calculate the scaled total deviation. For <span class="math inline">\(z_i = 0\)</span> we have: <span class="math display">\[\begin{align}
+   \frac{\left(t_i \frac{r_1}{T_1} - \delta_i\right)^2}{r_1}
+\end{align}\]</span> and for <span class="math inline">\(z_i = 1\)</span> we have <span class="math display">\[\begin{align}
+   \frac{\left(t_i \frac{r_2}{T_2} - \delta_i\right)^2}{r_2}
+\end{align}\]</span></p>
+</div>
 
 
-</section>
-</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-collett1994modelling" class="csl-entry" role="listitem">
+Collett, David. 1994. <em>Modelling Survival Data in Medical Research</em>. Chapman &amp; Hall.
+</div>
+<div id="ref-hall1982outliers" class="csl-entry" role="listitem">
+Hall, Gaineford J, William H Rogers, and Daryl Pregibon. 1982. <em>Outliers Matter in Survival Analysis</em>. Vol. 6761. Rand Corporation.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
