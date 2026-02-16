@@ -198,10 +198,11 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#stratified-cox-model" id="toc-stratified-cox-model" class="nav-link active" data-scroll-target="#stratified-cox-model"><span class="header-section-number">1</span> Stratified Cox model</a>
+  <li><a href="#stratified-cox-model" id="toc-stratified-cox-model" class="nav-link active" data-scroll-target="#stratified-cox-model"><span class="header-section-number">1</span> Stratified Cox model</a></li>
+  <li><a href="#including-time-dependent-variables-in-the-cox-model" id="toc-including-time-dependent-variables-in-the-cox-model" class="nav-link" data-scroll-target="#including-time-dependent-variables-in-the-cox-model"><span class="header-section-number">2</span> Including time dependent variables in the Cox model</a>
   <ul class="collapse">
-  <li><a href="#including-time-dependent-variables-in-the-cox-model" id="toc-including-time-dependent-variables-in-the-cox-model" class="nav-link" data-scroll-target="#including-time-dependent-variables-in-the-cox-model"><span class="header-section-number">1.1</span> Including time dependent variables in the Cox model</a></li>
-  <li><a href="#solving-the-problem-with-time-varying-covariates" id="toc-solving-the-problem-with-time-varying-covariates" class="nav-link" data-scroll-target="#solving-the-problem-with-time-varying-covariates"><span class="header-section-number">1.2</span> Solving the problem with time-varying covariates</a></li>
+  <li><a href="#representing-time-varying-covariates-in-survival-data" id="toc-representing-time-varying-covariates-in-survival-data" class="nav-link" data-scroll-target="#representing-time-varying-covariates-in-survival-data"><span class="header-section-number">2.1</span> Representing time-varying covariates in survival data</a></li>
+  <li><a href="#addressing-the-problem-with-time-varying-covariates" id="toc-addressing-the-problem-with-time-varying-covariates" class="nav-link" data-scroll-target="#addressing-the-problem-with-time-varying-covariates"><span class="header-section-number">2.2</span> Addressing the problem with time-varying covariates</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -244,8 +245,9 @@ window.Quarto = {
 \end{align}\]</span> Plugging this back into the equations above gives <span class="math display">\[\begin{align}
     L(\boldsymbol{\beta}) = \prod_{j=1}^J \prod_{i \mid j[i] = j} \left( \frac{\exp(\mathbf{z}_i^T \boldsymbol{\beta})}{\sum_{k \mid R(t_i), j[k] = j} \exp(\mathbf{z}_k^T \boldsymbol{\beta})} \right)^{\delta_i}\exp \left(-\sum_{i=1}^n \delta_i \right)
 \end{align}\]</span> Thus the likelihood is stratified by <span class="math inline">\(j\)</span>, but additive over <span class="math inline">\(j\)</span>. The likelihood enforces that information about <span class="math inline">\(\beta\)</span> is shared across all units, but the risk set to which each failure is compared is limited to individuals within the same stratum.</p>
-<section id="including-time-dependent-variables-in-the-cox-model" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="including-time-dependent-variables-in-the-cox-model"><span class="header-section-number">1.1</span> Including time dependent variables in the Cox model</h3>
+</section>
+<section id="including-time-dependent-variables-in-the-cox-model" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="including-time-dependent-variables-in-the-cox-model"><span class="header-section-number">2</span> Including time dependent variables in the Cox model</h2>
 <p>Let’s say we now have a variable <span class="math inline">\(W_i(t)\)</span> that changes with <span class="math inline">\(t\)</span> and we wish to include this variable in our Cox model. There is no mathematical reason we cannot include this variable in our model. The hazard ratio for an individual is now: <span class="math display">\[\lambda_i(t) = \lambda_0(t) \exp(\mathbf{z}_i^T \boldsymbol{\beta} + \gamma W_i(t))\]</span> where <span class="math inline">\(\gamma\)</span> is the coefficient for the time-varying covariate. The first thing to note is that this is no longer a proportional hazards model, because <span class="math inline">\(\lambda_i(t)/ \lambda_0(t)\)</span> is not constant in time. Instead: <span class="math display">\[\lambda_i(t)/ \lambda_0(t) = \exp(\mathbf{z}_i^T \boldsymbol{\beta} + \gamma W_i(t)).\]</span></p>
 <p>Now we construct the partial likelihood. <span class="math display">\[\begin{align}
     PL(\boldsymbol{\beta}) &amp; = \prod_{i=1}^n  \left(\frac{\exp(\mathbf{z}_i^T \boldsymbol{\beta} + \gamma W_i(t_i))}{\sum_{j \in R(t_i)} \exp(\mathbf{z}_j^T \boldsymbol{\beta} + \gamma W_j(t_i))}\right)^{\delta_i}
@@ -256,12 +258,16 @@ window.Quarto = {
 <p>We can still use the Breslow estimator for cumulative baseline hazard: <span class="math display">\[\begin{align}
    \hat{\Lambda}_0(t) = \sum_{i \mid t_i \leq t, \delta_i = 1} \frac{1}{\sum_{j \in R(t_i} \exp(\mathbf{z}_j^T \boldsymbol{\beta} + \gamma W_j(t_i))}
 \end{align}\]</span></p>
-<section id="representing-time-varying-covariates-in-survival-data" class="level4" data-number="1.1.1">
-<h4 data-number="1.1.1" class="anchored" data-anchor-id="representing-time-varying-covariates-in-survival-data"><span class="header-section-number">1.1.1</span> Representing time-varying covariates in survival data</h4>
-<p>The way we represent time-varying covariates in a dataset is somewhat different than what we’re used to with simpler survival data. The reason for this is that every individual has different numbers of time-varying covariate values depending on their time to failure or censoring. Thus a datatset in wide format might look like:</p>
-<div id="tab:my_label">
+<section id="representing-time-varying-covariates-in-survival-data" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="representing-time-varying-covariates-in-survival-data"><span class="header-section-number">2.1</span> Representing time-varying covariates in survival data</h3>
+<p>The way we represent time-varying covariates in a dataset is somewhat different than what we’re used to with simpler survival data. The reason for this is that every individual has different numbers of time-varying covariate values depending on their time to failure or censoring. Thus a datatset in wide format might look like <a href="#tbl-wide" class="quarto-xref">Table&nbsp;1</a>.</p>
+<div id="tbl-wide" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-wide-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Wide-format dataset
+</figcaption>
+<div aria-describedby="tbl-wide-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
-<caption>Caption</caption>
 <thead>
 <tr class="header">
 <th style="text-align: center;">id</th>
@@ -304,10 +310,16 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
-<p>An alternative is called the counting process representation. The data now look like:</p>
-<div id="tab:my_label">
+</figure>
+</div>
+<p>An alternative is called the counting process representation. The transformed data is now show in <a href="#tbl-count" class="quarto-xref">Table&nbsp;2</a>.</p>
+<div id="tbl-count" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Counting process representation
+</figcaption>
+<div aria-describedby="tbl-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
-<caption>Caption</caption>
 <thead>
 <tr class="header">
 <th style="text-align: center;">id</th>
@@ -374,11 +386,12 @@ window.Quarto = {
 </tbody>
 </table>
 </div>
+</figure>
+</div>
 <p>These sort of data can be fitted in the survival package using the following command: <code>coxph(Surv(start, stop, status) &nbsp; age + a, data = data)</code>.</p>
 </section>
-</section>
-<section id="solving-the-problem-with-time-varying-covariates" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="solving-the-problem-with-time-varying-covariates"><span class="header-section-number">1.2</span> Solving the problem with time-varying covariates</h3>
+<section id="addressing-the-problem-with-time-varying-covariates" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="addressing-the-problem-with-time-varying-covariates"><span class="header-section-number">2.2</span> Addressing the problem with time-varying covariates</h3>
 <p>This discussion follows <span class="citation" data-cites="tsiatis_joint_2004">(<a href="#ref-tsiatis_joint_2004" role="doc-biblioref">Tsiatis and Davidian 2004</a>)</span>. Imagine we had the following set of random variables for each participant in a clinical trial: <span class="math display">\[\{(T_i = \min(X_i, C_i), \mathbf{z}_i, W_i(u) \mid 0 \leq u \leq T_i), i = 1, \dots, n\}.\]</span></p>
 <p>If we observed this process for each individual, we could fit a Cox PH model as above: <span class="math display">\[\begin{align}
     PL(\boldsymbol{\beta}) &amp; = \prod_{i=1}^n  \left(\frac{\exp(\mathbf{z}_i^T \boldsymbol{\beta} + \gamma W_i(t_i))}{\sum_{j \in R(t_i)} \exp(\mathbf{z}_j^T \boldsymbol{\beta} + \gamma W_j(t_i))}\right)^{\delta_i}
