@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Missing data lecture 10: Flawed approach to missing data and EM</title>
+<title>Missing data lecture 11: More EM</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -175,15 +175,17 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#flawed-approach-to-missing-data" id="toc-flawed-approach-to-missing-data" class="nav-link active" data-scroll-target="#flawed-approach-to-missing-data">Flawed approach to missing data</a></li>
-  <li><a href="#em-algorithm" id="toc-em-algorithm" class="nav-link" data-scroll-target="#em-algorithm">EM algorithm</a>
+  <li><a href="#one-more-em-convergence-result" id="toc-one-more-em-convergence-result" class="nav-link active" data-scroll-target="#one-more-em-convergence-result">One more EM convergence result</a>
   <ul class="collapse">
-  <li><a href="#normal-example-again" id="toc-normal-example-again" class="nav-link" data-scroll-target="#normal-example-again">Normal example, again</a></li>
-  <li><a href="#nontrivial-example" id="toc-nontrivial-example" class="nav-link" data-scroll-target="#nontrivial-example">Nontrivial example</a></li>
+  <li><a href="#nontrivial-em-example" id="toc-nontrivial-em-example" class="nav-link" data-scroll-target="#nontrivial-em-example">Nontrivial EM example</a></li>
+  <li><a href="#multivariate-normal-with-missingness" id="toc-multivariate-normal-with-missingness" class="nav-link" data-scroll-target="#multivariate-normal-with-missingness">Multivariate normal with missingness</a></li>
+  <li><a href="#measuring-uncertainty-in-em-parameter-estimates" id="toc-measuring-uncertainty-in-em-parameter-estimates" class="nav-link" data-scroll-target="#measuring-uncertainty-in-em-parameter-estimates">Measuring uncertainty in EM parameter estimates</a></li>
   </ul></li>
-  <li><a href="#why-does-em-work" id="toc-why-does-em-work" class="nav-link" data-scroll-target="#why-does-em-work">Why does EM work?</a>
+  <li><a href="#variants-of-em" id="toc-variants-of-em" class="nav-link" data-scroll-target="#variants-of-em">Variants of EM</a>
   <ul class="collapse">
-  <li><a href="#multivariate-normal-example-again" id="toc-multivariate-normal-example-again" class="nav-link" data-scroll-target="#multivariate-normal-example-again">Multivariate normal example again</a></li>
+  <li><a href="#gem-generalized-em" id="toc-gem-generalized-em" class="nav-link" data-scroll-target="#gem-generalized-em">GEM: Generalized EM</a></li>
+  <li><a href="#ecm" id="toc-ecm" class="nav-link" data-scroll-target="#ecm">ECM</a></li>
+  <li><a href="#monte-carlo-em" id="toc-monte-carlo-em" class="nav-link" data-scroll-target="#monte-carlo-em">Monte Carlo EM</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -193,7 +195,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Missing data lecture 10: Flawed approach to missing data and EM</h1>
+<h1 class="title">Missing data lecture 11: More EM</h1>
 </div>
 
 
@@ -210,163 +212,55 @@ window.Quarto = {
 </header>
 
 
-<section id="flawed-approach-to-missing-data" class="level2">
-<h2 class="anchored" data-anchor-id="flawed-approach-to-missing-data">Flawed approach to missing data</h2>
-<p>One generally flawed approach to inference in missing data problems is to treat the missing values as unknown parameters and to maximize the following function of parameters <em>and</em> missing values: <span class="math display">\[
-L_{\text{mispar}}(\theta, y_{(1)} \mid y_{(0)}) = f_{Y}(y_{(1)}, y_{(0)} \mid \theta)
-\]</span> The MLE using this distribution would require you to jointly maximize the likelihood with respect to <span class="math inline">\(\theta\)</span> <em>and</em> <span class="math inline">\(y_{(1)}\)</span>. Let’s take this approach with the censored exponential samples and see what we get. We had that the likelihood was</p>
-<p><span class="math display">\[
-\prod_{i=1}^r \theta^{-1} e^{-y_i / \theta} \ind{y_i &lt; c} \prod_{i={r+1}}^n \theta^{-1} e^{-y_i / \theta} \ind{y_i \geq c} f(y \mid \theta)
-\]</span> Because <span class="math inline">\(e^{-y_i/\theta}\)</span> is monotonically decreasing in <span class="math inline">\(y_i\)</span> for any <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\hat{y}_i\)</span> is <span class="math inline">\(c\)</span> for the missing observations.</p>
-<p>Plugging this into the log-likelihood gives <span class="math display">\[
--r \log\theta -(n-r) \log \theta -\frac{\sum_{i=1}^r y_i + (n - r)c}{\theta}
-\]</span> Taking derivatives and setting this equal to zero gives: <span class="math display">\[
-\hat{\theta}_{\text{mispar}} = \frac{\sum_{i=1}^r y_i + (n - r)c}{n}  = \frac{r}{n}\hat{\theta}
-\]</span> This understates the true value <span class="math inline">\(\theta\)</span>, and one can show that this estimator isn’t consistent for <span class="math inline">\(\theta\)</span>. The only way this estimator is consistent for <span class="math inline">\(\theta\)</span> is if <span class="math inline">\(r / n \to 1\)</span>.</p>
-<p>This example shows that the goal in missing data analysis isn’t to predict missing values, it is to account for the uncertainty in missing values by integrating over the distribution of missing values.</p>
-<p>Here is another example.</p>
-<p>Let <span class="math inline">\(y_i\)</span> be normally distributed with unknown mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. Suppose there are <span class="math inline">\(r\)</span> observed values and <span class="math inline">\(n - r\)</span> missing values. We assume that the data are MAR and the parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> are distinct from the parameters of the missingness distribution.</p>
-<p>The MLE from the ignorable likelihood is just the MLE on the complete cases: <span class="math display">\[
-\hat{\mu} = \sum_{i=1}^r \frac{y_i}{r}, \hat{\sigma}^2 = \sum_{i=1}^r \frac{(y_i - \hat{\mu}^2)}{r}
-\]</span> If we write down the mistaken likelihood for the data we get:</p>
-<p><span class="math display">\[
-\ell_{\text{mispar}}(\mu, \sigma^2, y_{r+1},\dots, y_n \mid y_{(0)}) =
--\frac{n}{2} \log \sigma^2 - \frac{1}{2\sigma^2} \sum_{i=1}^r (y_i - \mu)^2 - \frac{1}{2\sigma^2} \sum_{i=r+1}^n (y_i - \mu)^2
-\]</span> We can maximize this by setting <span class="math inline">\(y_{r+1}, \dots, y_n\)</span> to <span class="math inline">\(\mu\)</span>, thereby eliminating the second sum. This leads to an MLE for <span class="math inline">\(\mu\)</span> that is equal to <span class="math inline">\(\hat{\mu}\)</span> above. The variance, however, is incorrectly estimated. Taking gradients and solving for <span class="math inline">\(\sigma^2\)</span> gives <span class="math display">\[
-\hat{\sigma}^2 = \sum_{i=1}^r \frac{(y_i - \hat{\mu})^2}{n}
-\]</span> Why is this wrong? Intuitively, we can see that the expected value of the second term isn’t zero, and thus we’ll understate the variance Thus, the MLE in the misparametrized model yields a variance estimate that is too low.</p>
-<p>Again, we want to integrate over our uncertainty in the missing values, rather than predict missing values.</p>
-</section>
-<section id="em-algorithm" class="level2">
-<h2 class="anchored" data-anchor-id="em-algorithm">EM algorithm</h2>
-<p>The last section discussed how maximizing the likelihood as a function of the missing data points was an incorrect way to go about doing likelihood inference when there is missing data.</p>
-<p>The “right” way to do so is to integrate over the uncertainty in your likelihood stemming from the missing observations, and then maximize this object.</p>
-<p><span class="math display">\[
-L_\text{ign}(\theta \mid Y_{(0)} = \tilde{y}_{(0)}) \propto \int_{\mathcal{Y}_{(1)}} f_Y(Y_{(0)} = \tilde{y}_{(0)}, Y_{(0)} = y_{(1)} \mid \theta) dy_{(1)}
-\]</span> We’ll call the log-likelihood above: <span class="math display">\[
-\ell(\theta \mid  Y_{(0)} = \tilde{y}_{(0)})
-\]</span></p>
-<p>Sometimes we can’t do this maximization directly in one step because it is tricky. Instead, of doing the maximization directly we do so iteratively, and this is the motivation for the Expectation-Maximization algorithm: Let <span class="math inline">\(\ell_Y(\theta \mid Y)\)</span> be the complete data log-likelihood, and <span class="math inline">\(f(Y_{(1)} \mid Y_{(0)}, \theta^{(t)})\)</span> be the distribution of missing values given the observed values and the current best guess at the parameters <span class="math inline">\(\theta^{(t)}\)</span>. The object, which we’ll call <span class="math inline">\(Q(\theta \mid \theta^{(t)})\)</span>, we want to maximize is the expected log-likelihood, where we take the expectation over the conditional distribution of the missing values</p>
-<p><span class="math display">\[
-Q(\theta \mid \theta^{(t)}) = \int_{\mathcal{Y}_{(1)}}\ell_Y(\theta \mid Y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^{(t)})dY_{(1)}
-\]</span></p>
-<section id="normal-example-again" class="level3">
-<h3 class="anchored" data-anchor-id="normal-example-again">Normal example, again</h3>
-<p>Continuing the normal example from above, we have that our complete data log-likelihood is: <span class="math display">\[
-\ell_Y(\mu, \sigma^2 \mid Y_{(1)}, Y_{(0)}) = -\frac{n}{2} \log \sigma^2 -\frac{1}{2\sigma^2} \sum_{i=1}^r (y_i - \mu)^2 -\frac{1}{2\sigma^2} \sum_{i=r+1}^n (y_i - \mu)^2
-\]</span></p>
-<p>Because we’ve assumed that the data are MAR (which in univariate settings equals MCAR), we have that <span class="math display">\[
-y_i \sim \text{Normal}(\mu^{(t)}, (\sigma^2)^{(t)})
-\]</span> Then for each <span class="math inline">\(y_i\)</span>, <span class="math display">\[
-\Exp{y_i^2 - 2\mu y_i + \mu^2} = (\mu^{(t)})^2 + (\sigma^{t})^2  - 2 \mu \mu^{(t)} + \mu^2
-\]</span> Then the expected log-likelihood is: <span class="math display">\[
-Q(\theta \mid \theta^{(t)}) = -\frac{n}{2} \log \sigma^2 -\frac{1}{2\sigma^2} \sum_{i=1}^r (y_i - \mu)^2 -\frac{1}{2\sigma^2} (n-r) ((\mu^{(t)})^2 + (\sigma^{t})^2  - 2 \mu \mu^{(t)} + \mu^2)
-\]</span> Taking partial derivatives with respect to <span class="math inline">\(\mu\)</span> gives: <span class="math display">\[
-\begin{aligned}
-0 &amp; = \frac{1}{\sigma^2} \sum_{i=1}^r (y_i - \mu) -\frac{1}{\sigma^2} (n-r) (-2 \mu^{(t)} + 2 \mu)  \\
-&amp; = \frac{1}{\sigma^2} (\sum_{i=1}^r y_i  + (n - r) \mu^{(t)}) - n\frac{\mu}{\sigma^2}
-\end{aligned}
-\]</span> Solving for <span class="math inline">\(\mu\)</span> gives the update rule for <span class="math inline">\(\mu^{(t)}\)</span>:</p>
-<p><span class="math display">\[
-\begin{aligned}
-\mu^{(t+1)} = \frac{\sum_{i=1}^r y_i  + (n - r) \mu^{(t)}}{n}
-\end{aligned}
-\]</span> Taking partials with respect to <span class="math inline">\(\sigma^2\)</span> <span class="math display">\[
-\frac{\partial Q(\theta \mid \theta^{(t)})}{\partial \sigma^2} = -\frac{n}{2 \sigma^2} +\frac{1}{2\sigma^4} (\sum_{i=1}^r (y_i - \mu)^2 + (n-r) ((\mu^{(t)})^2 + (\sigma^{(t)})^2  - 2 \mu \mu^{(t)} + \mu^2))
-\]</span> Setting this equal to zero and simplifying gives: <span class="math display">\[
-\begin{aligned}
-0 &amp; = -\frac{n}{2 \sigma^2} +\frac{1}{2\sigma^4} (\sum_{i=1}^r (y_i - \mu^{(t+1)})^2 + (n-r) ((\mu^{(t)})^2 + (\sigma^{(t)})^2  - 2 \mu^{(t+1)} \mu^{(t)} + (\mu^{(t+1)})^2))
-\end{aligned}
-\]</span> This yields: <span class="math display">\[
-\begin{aligned}
-(\sigma^2)^{(t+1)} &amp; = \frac{(\sum_{i=1}^r (y_i - \mu^{(t+1)})^2 + (n-r) ((\mu^{(t)})^2 + (\sigma^{(t)})^2  - 2 \mu^{(t+1)} \mu^{(t)} + (\mu^{(t+1)})^2))}{n}
-\end{aligned}
-\]</span> which simplifies to <span class="math display">\[
-\begin{aligned}
-(\sigma^2)^{(t+1)} &amp; = \frac{(\sum_{i=1}^r y_i^2 + (n-r) ((\mu^{(t)})^2 + (\sigma^{(t)})^2)}{n} - (\mu^{(t+1)})^2
-\end{aligned}
-\]</span> This shows why the prior procedure didn’t work; namely it ignores the extra variability in imputations for the missing <span class="math inline">\(y_i^2\)</span> terms.</p>
-<p>To see why this simplifies, expand out <span class="math display">\[
-\sum_{i=1}^r (y_i - \mu^{(t+1)})^2 = \sum_{i=1}^r y_i^2 - 2 \mu^{(t+1)} \sum_{i=1}^r y_i +  r (\mu^{(t+1)})^2
-\]</span> and sub in the following expression for <span class="math inline">\(\sum_i y_i\)</span> <span class="math display">\[
-\begin{aligned}
-\sum_{i=1}^r y_i = n \mu^{(t+1)}  - (n - r)\mu^{(t)}
-\end{aligned}
-\]</span></p>
-<p>Plugging in our estimate for <span class="math inline">\(\mu^{(t+1)}\)</span> gives the solution above.</p>
-<p>One can show that the EM solution converges to the complete data result.</p>
-</section>
-<section id="nontrivial-example" class="level3">
-<h3 class="anchored" data-anchor-id="nontrivial-example">Nontrivial example</h3>
-<p>Here’s an example: Let’s say we have two outcomes, so <span class="math inline">\(Y\)</span> is an <span class="math inline">\(n \times 2\)</span> matrix. For simplicity’s sake, we assume the missingness is ignorable, and assume we have a general missingness pattern, i.e.&nbsp;there are 3 patterns of missingness, assuming all participants had at least one measurement. The parameters of interest are <span class="math inline">\(\mu_1, \mu_2, \Sigma\)</span>, and we’d like to use all the available data to do inference. If we had a complete dataset, we know from an earlier lecture the ML solutions for these quantities: <span class="math display">\[
-\hat{\mu}_1 = \bar{y}_1,\,\hat{\mu}_2 = \bar{y}_2,\, \hat{\Sigma} = 1/n\sum_i y_i y_i^T - \hat{\mu}\hat{\mu}^T
-\]</span> Let <span class="math display">\[
-r_1 = \# (y_{1i} \text{ obs, }, y_{2i} \text{ missing }), r_2 = \# (y_{2i} \text{ obs, }, y_{1i} \text{ missing }), n - r_1 - r_2 = \# (y_{2i} \text{ obs, }, y_{1i} \text{ obs })
-\]</span>, and suppose we have arranged our indices <span class="math inline">\(i\)</span> so <span class="math inline">\(i \in \{1, \dots, r_1\}\)</span> have <span class="math inline">\(y_1\)</span> observed, <span class="math inline">\(i \in \{r_1 + 1, \dots, r_1 + r_2\}\)</span> have <span class="math inline">\(y_2\)</span> observed and <span class="math inline">\(i \in \{r_1+r_2+1, \dots, n\}\)</span> have all data observed. Let <span class="math inline">\(f_{Y_j}(y_{ji} \mid \mu_j, \Sigma_{j,j}), j = 1, 2\)</span> be the univariate normal density, while <span class="math inline">\(f_{Y}(y_{i} \mid \mu_1, \mu_2, \Sigma)\)</span> is the bivariate normal density. The observed data likelihood is <span class="math display">\[
-L(\mu_1, \mu_2, \Sigma \mid Y_{(0)}) = \prod_{i=1}^{r_1} f_{Y_1}(y_{1i} \mid \mu_1, \Sigma_{1,1})\prod_{i=r_1+1}^{r_1+r_2} f_{Y_2}(y_{2i} \mid \mu_2, \Sigma_{2,2})\prod_{i=r_1+r_2+1}^{n} f_{Y_2}(y_{i} \mid \mu_1, \mu_2, \Sigma)
-\]</span> We can find the MLEs for this expression, but it isn’t standard, and it’ll involve some thinking, whereas if we had a complete dataset we could just do the maximization very easily. The two variable dataset seems pretty tractable, but imagine we had many variables with lots of missingness patterns, and then the maximization would be hard.</p>
-</section>
-</section>
-<section id="why-does-em-work" class="level2">
-<h2 class="anchored" data-anchor-id="why-does-em-work">Why does EM work?</h2>
-<p>Why does this work? We want to show that maximizing <span class="math inline">\(Q\)</span> is equivalent to maximizing <span class="math inline">\(L_\text{ign}\)</span>.</p>
-<p>We can write the complete data distribution as the product of two factors: <span class="math display">\[
-f_Y(Y_{(1)}, Y_{(0)} \mid \theta) = f(Y_{(0)} \mid \theta)f(Y_{(1)}\mid Y_{(0)}, \theta)
-\]</span> Taking logs gives us the complete data likelihood in terms of the observe data likelihood and the log likelihood of the conditional distribution of the missing data given the observed data and a parameter value. <span class="math display">\[
-\ell_Y(Y_{(1)}, Y_{(0)} \mid \theta) = \log(f(Y_{(0)} \mid \theta)) + \log(f(Y_{(1)}\mid Y_{(0)}, \theta))
-\]</span> The first term is the observed data likelihood, which is what we want to maximize. Rearranging gives: <span class="math display">\[
-\log(f(Y_{(0)} \mid \theta)) = \ell_Y(Y_{(1)}, Y_{(0)} \mid \theta) - \log(f(Y_{(1)}\mid Y_{(0)}, \theta))
-\]</span> Taking expectations for a current iterate <span class="math inline">\(\theta^r\)</span> over <span class="math inline">\(f(Y_{(1)}\mid Y_{(0)}, \theta^t)\)</span>, gives <span class="math display">\[
-\Exp{\log(f(Y_{(0)} \mid \theta))}{f(Y_{(1)}\mid Y_{(0)}, \theta^t)} = Q(\theta \mid \theta^t) - H(\theta \mid \theta^t)
-\]</span> where <span class="math inline">\(Q\)</span> is as above and <span class="math inline">\(H(\theta \mid \theta^t)\)</span> is: <span class="math display">\[
-H(\theta \mid \theta^{(t)}) = \int_{\mathcal{Y}_{(1)}} \log f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta)f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t)dY_{(1)}
-\]</span> We can show that <span class="math inline">\(H(\theta \mid \theta^t) \leq H(\theta^t \mid \theta^t)\)</span> for all <span class="math inline">\(\theta\)</span>.</p>
-<p><span class="math display">\[
-\begin{aligned}
-    H(\theta \mid \theta^t)  - H(\theta^t \mid \theta^t) &amp; = \int_{\mathcal{Y}_{(1)}} \log \frac{f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta)}{f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t)}f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t)dY_{(1)}  \\
-&amp; = \Exp{\log \frac{f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta)}{f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}}}{f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t)} \\
-&amp; \leq
-\log \Exp{\frac{f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta)}{f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}}}{f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t)} \\
-&amp; = \log 1 = 0
-\end{aligned}
-\]</span> This is the same proof that shows that the KL divergence is always positive! <span class="math display">\[
-\begin{aligned}
-\text{KL}(f \mid g) = \int_{\mathcal{Y}} \log \frac{f(y)}{g(y)} f(y) dy
-\end{aligned}
-\]</span></p>
-<p>Now we look at the value of the maximized oberved data likelihood: <span class="math display">\[
-\ExpA{\log(f(Y_{(0)} \mid \theta^{t}))}{f(Y_{(1)} \mid Y_{(0)}, \theta^t)}
-\]</span> and how this changes between steps <span class="math inline">\(t\)</span> and <span class="math inline">\(t+1\)</span> so that <span class="math inline">\(\theta^{t+1}\)</span> as <span class="math inline">\(\theta^{t+1} = \text{argmax}_\theta Q(\theta \mid \theta^{t})\)</span>.</p>
-<p>The difference between the observed likelihoods</p>
-<p><span class="math display">\[
-\begin{aligned}
-\ExpA{\log(f(Y_{(0)} \mid \theta^{t+1}))}{f(Y_{(1)} \mid Y_{(0)}, \theta^{t+1})} - &amp; \ExpA{\log(f(Y_{(0)} \mid \theta^{t}))}{{f(Y_{(1)} \mid Y_{(0)}, \theta^{t})}} \\ &amp; =  Q(\theta^{t+1} \mid \theta^t) - Q(\theta^{t} \mid \theta^t) - (H(\theta^{t+1} \mid \theta^t) - H(\theta^{t} \mid \theta^t))
-\end{aligned}
-\]</span> Thus, by maximizing the expected complete data likelihood, we in turn maximize the function we really want, namely the observed likelihood.</p>
-<p>Another result is that if <span class="math inline">\(\theta^{t+1}\)</span> is chosen such that: 1. <span class="math inline">\(\frac{\partial}{\partial \theta} Q(\theta \mid \theta^t) \mid_{\theta = \theta^{t+1}} = 0\)</span></p>
-<ol start="2" type="1">
+<section id="one-more-em-convergence-result" class="level2">
+<h2 class="anchored" data-anchor-id="one-more-em-convergence-result">One more EM convergence result</h2>
+<p>Another result is that if <span class="math inline">\(\theta^{t+1}\)</span> is chosen such that:</p>
+<ol type="1">
+<li><p><span class="math inline">\(\frac{\partial}{\partial \theta} Q(\theta \mid \theta^t) \mid_{\theta = \theta^{t+1}} = 0\)</span></p></li>
 <li><p><span class="math inline">\(\theta^{t+1} \to \theta^\star\)</span></p></li>
 <li><p><span class="math inline">\(f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta)\)</span> is sufficiently smooth in <span class="math inline">\(\theta\)</span></p></li>
 </ol>
 <p>Then</p>
 <p><span class="math inline">\(\frac{\partial}{\partial \theta} \ell(\theta \mid Y_{(0)} = \tilde{y}_{(0)}) \mid_{\theta = \theta^\star} = 0\)</span></p>
+<p>which means that the value to which the step-by-step maximization of the <span class="math inline">\(Q(\theta \mid \theta^t)\)</span> functions converges, <span class="math inline">\(\theta^\star\)</span>, will also be a stationary point of the observed data likelihood, <span class="math inline">\(\ell(\theta \mid Y_{(0)} = \tilde{y}_{(0)})\)</span></p>
 <p><span class="math display">\[
 \begin{aligned}
 \frac{\partial}{\partial \theta} \ell(\theta \mid Y_{(0)} = \tilde{y}_{(0)}) \mid_{\theta = \theta^\star} = \frac{\partial}{\partial \theta} Q(\theta \mid \theta^{t}) \mid_{\theta = \theta^\star} - \frac{\partial}{\partial \theta} H(\theta \mid \theta^{t}) \mid_{\theta = \theta^\star}
 \end{aligned}
 \]</span> The first quantity on the RHS is zero by the condition that we pick <span class="math inline">\(\theta^{t+1}\)</span> as that which leads to <span class="math inline">\(\frac{\partial}{\partial \theta} Q(\theta \mid \theta^{t}) \mid_{\theta = \theta^\star}=0\)</span>, so if <span class="math inline">\(\theta^t \to \theta^\star\)</span>, we must have gotten there by setting these gradients equal to zero. The second quantity on the RHS is <span class="math display">\[
 \begin{aligned}
-\frac{\partial}{\partial \theta} H(\theta \mid \theta^{t}) \mid_{\theta = \theta^\star} &amp; = \frac{\partial}{\partial \theta} \int_{\mathcal{Y}_{(1)}} \log f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta) f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t) dY_{(1)} \mid_{\theta=\theta^\star} \\
-&amp; = \int_{\mathcal{Y}_{(1)}} \frac{\frac{\partial}{\partial \theta}f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta)\mid_{\theta=\theta^\star}}{f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^\star)}  f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t) dY_{(1)} \mid_{\theta=\theta^\star} \\
+\frac{\partial}{\partial \theta} H(\theta \mid \theta^{t}) \mid_{\theta = \theta^\star} &amp; = \frac{\partial}{\partial \theta} \int_{\mathcal{Y}_{(1)}} \log f(Y_{(1)} = y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta) f(Y_{(1)} = y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t) dy_{(1)} \mid_{\theta=\theta^\star} \\
+&amp; = \int_{\mathcal{Y}_{(1)}} \frac{\frac{\partial}{\partial \theta}f(Y_{(1)} = y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta)\mid_{\theta=\theta^\star}}{f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta^\star)}  f(Y_{(1)}  = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t) dy_{(1)} \mid_{\theta=\theta^\star} \\
 \end{aligned}
 \]</span> as <span class="math inline">\(\theta^t \to \theta^\star\)</span> the denominators cancel, leaving</p>
 <p><span class="math display">\[
-\int_{\mathcal{Y}_{(1)}} \frac{\partial}{\partial \theta}f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta)\mid_{\theta=\theta^\star}dY_{(1)}
+\int_{\mathcal{Y}_{(1)}} \frac{\partial}{\partial \theta}f(Y_{(1)} = y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta)\mid_{\theta=\theta^\star}dY_{(1)}
 \]</span> which, if we pull the derivative out of the integral again, equals zero because we’re differentiating a constant.</p>
-<section id="multivariate-normal-example-again" class="level3">
-<h3 class="anchored" data-anchor-id="multivariate-normal-example-again">Multivariate normal example again</h3>
-<p>In the multivariate normal example we know how to maximize the likelihood, but how do we do the conditional expectation?</p>
-<p><span class="math display">\[
+<section id="nontrivial-em-example" class="level3">
+<h3 class="anchored" data-anchor-id="nontrivial-em-example">Nontrivial EM example</h3>
+<p>Here’s a nontrivial example: Let’s say we have three outcomes, so <span class="math inline">\(Y\)</span> is an <span class="math inline">\(n \times 3\)</span> matrix, and <span class="math inline">\(Y_i\)</span> are distributed trivariate normal with means, <span class="math inline">\(\mu_1, \mu_2, \mu_3\)</span> and covariance matrix <span class="math inline">\(\Sigma\)</span>. For simplicity’s sake, we assume the missingness is ignorable, and assume we have only three missingness patterns: <span class="math display">\[
+m_i \in \{(0, 0, 1), (1, 0, 0), (0, 0, 0)\}.
+\]</span> The parameters of interest are <span class="math inline">\(\mu_1, \mu_2, \mu_3, \Sigma\)</span>, and we’d like to use all the available data to do inference. Let the three groups that have missingness be defined as: <span class="math display">\[
+\begin{aligned}
+r_1 &amp; = \# (y_{1i} \text{ obs, }, y_{2i} \text{ obs }, y_{3i} \text{ miss. })\\
+r_2 &amp; = \# (y_{1i} \text{ miss, }, y_{2i} \text{ obs }, y_{3i} \text{ obs }) \\
+n - r_1 - r_3 &amp; = \# (y_{1i} \text{ obs, }, y_{2i} \text{ obs, }, y_{3i} \text{ obs })
+\end{aligned}
+\]</span>, and suppose we have arranged our indices <span class="math inline">\(i\)</span> so <span class="math inline">\(i \in \{1, \dots, r_1\}\)</span> have <span class="math inline">\(y_1\)</span> observed, <span class="math inline">\(i \in \{r_1 + 1, \dots, r_1 + r_2\}\)</span> have <span class="math inline">\(y_2\)</span> observed and <span class="math inline">\(i \in \{r_1+r_2+1, \dots, n\}\)</span> have all data observed. z Let <span class="math inline">\(f_{Y_j, Y_k}((y_{ji},y_{ki}) \mid (\mu_j, \mu_k), \Sigma_{jk}), j = 1, 2\)</span> be the bivariate normal density for indices <span class="math inline">\(j,k, j\neq k\)</span>, where <span class="math display">\[\Sigma_{jk} = \Exp{((Y_j, Y_k)^T - (\mu_j, \mu_k)^T)((Y_j, Y_k) - (\mu_j, \mu_k))}\]</span> while <span class="math inline">\(f_{Y}(y_{i} \mid \mu_1, \mu_2, \mu_3 \Sigma)\)</span> is the trivariate normal density. The observed data likelihood is <span class="math display">\[
+\begin{aligned}
+L(\mu_1, \mu_2, \mu_3 \Sigma, \mid Y_{(0)}) &amp; = \prod_{i=1}^{r_1} f_{Y_1, Y_2}(y_{1i}, y_{2i} \mid \mu_1,\mu_2, \Sigma_{12}) \\
+&amp;\prod_{i=r_1+1}^{r_1+r_2} f_{Y_2,Y_3}(y_{2i}, y_{3i} \mid \mu_2, \mu_3, \Sigma_{23}) \\
+&amp;\prod_{i=r_1+r_2+1}^{n} f_{Y}(y_{i} \mid \mu_1, \mu_2, \mu_3, \Sigma)
+\end{aligned}
+\]</span> This is going to be a hard function to maximize in terms of <span class="math inline">\(\Sigma\)</span>. We can find the MLEs for this expression, but it isn’t standard, and it’ll involve some thinking, whereas if we had a complete dataset we could just do the maximization very easily.</p>
+<p>If we had a complete dataset, we know from an earlier lecture the ML solutions for these quantities: <span class="math display">\[
+\hat{\mu}_1 = \bar{y}_1,\,\hat{\mu}_2 = \bar{y}_2,\,\hat{\mu}_3 = \bar{y}_3,\, \hat{\Sigma} = 1/n\sum_i y_i y_i^T - \hat{\mu}\hat{\mu}^T
+\]</span></p>
+<p>How can we get an MLE when there is ignorable missingness as described above?</p>
+</section>
+<section id="multivariate-normal-with-missingness" class="level3">
+<h3 class="anchored" data-anchor-id="multivariate-normal-with-missingness">Multivariate normal with missingness</h3>
+<p>We can run the EM algorithm, which will require computing the <span class="math inline">\(Q(\theta \mid \theta^t)\)</span> function. For the multivariate normal example, this is: <span class="math display">\[
 \Exp{\ell_{Y}(\mu, \Sigma \mid Y) \mid Y_{(0)}, \mu^t, \Sigma^t} = \frac{1}{2} \log (\det\Sigma^{-1}) -\frac{1}{2}\text{tr}\sum_i\Exp{\lp(y_i - \mu) (y_i - \mu)^T  \mid Y_{(0)}, \mu^t, \Sigma^t}\Sigma^{-1}\rp
 \]</span> If we expand out the cross product, we see we need <span class="math display">\[
 \Exp{(y_i - \mu) (y_i - \mu)^T  \mid Y_{(0)}, \mu^t, \Sigma^t} = \Exp{y_i y_i^T \mid Y_{(0)}, \mu^t, \Sigma^t} - \Exp{\mu y_i^T - y_i^T \mu \mid Y_{(0)}, \mu^t, \Sigma^t}  - \mu\mu^T
@@ -388,9 +282,148 @@ H(\theta \mid \theta^{(t)}) = \int_{\mathcal{Y}_{(1)}} \log f(Y_{(1)} \mid Y_{(0
 \]</span></p>
 <p>and for</p>
 <p><span class="math display">\[
-\Sigma^{t+1} = \frac{1}{n}\sum_i\text{Cov}(y_i \mid y_{i(0)}, \mu^t, \Sigma^t) + (\Exp{y_i \mid y_{i(0)}, \mu^t, \Sigma^t} - \mu^{t+1} )(\Exp{y_i \mid y_{i(0)}, \mu^t, \Sigma^t} - \mu^{t+1} )^T
+\Sigma^{t+1} = \frac{1}{n}\sum_i\text{Cov}(y_i \mid \tilde{y}_{i(0)}, \mu^t, \Sigma^t) + (\Exp{y_i \mid \tilde{y}_{i(0)}, \mu^t, \Sigma^t} - \mu^{t+1} )(\Exp{y_i \mid \tilde{y}_{i(0)}, \mu^t, \Sigma^t} - \mu^{t+1} )^T
 \]</span></p>
 <p>The key is that the conditional expectation and covariances for <span class="math inline">\(y_i\)</span> are informed by the observed data.</p>
+<p>Suppose our observation is in the first group, so <span class="math inline">\(m_i = (0, 0, 1)\)</span>. Then we need to compute <span class="math inline">\(\text{Cov}(y_i \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t)\)</span>, which is</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+\text{Var}(y_{i1} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t) &amp; \text{Cov}(y_{i1}, y_{i2} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t) &amp;  \text{Cov}(y_{i1}, y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t) \\
+\text{Cov}(y_{i1}, y_{i2} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t) &amp; \text{Var}(y_{i2} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t) &amp;  \text{Cov}(y_{i2}, y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t) \\
+\text{Cov}(y_{i1}, y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t) &amp; \text{Cov}(y_{i2}, y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t) &amp; \text{Var}(y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t)
+\end{bmatrix}
+\]</span> Most of the elements of this matrix are zero, because of the properties of conditional expectation. Look at <span class="math inline">\(\text{Cov}(y_{i1}, y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t)\)</span>, for instance: <span class="math display">\[
+\text{Cov}(y_{i1}, y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t)  = \Exp{y_{i1} y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t} - \Exp{y_{i1} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t}\Exp{y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t}
+\]</span> <span class="math display">\[
+\Exp{y_{i1} y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t} = y_{i1} \Exp{y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t}
+\]</span> and similarly</p>
+<p><span class="math display">\[
+\Exp{y_{i1} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t} = y_{i1}
+\]</span></p>
+<p>so we get <span class="math display">\[
+\begin{aligned}
+\text{Cov}(y_{i1}, y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t) = &amp; y_{i1} \Exp{y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t} - y_{i1} \Exp{y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t} \\
+= &amp; 0
+\end{aligned}
+\]</span> The same holds for the conditional variances. The only nonzero element is <span class="math inline">\(\text{Var}(y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t)\)</span>. We can use the properties of the conditional normal distribution to derive the conditional variance.</p>
+<p>Let our covariance matrix <span class="math inline">\(\Sigma\)</span> be defined: <span class="math display">\[
+\Sigma = \begin{bmatrix}
+\Sigma_{12} &amp; \begin{bmatrix} \sigma_{13} \\ \sigma_{23} \end{bmatrix} \\
+\begin{bmatrix} \sigma_{13} &amp; \sigma_{23} \end{bmatrix} &amp; \sigma^2_3
+\end{bmatrix}\,,
+\Sigma_{12} = \begin{bmatrix}
+\sigma_{1}^2 &amp; \sigma_{12}  \\
+\sigma_{12}  &amp; \sigma_{2}^2
+\end{bmatrix}
+\]</span> Then the conditional variance, evaluated at <span class="math inline">\(\mu^{(t)}, \Sigma^{(t)}\)</span> is: <span class="math display">\[
+(\sigma^2_3)^{(t)} - \begin{bmatrix} \sigma^{(t)}_{13} &amp; \sigma^{(t)}_{23} \end{bmatrix} (\Sigma_{12}^{(t)})^{-1}\begin{bmatrix} \sigma^{(t)}_{13} \\ \sigma^{(t)}_{23} \end{bmatrix}
+\]</span> The conditional mean, <span class="math inline">\(\Exp{y_{i3} \mid y_{i1}, y_{i2}, \mu^t, \Sigma^t}\)</span> is <span class="math display">\[
+\mu_3^{(t)} + \begin{bmatrix} \sigma^{(t)}_{13} &amp; \sigma^{(t)}_{23} \end{bmatrix} (\Sigma_{12}^{(t)})^{-1}\begin{bmatrix} y_{i1} - \mu_1^{(t)} \\ y_{i2} - \mu_2^{(t)} \end{bmatrix}
+\]</span> Similar formulas can be used for the second group, where you have observed <span class="math inline">\(y_{i2},y_{i3}\)</span>, but not <span class="math inline">\(y_{i1}\)</span>.</p>
+</section>
+<section id="measuring-uncertainty-in-em-parameter-estimates" class="level3">
+<h3 class="anchored" data-anchor-id="measuring-uncertainty-in-em-parameter-estimates">Measuring uncertainty in EM parameter estimates</h3>
+<p>We might want to find something like standard errors for our parameter estimates. We can get asymptotic standard errors from the inverse of the information matrix: <span class="math inline">\(I(\theta \mid Y_{(0)})^{-1}\)</span>: Starting with our standard decomposition of the observed data log likelihood:</p>
+<p><span class="math display">\[
+\ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)}) = \log(f(Y_{(0)} = \tilde{y}_{(0)} \mid \theta)) + \log(f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta))
+\]</span> Rearranging <span class="math display">\[
+\log(f(Y_{(0)} = \tilde{y}_{(0)} \mid \theta)) = \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)}) - \log(f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta))
+\]</span> we can differentiate twice to get: <span class="math display">\[
+-\nabla^2_\theta\log(f(Y_{(0)} = \tilde{y}_{(0)} \mid \theta)) = -\nabla^2_\theta\ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)}) +\nabla^2_\theta\log(f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta))
+\]</span> which is equivalent to:</p>
+<p><span class="math display">\[
+I(\theta \mid Y_{(0)} = \tilde{y}_{(0)}) = I(\theta \mid Y_{(0)} = \tilde{y}_{(0)}, Y_{(1)} = y_{(1)}) + \nabla^2_\theta\log(f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta))
+\]</span> where <span class="math inline">\(I(\theta \mid Y_{(0)} = \tilde{y}_{(0)})\)</span> is the observed information. Taking expectations with respect random variable <span class="math inline">\(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t\)</span> gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+I(\theta \mid Y_{(0)} = \tilde{y}_{(0)}) &amp; = \ExpA{I(\theta \mid Y_{(0)}=\tilde{y}_{(0)}, Y_{(1)})}{Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t} + \ExpA{\nabla^2_\theta\log(f(Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta))}{Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta^t} \\
+&amp; = -\nabla^2_\theta Q(\theta \mid \theta^t) + \nabla^2_\theta H(\theta \mid \theta^t)
+\end{aligned}
+\]</span> When we have reached a stationary point <span class="math inline">\(\theta^\star\)</span>, we can evaluate the first term on the right easily: <span class="math display">\[
+-\nabla^2_\theta Q(\theta \mid \theta^t)\mid_{\theta = \theta^\star}
+\]</span> We can get the second term in EM from Louis’ Identity: <span class="math display">\[
+\begin{aligned}
+-\nabla^2_\theta H(\theta \mid \theta^t) = &amp; \ExpA{\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})^T}{Y_{(1)} \mid Y_{(0)}=\tilde{y}_{(0)},\theta^t}\\
+&amp;- \nabla_\theta \ell_Y(\theta \mid Y_{(0)} = \tilde{y}_{(0)})\nabla_\theta \ell_Y(\theta \mid Y_{(0)} = \tilde{y}_{(0)})^T
+\end{aligned}
+\]</span> where we note that at the stationary point, the gradient is zero, so we get: <span class="math display">\[
+-\nabla^2_\theta H(\theta \mid \theta^t)\mid_{\theta = \theta^\star} = \ExpA{\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})^T}{Y_{(1)} \mid Y_{(0)}=\tilde{y}_{(0)}}\mid_{\theta = \theta^\star}
+\]</span></p>
+<p>The final expression is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+I(\theta^\star \mid Y_{(0)} = \tilde{y}_{(0)}) = &amp;\, -\nabla^2_\theta Q(\theta \mid \theta^\star)\mid_{\theta = \theta^\star} \\
+&amp;-\ExpA{\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})^T}{Y_{(1)} \mid Y_{(0)}=\tilde{y}_{(0)}}\mid_{\theta = \theta^\star}
+\end{aligned}
+\]</span></p>
+</section>
+</section>
+<section id="variants-of-em" class="level2">
+<h2 class="anchored" data-anchor-id="variants-of-em">Variants of EM</h2>
+<p>The standard EM algorithm has two important characteristics that may make it hard to apply in practice:</p>
+<ol type="1">
+<li><p>The expectation step of the log-likelihood might be intractable.</p></li>
+<li><p>The M step might not be able to be done exactly.</p></li>
+</ol>
+<p>There are variants of the EM algorithm that can handle both of these issue.</p>
+<section id="gem-generalized-em" class="level3">
+<h3 class="anchored" data-anchor-id="gem-generalized-em">GEM: Generalized EM</h3>
+<p>If we can’t maximize the <span class="math inline">\(Q(\theta \mid \theta^t)\)</span> exactly, we can instead set <span class="math inline">\(\theta^{t+1}\)</span> so that <span class="math display">\[
+Q(\theta^t \mid \theta^t) \leq Q(\theta^{t+1} \mid \theta^t).
+\]</span></p>
+<p>We showed last time that any value of <span class="math inline">\(\theta^{t+1}\)</span> for which the above holds will lead to an increase in the observed likelihood, which is ultimately what we’re trying to maximize.</p>
+<p>One can show that we still reach a stationary point for the observed likelihood under a GEM algorithm.</p>
+</section>
+<section id="ecm" class="level3">
+<h3 class="anchored" data-anchor-id="ecm">ECM</h3>
+<p>The first variant of EM is called ECM, or Expectation-Conditional Maximization. This is a GEM algorithm, so if we can’t do the maximizaton step exactly, we can instead do conditional maximization, which at least increases the <span class="math inline">\(Q\)</span> function each iteration. We have an example of this sort of model from the first few weeks of class: the repeated measures model:</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_{i} \mid X_{i} \, &amp; = X_{i} \beta + \epsilon_{i} \\
+\epsilon_{i} &amp; \sim \text{Normal}(0, \Sigma) \\
+\epsilon_{i} &amp; \indy \epsilon_{j} \forall i\neq j
+\end{aligned}
+\]</span></p>
+<p>We can look back in our notes to see that we have an iterative maximization scheme for this model:</p>
+<p><span class="math display">\[
+\beta^{(t+1)} = \left(\sum_i X_i^T (\Sigma^{(t)})^{-1}X_i\right)^{-1} \sum_i X_i^T (\Sigma^{(t)})^{-1}y_i
+\]</span> and <span class="math display">\[
+\Sigma^{(t+1)} = \frac{1}{n}\sum_i (y_i - X_i \beta^{(t+1)}) (y_i - X_i \beta^{(t+1)})^T
+\]</span></p>
+<p>Each step of the conditional maximization increased the complete data likelihood: <span class="math display">\[
+\begin{aligned}
+\ell_Y(\beta^{t+1}, \Sigma^{t} \mid Y) &amp; \geq \ell_Y(\beta^{t}, \Sigma^{t} \mid Y) \\
+\ell_Y(\beta^{t+1}, \Sigma^{t+1} \mid Y) &amp; \geq \ell_Y(\beta^{t+1}, \Sigma^{t} \mid Y)
+\end{aligned}
+\]</span> Thus, if we had missing outcome data in our regression, we could run an ECM algorithm with the following steps:</p>
+<ol type="1">
+<li><p>Initialize with <span class="math inline">\(\beta^1, \Sigma^1\)</span></p></li>
+<li><p>For <span class="math inline">\(t = 2,\dots\)</span> compute</p>
+<ol type="a">
+<li><p>Find the conditional expectations: <span class="math inline">\(\Exp{y_i \mid Y_{(0)}, X, \beta^t, \Sigma^t}\)</span>, <span class="math inline">\(\Exp{y_i y_i^T \mid Y_{(0)}, X, \beta^t, \Sigma^t}\)</span></p></li>
+<li><p>Set <span class="math inline">\(\beta^{t+1}\)</span> to: <span class="math display">\[
+\beta^{(t+1)} = \left(\sum_i X_i^T (\Sigma^{(t)})^{-1}X_i\right)^{-1} \sum_i X_i^T (\Sigma^{(t)})^{-1}\Exp{y_i \mid Y_{(0)}, X, \beta^t, \Sigma^t}
+\]</span></p></li>
+<li><p>Set <span class="math inline">\(\Sigma^{t+1}\)</span> to: <span class="math display">\[
+\Sigma^{(t+1)} = \frac{1}{n}\sum_i \Exp{(y_i - X_i \beta^{(t+1)}) (y_i - X_i \beta^{(t+1)})^T \mid  Y_{(0)}, X, \beta^t, \Sigma^t}
+\]</span></p></li>
+<li><p>If <span class="math inline">\(Q(\theta^{t+1} \mid \theta^t) - Q(\theta^{t} \mid \theta^t) \geq \epsilon\)</span>, continue, otherwise end</p></li>
+</ol></li>
+</ol>
+</section>
+<section id="monte-carlo-em" class="level3">
+<h3 class="anchored" data-anchor-id="monte-carlo-em">Monte Carlo EM</h3>
+<p>Monte Carlo EM (MCEM) algorithms can be used when the conditional expectation is not possible to do analytically. That is, if we cannot do this integral: <span class="math display">\[
+Q(\theta \mid \theta^{(t)}) = \int_{\mathcal{Y}_{(1)}}\ell_Y(\theta \mid Y_{(0)} = \tilde{y}_{(0)}, Y_{(1)} = y_{(1)} )f(Y_{(1)} = y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^{(t)})dy_{(1)}
+\]</span> we can instead approximate it with a Monte Carlo estimator. Assuming we can draw samples from <span class="math inline">\(y_{(1)}^s \sim f(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^{(t)})\)</span>, we can compute:</p>
+<p><span class="math display">\[
+\hat{Q}(\theta \mid \theta^{(t)}) = \frac{1}{S}\sum_{s=1}^S \ell_Y(\theta \mid Y_{(0)} = \tilde{y}_{(0)}, Y_{(1)} = y^s_{(1)} )
+\]</span></p>
+<p>which we know: <span class="math display">\[
+\lim_{S\to\infty}\hat{Q}(\theta \mid \theta^{(t)}) = Q(\theta \mid \theta^{(t)})
+\]</span> This change in the algorithm isn’t without its complications, because we now have to determine how to measure convergence. While it is true that <span class="math inline">\(Q(\theta^{(t+1)} \mid \theta^{(t)})  \geq Q(\theta^{(t)} \mid \theta^{(t)})\)</span>, we now have to contend with the fact that there is noise in our assessment of convergence, so we need something more like: <span class="math display">\[
+P(\hat{Q}(\theta^{(t+1)} \mid \theta^{(t)}) - \hat{Q}(\theta^{(t)} \mid \theta^{(t)}) \geq \epsilon)
+\]</span></p>
 
 
 </section>

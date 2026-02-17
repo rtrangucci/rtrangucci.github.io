@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 625 - W 24</title>
+<title>REML thoughs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,47 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +88,70 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\Z}{\mathbb{Z}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+        \newcommand{\VarA}[2]{\mathrm{Var}_{#2}\lp #1 \rp}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+        \newcommand{\ddtA}[1]{\frac{\partial^2}{\partial #1^2}}
+        \newcommand{\ddtB}[2]{\frac{\partial^2}{\partial #1 \partial #2}}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm','[tex]/upgreek']},
+  tex: {packages: {'[+]': ['bbm','upgreek']}}
+};
+</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +167,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -117,12 +198,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
-  <ul class="collapse">
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  </ul></li>
+  <li><a href="#reml-derivation-one-of-many" id="toc-reml-derivation-one-of-many" class="nav-link active" data-scroll-target="#reml-derivation-one-of-many"><span class="header-section-number">1</span> REML derivation (one of many)</a></li>
   </ul>
 </nav>
     </div>
@@ -131,7 +207,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 625 - W 24</h1>
+<h1 class="title">REML thoughs</h1>
 </div>
 
 
@@ -148,33 +224,64 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level2">
-<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
-<section id="textbook" class="level3">
-<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
-<ul>
-<li><p>Required: <em>Survival Analysis: Techniques for censored and truncated data,</em> Klein and Moeschberger</p></li>
-<li><p>Optional: <em>Survival and Event History Analysis</em>, Aalen, Borgan, and Gjessing</p></li>
-<li><p>Optional: <em>Counting Processes and Survival Analysis</em>, Fleming and Harrington</p></li>
-</ul>
-</section>
-<section id="course-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
-<p>To highlight the unique challenges posed by the analysis of failure/survival data. To allow you to analyze survival data using parametric and nonparametric techniques in the face of these challenges. To apply these techniques to real data using R code and R packages for survival analysis. To understand the theory and methodology through math, practice and code.</p>
-<p><strong>Course content</strong></p>
-<p>Concepts to be discussed include: hazard function (failure rate function); nonparametric likeli- hood; counting processes; empirical distribution function; censoring and truncation; Kaplan-Meier estimator; Bias of the KM estimator; Cox proportional hazards model; Accelerated Failure Time Model; Partial Likelihood; log-rank test; martingales. R will be the programming language used in the course.</p>
-</section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ul>
-<li><a href="pdfs/survival_analysis_notes.pdf">Notes</a></li>
-</ul>
+<section id="reml-derivation-one-of-many" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> REML derivation (one of many)</h1>
+<p>Let <span class="math inline">\(Y \in \R^n\)</span>, <span class="math inline">\(X \in \R^{n \times p}\)</span>, with rank <span class="math inline">\(p\)</span> and let <span class="math inline">\(Y \sim \text{Normal}(X \beta, \Sigma(\gamma))\)</span>, <span class="math inline">\(\gamma \in \R^m\)</span>, with density: <span class="math display">\[
+f_Y(y \mid \beta, \gamma) = (2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp y - X \beta \rp^T \Sigma(\gamma)^{-1}\lp y - X \beta \rp \rp
+\]</span> We’ll show that <span class="math display">\[
+\lp y - X \beta \rp^T \Sigma(\gamma)^{-1}\lp y - X \beta \rp = (\hat{\beta} - \beta)^T X^T \Sigma(\gamma)^{-1} X(\hat{\beta} - \beta) + (K^Ty)^T (K^T \Sigma(\gamma) K) K^Ty
+\]</span></p>
+<p>where, for any <span class="math inline">\(C \in \R^{n - p \times n}\)</span> with full row rank such that <span class="math inline">\(K^T K = I_{n-p}\)</span>, <span class="math display">\[
+\hat{\beta} = (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1} y, \quad K = C^T(I_n - X(X^T X)^{-1} X^T)
+\]</span> Let’s work on the log scale: <span class="math display">\[
+\log f_Y(y \mid \beta, \gamma) = -\frac{n}{2} \log (2\pi) - \frac{1}{2} \log \det \Sigma(\gamma) -\frac{1}{2} \lp y - X \beta \rp^T \Sigma(\gamma)^{-1}\lp y - X \beta \rp
+\]</span> Let a decomposition of <span class="math inline">\(\Sigma(\gamma)^{-1}\)</span> be <span class="math inline">\(L^T L\)</span>, so we can rewrite the quadratic term: <span class="math display">\[\begin{align}
+\lp y - X \beta \rp^T \Sigma(\gamma)^{-1}\lp y - X \beta \rp &amp; = (L \lp y - X \beta \rp)^T L \lp y - X \beta \rp\\
+&amp; = \lp L y - LX \beta \rp^T \lp L y - L X \beta \rp
+\end{align}\]</span> Then we introduce the following variables: <span class="math inline">\(u = Ly\)</span> and <span class="math inline">\(W = LX\)</span> so the quadratic becomes: <span class="math display">\[
+(u - W \beta)^T (u - W \beta)
+\]</span> We can project <span class="math inline">\(u\)</span> onto the column space of <span class="math inline">\(W\)</span> as the usual least-squares estimator: <span class="math display">\[
+W \hat{\beta} = W (W^T W)^{-1} W^T u = L X(X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} y
+\]</span> Then we can rewrite the quadratic <span class="math inline">\((u - W \beta)\)</span>: <span class="math display">\[
+(W \hat{\beta} + u - W \hat{\beta} - W \beta)^T(W \hat{\beta} + u - W \hat{\beta} - W \beta)
+\]</span> This expands to: <span class="math display">\[
+(W \hat{\beta} - W \beta)^T(W \hat{\beta} - W \beta) + (u - W\hat{\beta})^T (u - W\hat{\beta}) + 2(W \hat{\beta} - W \beta)^T(u - W\hat{\beta})
+\]</span> Note that <span class="math inline">\((W \hat{\beta} - W \beta)^T(u - W\hat{\beta}) = 0\)</span> as the residuals of the regression of <span class="math inline">\(u\)</span> on <span class="math inline">\(W\)</span> are orthogonal to the column space of <span class="math inline">\(W\)</span>. We now have the following expression for the quadratic term: <span class="math display">\[\begin{align}
+(W \hat{\beta} - W \beta)^T(W \hat{\beta} - W \beta) &amp; + (u - W\hat{\beta})^T (u - W\hat{\beta}) \\
+&amp; = (L X \hat{\beta} - L X \beta)^T(L X \hat{\beta} - L X \beta) + (L y - L X\hat{\beta})^T (L y - L X\hat{\beta}) \\
+&amp; = (\hat{\beta} - \beta)^TX^T\Sigma(\gamma)^{-1} X (\hat{\beta} - \beta) + (y - X\hat{\beta})^T \Sigma(\gamma)^{-1} (y - X \hat{\beta})
+\end{align}\]</span> The expression <span class="math inline">\((y - X\hat{\beta})^T \Sigma(\gamma)^{-1} (y - X \hat{\beta})\)</span> simplifies: <span class="math display">\[\begin{align}
+&amp; (y - X\hat{\beta})^T \Sigma(\gamma)^{-1} (y - X \hat{\beta})  \\
+&amp; = (y - X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} y)^T \Sigma(\gamma)^{-1} (y - X(X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} y)\\
+&amp; = y^T(I - X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1})^T \Sigma(\gamma)^{-1} (I - X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} )y
+\end{align}\]</span> The matrix in the quadratic form simplifies again: <span class="math display">\[\begin{align}
+&amp; (I - X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1})^T \Sigma(\gamma)^{-1} (I - X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} )\\
+&amp; =(I - \Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T ) (\Sigma(\gamma)^{-1}  - \Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} ) \\
+&amp; = \Sigma(\gamma)^{-1} - 2\Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} \\
+&amp; \quad +\Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T  \Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} \\
+&amp; = \Sigma(\gamma)^{-1} - \Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1}
+\end{align}\]</span></p>
+<p>Finally we have the full expression for the quadratic form: <span class="math display">\[
+(\hat{\beta} - \beta)^TX^T\Sigma(\gamma)^{-1} X (\hat{\beta} - \beta) + y^T \lp\Sigma(\gamma)^{-1} - \Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1}\rp y
+\]</span></p>
+<p>The matrix <span class="math inline">\(\lp\Sigma(\gamma)^{-1} - \Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1}\rp\)</span> has a simplification, shown in § M.4f of <span class="citation" data-cites="mccullochglmms">McCulloch, Searle, and Neuhaus (<a href="#ref-mccullochglmms" role="doc-biblioref">2008</a>)</span>: <span class="math display">\[
+K(K^T \Sigma K)^{-1}K^T = \Sigma(\gamma)^{-1} - \Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1}
+\]</span> for any <span class="math inline">\(K\)</span> such that <span class="math inline">\(K^T X = 0\)</span>. As we’ve defined <span class="math inline">\(K^T\)</span> as <span class="math inline">\(C^T(I_n - X(X^T X)^{-1} X^T)\)</span>, this holds, and we’re left with the following expression for the quadratic form:</p>
+<p><span class="math display">\[
+(\hat{\beta} - \beta)^TX^T\Sigma(\gamma)^{-1} X (\hat{\beta} - \beta) + (K^Ty)^T \lp K^T \Sigma K\rp^{-1} K^T y
+\]</span> We can’t use this directly as a density because we’ve done a transformation of <span class="math inline">\(y\)</span> to statistics <span class="math inline">\(t\)</span> and <span class="math inline">\(a\)</span>: <span class="math display">\[
+t = (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} y, \quad a = K^T y
+\]</span></p>
 
 
-</section>
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-mccullochglmms" class="csl-entry" role="listitem">
+McCulloch, Charles E., Shayle R. Searle, and John M. Neuhaus. 2008. <em>Generalized, Linear, and Mixed Models</em>. 2nd ed. John Wiley &amp; Sons.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

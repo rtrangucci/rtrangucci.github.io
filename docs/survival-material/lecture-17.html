@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Lecture 17: Counting processes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\Z}{\mathbb{Z}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+        \newcommand{\VarA}[2]{\mathrm{Var}_{#2}\lp #1 \rp}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+        \newcommand{\ddtA}[1]{\frac{\partial^2}{\partial #1^2}}
+        \newcommand{\ddtB}[2]{\frac{\partial^2}{\partial #1 \partial #2}}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm','[tex]/upgreek']},
+  tex: {packages: {'[+]': ['bbm','upgreek']}}
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../papers.html"> 
+<span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../courses.html"> 
+<span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#martingales-and-stochastic-processes" id="toc-martingales-and-stochastic-processes" class="nav-link active" data-scroll-target="#martingales-and-stochastic-processes"><span class="header-section-number">1</span> Martingales and stochastic processes</a>
+  <ul class="collapse">
+  <li><a href="#discrete-time-martingales" id="toc-discrete-time-martingales" class="nav-link" data-scroll-target="#discrete-time-martingales"><span class="header-section-number">1.1</span> Discrete time martingales</a></li>
+  <li><a href="#doob-decomposition" id="toc-doob-decomposition" class="nav-link" data-scroll-target="#doob-decomposition"><span class="header-section-number">1.2</span> Doob Decomposition</a></li>
+  <li><a href="#continuous-time-martingales" id="toc-continuous-time-martingales" class="nav-link" data-scroll-target="#continuous-time-martingales"><span class="header-section-number">1.3</span> Continuous time martingales</a></li>
+  <li><a href="#doob-meyer-decomposition" id="toc-doob-meyer-decomposition" class="nav-link" data-scroll-target="#doob-meyer-decomposition"><span class="header-section-number">1.4</span> Doob-Meyer Decomposition</a></li>
+  </ul></li>
+  <li><a href="#counting-process-formulation" id="toc-counting-process-formulation" class="nav-link" data-scroll-target="#counting-process-formulation"><span class="header-section-number">2</span> Counting process formulation</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lecture 17: Counting processes</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="martingales-and-stochastic-processes" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Martingales and stochastic processes</h1>
+<p>Modern treatments of the theory of survival analysis depend on martingales, which can be thought of as a generalization of stationarity. This chapter is nearly verbatim from</p>
+<section id="discrete-time-martingales" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="discrete-time-martingales"><span class="header-section-number">1.1</span> Discrete time martingales</h2>
+<p>Let <span class="math inline">\(M = \{M_0, M_1, M_2, \dots\}\)</span> be a stochastic process in discrete time. This means we can define a sample path for a given <span class="math inline">\(\omega\)</span> as defining a function <span class="math inline">\(M(\omega) = \{M_0(\omega), M_1(\omega), M_2(\omega), \dots\}\)</span> defined on the nonnegative integers. <span class="math inline">\(M\)</span> is a martingale if the following holds true: <span class="math display">\[\begin{align}
+\label{eq:one-step-martingale}
+\Exp{M_n \mid M_0, \dots, M_{n-1}} = M_{n-1}.
+\end{align}\]</span> This means that the conditional expectation of the next random variable <span class="math inline">\(M_n\)</span> given all information preceding it, is <span class="math inline">\(M_{n-1}\)</span>. This property extends so that the conditional expectation of any <span class="math inline">\(j \geq 2\)</span> step-ahead value, <span class="math inline">\(M_{n+j-1}\)</span>, is <span class="math inline">\(M_{n-1}\)</span>: <span class="math display">\[\begin{align}
+  \Exp{M_{n+j-1} \mid M_0, \dots, M_{n-1}} &amp; = \Exp{\Exp{M_{n+j-1} \mid M_0, \dots, M_{n-1}, M_n, \dots, M_{n+j-2}} \mid M_0, \dots, M_{n-1}} \\
+  &amp; = \Exp{M_{n+j-2} \mid M_0, \dots, M_{n-1}}
+\end{align}\]</span> We can apply this property <span class="math inline">\(j-1\)</span> times to get back to <a href="#eq:one-step-martingale" data-reference-type="ref+Label" data-reference="eq:one-step-martingale">[eq:one-step-martingale]</a>. The idea of a collection of random variables, and all the information that can be represented with those RVs, that expands as the time index increases, is called a <em>filtration</em>. It is just a way of representing all the events related to past values of the stochastic process, and we’ll write the information up to and including time step <span class="math inline">\(m\)</span> as <span class="math display">\[\mathcal{F}_m.\]</span> Note that <span class="math inline">\(\mathcal{F}_m \subset \mathcal{F}_n\)</span> for all <span class="math inline">\(m &lt; n\)</span>. This represents the intuitive idea that information accrues as time marches forward. This collection of information may contain events that are external to events involving the martingale, like covariate values. We can equivalently write the above: <span class="math display">\[\begin{align}
+\Exp{M_n \mid \mathcal{F}_{n-1}} = M_{n-1}.
+\end{align}\]</span> <span class="math display">\[\begin{align}
+  \Exp{M_{n+j-1} \mid \mathcal{F}_{n-1}} &amp; = \Exp{\Exp{M_{n+j-1} \mid \mathcal{F}_{n+j-2}} \mid \mathcal{F}_{n-1}} \\
+  &amp; = \Exp{M_{n+j-2} \mid \mathcal{F}_{n-1}}
+\end{align}\]</span> We say that the martingale <span class="math inline">\(M\)</span> is <em>adapted to</em> the filtration <span class="math inline">\(\mathcal{F}_n\)</span> to mean that <span class="math inline">\(M_0, \dots, M_n\)</span> are measurable with respect to <span class="math inline">\(\mathcal{F}_n\)</span>. Consequently, <span class="math display">\[\Exp{M_{m} \mid \mathcal{F}_{n}} = M_m,\, m \leq n\]</span> We can use the same argument as we did above to show that the unconditional expected value for <span class="math inline">\(M_n\)</span> at any time <span class="math inline">\(n&gt;0\)</span> is equal to the marginal expectation of <span class="math inline">\(M_0\)</span>: <span class="math display">\[\begin{align}
+  \Exp{M_{n}} &amp; =  \Exp{\Exp{M_{n} \mid \mathcal{F}_{0}}} \\
+  &amp; = \Exp{M_{0}}
+\end{align}\]</span> In much of what we do in survival analysis, <span class="math inline">\(\Exp{M_{0}} = 0\)</span>, and the processes <span class="math inline">\(M_n\)</span> are thus called a <em>mean-zero martingales</em>. We can also show that for mean-zero martingales: <span class="math display">\[\begin{align}
+  \text{Cov}\left(M_{m}, M_{n} - M_m \right) &amp; =  0
+\end{align}\]</span> for all <span class="math inline">\(n &gt; m\)</span>. This means that the martingale has uncorrelated increments. We can show this using both properties of the martingale that we’ve learned above. <span class="math display">\[\begin{align}
+  \text{Cov}\left(M_{m}, M_{n} - M_m \right) &amp; =  \Exp{M_m(M_n - M_m)} - \Exp{M_m}\Exp{M_n} \\
+   &amp; =  \Exp{\Exp{M_m(M_n - M_m) \mid \mathcal{F}_m}} - \Exp{M_0}^2\\
+                           &amp; =  \Exp{M_m\Exp{M_n\mid \mathcal{F}_m} - M_m^2}\\
+h &amp; = \Exp{M_m^2 - M_m^2}\\
+  &amp; = 0
+\end{align}\]</span></p>
+<p>Martingales also have nice variation properties. There are two measures of variation we can use: <em>predictable variation</em> and <em>optional variation</em>. Predictable variaton is is the sum of the conditional variances of the martingale. Let <span class="math inline">\(\Delta M_n = M_n - M_{n-1}\)</span>, then we can write the predictable variation process as <span class="math display">\[\braket{M}_n = \sum_{i=1}^n \Exp{(M_i - M_{i-1})^2 \mid \mathcal{F}_{i-1}} = \sum_{i=1}^n \Var{\Delta M_i \mid \mathcal{F}_{i-1}},\]</span> and <span class="math inline">\(\braket{M}_0 = 0\)</span>. Optional variation is defined as <span class="math display">\[[M]_n = \sum_{i=1}^n (M_i - M_{i-1})^2 = \sum_{i=1}^n (\Delta M_i)^2,\]</span> where we similarly define <span class="math inline">\([M]_0 = 0\)</span>. For martingales, it turns out that we can define other martingales related to these variation processes: <span class="math display">\[M^2 - \braket{M}, \, M^2 - [M]\]</span> are both mean zero martingales. Note that <span class="math display">\[M_n^2 = (M_{n-1} + M_n - M_{n-1})^2, \, [M]_n = [M]_{n-1} + (M_n - M_{n-1})^2\]</span> <span class="math display">\[\begin{align}
+  &amp; \Exp{M_n^2 - [M]_n \mid \mathcal{F}_{n-1}}  \\
+  &amp; \quad = \Exp{M^2_{n-1} + 2M_{n-1}(M_n - M_{n-1}) + (M_n - M_{n-1})^2 - [M]_{n-1} - (M_n - M_{n-1})^2 \mid \mathcal{F}_{n-1}}  \\
+  &amp; \quad = \Exp{M^2_{n-1} + 2M_{n-1}(M_n - M_{n-1}) - [M]_{n-1} \mid \mathcal{F}_{n-1}}  \\
+  &amp; \quad = M^2_{n-1}-[M]_{n-1} + 2M_{n-1}\Exp{M_n - M_{n-1}\mid \mathcal{F}_{n-1}} \\
+  &amp; \quad = M^2_{n-1}-[M]_{n-1}
+\end{align}\]</span> Thus <span class="math inline">\(M_n^2 - [M]_n\)</span> it is a martingale.</p>
+<p>Another important property is when we transform a martingale by some predictable process. A predictable process, written <span class="math inline">\(H_n\)</span>, is something that is measurable with respect to <span class="math inline">\(\mathcal{F}_{n-1}\)</span>. The transformation is written: <span class="math display">\[Z = H \cdot M = H_0 M_0 + H_1 (M_1 - M_0) + H_2 (M_2 - M_1) + \dots\]</span> where <span class="math inline">\(Z_n\)</span> is defined: <span class="math display">\[Z_n = H_0 M_0 + H_1 (M_1 - M_0) + \dots + H_n (M_n - M_{n-1})\]</span> Given that <span class="math inline">\(H\)</span> is predictable, this transformed process is also a martingale: <span class="math display">\[\begin{align}
+  \Exp{Z_n - Z_{n-1} \mid \mathcal{F}_{n-1}} &amp; = \Exp{H_n(M_n - M_{n-1}) \mid \mathcal{F}_{n-1}} \\
+                                             &amp; = H_n\Exp{M_n - M_{n-1} \mid \mathcal{F}_{n-1}} \\
+  &amp; = 0
+\end{align}\]</span> Given that <span class="math inline">\(\Exp{M_0} = 0\)</span> and <span class="math inline">\(H_0\)</span> is predictable, this is also a mean zero martingale Importantly, the variation processes of these transfomrations have nice properties: <span class="math display">\[\braket{H \cdot M} = H^2 \cdot \braket{M}, \, [H \cdot M] = H^2 \cdot [M]\]</span> This transformation is important because we can formulate stopping times as a transformation.</p>
+<p>A stopping time <span class="math inline">\(T\)</span> is defined as an event <span class="math inline">\({T = t}\)</span> that is dependent on only information known prior to and including time <span class="math inline">\(t\)</span>. We can define a martingale, <span class="math inline">\(M_n^T = M_{n \wedge T}\)</span>, called a martingale stopped at time <span class="math inline">\(T\)</span>. This is still a martingale, which we can show by creating the process <span class="math inline">\(M^T\)</span> as a transformation with <span class="math inline">\(H_n\)</span> defined as: <span class="math display">\[H_n = \mathbbm{1}\left(n \leq T\right)\]</span> This leads to the transformed process defined as: <span class="math display">\[Z_n = \mathbbm{1}\left(0 \leq T\right) M_0 + \sum_{k = 1}^n \mathbbm{1}\left(k \leq T\right) (M_k - M_{k-1}).\]</span> Thus, for any <span class="math inline">\(n \leq T\)</span>, <span class="math inline">\(Z_n = M_n\)</span>, and for <span class="math inline">\(n &gt; T\)</span> <span class="math inline">\(Z_n = M_T\)</span>.</p>
+</section>
+<section id="doob-decomposition" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="doob-decomposition"><span class="header-section-number">1.2</span> Doob Decomposition</h2>
+<p>The Doob decomposition is a way to rewrite any stochastic process as the sum of a predictable process and a martingale. Let <span class="math inline">\(X=\{X_0, X_1, X_2, \dots\}\)</span> be a stochastic process that is adapted to a history <span class="math inline">\(\mathcal{F}_n\)</span> with <span class="math inline">\(X_0 = 0\)</span> and define <span class="math inline">\(M_0 = X_0\)</span> and <span class="math inline">\(M_n - M_{n-1}= X_n - \Exp{X_n \mid \mathcal{F}_{n-1}}\)</span>. Note that <span class="math display">\[\begin{align}
+  \Exp{M_n - M_{n-1} \mid \mathcal{F}_{n-1}} &amp; = \Exp{X_n - \Exp{X_n \mid \mathcal{F}_{n-1}} \mid \mathcal{F}_{n-1}} \\
+                                             &amp; = \Exp{X_n \mid \mathcal{F}_{n-1}} - \Exp{X_n \mid \mathcal{F}_{n-1}} \\
+  &amp; = 0
+\end{align}\]</span> This shows that <span class="math inline">\(\Delta M_n = M_n - M_{n-1}\)</span> is a mean-zero martingale. We can rearrange things to get: <span class="math display">\[\begin{align}
+  X_n &amp; = \Exp{X_n \mid \mathcal{F}_{n-1}}+  \Delta M_n
+\end{align}\]</span></p>
+</section>
+<section id="continuous-time-martingales" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="continuous-time-martingales"><span class="header-section-number">1.3</span> Continuous time martingales</h2>
+<p>There are continuous time analogues of martingales, and these are what the theory of survival analysis is built on. Let the stochastic process <span class="math inline">\(\{M(t), t \in [0, \tau]\}\)</span> be adapted to the filtration <span class="math inline">\(\{\mathcal{F}_t\}\)</span>. The way to think about this process is that in the probability space <span class="math inline">\((\Omega, \mathcal{B}, P)\)</span>, where <span class="math inline">\(\mathcal{B}\)</span> the sigma algebra for the sample space <span class="math inline">\(\Omega\)</span>, given <span class="math inline">\(\omega \in \Omega\)</span>, <span class="math inline">\(M(t,\omega)\)</span> is a function defined for all <span class="math inline">\(t \in [0, \tau]\)</span>. This means we can define things like <span class="math inline">\(\Delta M_k = M(k t / n) - M((k-1) t / n)\)</span>, which are the changes in the martingale in the <span class="math inline">\(k^{\mathrm{th}}\)</span> interval of the discretized interval of <span class="math inline">\([0,t]\)</span> into <span class="math inline">\(n\)</span> intervals. <span class="math display">\[\Exp{M(t) \mid \mathcal{F}_s} = M(s), \forall t &gt; s\]</span> We can define something akin to <span class="math inline">\(\Delta M_n\)</span> in continuous time written as <span class="math inline">\(dM(t)\)</span>, which is the increment of <span class="math inline">\(M(t)\)</span> in the interval <span class="math inline">\([t, t+dt)\)</span>. Another way to define this property is <span class="math display">\[\Exp{dM(t) \mid \mathcal{F}_{t-}} = 0\]</span> We assume that <span class="math inline">\(M(0) = 0\)</span> for the rest of the chapter. Then <span class="math inline">\(\Exp{M(t)} = 0\)</span> for all <span class="math inline">\(t\)</span>. Under this assumption, <span class="math display">\[\text{Cov}\left(M(t) - M(s), M(v) - M(u) \right) = 0\]</span> for the intervals <span class="math inline">\(0 \leq s &lt; t &lt; u &lt; v \leq \tau\)</span>.</p>
+<p>We define <span class="math inline">\(\braket{M}(t)\)</span> as the limit of sums of conditional variances of the increasingly-fine differences <span class="math display">\[\Delta M_k = M(kt/n) - M((k-1)t/n):\]</span> <span class="math display">\[\braket{M}(t) = \lim_{n\to\infty} \sum_{k=1}^n \text{Var}(\Delta M_k \mid \mathcal{F}_{(k-1)t/n}),\]</span> and <span class="math inline">\([M](t)\)</span> as the limit of sums of squared <span class="math inline">\(\Delta M_k\)</span>: <span class="math display">\[[M](t) = \lim_{n\to\infty} \sum_{k=1}^n \left(\Delta M_k\right)^2.\]</span> Just as for the discrete time processes, <span class="math inline">\(M^2 - \braket{M}\)</span> and <span class="math inline">\(M^2 - [M]\)</span> are both zero-mean martingales. Given that <span class="math inline">\(\Exp{M(t)} = 0\)</span> for all <span class="math inline">\(t\)</span>, we have that <span class="math display">\[\begin{align}
+  \text{Var}(M(t)) &amp; = \Exp{M^2(t)} \\
+                   &amp; = \Exp{\braket{M}(t)} \\
+  &amp; = \Exp{[M](t)}
+\end{align}\]</span> Thus, the variation processes are can be used to represent the variance of the martingale.</p>
+<p>We can define integrals with respect to <span class="math inline">\(M(t)\)</span> for predictable processes <span class="math inline">\(H(t)\)</span>, which are measurable with respect to <span class="math inline">\(\mathcal{F}_{t-}\)</span>, or, <span class="math inline">\(\Exp{H(t) \mid \mathcal{F}_{t-}} = H(t)\)</span>: <span class="math display">\[I(t) = \int_0^t H(s) dM(s)\]</span> Similarly to the variation processes, this is defined as the following limit: <span class="math display">\[I(t) = \lim_{n\to\infty}\sum_{k=1}^n H_k \Delta M_k\]</span> where <span class="math inline">\(H_k = H((k-1) t / n)\)</span> <span class="math display">\[\Delta M_k = M(k t / n) - M((k-1) t / n)\]</span> Note that this definition is fine for martingales that are defined with repsect to counting processes, and it isn’t valid for all stochastic processes.</p>
+<p>Given that we’ve defined the integral in this way, we can immediately use the transformation property we had in discrete time to show that <span class="math inline">\(I(t)\)</span> is a mean-zero martingale with respect to <span class="math inline">\(\{\mathcal{F}_t\}\)</span>.</p>
+<p>We also have the following useful results for the variation processes of transformed martingales: <span class="math display">\[\braket{\int_{0}^t H(s) dM(s)} = \int_{0}^t H^2(s) d\braket{M}(s),[\int_{0}^t H(s) dM(s)] = \int_{0}^t H^2(s) d[M](s)\]</span></p>
+</section>
+<section id="doob-meyer-decomposition" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="doob-meyer-decomposition"><span class="header-section-number">1.4</span> Doob-Meyer Decomposition</h2>
+<p>The most important</p>
+</section>
+</section>
+<section id="counting-process-formulation" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Counting process formulation</h1>
+<p>Another way to think about the information contained in the time-to-infection data is as follows: For each participant <span class="math inline">\(i\)</span> and for each instant <span class="math inline">\(t\)</span> one may define the quantities <span class="math inline">\(N_i(t) = \mathbbm{1}\left(X_i \leq t\right)\)</span> and <span class="math inline">\(Y_i(t) = \mathbbm{1}\left(X_i \geq t\right)\)</span>, which encode the information “Has infection occurred for participant <span class="math inline">\(i\)</span> prior to <span class="math inline">\(t\)</span>?” and “Is participant <span class="math inline">\(i\)</span> at risk for infection at time <span class="math inline">\(t\)</span>?”. These are examples of <em>stochastic processes</em>, because they are random variables indexed by <span class="math inline">\(t\)</span>. Another way to think of them is as functions of <span class="math inline">\(t\)</span> that are random. More formally, let <span class="math inline">\(X_i(\omega)\)</span> be a random variable defined with respect to the triplet <span class="math inline">\((\Omega, \mathcal{B}, P)\)</span> such that <span class="math inline">\(X_i: \Omega \to \R^+\)</span>. Then <span class="math inline">\(N_i(t)\)</span> is really properly defined as <span class="math inline">\(N_i(t, \omega)\)</span> so that for each <span class="math inline">\(\omega\)</span>, or equivalently, each realization of <span class="math inline">\(X_i\)</span>, <span class="math inline">\(N_i(t,\omega)\)</span> is a right-continuous function of <span class="math inline">\(t\)</span>. This means that <span class="math inline">\(\lim_{\epsilon \to 0} N_i(t + \epsilon) = N_i(t) \forall t\)</span>. An example is shown in <a href="#fig:example-stoch-proc" data-reference-type="ref+Label" data-reference="fig:example-stoch-proc">3.1</a>.</p>
+<div id="fig:example-stoch-proc" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><embed src="figures/stochastic-process.pdf" class="img-fluid"></p>
+<figcaption>Example plot of <span class="math inline">\(N_i(t)=\mathbbm{1}\left(3 \leq t\right)\)</span></figcaption>
+</figure>
+</div>
+<p>Of course, a natural quantity that arises from our definition is <span class="math inline">\(\Exp{N_i(t)} = \Exp{\mathbbm{1}\left(X_i \leq t\right)} = F_{X_i}(t)\)</span> or the cumulative distribution function of <span class="math inline">\(X_i\)</span>. The hazard function leads to an important identity for <span class="math inline">\(\Exp{N_i(t)}\)</span>: <span class="math display">\[\begin{align}
+\Exp{N_i(t)} &amp; = \int_{0}^\infty \mathbbm{1}\left(x \leq t\right) f_{X_i}(x) dx \\
+&amp; = \int_{0}^t f_{X_i}(x) dx \\
+&amp; =\int_{0}^t \lambda_i(x) \Prob{X_i \geq x} dx \\
+&amp; =\int_{0}^t \lambda_i(x) \Exp{\mathbbm{1}\left(X_i \geq x\right)} dx \\
+&amp; =\Exp{\int_{0}^t \lambda_i(x) \mathbbm{1}\left(X_i \geq x\right) dx}. \label{eq:martin}
+\end{align}\]</span> It immediately follows that <span class="math display">\[\Exp{N_i(t) - \int_{0}^t \lambda_i(x) \mathbbm{1}\left(X_i \geq x\right) dx} = 0.\]</span> Several mathematical details have been elided, but are worth keeping in mind. The integral <span class="math display">\[\begin{align}
+\label{eq:stoch-int}
+    \int_{0}^t \lambda_i(x) \mathbbm{1}\left(X_i \geq x\right) dx
+\end{align}\]</span> needs to be well-defined for this property to make sense. Note that this is an integral of a function against a stochastic process, thus the value of the integral is a random variable, ultimately defined with respect to <span class="math inline">\((\Omega, \mathcal{B}, P)\)</span>. Conditions for determining if <a href="#eq:stoch-int" data-reference-type="ref+Label" data-reference="eq:stoch-int">[eq:stoch-int]</a> is well-defined are outlined in Appendix A in <span class="citation" data-cites="fleming2005counting">(<a href="#ref-fleming2005counting" role="doc-biblioref">Fleming and Harrington 2005</a>)</span>. One question we might have is whether we can define the integral with respect to a smaller <span class="math inline">\(\sigma\)</span>-algebra, one that includes information only through time <span class="math inline">\(t\)</span>. This notion ties into the idea of a a “history”, which has both a technical meaning as well as its more common meaning in survival analysis. The reason for trying to define a smaller set of information is because this is how survival data arises in practice; we don’t know the future, namely what the value of <span class="math inline">\(X_i\)</span> for any particular <span class="math inline">\(\omega\)</span> is, we only know whether <span class="math inline">\(X_i\)</span> has occurred or not up to a give time <span class="math inline">\(t\)</span>.</p>
+<p>This motivates the idea of a <em>filtration</em>, which is a family of <span class="math inline">\(\sigma\)</span>-algebras, <span class="math inline">\(\{\mathcal{F}_t, 0 \leq t \leq \infty\}\)</span> such that <span class="math inline">\(\mathcal{F}_s \subset \mathcal{F}_t\)</span> for all <span class="math inline">\(s &lt; t\)</span>. When <span class="math inline">\(N_i(t) = \mathbbm{1}\left(X_i \leq t\right)\)</span>, the simplest <span class="math inline">\(\sigma\)</span>-algebra would be <span class="math inline">\(\sigma(\mathbbm{1}\left(X_i \leq s\right), s \leq t)\)</span>. Note that this consists of sets of <span class="math display">\[\{\omega \mid X_i(\omega) \leq s, s \leq t \}\]</span> This is equivalent to the <span class="math inline">\(\sigma\)</span>-algebra generated from the random variable itself limited to the interval <span class="math inline">\([0,t]\)</span>: <span class="math display">\[\sigma(X_i(s), s \leq t) = \{\omega \mid X_i(\omega) \leq s, s \leq t \}\]</span> Note that this <span class="math inline">\(\sigma\)</span>-algebra contains information on whether the event <span class="math inline">\(X_i\)</span> has occurred by time <span class="math inline">\(t\)</span>, but it contains the same information as the information about <span class="math inline">\(X_i\)</span> on the interval <span class="math inline">\([0,t]\)</span>. Informally, we haven’t lost information by moving from a real-valued random variable to a counting process.</p>
+<p>We say that the stochastic process <span class="math inline">\(\{N_i(t), 0 \leq t \leq \infty\}\)</span> is <em>adapted</em> to a filtration <span class="math inline">\(\{\mathcal{F}_t, 0 \leq t \leq \infty \}\)</span> to mean that <span class="math inline">\(N_i(t)\)</span> is measurable with respect to each <span class="math inline">\(\mathcal{F}_t\)</span>. This is trivially achieved by using the <span class="math inline">\(\sigma\)</span>-algebra generated by the counting process itself, and this filtration will be called the history of the counting process.</p>
+<p>The property that <span class="math inline">\(N_i(t) - \int_{0}^t \lambda_i(x) \mathbbm{1}\left(X_i \geq x\right) dx\)</span> has expectation zero is central to much of the modern theoretical treatment of survival analysis. The benefit of this treatment is that counting processes add together. Let <span class="math inline">\(\bar{N}(t) = \sum_{i=1}^n N_i(t)\)</span>. Assume that <span class="math inline">\(\lambda_i(t) = \lambda(t)\)</span>. Recall that <span class="math inline">\(Y_i(t) = \mathbbm{1}\left(X_i \geq t\right)\)</span>, so let <span class="math inline">\(\bar{Y}(t) = \sum_{i=1}^n Y_i(t)\)</span>. Then <span class="math display">\[P(\bar{N}(t + \epsilon) - \bar{N}(t) = 1 \mid \mathcal{F}_{t-}) \approxeq \bar{Y}(t)\lambda(t) dt\]</span> Let <span class="math inline">\(d\bar{N}(t) = \bar{N}(t + \epsilon) - \bar{N}(t) = 1)\)</span>, so we can rewrite the above equation as: <span class="math display">\[\Exp{d\bar{N}(t) \mid \mathcal{F}_{t-}} = \bar{Y}(t)\lambda(t) dt \implies \Exp{d\bar{N}(t) - \bar{Y}(t)\lambda(t) dt \mid \mathcal{F}_{t-}} = 0.\]</span> We also have, by virtue of the linearity of expectation and <a href="#eq:martin" data-reference-type="ref+Label" data-reference="eq:martin">[eq:martin]</a>: <span class="math display">\[\Exp{\bar{N}(t) - \int_{0}^t \lambda(x) \bar{Y}(x) dx} = 0.\]</span> Then this process, which we’ll call <span class="math inline">\(M(t) = \bar{N}(t) - \int_{0}^t \lambda(x) \bar{Y}(x) dx\)</span>, is what is called a <em>martingale</em>. A martingale satisfies three properties:</p>
+<ol type="1">
+<li><p><span class="math inline">\(M\)</span> is adapted to the filtration <span class="math inline">\(\{\mathcal{F}_t, t \geq 0\}\)</span></p></li>
+<li><p><span class="math inline">\(\Exp{\left| M(t) \right|} &lt; \infty\)</span> for all <span class="math inline">\(t\)</span></p></li>
+<li><p><span class="math inline">\(\Exp{M(t + s) \mid \mathcal{F}_t} = M(t)\)</span> for all <span class="math inline">\(s &gt; 0\)</span></p></li>
+</ol>
+<p>There are also two modifcations of martingales, <em>submartingales</em> and <em>supermartingales</em>. Submartingales replace the third property with <span class="math display">\[\Exp{M(t + s) \mid \mathcal{F}_t} \geq M(t),\]</span> while supermartingales are defined by: <span class="math display">\[\Exp{M(t + s) \mid \mathcal{F}_t} \leq M(t).\]</span> First, we can see that <span class="math inline">\(N(t)\)</span> is a submartingale: it is a nondecreasing random variable, and, as such, it has a positive drift in expectation. Second is that martingales are robust to many transformations. We’ll start with discrete time martingales before moving to continuous time martingales.</p>
+<p>Crucially, we haven’t used independence here. Informally, we can write differential of term inside the integral: <span class="math display">\[d \left(\bar{N}(t) - \int_{0}^t \lambda(x) \bar{Y}(x) dx\right)= d \bar{N}(t) - \lambda(t) \bar{Y}(t) dt\]</span> We can write this quantity as <span class="math inline">\(d\bar{M}(t)\)</span> so that <span class="math display">\[d \bar{N}(t) = \lambda(t) \bar{Y}(t) dt + d\bar{M}(t)\]</span> where <span class="math inline">\(\Exp{d\bar{M}(t)} = 0\)</span>. We can divide each side by <span class="math inline">\(\bar{Y}(t)\)</span> as long as <span class="math inline">\(\bar{Y}(t) &gt; 0\)</span>. If we introduce the indicator variable <span class="math inline">\(J(t) = \mathbbm{1}\left(\bar{Y}(t) &gt; 0\right)\)</span> and the convention that <span class="math inline">\(J(t) / \bar{Y}(t) = 0\)</span> when <span class="math inline">\(\bar{Y}(t) = 0\)</span> the equation becomes: <span class="math display">\[\frac{J(t)}{\bar{Y}(t)}d \bar{N}(t) = J(t) \lambda(t) dt + \frac{J(t)}{\bar{Y}(t)}d\bar{M}(t)\]</span> Integrating both sides yields an alternative estimand for <span class="math inline">\(\int_0^u \lambda(t) dt\)</span>: <span class="math display">\[\int_0^u \frac{J(t)}{\bar{Y}(t)}d \bar{N}(t) = \int_0^u J(t) \lambda(t) dt + \int_0^u\frac{J(t)}{\bar{Y}(t)}d\bar{M}(t)\]</span> The second term on the RHS is mean zero, so <span class="math display">\[\Exp{\int_0^u \frac{J(t)}{\bar{Y}(t)}d \bar{N}(t)} = \Exp{\int_0^u J(t) \lambda(t) dt}.\]</span> If <span class="math inline">\(J(t) \approxeq 1\)</span> then the estimator is approximately unbiased.</p>
+<p>We will return to this idea later in the course.</p>
+<p>We can define the indicator variable <span class="math inline">\(\mathbbm{1}\left(u = t_i\right)\)</span>, which allows us to write the evaluation of the hazard function at time <span class="math inline">\(t_i\)</span>, <span class="math inline">\(\lambda_X(t_i)\)</span>, as <span class="math display">\[\prod_{0 &lt; u &lt; \infty} (Y_{t_i}(u) \lambda_X(u))^{\mathbbm{1}\left(u = t_i\right)}.\]</span> Recall our identity from earlier in the class that we can write the survival function in continuous time in terms of products of incremental probabilities. Let’s say we partition our interval <span class="math inline">\([0,t)\)</span> into <span class="math inline">\(n\)</span> equally sized bits of size <span class="math inline">\(\Delta t\)</span>: <span class="math display">\[\begin{align*}
+P(X &gt; t) &amp; = P(X \geq 0) P(X &gt; \Delta t \mid X \geq 0) P(X &gt; 2 \Delta t \mid X \geq \Delta t) \dots P(X &gt; t \mid X \geq (n - 1) \Delta t) \\
+&amp; = 1 \times (1 - \lambda_X(0) \Delta t) (1 - \lambda_X(\Delta t) \Delta t) \dots (1 - \lambda_X((n-1) \Delta t) \Delta t) \\
+&amp; = \prod_{0 &lt; u &lt; t} (1 - \lambda_X(u) \Delta t)
+\end{align*}\]</span> We showed in <a href="#sec:disc-continue" data-reference-type="ref+Label" data-reference="sec:disc-continue">[sec:disc-continue]</a> that this expression converges to <span class="math display">\[\exp(-\int_0^t \lambda_X(u) du)\]</span> as <span class="math inline">\(n \to \infty\)</span>. We could rewrite the product with the help of the function <span class="math inline">\(Y_t(u)\)</span> as follows: <span class="math display">\[\begin{align*}
+    \prod_{0 &lt; u &lt; t} (1 - \lambda_X(u) \Delta t) = \prod_{0 &lt; u &lt; \infty} (1 - Y_t(u) \lambda_X(u) \Delta t)^{1 - \mathbbm{1}\left(u = t\right)}
+\end{align*}\]</span> which implies that we can rewrite the likelihood in terms of the product limit: <span class="math display">\[\begin{align*}
+   f_X(t_i) &amp; = \lambda_X(t_i) S_X(t_i) \\
+   &amp; = \prod_{0 &lt; u &lt; \infty}(Y_{t_i}(u)\lambda_X(u))^{\mathbbm{1}\left(u = t_i\right)} (1 - Y_{t_i}(u) \lambda_X(u) \Delta t)^{1-\mathbbm{1}\left(u = t_i\right)}
+\end{align*}\]</span></p>
+<p>When we have multiple observations, <span class="math inline">\(i \in 1, \dots, n\)</span>, we get the following likelihood: <span class="math display">\[\begin{align*}
+   L_(\theta) &amp; = \prod_{i=1}^n \prod_{0 &lt; u &lt; \infty}(Y_{t_i}(u)\lambda_X(u))^{\mathbbm{1}\left(u = t_i\right)} (1 - Y_{t_i}(u) \lambda_X(u) \Delta t)^{1-\mathbbm{1}\left(u = t_i\right)}  \\
+   &amp; = \prod_{0 &lt; u &lt; \infty}\prod_{i=1}^n (Y_{t_i}(u)\lambda_X(u))^{\mathbbm{1}\left(u = t_i\right)} (1 - Y_{t_i}(u) \lambda_X(u) \Delta t)^{1-\mathbbm{1}\left(u = t_i\right)}
+\end{align*}\]</span> Taking logs and evaluating the product gives us <span class="math display">\[\begin{align*}
+   \ell_(\theta) &amp; =  \sum_{0 &lt; u &lt; \infty}\sum_{i=1}^n \mathbbm{1}\left(u = t_i\right)\log(Y_{t_i}(u)\lambda_X(u)) + (1-\mathbbm{1}\left(u = t_i\right))\log(1 - Y_{t_i}(u) \lambda_X(u) \Delta t)
+\end{align*}\]</span> Taking the derivative with respect to <span class="math inline">\(\lambda_X(u)\)</span> gives us:</p>
+<p>What do we do in the presence of noninformative right-censoring?</p>
+<p>Remember that we have the equality: <span class="math display">\[\begin{align*}
+\Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t} = \Prob{t \leq X_i &lt; t + \Delta t \mid X_i \geq t, C_i \geq t}.
+\end{align*}\]</span> Let’s assume we have a density for the censoring variables <span class="math inline">\(C_i\)</span>: <span class="math display">\[f_{C}(c) = \lambda_C(c) S_C(c)\]</span> Then the joint density <span class="math inline">\(f_{X,C}(x,c) =\)</span></p>
+<p>The joint likelihood for <span class="math inline">\(X_i\)</span> for iid observations of right censored data is: <span class="math display">\[f_{\mathbf{X}}(t_1, \dots, t_n) = \prod_{i=1}^n \lambda_X(t_i)^{\delta_i} S_X(t_i).\]</span> This equals <span class="math display">\[f_{\mathbf{X}}(t_1, \dots, t_n) = \left(\prod_{i=1}^n \lambda_X(t_i)^{\delta_i}\right)\exp\left(-\sum_{i=1}^n \int_0^{t_i} \lambda_X(u) du\right) .\]</span> For the joint likelihood of <span class="math inline">\(X_i, C_i\)</span> see <a href="#chap:intro" data-reference-type="ref+Label" data-reference="chap:intro">[chap:intro]</a>.</p>
+
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-fleming2005counting" class="csl-entry" role="listitem">
+Fleming, Thomas R, and David P Harrington. 2005. <span>“Counting Processes and Survival Analysis.”</span> <em>Wiley Series in Probability and Statistics</em>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
