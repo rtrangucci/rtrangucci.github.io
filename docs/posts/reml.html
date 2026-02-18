@@ -276,9 +276,9 @@ K(K^T \Sigma K)^{-1}K^T = \Sigma(\gamma)^{-1} - \Sigma(\gamma)^{-1} X (X^T \Sigm
 \]</span> for any <span class="math inline">\(K\)</span> such that <span class="math inline">\(K^T X = 0\)</span>. As we’ve defined <span class="math inline">\(K^T\)</span> as <span class="math inline">\(C^T(I_n - X(X^T X)^{-1} X^T)\)</span>, this holds, and we’re left with the following expression for the quadratic form:</p>
 <p><span class="math display">\[
 (\hat{\beta} - \beta)^TX^T\Sigma(\gamma)^{-1} X (\hat{\beta} - \beta) + (K^Ty)^T \lp K^T \Sigma K\rp^{-1} K^T y
-\]</span> We can’t use this directly as a density because we’ve done a transformation of <span class="math inline">\(y\)</span> to statistics <span class="math inline">\(t\)</span> and <span class="math inline">\(a\)</span>: <span class="math display">\[
+\]</span> We can’t use this directly as a density because we’ve done a transformation of <span class="math inline">\(y\)</span> to statistics <span class="math inline">\(t\)</span> and <span class="math inline">\(a\)</span>: <span id="eq-ta-def"><span class="math display">\[
 t = (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} y, \quad a = K^T y
-\]</span> We have the likelihood expressed in terms of <span class="math inline">\(t\)</span> and <span class="math inline">\(a\)</span> already, but we need to account for the Jacobian. Let <span class="math inline">\(B = (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1}\)</span></p>
+\tag{1}\]</span></span> We have the likelihood expressed in terms of <span class="math inline">\(t\)</span> and <span class="math inline">\(a\)</span> already, but we need to account for the Jacobian. Let <span class="math inline">\(B = (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1}\)</span></p>
 <p><span class="math display">\[
 \begin{bmatrix}
 t \\
@@ -329,7 +329,7 @@ K^T B &amp; K^T K
 f_Y(y \mid \beta, \gamma) &amp; = (2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp y - X \beta \rp^T \Sigma(\gamma)^{-1}\lp y - X \beta \rp \rp
 \end{aligned}
 \]</span></p>
-<p>as a joint density in <span class="math inline">\((t,a)\)</span>:</p>
+<p>as a joint density in <span class="math inline">\((t,a)\)</span>, defined as a 1-1 transformation of <span class="math inline">\(y\)</span> in <a href="#eq-ta-def" class="quarto-xref">Equation&nbsp;1</a>,:</p>
 <p><span class="math display">\[
 \begin{aligned}
 f_{t,a}(t,a \mid \beta, \gamma) &amp; = \det(X^T X)^{1/2}(2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp\\
