@@ -461,20 +461,19 @@ f_{t,a}(t,a \mid \hat{\beta}, \hat{\gamma}) &amp; = \det(X^T X)^{1/2}(2\pi)^{-n 
 </section>
 <section id="use-of-reml-criterion-in-model-comparison" class="level2" data-number="1.6">
 <h2 data-number="1.6" class="anchored" data-anchor-id="use-of-reml-criterion-in-model-comparison"><span class="header-section-number">1.6</span> Use of REML criterion in model comparison</h2>
-<p>When we have models of differing fixed effects, we’d like to use the modified REML criterion to compare models. <span class="citation" data-cites="verbylaNoteModelSelection2019">(<a href="#ref-verbylaNoteModelSelection2019" role="doc-biblioref"><strong>verbylaNoteModelSelection2019?</strong></a>)</span> argues that we should compare the joint log-likelihood for <span class="math inline">\((t,a)\)</span> evaluated at the REML estimates for <span class="math inline">\(\beta, \gamma\)</span> under each model.</p>
+<p>When we have models of differing fixed effects, we’d like to use the modified REML criterion to compare models. <span class="citation" data-cites="verbylaNoteModelSelection2019">Verbyla (<a href="#ref-verbylaNoteModelSelection2019" role="doc-biblioref">2019</a>)</span> argues that we should compare the joint log-likelihood for <span class="math inline">\((t,a)\)</span> evaluated at the REML estimates for <span class="math inline">\(\beta, \gamma\)</span> under each model.</p>
 <p>We can see that each model will have a factor of <span class="math inline">\(-\frac{n}{2}\log(2\pi)\)</span> in the log-likelihood, so this term can be omitted. The determinant of <span class="math inline">\(X^T X\)</span>, however, cannot be omitted.</p>
-<p>The REML criterion used in software typically leaves out constants independent of <span class="math inline">\(\gamma\)</span>:</p>
+<p>The REML criterion used in <code>spmodel</code> leaves out <span class="math inline">\(\frac{1}{2}\log\det X^TX\)</span>:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\ell^{\text{REML}}(\gamma \mid a) &amp; = -\frac{1}{2}\log\det(X^T \Sigma(\gamma)^{-1}X) -\frac{1}{2}\log\det\Sigma(\gamma)  -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a
+\ell_{\texttt{spmodel}}^{\text{REML}}(\gamma \mid a) &amp; = -\frac{n-p}{2}\log(2\pi) -\frac{1}{2}\log\det(X^T \Sigma(\gamma)^{-1}X) -\frac{1}{2}\log\det\Sigma(\gamma)  -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a
 \end{aligned}
 \]</span></p>
-<p>In order to use <span class="math inline">\(\ell^{\text{REML}}(\hat{\gamma} \mid a)\)</span> in model comparison, we need to add back <span class="math inline">\(\frac{1}{2}\log\det X^T X\)</span>.</p>
+<p>In order to use <span class="math inline">\(\ell_{\texttt{spmodel}}^{\text{REML}}(\hat{\gamma} \mid a)\)</span> in model comparison, we need to add back <span class="math inline">\(\frac{1}{2}\log\det X^T X\)</span> and eliminate <span class="math inline">\(-\frac{1}{2}\log\det(X^T \Sigma(\gamma)^{-1} X)\)</span>, and <span class="math inline">\(\frac{p}{2}\log(2\pi)\)</span>.</p>
 <p>This would yield a log-likelihood suitable for use in an AIC:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\ell^{\text{REML}}(\hat{\gamma} \mid a) &amp; = -\frac{1}{2}\log\det(X^T \Sigma(\gamma)^{-1}X) -\frac{1}{2}\log\det\Sigma(\gamma)  -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a \\
-&amp; \quad + \frac{1}{2}\log\det X^T X
+\ell^{\text{REML}}(\hat{\gamma} \mid a) &amp; = \ell_{\texttt{spmodel}}^{\text{REML}}(\hat{\gamma} \mid a) -\frac{p}{2}\log(2\pi) +\frac{1}{2}\log\det(X^T \Sigma(\hat{\gamma})^{-1}X)  + \frac{1}{2}\log\det X^T X
 \end{aligned}
 \]</span></p>
 
@@ -492,6 +491,9 @@ McCulloch, Charles E., Shayle R. Searle, and John M. Neuhaus. 2008. <em>Generali
 </div>
 <div id="ref-smythConditionalLikelihoodApproach1996" class="csl-entry" role="listitem">
 Smyth, Gordon K., and Arūnas P. Verbyla. 1996. <span>“A <span>Conditional</span> <span>Likelihood</span> <span>Approach</span> to <span>Residual</span> <span>Maximum</span> <span>Likelihood</span> <span>Estimation</span> in <span>Generalized</span> <span>Linear</span> <span>Models</span>.”</span> <em>Journal of the Royal Statistical Society. Series B (Methodological)</em> 58 (3).
+</div>
+<div id="ref-verbylaNoteModelSelection2019" class="csl-entry" role="listitem">
+Verbyla, Arunas Petras. 2019. <span>“A Note on Model Selection Using Information Criteria for General Linear Models Estimated Using <span>REML</span>.”</span> <em>Australian &amp; New Zealand Journal of Statistics</em> 61 (1): 39–50. <a href="https://doi.org/10.1111/anzs.12254">https://doi.org/10.1111/anzs.12254</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
