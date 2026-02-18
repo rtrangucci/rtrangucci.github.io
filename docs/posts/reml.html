@@ -473,7 +473,7 @@ f_{t,a}(t,a \mid \hat{\beta}, \hat{\gamma}) &amp; = \det(X^T X)^{1/2}(2\pi)^{-n 
 <p>This would yield a log-likelihood suitable for use in an AIC:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\ell^{\text{REML}}(\hat{\gamma} \mid a) &amp; = \ell_{\texttt{spmodel}}^{\text{REML}}(\hat{\gamma} \mid a) -\frac{p}{2}\log(2\pi) +\frac{1}{2}\log\det(X^T \Sigma(\hat{\gamma})^{-1}X)  + \frac{1}{2}\log\det X^T X
+\ell^{\text{REML}}(\hat{\beta},\hat{\gamma} \mid a, t) &amp; = \ell_{\texttt{spmodel}}^{\text{REML}}(\hat{\gamma} \mid a) -\frac{p}{2}\log(2\pi) +\frac{1}{2}\log\det(X^T \Sigma(\hat{\gamma})^{-1}X)  + \frac{1}{2}\log\det X^T X
 \end{aligned}
 \]</span></p>
 
