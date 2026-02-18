@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>REML thoughs</title>
+<title>REML thoughts</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -207,7 +207,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">REML thoughs</h1>
+<h1 class="title">REML thoughts</h1>
 </div>
 
 
@@ -226,6 +226,7 @@ window.Quarto = {
 
 <section id="reml-derivation-one-of-many" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> REML derivation (one of many)</h1>
+<p>This derivation follows: <span class="citation" data-cites="smythConditionalLikelihoodApproach1996">Smyth and Verbyla (<a href="#ref-smythConditionalLikelihoodApproach1996" role="doc-biblioref">1996</a>)</span></p>
 <p>Let <span class="math inline">\(Y \in \R^n\)</span>, <span class="math inline">\(X \in \R^{n \times p}\)</span>, with rank <span class="math inline">\(p\)</span> and let <span class="math inline">\(Y \sim \text{Normal}(X \beta, \Sigma(\gamma))\)</span>, <span class="math inline">\(\gamma \in \R^m\)</span>, with density: <span class="math display">\[
 f_Y(y \mid \beta, \gamma) = (2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp y - X \beta \rp^T \Sigma(\gamma)^{-1}\lp y - X \beta \rp \rp
 \]</span> We’ll show that <span class="math display">\[
@@ -271,6 +272,70 @@ K(K^T \Sigma K)^{-1}K^T = \Sigma(\gamma)^{-1} - \Sigma(\gamma)^{-1} X (X^T \Sigm
 (\hat{\beta} - \beta)^TX^T\Sigma(\gamma)^{-1} X (\hat{\beta} - \beta) + (K^Ty)^T \lp K^T \Sigma K\rp^{-1} K^T y
 \]</span> We can’t use this directly as a density because we’ve done a transformation of <span class="math inline">\(y\)</span> to statistics <span class="math inline">\(t\)</span> and <span class="math inline">\(a\)</span>: <span class="math display">\[
 t = (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} y, \quad a = K^T y
+\]</span> We have the likelihood expressed in terms of <span class="math inline">\(t\)</span> and <span class="math inline">\(a\)</span> already, but we need to account for the Jacobian. Let <span class="math inline">\(B = (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1}\)</span></p>
+<p><span class="math display">\[
+\begin{bmatrix}
+t \\
+a
+\end{bmatrix} = \begin{bmatrix}
+B^T \\
+K^T
+\end{bmatrix}y
+\]</span> We need the determinant of the Jacobian of <span class="math inline">\((t,a) \to y\)</span>, which we can get by taking the reciprocal of the Jacobian <span class="math inline">\(y \to (t,a)\)</span>, which is <span class="math display">\[
+\det \begin{bmatrix}
+B^T \\
+K^T
+\end{bmatrix}
+\]</span> We can simplify this expression by noting that <span class="math display">\[
+\begin{aligned}
+\det \begin{bmatrix}
+B^T \\
+K^T
+\end{bmatrix} &amp; = \sqrt{\det \begin{bmatrix}
+B^T \\
+K^T
+\end{bmatrix}\begin{bmatrix}
+B^T \\
+K^T
+\end{bmatrix}^T} \\
+&amp; = \det \begin{bmatrix}
+B^T B &amp; B^TK\\
+K^T B &amp; K^T K
+\end{bmatrix}^{1/2}
+\end{aligned}
+\]</span> Using the block matrix determinant formula, we get that: <span class="math display">\[
+\begin{aligned}
+\det \begin{bmatrix}
+B^T B &amp; B^TK\\
+K^T B &amp; K^T K
+\end{bmatrix}^{1/2} &amp; = \det K^T K^{1/2} \det (B^T B - B^T K(K^T K)^{-1} K^T B)^{1/2} \\
+&amp; = \det K^T K^{1/2} \det (B^T(I -  K(K^T K)^{-1} K^T)B)^{1/2} \\
+&amp; = \det K^T K^{1/2} \det (B^T X(X^TX)^{-1}X^T B)^{1/2} \\
+&amp; = \det K^T K^{1/2} \det ((X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} X(X^TX)^{-1}X^T \Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1})^{1/2} \\
+&amp; = \det K^T K^{1/2} \det ((X^TX)^{-1})^{1/2}  \\
+&amp; = \det ((X^TX)^{-1})^{1/2}
+\end{aligned}
+\]</span> Thus we get that the Jacobian of our transformation is <span class="math inline">\(\lp\det ((X^TX)^{-1})^{1/2}\rp^{-1}\)</span> or <span class="math inline">\(\sqrt{\det X^T X}\)</span></p>
+<p>Finally:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f_Y(y \mid \beta, \gamma) &amp; = (2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp y - X \beta \rp^T \Sigma(\gamma)^{-1}\lp y - X \beta \rp \rp\\
+&amp; = \det(X^T X)^{1/2}(2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp \hat{\beta} - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp \hat{\beta} - \beta \rp \rp\\
+&amp; \quad \times\exp\lp -\frac{1}{2} \lp K^T y \rp^T (K^T \Sigma(\gamma)K )^{-1}\lp K^T y \rp \rp
+\end{aligned}
+\]</span></p>
+<p>From this representation, we can see that <span class="math inline">\(\hat{\beta}\)</span> is multivariate normal:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f_{\hat{\beta}}(t \mid \beta, \gamma) = (2\pi)^{-p / 2}\det(X^T \Sigma(\gamma)^{-1}X)^{1/2}\exp\lp -\frac{1}{2} \lp \hat{\beta} - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp \hat{\beta} - \beta \rp \rp\\
+\end{aligned}
+\]</span></p>
+<p>Writing <span class="math inline">\(f_{a \mid t}\)</span> by dividing the two densities gives:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{f_Y(y \mid \beta, \gamma)}{f_{\beta}(t \mid \hat{\beta}, \gamma)} &amp; = (2\pi)^{-(n-p) / 2}\det(X^T X)^{1/2}\det(X^T \Sigma(\gamma)^{-1}X)^{-1/2}\det \Sigma(\gamma)^{-1/2}\\
+&amp; \quad \times\exp\lp -\frac{1}{2} \lp K^T y \rp^T (K^T \Sigma(\gamma)K )^{-1}\lp K^T y \rp \rp
+\end{aligned}
 \]</span></p>
 
 
@@ -280,6 +345,9 @@ t = (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1} y, \quad a = K^T y
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-mccullochglmms" class="csl-entry" role="listitem">
 McCulloch, Charles E., Shayle R. Searle, and John M. Neuhaus. 2008. <em>Generalized, Linear, and Mixed Models</em>. 2nd ed. John Wiley &amp; Sons.
+</div>
+<div id="ref-smythConditionalLikelihoodApproach1996" class="csl-entry" role="listitem">
+Smyth, Gordon K., and Arūnas P. Verbyla. 1996. <span>“A <span>Conditional</span> <span>Likelihood</span> <span>Approach</span> to <span>Residual</span> <span>Maximum</span> <span>Likelihood</span> <span>Estimation</span> in <span>Generalized</span> <span>Linear</span> <span>Models</span>.”</span> <em>Journal of the Royal Statistical Society. Series B (Methodological)</em> 58 (3).
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

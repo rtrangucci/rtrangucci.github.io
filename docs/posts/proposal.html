@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 625 - W 26</title>
+<title>Project proposal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +68,41 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\Z}{\mathbb{Z}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+        \newcommand{\VarA}[2]{\mathrm{Var}_{#2}\lp #1 \rp}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+        \newcommand{\ddtA}[1]{\frac{\partial^2}{\partial #1^2}}
+        \newcommand{\ddtB}[2]{\frac{\partial^2}{\partial #1 \partial #2}}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm','[tex]/upgreek']},
+  tex: {packages: {'[+]': ['bbm','upgreek']}}
+};
+</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +118,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -117,15 +149,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
+  <li><a href="#due-date-submission-instructions-grade-breakdown" id="toc-due-date-submission-instructions-grade-breakdown" class="nav-link active" data-scroll-target="#due-date-submission-instructions-grade-breakdown"><span class="header-section-number">1</span> Due date, submission instructions, grade breakdown</a></li>
+  <li><a href="#project-overview" id="toc-project-overview" class="nav-link" data-scroll-target="#project-overview"><span class="header-section-number">2</span> Project overview</a>
   <ul class="collapse">
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
-  <li><a href="#course-syllabus" id="toc-course-syllabus" class="nav-link" data-scroll-target="#course-syllabus">Course syllabus</a></li>
-  <li><a href="#project-proposal" id="toc-project-proposal" class="nav-link" data-scroll-target="#project-proposal">Project proposal</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
+  <li><a href="#data-analysis" id="toc-data-analysis" class="nav-link" data-scroll-target="#data-analysis"><span class="header-section-number">2.1</span> Data analysis</a></li>
+  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology"><span class="header-section-number">2.2</span> Methodology</a></li>
+  <li><a href="#pedagogical-material" id="toc-pedagogical-material" class="nav-link" data-scroll-target="#pedagogical-material"><span class="header-section-number">2.3</span> Pedagogical material</a></li>
   </ul></li>
+  <li><a href="#project-proposal-instructions" id="toc-project-proposal-instructions" class="nav-link" data-scroll-target="#project-proposal-instructions"><span class="header-section-number">3</span> Project proposal instructions</a></li>
   </ul>
 </nav>
     </div>
@@ -134,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 625 - W 26</h1>
+<h1 class="title">Project proposal</h1>
 </div>
 
 
@@ -151,69 +182,67 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level2">
-<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
-<section id="textbook" class="level3">
-<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
-<ul>
-<li><p>Required: <em>Modelling Survival Data in Medical Research, 4th Edition,</em> Collett</p></li>
-<li><p>Optional: <em>Survival and Event History Analysis</em>, Aalen, Borgan, and Gjessing</p></li>
-<li><p>Optional: <em>Counting Processes and Survival Analysis</em>, Fleming and Harrington</p></li>
-</ul>
+<section id="due-date-submission-instructions-grade-breakdown" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Due date, submission instructions, grade breakdown</h1>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Report</td>
+<td style="text-align: center;">Max Length</td>
+<td style="text-align: center;">Due date</td>
+<td style="text-align: center;">Grade</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">(w/o refs)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Project proposal</td>
+<td style="text-align: center;">1 page</td>
+<td style="text-align: center;">3/03 11:59pm</td>
+<td style="text-align: center;">5% of final grade</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Final project report</td>
+<td style="text-align: center;">8 pages</td>
+<td style="text-align: center;">3/17 11:59pm</td>
+<td style="text-align: center;">15% of final grade</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>final report</strong> will be due on 3/17 at 11:59pm PT, and will be worth <strong>15% of your final grade</strong>. The <strong>project proposal</strong> will be due on 3/03 at 11:59pm PT, and will be worth <strong>5% of your final grade</strong>.</p>
+<p>Submission of both will be through Gradescope, where I’ll create new assignments for the proposal and the final project.</p>
 </section>
-<section id="course-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
-<p>To highlight the unique challenges posed by the analysis of failure/survival data. To allow you to analyze survival data using parametric and nonparametric techniques in the face of these challenges. To apply these techniques to real data using R code and R packages for survival analysis. To understand the theory and methodology through math, practice and code.</p>
-<p><strong>Course content</strong></p>
-<p>Concepts to be discussed include: hazard function (failure rate function); nonparametric likeli- hood; counting processes; empirical distribution function; censoring and truncation; Kaplan-Meier estimator; Bias of the KM estimator; Cox proportional hazards model; Accelerated Failure Time Model; Partial Likelihood; log-rank test; martingales. R will be the programming language used in the course.</p>
+<section id="project-overview" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Project overview</h1>
+<p>The final project for this course is a 4 to 8 page report (not including the reference page(s)) focusing on one of several areas:</p>
+<ol type="1">
+<li><p>Data analysis</p></li>
+<li><p>Methodology investigation</p></li>
+<li><p>Pedagogical material</p></li>
+</ol>
+<p>All projects should have some implementation in R Code. That makes RMarkdown a useful tool to use for this report.</p>
+<p>If you are doing likelihood-based analysis for your project, you need to write down an expression for your likelihood.</p>
+<section id="data-analysis" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="data-analysis"><span class="header-section-number">2.1</span> Data analysis</h2>
+<p>In this route, you’ll find a dataset that has a time-to-failure or time-to-event outcome. Examples of this include time to cancer remission, time to death after a heart transplant, time to infection with a certain pathogen, time to marriage, time to bankruptcy, time to acquisition, etc.. It could be recurrent data, like time to tumor recurrence in a subset of patients who have had a tumor removed, or time to new product launch. You’ll use a method we learned in class or an extension of the methods in class to analyze the data. You can approach this project in two ways: you could find an interesting dataset, and then think of a question that could be answered by analyzing the dataset, or you could think of a question you’re interested in an look for data to answer the question. The first route is easier, but the second route is possible too.</p>
 </section>
-<section id="course-syllabus" class="level3">
-<h3 class="anchored" data-anchor-id="course-syllabus">Course syllabus</h3>
-<ul>
-<li><a href="pdfs/survival-class/survival_analysis_syllabus_W26.pdf">Syllabus</a></li>
-</ul>
+<section id="methodology" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="methodology"><span class="header-section-number">2.2</span> Methodology</h2>
+<p>We’ve studied many different methods in survival analysis: parametric methods, nonparametric methods, many different hypothesis tests, and confidence intervals derived from these models, and model checking routines. If you like, you could do a deep dive on a methodology in one of these areas from a theoretical or simulation-study standpoint. If you go with this sort of project and you’re doing a simulation study, make sure that you design your simulation study to have a high-enough power to detect whatever interesting thing you’re investigating. This may require using the computing cluster. If you’re doing a theoretical deep dive on the material, you’ll also want to run a simulation study to ensure that your theoretical results hold in different scenarios.</p>
 </section>
-<section id="project-proposal" class="level3">
-<h3 class="anchored" data-anchor-id="project-proposal">Project proposal</h3>
-<ul>
-<li><a href="./survival-material/proposal.html">Project proposal</a></li>
-</ul>
+<section id="pedagogical-material" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="pedagogical-material"><span class="header-section-number">2.3</span> Pedagogical material</h2>
+<p>If you’re interested in learning more about a certain topic we covered in class or a topic you wished we had covered in class, you can develop pedagogical material related to this topic. The material should have some coding aspect to it because survival analysis is an applied discipline.</p>
 </section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ul>
-<li><a href="./survival-material/lecture-1.html">Lecture 1</a></li>
-<li><a href="./survival-material/lecture-2.html">Lecture 2</a></li>
-<li><a href="./survival-material/lecture-3.html">Lecture 3</a></li>
-<li><a href="./survival-material/lecture-4.html">Lecture 4</a></li>
-<li><a href="./survival-material/lecture-5.html">Lecture 5</a></li>
-<li><a href="./survival-material/lecture-6.html">Lecture 6</a></li>
-<li><a href="./survival-material/lecture-7.html">Lecture 7</a></li>
-<li><a href="./survival-material/lecture-8.html">Lecture 8</a></li>
-<li><a href="./survival-material/lecture-9.html">Lecture 9</a></li>
-<li><a href="./survival-material/lecture-10.html">Lecture 10</a></li>
-<li><a href="./survival-material/lecture-11.html">Lecture 11</a></li>
-<li><a href="./survival-material/lecture-12.html">Lecture 12</a></li>
-<li><a href="./survival-material/lecture-13.html">Lecture 13</a></li>
-<li><a href="./survival-material/lecture-14.html">Lecture 14</a></li>
-<li><a href="./survival-material/lecture-15.html">Lecture 15</a></li>
-<li><a href="./survival-material/lecture-16.html">Lecture 16</a></li>
-</ul>
 </section>
-<section id="homework" class="level3">
-<h3 class="anchored" data-anchor-id="homework">Homework</h3>
-<ul>
-<li><p><a href="./survival-material/weibull-mappings.html">Maps between Weibull parameterizations</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-1.pdf">HW 1</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-2.pdf">HW 2</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-3.pdf">HW 3</a></p></li>
-<li><p><a href="survival-material/HW-4.pdf">HW 4</a></p></li>
-<li><p><a href="pdfs/survival-class/HW-5.pdf">HW 5</a></p></li>
-<li><p><a href="survival-material/HW-6.pdf">HW 6</a></p></li>
-</ul>
+<section id="project-proposal-instructions" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Project proposal instructions</h1>
+<p>Describe the project you plan to do using a maximum of one page. Be specific about what dataset you plan to use, what questions you want to ask, and the methodologies you think you might use. Please come talk to me about your idea if you have any questions.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
