@@ -204,6 +204,7 @@ window.Quarto = {
   <li><a href="#reml-by-marginalizing-t" id="toc-reml-by-marginalizing-t" class="nav-link" data-scroll-target="#reml-by-marginalizing-t"><span class="header-section-number">1.2</span> REML by marginalizing <span class="math inline">\(t\)</span></a></li>
   <li><a href="#reml-by-conditioning-on-t" id="toc-reml-by-conditioning-on-t" class="nav-link" data-scroll-target="#reml-by-conditioning-on-t"><span class="header-section-number">1.3</span> REML by conditioning on <span class="math inline">\(t\)</span></a></li>
   <li><a href="#reml-by-bayes-integrating-out-beta" id="toc-reml-by-bayes-integrating-out-beta" class="nav-link" data-scroll-target="#reml-by-bayes-integrating-out-beta"><span class="header-section-number">1.4</span> REML by Bayes (integrating out <span class="math inline">\(\beta\)</span>)</a></li>
+  <li><a href="#evaluation-of-joint-likelihood-at-reml-estimates" id="toc-evaluation-of-joint-likelihood-at-reml-estimates" class="nav-link" data-scroll-target="#evaluation-of-joint-likelihood-at-reml-estimates"><span class="header-section-number">1.5</span> Evaluation of joint likelihood at REML estimates</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -334,12 +335,12 @@ f_Y(y \mid \beta, \gamma) &amp; = (2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\
 \end{aligned}
 \]</span></p>
 <p>as a joint density in <span class="math inline">\((t,a)\)</span>, defined as a 1-1 transformation of <span class="math inline">\(y\)</span> in <a href="#eq-ta-def" class="quarto-xref">Equation&nbsp;1</a>, and with <span class="math inline">\(K\)</span> defined in <a href="#prp-mat-equal" class="quarto-xref">Proposition&nbsp;1</a>:</p>
-<p><span class="math display">\[
+<p><span id="eq-joint-dist"><span class="math display">\[
 \begin{aligned}
 f_{t,a}(t,a \mid \beta, \gamma) &amp; = \det(X^T X)^{1/2}(2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp\\
-&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp
+&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1} a \rp
 \end{aligned}
-\]</span></p>
+\tag{2}\]</span></span></p>
 </section>
 <section id="reml-by-marginalizing-t" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="reml-by-marginalizing-t"><span class="header-section-number">1.2</span> REML by marginalizing <span class="math inline">\(t\)</span></h2>
@@ -352,15 +353,15 @@ f_{t,a}(t,a \mid \beta, \gamma) &amp; = \det(X^T X)^{1/2}(2\pi)^{-n / 2}\det \Si
 <p><span class="math display">\[
 \begin{aligned}
 f_{a}(a \mid \gamma) &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} \det(X^T X)^{1/2}(2\pi)^{-(n-p) / 2}\det \Sigma(\gamma)^{-1/2}\\
-&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp
+&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a \rp
 \end{aligned}
 \]</span> Note that by the equivalence in <span class="citation" data-cites="mccullochglmms">McCulloch, Searle, and Neuhaus (<a href="#ref-mccullochglmms" role="doc-biblioref">2008</a>)</span>, the expression is:</p>
-<p><span class="math display">\[
+<p><span id="eq-reml-marg"><span class="math display">\[
 \begin{aligned}
 f_{a}(a \mid \gamma) &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} \det(X^T X)^{1/2}(2\pi)^{-(n-p) / 2}\det \Sigma(\gamma)^{-1/2}\\
 &amp; \quad \times\exp\lp -\frac{1}{2} y^T \lp\Sigma(\gamma)^{-1} - \Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1}\rp y \rp
 \end{aligned}
-\]</span></p>
+\tag{3}\]</span></span></p>
 </section>
 <section id="reml-by-conditioning-on-t" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="reml-by-conditioning-on-t"><span class="header-section-number">1.3</span> REML by conditioning on <span class="math inline">\(t\)</span></h2>
@@ -368,7 +369,7 @@ f_{a}(a \mid \gamma) &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} \det(X^T X)^{
 <p><span class="math display">\[
 \begin{aligned}
 f_{a}(a \mid \gamma) &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} \det(X^T X)^{1/2}(2\pi)^{-(n-p) / 2}\det \Sigma(\gamma)^{-1/2}\\
-&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp
+&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a \rp
 \end{aligned}
 \]</span></p>
 <p>This means that we can marginalize out <span class="math inline">\(a\)</span> from the joint distribution to get the marginal distribution for <span class="math inline">\(t\)</span>:</p>
@@ -391,7 +392,7 @@ f_{a}(a \mid \gamma) &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} \det(X^T X)^{
 <p><span class="math display">\[
 \begin{aligned}
 \pi(\beta, \gamma\mid t,a) &amp; \propto \det(X^T X)^{1/2}(2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp\\
-&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp g(\gamma)
+&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1} a \rp g(\gamma)
 \end{aligned}
 \]</span></p>
 <p>This factorizes into a conditional distribution for <span class="math inline">\(\beta \mid \gamma\)</span> and a marginal distribution for <span class="math inline">\(\gamma\)</span>:</p>
@@ -400,7 +401,7 @@ f_{a}(a \mid \gamma) &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} \det(X^T X)^{
 \pi(\beta, \gamma\mid t,a) &amp; \propto \pi(\beta \mid \gamma, t) \pi(\gamma \mid a) \\
 &amp; \propto \det(X^T X)^{1/2}(2\pi)^{-n / 2} \\
 &amp; \quad \times \exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp\\
-&amp; \quad\times \det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp g(\gamma)
+&amp; \quad\times \det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a \rp g(\gamma)
 \end{aligned}
 \]</span> We recognize that <span class="math inline">\(\pi(\beta \mid \gamma, t)\)</span> as a multivariate Gaussian: <span class="math display">\[
 \pi(\beta \mid \gamma, t) \propto \exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp
@@ -411,21 +412,50 @@ f_{a}(a \mid \gamma) &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} \det(X^T X)^{
 \pi(\beta, \gamma\mid t,a) &amp; \propto \pi(\beta \mid \gamma, t) \pi(\gamma \mid a) \\
 &amp; \propto \det(X^T X)^{1/2}(2\pi)^{-n / 2} \\
 &amp; \quad \times \det(X^T \Sigma(\gamma)^{-1}X)^{1/2} (2\pi)^{-p / 2}\exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp\\
-&amp; \quad \times \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} (2\pi)^{p / 2}\det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp g(\gamma)
+&amp; \quad \times \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} (2\pi)^{p / 2}\det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a \rp g(\gamma)
 \end{aligned}
 \]</span></p>
 <p>Integrating <span class="math inline">\(\beta\)</span> over <span class="math inline">\(\R^p\)</span> yields <span class="math inline">\(1\)</span> and the marginal posterior for <span class="math inline">\(\gamma\)</span>:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \pi(\gamma\mid a) &amp; \propto \det(X^T X)^{1/2}(2\pi)^{-(n-p) / 2}\det(X^T \Sigma(\gamma)^{-1}X)^{-1/2}  \\
-&amp; \quad \times \det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp g(\gamma)
+&amp; \quad \times \det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a \rp g(\gamma)
 \end{aligned}
 \]</span> Given that we have a prior <span class="math inline">\(g(\gamma)\)</span>, the REML likelihood must be what is left:</p>
 <p><span class="math display">\[
 \begin{aligned}
 f_a(a \mid \gamma) &amp; \propto \det(X^T X)^{1/2}(2\pi)^{-(n-p) / 2}\det(X^T \Sigma(\gamma)^{-1}X)^{-1/2}  \\
-&amp; \quad \times \det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp
+&amp; \quad \times \det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a \rp
 \end{aligned}
+\]</span></p>
+</section>
+<section id="evaluation-of-joint-likelihood-at-reml-estimates" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="evaluation-of-joint-likelihood-at-reml-estimates"><span class="header-section-number">1.5</span> Evaluation of joint likelihood at REML estimates</h2>
+<p>If we evaluate <a href="#eq-joint-dist" class="quarto-xref">Equation&nbsp;2</a> at the REML estimate <span class="math inline">\((\hat{\beta}, \hat{\gamma})\)</span> that we obtained by maximizing <a href="#eq-reml-marg" class="quarto-xref">Equation&nbsp;3</a> and plugging this into the equation for <span class="math inline">\(\hat{\beta} \equiv t(\gamma)\)</span> shown in <a href="#eq-ta-def" class="quarto-xref">Equation&nbsp;1</a> to get <span class="math inline">\(\hat{\beta}(\hat{\gamma})\)</span> this gives:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f_{t,a}(t,a \mid \hat{\beta}, \hat{\gamma}) &amp; = \det(X^T X)^{1/2}(2\pi)^{-n / 2}\det \Sigma(\hat{\gamma})^{-1/2}\exp\lp -\frac{1}{2} \lp t(\hat{\gamma}) - \hat{\beta} \rp^T X^T \Sigma(\hat{\gamma})^{-1}X\lp t(\hat{\gamma}) - \hat{\beta} \rp \rp\\
+&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\hat{\gamma})K )^{-1}a \rp \\
+&amp; = \det(X^T X)^{1/2}(2\pi)^{-n / 2}\det \Sigma(\hat{\gamma})^{-1/2} \exp\lp -\frac{1}{2} a^T (K^T \Sigma(\hat{\gamma})K )^{-1} a  \rp
+\end{aligned}
+\]</span></p>
+<p>The log likelihood is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\ell(\hat{\beta}, \hat{\gamma} \mid t, a)
+&amp; = \frac{1}{2}\log\det(X^T X) -\frac{n}{2} \log(2\pi) -\frac{1}{2}\log\det \Sigma(\hat{\gamma}) -\frac{1}{2} a^T (K^T \Sigma(\hat{\gamma})K )^{-1} a
+\end{aligned}
+\]</span></p>
+<p>Thus if we have maximized the REML criterion, shown <a href="#eq-reml-marg" class="quarto-xref">Equation&nbsp;3</a> to give the maximized objective function:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\ell(\hat{\gamma}; a) &amp; = -\frac{1}{2}\log\det(X^T \Sigma(\hat{\gamma})^{-1}X) + \frac{1}{2} \log\det(X^T X) -\frac{n-p}{2} \log(2\pi) - \frac{1}{2}\log\det \Sigma(\hat{\gamma})\\
+&amp; \quad -\frac{1}{2} a^T (K^T \hat{\Sigma(\gamma)}K )^{-1} a
+\end{aligned}
+\]</span></p>
+<p>and we wish to evaluate the log-likelihood of the joint distribution for <span class="math inline">\(y\)</span> at the REML estimates (which is equivalent to the log joint distribution for <span class="math inline">\((t,a)\)</span>) we can adjust the REML criterion to do so:</p>
+<p><span class="math display">\[
+\ell(\hat{\beta}, \hat{\gamma} \mid t, a) = \ell(\hat{\gamma}; a) -\frac{p}{2}\log(2\pi) +\frac{1}{2}\log\det(X^T \Sigma(\hat{\gamma})^{-1}X)
 \]</span></p>
 
 
