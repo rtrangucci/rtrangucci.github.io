@@ -205,6 +205,7 @@ window.Quarto = {
   <li><a href="#reml-by-conditioning-on-t" id="toc-reml-by-conditioning-on-t" class="nav-link" data-scroll-target="#reml-by-conditioning-on-t"><span class="header-section-number">1.3</span> REML by conditioning on <span class="math inline">\(t\)</span></a></li>
   <li><a href="#reml-by-bayes-integrating-out-beta" id="toc-reml-by-bayes-integrating-out-beta" class="nav-link" data-scroll-target="#reml-by-bayes-integrating-out-beta"><span class="header-section-number">1.4</span> REML by Bayes (integrating out <span class="math inline">\(\beta\)</span>)</a></li>
   <li><a href="#evaluation-of-joint-likelihood-at-reml-estimates" id="toc-evaluation-of-joint-likelihood-at-reml-estimates" class="nav-link" data-scroll-target="#evaluation-of-joint-likelihood-at-reml-estimates"><span class="header-section-number">1.5</span> Evaluation of joint likelihood at REML estimates</a></li>
+  <li><a href="#use-of-reml-criterion-in-model-comparison" id="toc-use-of-reml-criterion-in-model-comparison" class="nav-link" data-scroll-target="#use-of-reml-criterion-in-model-comparison"><span class="header-section-number">1.6</span> Use of REML criterion in model comparison</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -450,12 +451,31 @@ f_{t,a}(t,a \mid \hat{\beta}, \hat{\gamma}) &amp; = \det(X^T X)^{1/2}(2\pi)^{-n 
 <p><span class="math display">\[
 \begin{aligned}
 \ell(\hat{\gamma}; a) &amp; = -\frac{1}{2}\log\det(X^T \Sigma(\hat{\gamma})^{-1}X) + \frac{1}{2} \log\det(X^T X) -\frac{n-p}{2} \log(2\pi) - \frac{1}{2}\log\det \Sigma(\hat{\gamma})\\
-&amp; \quad -\frac{1}{2} a^T (K^T \hat{\Sigma(\gamma)}K )^{-1} a
+&amp; \quad -\frac{1}{2} a^T (K^T \Sigma(\hat{\gamma})K )^{-1} a
 \end{aligned}
 \]</span></p>
 <p>and we wish to evaluate the log-likelihood of the joint distribution for <span class="math inline">\(y\)</span> at the REML estimates (which is equivalent to the log joint distribution for <span class="math inline">\((t,a)\)</span>) we can adjust the REML criterion to do so:</p>
 <p><span class="math display">\[
 \ell(\hat{\beta}, \hat{\gamma} \mid t, a) = \ell(\hat{\gamma}; a) -\frac{p}{2}\log(2\pi) +\frac{1}{2}\log\det(X^T \Sigma(\hat{\gamma})^{-1}X)
+\]</span></p>
+</section>
+<section id="use-of-reml-criterion-in-model-comparison" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="use-of-reml-criterion-in-model-comparison"><span class="header-section-number">1.6</span> Use of REML criterion in model comparison</h2>
+<p>When we have models of differing fixed effects, we’d like to use the modified REML criterion to compare models. <span class="citation" data-cites="verbylaNoteModelSelection2019">(<a href="#ref-verbylaNoteModelSelection2019" role="doc-biblioref"><strong>verbylaNoteModelSelection2019?</strong></a>)</span> argues that we should compare the joint log-likelihood for <span class="math inline">\((t,a)\)</span> evaluated at the REML estimates for <span class="math inline">\(\beta, \gamma\)</span> under each model.</p>
+<p>We can see that each model will have a factor of <span class="math inline">\(-\frac{n}{2}\log(2\pi)\)</span> in the log-likelihood, so this term can be omitted. The determinant of <span class="math inline">\(X^T X\)</span>, however, cannot be omitted.</p>
+<p>The REML criterion used in software typically leaves out constants independent of <span class="math inline">\(\gamma\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\ell^{\text{REML}}(\gamma \mid a) &amp; = -\frac{1}{2}\log\det(X^T \Sigma(\gamma)^{-1}X) -\frac{1}{2}\log\det\Sigma(\gamma)  -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a
+\end{aligned}
+\]</span></p>
+<p>In order to use <span class="math inline">\(\ell^{\text{REML}}(\hat{\gamma} \mid a)\)</span> in model comparison, we need to add back <span class="math inline">\(\frac{1}{2}\log\det X^T X\)</span>.</p>
+<p>This would yield a log-likelihood suitable for use in an AIC:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\ell^{\text{REML}}(\hat{\gamma} \mid a) &amp; = -\frac{1}{2}\log\det(X^T \Sigma(\gamma)^{-1}X) -\frac{1}{2}\log\det\Sigma(\gamma)  -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}a \\
+&amp; \quad + \frac{1}{2}\log\det X^T X
+\end{aligned}
 \]</span></p>
 
 
