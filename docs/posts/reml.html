@@ -198,7 +198,13 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#reml-derivation-one-of-many" id="toc-reml-derivation-one-of-many" class="nav-link active" data-scroll-target="#reml-derivation-one-of-many"><span class="header-section-number">1</span> REML derivation (one of many)</a></li>
+  <li><a href="#reml-derivation-three-ways" id="toc-reml-derivation-three-ways" class="nav-link active" data-scroll-target="#reml-derivation-three-ways"><span class="header-section-number">1</span> REML derivation three ways</a>
+  <ul class="collapse">
+  <li><a href="#tldr-rewriting-the-joint-distribution" id="toc-tldr-rewriting-the-joint-distribution" class="nav-link" data-scroll-target="#tldr-rewriting-the-joint-distribution"><span class="header-section-number">1.1</span> TL;DR Rewriting the joint distribution</a></li>
+  <li><a href="#reml-by-marginalizing-t" id="toc-reml-by-marginalizing-t" class="nav-link" data-scroll-target="#reml-by-marginalizing-t"><span class="header-section-number">1.2</span> REML by marginalizing <span class="math inline">\(t\)</span></a></li>
+  <li><a href="#reml-by-conditioning-on-t" id="toc-reml-by-conditioning-on-t" class="nav-link" data-scroll-target="#reml-by-conditioning-on-t"><span class="header-section-number">1.3</span> REML by conditioning on <span class="math inline">\(t\)</span></a></li>
+  <li><a href="#reml-by-bayes-integrating-out-beta" id="toc-reml-by-bayes-integrating-out-beta" class="nav-link" data-scroll-target="#reml-by-bayes-integrating-out-beta"><span class="header-section-number">1.4</span> REML by Bayes (integrating out <span class="math inline">\(\beta\)</span>)</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -224,9 +230,9 @@ window.Quarto = {
 </header>
 
 
-<section id="reml-derivation-one-of-many" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> REML derivation (one of many)</h1>
-<p>This derivation follows: <span class="citation" data-cites="smythConditionalLikelihoodApproach1996">Smyth and Verbyla (<a href="#ref-smythConditionalLikelihoodApproach1996" role="doc-biblioref">1996</a>)</span></p>
+<section id="reml-derivation-three-ways" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> REML derivation three ways</h1>
+<p>This derivation follows: <span class="citation" data-cites="smythConditionalLikelihoodApproach1996">Smyth and Verbyla (<a href="#ref-smythConditionalLikelihoodApproach1996" role="doc-biblioref">1996</a>)</span>, and <span class="citation" data-cites="harvilleBayesianInferenceVariance1974">Harville (<a href="#ref-harvilleBayesianInferenceVariance1974" role="doc-biblioref">1974</a>)</span>.</p>
 <p>Let <span class="math inline">\(Y \in \R^n\)</span>, <span class="math inline">\(X \in \R^{n \times p}\)</span>, with rank <span class="math inline">\(p\)</span> and let <span class="math inline">\(Y \sim \text{Normal}(X \beta, \Sigma(\gamma))\)</span>, <span class="math inline">\(\gamma \in \R^m\)</span>, with density: <span class="math display">\[
 f_Y(y \mid \beta, \gamma) = (2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp y - X \beta \rp^T \Sigma(\gamma)^{-1}\lp y - X \beta \rp \rp
 \]</span> We’ll show that <span class="math display">\[
@@ -316,33 +322,117 @@ K^T B &amp; K^T K
 &amp; = \det ((X^TX)^{-1})^{1/2}
 \end{aligned}
 \]</span> Thus we get that the Jacobian of our transformation is <span class="math inline">\(\lp\det ((X^TX)^{-1})^{1/2}\rp^{-1}\)</span> or <span class="math inline">\(\sqrt{\det X^T X}\)</span></p>
-<p>Finally:</p>
-<p><span class="math display">\[
+<section id="tldr-rewriting-the-joint-distribution" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="tldr-rewriting-the-joint-distribution"><span class="header-section-number">1.1</span> TL;DR Rewriting the joint distribution</h2>
+<p>Finally we can write the joint density for <span class="math inline">\(y\)</span>: <span class="math display">\[
 \begin{aligned}
-f_Y(y \mid \beta, \gamma) &amp; = (2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp y - X \beta \rp^T \Sigma(\gamma)^{-1}\lp y - X \beta \rp \rp\\
-&amp; = \det(X^T X)^{1/2}(2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp \hat{\beta} - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp \hat{\beta} - \beta \rp \rp\\
-&amp; \quad \times\exp\lp -\frac{1}{2} \lp K^T y \rp^T (K^T \Sigma(\gamma)K )^{-1}\lp K^T y \rp \rp
+f_Y(y \mid \beta, \gamma) &amp; = (2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp y - X \beta \rp^T \Sigma(\gamma)^{-1}\lp y - X \beta \rp \rp
 \end{aligned}
 \]</span></p>
-<p>From this representation, we can see that <span class="math inline">\(\hat{\beta}\)</span> is multivariate normal:</p>
+<p>as a joint density in <span class="math inline">\((t,a)\)</span>:</p>
 <p><span class="math display">\[
 \begin{aligned}
-f_{\hat{\beta}}(t \mid \beta, \gamma) = (2\pi)^{-p / 2}\det(X^T \Sigma(\gamma)^{-1}X)^{1/2}\exp\lp -\frac{1}{2} \lp \hat{\beta} - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp \hat{\beta} - \beta \rp \rp\\
+f_{t,a}(t,a \mid \beta, \gamma) &amp; = \det(X^T X)^{1/2}(2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp\\
+&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp
 \end{aligned}
 \]</span></p>
-<p>Writing <span class="math inline">\(f_{a \mid t}\)</span> by dividing the two densities gives:</p>
+</section>
+<section id="reml-by-marginalizing-t" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="reml-by-marginalizing-t"><span class="header-section-number">1.2</span> REML by marginalizing <span class="math inline">\(t\)</span></h2>
+<p>We see that the joint density for <span class="math inline">\((t,a)\)</span> factorizes. Thus we can derive the marginal distribution for <span class="math inline">\(a\)</span> by integrating out <span class="math inline">\(t\)</span>:</p>
 <p><span class="math display">\[
 \begin{aligned}
-\frac{f_Y(y \mid \beta, \gamma)}{f_{\beta}(t \mid \hat{\beta}, \gamma)} &amp; = (2\pi)^{-(n-p) / 2}\det(X^T X)^{1/2}\det(X^T \Sigma(\gamma)^{-1}X)^{-1/2}\det \Sigma(\gamma)^{-1/2}\\
+\det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} (2\pi)^{p / 2} = \int_{\R^p} \exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp\\
+\end{aligned}
+\]</span> which leaves the following marginal distribution for <span class="math inline">\(a\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f_{a}(a \mid \gamma) &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} \det(X^T X)^{1/2}(2\pi)^{-(n-p) / 2}\det \Sigma(\gamma)^{-1/2}\\
+&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp
+\end{aligned}
+\]</span> Note that by the equivalence in <span class="citation" data-cites="mccullochglmms">McCulloch, Searle, and Neuhaus (<a href="#ref-mccullochglmms" role="doc-biblioref">2008</a>)</span>, the expression is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f_{a}(a \mid \gamma) &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} \det(X^T X)^{1/2}(2\pi)^{-(n-p) / 2}\det \Sigma(\gamma)^{-1/2}\\
+&amp; \quad \times\exp\lp -\frac{1}{2} y^T \lp\Sigma(\gamma)^{-1} - \Sigma(\gamma)^{-1} X (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T \Sigma(\gamma)^{-1}\rp y \rp
+\end{aligned}
+\]</span></p>
+</section>
+<section id="reml-by-conditioning-on-t" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="reml-by-conditioning-on-t"><span class="header-section-number">1.3</span> REML by conditioning on <span class="math inline">\(t\)</span></h2>
+<p>We just showed that the marginal density for <span class="math inline">\(a\)</span> is of the form:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f_{a}(a \mid \gamma) &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} \det(X^T X)^{1/2}(2\pi)^{-(n-p) / 2}\det \Sigma(\gamma)^{-1/2}\\
+&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp
+\end{aligned}
+\]</span></p>
+<p>This means that we can marginalize out <span class="math inline">\(a\)</span> from the joint distribution to get the marginal distribution for <span class="math inline">\(t\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\int_{\R^{n-p}} f_{t,a}(t,a \mid \beta, \gamma)da &amp; = \det(X^T \Sigma(\gamma)^{-1}X)^{1/2}(2\pi)^{-p / 2}\exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp
+\end{aligned}
+\]</span> which shows that <span class="math inline">\(f(t \mid \beta, \gamma)\)</span> is multivariate normal. We can then condition <span class="math inline">\(Y\)</span> on <span class="math inline">\(T = t\)</span> to get the density <span class="math inline">\(f_{y \mid t}\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{f_Y(y \mid \beta, \gamma)}{f_{\beta}(t \mid \beta, \gamma)} &amp; = (2\pi)^{-(n-p) / 2}\det(X^T X)^{1/2}\det(X^T \Sigma(\gamma)^{-1}X)^{-1/2}\det \Sigma(\gamma)^{-1/2}\\
 &amp; \quad \times\exp\lp -\frac{1}{2} \lp K^T y \rp^T (K^T \Sigma(\gamma)K )^{-1}\lp K^T y \rp \rp
+\end{aligned}
+\]</span> again giving the REML likelihood. I’ve left the <span class="math inline">\(y\)</span> in the resulting likelihood because it emphasizes that conditioning of <span class="math inline">\(y\)</span> on <span class="math inline">\(t\)</span>.</p>
+</section>
+<section id="reml-by-bayes-integrating-out-beta" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="reml-by-bayes-integrating-out-beta"><span class="header-section-number">1.4</span> REML by Bayes (integrating out <span class="math inline">\(\beta\)</span>)</h2>
+<p>This is the development in <span class="citation" data-cites="harvilleBayesianInferenceVariance1974">Harville (<a href="#ref-harvilleBayesianInferenceVariance1974" role="doc-biblioref">1974</a>)</span>.</p>
+<p>Suppose we wish to do Bayesian inference on <span class="math inline">\(\gamma\)</span> and thus our target is the marginal posterior <span class="math inline">\(\pi(\gamma \mid y) = \int_{\R^p} \pi(\gamma, \beta \mid y)d\beta\)</span>. Suppose our joint prior for <span class="math inline">\(\gamma, \beta\)</span> is <span class="math inline">\(\pi(\gamma, \beta) \propto g(\gamma)\)</span>. Our joint posterior is:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\pi(\beta, \gamma\mid t,a) &amp; \propto \det(X^T X)^{1/2}(2\pi)^{-n / 2}\det \Sigma(\gamma)^{-1/2}\exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp\\
+&amp; \quad \times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp g(\gamma)
+\end{aligned}
+\]</span></p>
+<p>This factorizes into a conditional distribution for <span class="math inline">\(\beta \mid \gamma\)</span> and a marginal distribution for <span class="math inline">\(\gamma\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\pi(\beta, \gamma\mid t,a) &amp; \propto \pi(\beta \mid \gamma, t) \pi(\gamma \mid a) \\
+&amp; \propto \det(X^T X)^{1/2}(2\pi)^{-n / 2} \\
+&amp; \quad \times \exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp\\
+&amp; \quad\times \det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp g(\gamma)
+\end{aligned}
+\]</span> We recognize that <span class="math inline">\(\pi(\beta \mid \gamma, t)\)</span> as a multivariate Gaussian: <span class="math display">\[
+\pi(\beta \mid \gamma, t) \propto \exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp
+\]</span></p>
+<p>so we multiply and divide by the normalizing constant <span class="math inline">\(\det(X^T \Sigma(\gamma)^{-1}X)^{1/2} (2\pi)^{-p / 2}\)</span> to get a proper density in <span class="math inline">\(\beta\)</span> which we can integrate out:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\pi(\beta, \gamma\mid t,a) &amp; \propto \pi(\beta \mid \gamma, t) \pi(\gamma \mid a) \\
+&amp; \propto \det(X^T X)^{1/2}(2\pi)^{-n / 2} \\
+&amp; \quad \times \det(X^T \Sigma(\gamma)^{-1}X)^{1/2} (2\pi)^{-p / 2}\exp\lp -\frac{1}{2} \lp t - \beta \rp^T X^T \Sigma(\gamma)^{-1}X\lp t - \beta \rp \rp\\
+&amp; \quad \times \det(X^T \Sigma(\gamma)^{-1}X)^{-1/2} (2\pi)^{p / 2}\det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp g(\gamma)
+\end{aligned}
+\]</span></p>
+<p>Integrating <span class="math inline">\(\beta\)</span> over <span class="math inline">\(\R^p\)</span> yields <span class="math inline">\(1\)</span> and the marginal posterior for <span class="math inline">\(\gamma\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\pi(\gamma\mid a) &amp; \propto \det(X^T X)^{1/2}(2\pi)^{-(n-p) / 2}\det(X^T \Sigma(\gamma)^{-1}X)^{-1/2}  \\
+&amp; \quad \times \det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp g(\gamma)
+\end{aligned}
+\]</span> Given that we have a prior <span class="math inline">\(g(\gamma)\)</span>, the REML likelihood must be what is left:</p>
+<p><span class="math display">\[
+\begin{aligned}
+f_a(a \mid \gamma) &amp; \propto \det(X^T X)^{1/2}(2\pi)^{-(n-p) / 2}\det(X^T \Sigma(\gamma)^{-1}X)^{-1/2}  \\
+&amp; \quad \times \det \Sigma(\gamma)^{-1/2}\times\exp\lp -\frac{1}{2} a^T (K^T \Sigma(\gamma)K )^{-1}\lp a \rp \rp
 \end{aligned}
 \]</span></p>
 
 
 
 </section>
+</section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-harvilleBayesianInferenceVariance1974" class="csl-entry" role="listitem">
+Harville, David A. 1974. <span>“Bayesian <span>Inference</span> for <span>Variance</span> <span>Components</span> <span>Using</span> <span>Only</span> <span>Error</span> <span>Contrasts</span>.”</span> <em>Biometrika</em> 61 (2). <a href="https://doi.org/10.2307/2334370">https://doi.org/10.2307/2334370</a>.
+</div>
 <div id="ref-mccullochglmms" class="csl-entry" role="listitem">
 McCulloch, Charles E., Shayle R. Searle, and John M. Neuhaus. 2008. <em>Generalized, Linear, and Mixed Models</em>. 2nd ed. John Wiley &amp; Sons.
 </div>
