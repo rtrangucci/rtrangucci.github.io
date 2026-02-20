@@ -323,37 +323,49 @@ L(\mu_1, \mu_2, \mu_3 \Sigma, \mid Y_{(0)}) &amp; = \prod_{i=1}^{r_1} f_{Y_1, Y_
 </section>
 <section id="measuring-uncertainty-in-em-parameter-estimates" class="level3">
 <h3 class="anchored" data-anchor-id="measuring-uncertainty-in-em-parameter-estimates">Measuring uncertainty in EM parameter estimates</h3>
-<p>We might want to find something like standard errors for our parameter estimates. We can get asymptotic standard errors from the inverse of the information matrix: <span class="math inline">\(I(\theta \mid Y_{(0)})^{-1}\)</span>: Starting with our standard decomposition of the observed data log likelihood:</p>
+<p>We might want to find something like standard errors for our parameter estimates. We can get asymptotic standard errors from the inverse of the information matrix: <span class="math inline">\(I(\theta^\star \mid Y_{(0)})^{-1}\)</span>: Starting with our standard decomposition of the observed data log likelihood:</p>
 <p><span class="math display">\[
 \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)}) = \log(f(Y_{(0)} = \tilde{y}_{(0)} \mid \theta)) + \log(f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta))
-\]</span> Rearranging <span class="math display">\[
-\log(f(Y_{(0)} = \tilde{y}_{(0)} \mid \theta)) = \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)}) - \log(f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta))
-\]</span> we can differentiate twice to get: <span class="math display">\[
--\nabla^2_\theta\log(f(Y_{(0)} = \tilde{y}_{(0)} \mid \theta)) = -\nabla^2_\theta\ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)}) +\nabla^2_\theta\log(f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta))
-\]</span> which is equivalent to:</p>
-<p><span class="math display">\[
-I(\theta \mid Y_{(0)} = \tilde{y}_{(0)}) = I(\theta \mid Y_{(0)} = \tilde{y}_{(0)}, Y_{(1)} = y_{(1)}) + \nabla^2_\theta\log(f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta))
-\]</span> where <span class="math inline">\(I(\theta \mid Y_{(0)} = \tilde{y}_{(0)})\)</span> is the observed information. Taking expectations with respect random variable <span class="math inline">\(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t\)</span> gives</p>
-<p><span class="math display">\[
-\begin{aligned}
-I(\theta \mid Y_{(0)} = \tilde{y}_{(0)}) &amp; = \ExpA{I(\theta \mid Y_{(0)}=\tilde{y}_{(0)}, Y_{(1)})}{Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^t} + \ExpA{\nabla^2_\theta\log(f(Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta))}{Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta^t} \\
-&amp; = -\nabla^2_\theta Q(\theta \mid \theta^t) + \nabla^2_\theta H(\theta \mid \theta^t)
-\end{aligned}
-\]</span> When we have reached a stationary point <span class="math inline">\(\theta^\star\)</span>, we can evaluate the first term on the right easily: <span class="math display">\[
--\nabla^2_\theta Q(\theta \mid \theta^t)\mid_{\theta = \theta^\star}
-\]</span> We can get the second term in EM from Louis’ Identity: <span class="math display">\[
-\begin{aligned}
--\nabla^2_\theta H(\theta \mid \theta^t) = &amp; \ExpA{\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})^T}{Y_{(1)} \mid Y_{(0)}=\tilde{y}_{(0)},\theta^t}\\
-&amp;- \nabla_\theta \ell_Y(\theta \mid Y_{(0)} = \tilde{y}_{(0)})\nabla_\theta \ell_Y(\theta \mid Y_{(0)} = \tilde{y}_{(0)})^T
-\end{aligned}
-\]</span> where we note that at the stationary point, the gradient is zero, so we get: <span class="math display">\[
--\nabla^2_\theta H(\theta \mid \theta^t)\mid_{\theta = \theta^\star} = \ExpA{\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})^T}{Y_{(1)} \mid Y_{(0)}=\tilde{y}_{(0)}}\mid_{\theta = \theta^\star}
 \]</span></p>
-<p>The final expression is:</p>
-<p><span class="math display">\[
+<p>Rearranging <span id="eq-em-identity"><span class="math display">\[
+\log(f(Y_{(0)} = \tilde{y}_{(0)} \mid \theta)) = \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)}) - \log(f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta)).
+\tag{1}\]</span></span></p>
+<p>Make the following notational substitutions, where the function <span class="math inline">\(\ell(\theta ; V)\)</span> is read as the log-likelihood as a function of <span class="math inline">\(\theta\)</span> generated from the density corresponding to the distribution for random variable <span class="math inline">\(V\)</span> indexed by unknown parameter <span class="math inline">\(\theta\)</span>. In what follows <span class="math inline">\(V\)</span> can be conditional on another random variable, <span class="math inline">\(X\)</span>, as in <span class="math inline">\(V \mid X\)</span>. <span class="math display">\[
 \begin{aligned}
-I(\theta^\star \mid Y_{(0)} = \tilde{y}_{(0)}) = &amp;\, -\nabla^2_\theta Q(\theta \mid \theta^\star)\mid_{\theta = \theta^\star} \\
-&amp;-\ExpA{\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})\nabla_\theta \ell_Y(\theta \mid Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)})^T}{Y_{(1)} \mid Y_{(0)}=\tilde{y}_{(0)}}\mid_{\theta = \theta^\star}
+\ell(\theta ; Y_{(0)}) &amp; \equiv \log(f(Y_{(0)} = \tilde{y}_{(0)} \mid \theta)) \\
+\ell(\theta ; Y_{(0)}, Y_{(1)}) &amp; \equiv \log\lp f_Y(Y_{(1)} = y_{(1)}, Y_{(0)} = \tilde{y}_{(0)} \mid \theta)\rp \\
+\ell(\theta ; Y_{(1)} \mid Y_{(0)}) &amp; \equiv \log(f(Y_{(1)} = y_{(1)}\mid Y_{(0)} = \tilde{y}_{(0)}, \theta))
+\end{aligned}
+\]</span> We now have the following notation for log-likelihood derivatives:</p>
+<p><span class="math display">\[
+\ell_\theta(\theta^\prime ; V) \equiv \nabla_\theta \log(f(Y_{(0)} = \tilde{y}_{(0)} \mid \theta)) \Big|_{\theta = \theta^\prime}, \,\ell_{\theta\theta}(\theta^\prime ; V) \equiv \nabla^2_\theta \log(f(Y_{(0)} = \tilde{y}_{(0)} \mid \theta)) \Big|_{\theta = \theta^\prime}
+\]</span></p>
+<p>We can differentiate <a href="#eq-em-identity" class="quarto-xref">Equation&nbsp;1</a> twice and evaluate these at <span class="math inline">\(\theta = \theta^\star\)</span> to get: <span class="math display">\[
+-\ell_{\theta\theta}(\theta^\star; Y_{(0)}) = -\ell_{\theta\theta}(\theta^\star; Y_{(0)},Y_{(1)}) - (-\ell_{\theta\theta}(\theta^\star; Y_{(1)} \mid Y_{(0)}))
+\]</span> Taking expectations with respect random variable <span class="math inline">\(Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^\star\)</span> gives</p>
+<p><span id="eq-grad-em"><span class="math display">\[
+\begin{aligned}
+-\ell_{\theta\theta}(\theta^\star; Y_{(0)}) = \ExpA{-\ell_{\theta\theta}(\theta^\star; Y_{(0)},Y_{(1)})}{Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^\star} - \ExpA{-\ell_{\theta\theta}(\theta^\star; Y_{(1)} \mid Y_{(0)})}{Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta^\star}
+\end{aligned}
+\tag{2}\]</span></span> Using the Bartlett identity: <span class="math display">\[
+\ExpA{\ell_{\theta\theta}(\theta;X) + \ell_{\theta}(\theta;X)\ell_{\theta}(\theta;X)^T}{X \sim F_\theta} = 0
+\]</span> we can rewrite the second term on the RHS of <a href="#eq-grad-em" class="quarto-xref">Equation&nbsp;2</a> as: <span class="math display">\[
+\begin{aligned}
+\ExpA{-\ell_{\theta\theta}(\theta^\star; Y_{(1)} \mid Y_{(0)})}{Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta^\star} &amp; =\ExpA{\ell_{\theta}(\theta^\star; Y_{(1)} \mid Y_{(0)})\ell_{\theta}(\theta^\star; Y_{(1)} \mid Y_{(0)})^T}{Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta^\star} \\
+&amp; = \ExpA{\ell_{\theta}(\theta^\star; Y_{(0)}, Y_{(1)})\ell_{\theta}(\theta^\star; Y_{(0)}, Y_{(1)})^T}{Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta^\star} - \ExpA{\ell_{\theta}(\theta^\star; Y_{(0)})\ell_{\theta}(\theta^\star;  Y_{(0)})^T}{Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta^\star} \\
+&amp; = \ExpA{\ell_{\theta}(\theta^\star; Y_{(0)},Y_{(1)})\ell_{\theta}(\theta^\star; Y_{(0)}, Y_{(1)})^T}{Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta^\star}
+\end{aligned}
+\]</span> where the second line comes from the identity <span class="math inline">\(\ell_\theta(\theta^\star; Y_{(1)} \mid Y_{(0)}) = \ell_\theta(\theta^\star; Y_{(0)},Y_{(1)}) -  \ell_\theta(\theta^\star; Y_{(0)})\)</span> and the fact that we earlier proved that a stationary point of <span class="math inline">\(Q(\theta \mid \theta^t)\)</span> was also a stationay point of <span class="math inline">\(\ell(\theta; Y_{(0)})\)</span>.</p>
+<p>Furthermore, under regularity conditions allowing for gradients to be passed outside of integrals, the first term on the RHS in <a href="#eq-grad-em" class="quarto-xref">Equation&nbsp;2</a> simplifies to <span class="math display">\[
+\ExpA{-\ell_{\theta\theta}(\theta^\star; Y_{(0)},Y_{(1)})}{Y_{(1)} \mid Y_{(0)} = \tilde{y}_{(0)}, \theta^\star} = -\nabla^2_\theta Q(\theta \mid \theta^t)\mid_{\theta = \theta^\star}
+\]</span> Under the aforementioned regularity conditions, the simplification for the second term on the RHS is called Louis’ identity: <span class="math display">\[
+\begin{aligned}
+-\nabla^2_\theta H(\theta \mid \theta^t) = \ExpA{\ell_{\theta}(\theta^\star; Y_{(0)},Y_{(1)})\ell_{\theta}(\theta^\star; Y_{(0)}, Y_{(1)})^T}{Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta^\star}
+\end{aligned}
+\]</span></p>
+<p>Thus, the final expression for the observed information is <span class="math display">\[
+\begin{aligned}
+-\ell_{\theta\theta}(\theta^\star; Y_{(0)}) = -\nabla^2_\theta Q(\theta \mid \theta^\star)\mid_{\theta = \theta^\star} - \ExpA{\ell_{\theta}(\theta^\star; Y_{(0)},Y_{(1)})\ell_{\theta}(\theta^\star; Y_{(0)}, Y_{(1)})^T}{Y_{(1)}\mid Y_{(0)}=\tilde{y}_{(0)}, \theta^\star}.
 \end{aligned}
 \]</span></p>
 </section>
