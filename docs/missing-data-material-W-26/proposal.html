@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 599 - W 26: Missing data and causal inference</title>
+<title>Project proposal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +68,41 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\Z}{\mathbb{Z}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+        \newcommand{\VarA}[2]{\mathrm{Var}_{#2}\lp #1 \rp}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+        \newcommand{\ddtA}[1]{\frac{\partial^2}{\partial #1^2}}
+        \newcommand{\ddtB}[2]{\frac{\partial^2}{\partial #1 \partial #2}}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm','[tex]/upgreek']},
+  tex: {packages: {'[+]': ['bbm','upgreek']}}
+};
+</script>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +118,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -117,18 +149,14 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
+  <li><a href="#due-date-submission-instructions-grade-breakdown" id="toc-due-date-submission-instructions-grade-breakdown" class="nav-link active" data-scroll-target="#due-date-submission-instructions-grade-breakdown"><span class="header-section-number">1</span> Due date, submission instructions, grade breakdown</a></li>
+  <li><a href="#project-overview" id="toc-project-overview" class="nav-link" data-scroll-target="#project-overview"><span class="header-section-number">2</span> Project overview</a>
   <ul class="collapse">
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
-  <li><a href="#course-learning-outcomes" id="toc-course-learning-outcomes" class="nav-link" data-scroll-target="#course-learning-outcomes"><strong>Course learning outcomes</strong></a></li>
-  <li><a href="#schedule-and-readings" id="toc-schedule-and-readings" class="nav-link" data-scroll-target="#schedule-and-readings">Schedule and readings</a></li>
-  <li><a href="#course-syllabus" id="toc-course-syllabus" class="nav-link" data-scroll-target="#course-syllabus">Course syllabus</a></li>
-  <li><a href="#project-proposal" id="toc-project-proposal" class="nav-link" data-scroll-target="#project-proposal">Project proposal</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#mcmc-notes" id="toc-mcmc-notes" class="nav-link" data-scroll-target="#mcmc-notes">MCMC notes</a></li>
-  <li><a href="#hw" id="toc-hw" class="nav-link" data-scroll-target="#hw">HW</a></li>
+  <li><a href="#data-analysis" id="toc-data-analysis" class="nav-link" data-scroll-target="#data-analysis"><span class="header-section-number">2.1</span> Data analysis</a></li>
+  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology"><span class="header-section-number">2.2</span> Methodology</a></li>
+  <li><a href="#pedagogical-material" id="toc-pedagogical-material" class="nav-link" data-scroll-target="#pedagogical-material"><span class="header-section-number">2.3</span> Pedagogical material</a></li>
   </ul></li>
+  <li><a href="#project-proposal-instructions" id="toc-project-proposal-instructions" class="nav-link" data-scroll-target="#project-proposal-instructions"><span class="header-section-number">3</span> Project proposal instructions</a></li>
   </ul>
 </nav>
     </div>
@@ -137,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 599 - W 26: Missing data and causal inference</h1>
+<h1 class="title">Project proposal</h1>
 </div>
 
 
@@ -154,238 +182,66 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level2">
-<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
-<section id="textbook" class="level3">
-<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
-<ul>
-<li><p>Required: <em>Statistical Analysis with Missing Data, 3rd edition</em> Little and Rubin</p></li>
-<li><p>Required: <em>Causal Inference for Statistics, Social, and Biomedical Sciences</em>, Imbens and Rubin</p></li>
-<li><p>Optional: <em>Bayesian Inference for Partially Identified Models</em>, Gustafson</p></li>
-</ul>
-</section>
-<section id="course-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
-<p>Upon completion of this course, students should be able to critically evaluate how published literature handles (or does not handle) missing data, and analyze datasets that have missing values by designing models that account for missingness. Students should also be able to read published literature using randomized study designs, and assess whether researchers’ causal conclusions are reasonable.</p>
-</section>
-<section id="course-learning-outcomes" class="level3">
-<h3 class="anchored" data-anchor-id="course-learning-outcomes"><strong>Course learning outcomes</strong></h3>
-<ol type="1">
-<li>Differentiate between missing-completely-at-random, missing-at-random (MAR), and missing-not-at-random (MNAR) processes via assumptions about the joint distribution of missingness indicators, outcomes, and covariates.</li>
-<li>Evaluate whether estimands of interest are appropriately estimated under missingness for a given missing data technique (complete case analysis, multiple imputation, data augmentation, etc.).</li>
-<li>Derive the identification region and limiting posterior density for partially-identified models.</li>
-<li>Derive a principal causal effect using the Neyman-Rubin causal model.</li>
-<li>Construct and fit maximum likelihood (in R)/Bayesian models (in Stan) for MAR, MNAR, and causal models.</li>
-</ol>
-</section>
-<section id="schedule-and-readings" class="level3">
-<h3 class="anchored" data-anchor-id="schedule-and-readings">Schedule and readings</h3>
+<section id="due-date-submission-instructions-grade-breakdown" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Due date, submission instructions, grade breakdown</h1>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Topic</th>
-<th>Reading</th>
-<th>LO</th>
-<th>Assignments</th>
-</tr>
-</thead>
 <tbody>
 <tr class="odd">
-<td>1/6/2026</td>
-<td>Missingness mechanisms and patterns</td>
-<td>LR 1.1-1.4</td>
-<td>1, 2</td>
-<td>NA</td>
+<td style="text-align: center;">Report</td>
+<td style="text-align: center;">Max Length</td>
+<td style="text-align: center;">Due date</td>
+<td style="text-align: center;">Grade</td>
 </tr>
 <tr class="even">
-<td>1/8/2026</td>
-<td>Missing data techniques<br> Complete case analysis <br> Weighting</td>
-<td>LR Ch. 3</td>
-<td>1, 2</td>
-<td>NA</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">(w/o refs)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
 </tr>
 <tr class="odd">
-<td>1/13/2026</td>
-<td>Single imputation techniques</td>
-<td>LR Ch. 4</td>
-<td>1, 2</td>
-<td>NA</td>
+<td style="text-align: center;">Project proposal</td>
+<td style="text-align: center;">1 page</td>
+<td style="text-align: center;">2/26 11:59pm</td>
+<td style="text-align: center;">10% of final grade</td>
 </tr>
 <tr class="even">
-<td>1/15/2026</td>
-<td>Multiple imputation techniques</td>
-<td>LR Ch. 5</td>
-<td>1, 2</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>1/20/2026</td>
-<td>Likelihood theory</td>
-<td>LR Ch. 6</td>
-<td>1, 5</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>1/22/2026</td>
-<td>MV normal MLE, matrix differentials</td>
-<td>LR Ch. 6</td>
-<td>1, 5</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>1/27/2026</td>
-<td>Asymptotics of MLEs</td>
-<td>LR Ch. 6</td>
-<td>1, 5</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>1/29/2026</td>
-<td>Bayes intro</td>
-<td>LR Ch. 6</td>
-<td>1, 5</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>2/3/2026</td>
-<td>Bayes cont’d</td>
-<td>LR Ch. 6,10</td>
-<td>1, 5</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>2/5/2026</td>
-<td>Likelihood with missingness</td>
-<td>LR Ch. 6,7</td>
-<td>2, 5</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>2/10/2026</td>
-<td>Coarsening</td>
-<td>LR Ch. 6</td>
-<td>2, 5</td>
-<td>2</td>
-</tr>
-<tr class="even">
-<td>2/12/2026</td>
-<td>Incorrect like. inf. under missingnness</td>
-<td>LR Ch. 6</td>
-<td>2, 5</td>
-<td>2</td>
-</tr>
-<tr class="odd">
-<td>2/17/2026</td>
-<td>EM</td>
-<td>LR Ch. 8,11</td>
-<td>2, 5</td>
-<td>3</td>
-</tr>
-<tr class="even">
-<td>2/19/2026</td>
-<td>EM cont’d and MNAR missingness</td>
-<td>LR Ch. 8,9,11,15</td>
-<td>2, 5</td>
-<td>3</td>
-</tr>
-<tr class="odd">
-<td>2/24/2026</td>
-<td>MNAR missingness</td>
-<td>LR Ch. 15</td>
-<td>1, 5</td>
-<td>3</td>
-</tr>
-<tr class="even">
-<td>2/26/2026</td>
-<td>Causal inference intro</td>
-<td>IR Ch. 1,3,4</td>
-<td>4</td>
-<td>4</td>
-</tr>
-<tr class="odd">
-<td>3/3/2026</td>
-<td>Propensity scores</td>
-<td>IR Ch. 4,6,12,13</td>
-<td>4</td>
-<td>4</td>
-</tr>
-<tr class="even">
-<td>3/5/2026</td>
-<td>Principal stratification</td>
-<td>IR Ch. 23, 24</td>
-<td>4</td>
-<td>4</td>
-</tr>
-<tr class="odd">
-<td>3/10/2026</td>
-<td>Presentations</td>
-<td>NA</td>
-<td>NA</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>3/12/2026</td>
-<td>Presentations</td>
-<td>NA</td>
-<td>NA</td>
-<td>NA</td>
+<td style="text-align: center;">Final project report</td>
+<td style="text-align: center;">8 pages</td>
+<td style="text-align: center;">3/20 6:00pm</td>
+<td style="text-align: center;">40% of final grade</td>
 </tr>
 </tbody>
 </table>
+<p>The <strong>final report</strong> will be due on 3/20 at 6pm PT, and will be worth <strong>40% of your final grade</strong>. The <strong>project proposal</strong> will be due on 2/26 at 11:59pm PT, and will be worth <strong>10% of your final grade</strong>.</p>
+<p>Submission of both will be through Gradescope, where I’ll create new assignments for the proposal and the final project.</p>
 </section>
-<section id="course-syllabus" class="level3">
-<h3 class="anchored" data-anchor-id="course-syllabus">Course syllabus</h3>
-<ul>
-<li><a href="missing-data-material-W-26/missing-data-syllabus-W26.pdf">Syllabus</a></li>
-</ul>
+<section id="project-overview" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Project overview</h1>
+<p>The final project for this course is a 4 to 8 page report (not including the reference page(s)) focusing on one of several areas:</p>
+<ol type="1">
+<li><p>Data analysis</p></li>
+<li><p>Methodology investigation</p></li>
+<li><p>Pedagogical material</p></li>
+</ol>
+<p>All projects should have some implementation in R Code. That makes RMarkdown, Quarto, or Knitr useful tools for this report.</p>
+<section id="data-analysis" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="data-analysis"><span class="header-section-number">2.1</span> Data analysis</h2>
+<p>Define a research question that can be answered with a dataset that you have access to. The dataset will likely have missing, or coarsened values; any dataset that has no missing data is suspect. Use the dataset to answer your research question, and use techniques from the class to handle the missingness/coarseness. Run sensitivity analyses to determine if changing assumptions from MCAR, to MAR to MNAR affects your conclusions. Write up your conclusions in a report, and detail the methods you used, and the decisions you made about how to model your data and the missingness process. Argue why/why not ignorable missingness is a good assumption. You can approach this project in two ways: you could find an interesting dataset, and then think of a question that could be answered by analyzing the dataset, or you could think of a question you’re interested in an look for data to answer the question. The first route is easier, but the second route is possible too.</p>
 </section>
-<section id="project-proposal" class="level3">
-<h3 class="anchored" data-anchor-id="project-proposal">Project proposal</h3>
-<ul>
-<li><a href="./missing-data-material-W-26/proposal.html">Project proposal</a></li>
-</ul>
+<section id="methodology" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="methodology"><span class="header-section-number">2.2</span> Methodology</h2>
+<p>We’ve studied and will study different methods for dealing with missing data: Joint modeling, multiple imputation, latent variable modeling, EM, Bayes. If you like, you could do a deep dive on a methodology in one of these areas from a theoretical or simulation-study standpoint. If you go with this sort of project and you’re doing a simulation study, make sure that you design your simulation study to have a high-enough power to detect whatever interesting thing you’re investigating. This may require using the computing cluster. If you’re doing a theoretical deep dive on the material, you’ll also want to run a simulation study to ensure that your theoretical results hold in different scenarios.</p>
 </section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ul>
-<li><a href="./missing-data-material-W-26/notes/lecture-1-notes.html">Lecture 1 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-2-notes.html">Lecture 2 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-3-notes.html">Lecture 3 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-4-notes.html">Lecture 4 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-5-notes.html">Lecture 5 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-6-notes.html">Lecture 6 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-7-notes.html">Lecture 7 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-8-notes.html">Lecture 8 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-9-notes.html">Lecture 9 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-10-notes.html">Lecture 10 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-11-notes.html">Lecture 11 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-12-notes.html">Lecture 12 notes</a></li>
-</ul>
+<section id="pedagogical-material" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="pedagogical-material"><span class="header-section-number">2.3</span> Pedagogical material</h2>
+<p>If you’re interested in learning more about a certain topic we covered in class or a topic you wished we had covered in class, you can develop pedagogical material related to this topic. The material should have some coding aspect to it because missing data is an applied discipline.</p>
 </section>
-<section id="mcmc-notes" class="level3">
-<h3 class="anchored" data-anchor-id="mcmc-notes">MCMC notes</h3>
-<ul>
-<li><a href="./missing-data-material-W-26/notes/MCMC-lecture-1.html">MCMC intro and diagnostics</a></li>
-<li><a href="./missing-data-material-W-26/notes/MCMC-lecture-2.html">Hamiltonian Monte Carlo</a></li>
-</ul>
 </section>
-<section id="hw" class="level3">
-<h3 class="anchored" data-anchor-id="hw">HW</h3>
-<ul>
-<li><a href="./missing-data-material-W-26/homeworks/HW-1.html">HW 1</a></li>
-<li><a href="./missing-data-material-W-26/homeworks/HW-2.html">HW 2</a></li>
-</ul>
+<section id="project-proposal-instructions" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Project proposal instructions</h1>
+<p>Describe the project you plan to do using a maximum of one page. Be specific about what dataset you plan to use, what questions you want to ask, and the methodologies you think you might use. Please come talk to me about your idea if you have any questions.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
