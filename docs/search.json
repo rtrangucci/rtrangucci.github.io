@@ -1430,28 +1430,28 @@
   {
     "objectID": "survival-material/proposal.html",
     "href": "survival-material/proposal.html",
-    "title": "Project proposal",
+    "title": "Project proposal for survival analysis",
     "section": "",
     "text": "Report\nMax Length\nDue date\nGrade\n\n\n\n(w/o refs)\n\n\n\n\nProject proposal\n1 page\n3/03 11:59pm\n5% of final grade\n\n\nFinal project report\n8 pages\n3/17 11:59pm\n15% of final grade\n\n\n\nThe final report will be due on 3/17 at 11:59pm PT, and will be worth 15% of your final grade. The project proposal will be due on 3/03 at 11:59pm PT, and will be worth 5% of your final grade.\nSubmission of both will be through Gradescope, where I’ll create new assignments for the proposal and the final project."
   },
   {
     "objectID": "survival-material/proposal.html#data-analysis",
     "href": "survival-material/proposal.html#data-analysis",
-    "title": "Project proposal",
+    "title": "Project proposal for survival analysis",
     "section": "2.1 Data analysis",
     "text": "2.1 Data analysis\nIn this route, you’ll find a dataset that has a time-to-failure or time-to-event outcome. Examples of this include time to cancer remission, time to death after a heart transplant, time to infection with a certain pathogen, time to marriage, time to bankruptcy, time to acquisition, etc.. It could be recurrent data, like time to tumor recurrence in a subset of patients who have had a tumor removed, or time to new product launch. You’ll use a method we learned in class or an extension of the methods in class to analyze the data. You can approach this project in two ways: you could find an interesting dataset, and then think of a question that could be answered by analyzing the dataset, or you could think of a question you’re interested in an look for data to answer the question. The first route is easier, but the second route is possible too."
   },
   {
     "objectID": "survival-material/proposal.html#methodology",
     "href": "survival-material/proposal.html#methodology",
-    "title": "Project proposal",
+    "title": "Project proposal for survival analysis",
     "section": "2.2 Methodology",
     "text": "2.2 Methodology\nWe’ve studied many different methods in survival analysis: parametric methods, nonparametric methods, many different hypothesis tests, and confidence intervals derived from these models, and model checking routines. If you like, you could do a deep dive on a methodology in one of these areas from a theoretical or simulation-study standpoint. If you go with this sort of project and you’re doing a simulation study, make sure that you design your simulation study to have a high-enough power to detect whatever interesting thing you’re investigating. This may require using the computing cluster. If you’re doing a theoretical deep dive on the material, you’ll also want to run a simulation study to ensure that your theoretical results hold in different scenarios."
   },
   {
     "objectID": "survival-material/proposal.html#pedagogical-material",
     "href": "survival-material/proposal.html#pedagogical-material",
-    "title": "Project proposal",
+    "title": "Project proposal for survival analysis",
     "section": "2.3 Pedagogical material",
     "text": "2.3 Pedagogical material\nIf you’re interested in learning more about a certain topic we covered in class or a topic you wished we had covered in class, you can develop pedagogical material related to this topic. The material should have some coding aspect to it because survival analysis is an applied discipline."
   },
@@ -1542,28 +1542,28 @@
   {
     "objectID": "missing-data-material-W-26/proposal.html",
     "href": "missing-data-material-W-26/proposal.html",
-    "title": "Project proposal",
+    "title": "Project proposal for missing data",
     "section": "",
-    "text": "Report\nMax Length\nDue date\nGrade\n\n\n\n(w/o refs)\n\n\n\n\nProject proposal\n1 page\n3/2 11:59pm\n10% of final grade\n\n\nFinal project report\n8 pages\n3/20 6:00pm\n40% of final grade\n\n\n\nThe final report will be due on 3/20 at 6pm PT, and will be worth 40% of your final grade. The project proposal will be due on 3/2 at 11:59pm PT, and will be worth 10% of your final grade.\nSubmission of both will be through Gradescope, where I’ll create new assignments for the proposal and the final project."
+    "text": "Report\nMax Length\nDue date\nGrade\n\n\n\n(w/o refs)\n\n\n\n\nProject proposal\n1 page\n3/03 11:59pm\n10% of final grade\n\n\nFinal project report\n8 pages\n3/20 6:00pm\n40% of final grade\n\n\n\nThe final report will be due on 3/20 at 6pm PT, and will be worth 40% of your final grade. The project proposal will be due on 3/3 at 11:59pm PT, and will be worth 10% of your final grade.\nSubmission of both will be through Gradescope, where I’ll create new assignments for the proposal and the final project."
   },
   {
     "objectID": "missing-data-material-W-26/proposal.html#data-analysis",
     "href": "missing-data-material-W-26/proposal.html#data-analysis",
-    "title": "Project proposal",
+    "title": "Project proposal for missing data",
     "section": "2.1 Data analysis",
     "text": "2.1 Data analysis\nDefine a research question that can be answered with a dataset that you have access to. The dataset will likely have missing, or coarsened values; any dataset that has no missing data is suspect. Use the dataset to answer your research question, and use techniques from the class to handle the missingness/coarseness. Run sensitivity analyses to determine if changing assumptions from MCAR, to MAR to MNAR affects your conclusions. Write up your conclusions in a report, and detail the methods you used, and the decisions you made about how to model your data and the missingness process. Argue why/why not ignorable missingness is a good assumption. You can approach this project in two ways: you could find an interesting dataset, and then think of a question that could be answered by analyzing the dataset, or you could think of a question you’re interested in an look for data to answer the question. The first route is easier, but the second route is possible too."
   },
   {
     "objectID": "missing-data-material-W-26/proposal.html#methodology",
     "href": "missing-data-material-W-26/proposal.html#methodology",
-    "title": "Project proposal",
+    "title": "Project proposal for missing data",
     "section": "2.2 Methodology",
     "text": "2.2 Methodology\nWe’ve studied and will study different methods for dealing with missing data: Joint modeling, multiple imputation, latent variable modeling, EM, Bayes. If you like, you could do a deep dive on a methodology in one of these areas from a theoretical or simulation-study standpoint. If you go with this sort of project and you’re doing a simulation study, make sure that you design your simulation study to have a high-enough power to detect whatever interesting thing you’re investigating. This may require using the computing cluster. If you’re doing a theoretical deep dive on the material, you’ll also want to run a simulation study to ensure that your theoretical results hold in different scenarios."
   },
   {
     "objectID": "missing-data-material-W-26/proposal.html#pedagogical-material",
     "href": "missing-data-material-W-26/proposal.html#pedagogical-material",
-    "title": "Project proposal",
+    "title": "Project proposal for missing data",
     "section": "2.3 Pedagogical material",
     "text": "2.3 Pedagogical material\nIf you’re interested in learning more about a certain topic we covered in class or a topic you wished we had covered in class, you can develop pedagogical material related to this topic. The material should have some coding aspect to it because missing data is an applied discipline."
   },
