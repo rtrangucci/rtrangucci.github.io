@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Missing data lecture 12: MNAR</title>
+<title>Missing data lecture 12: MNAR missingness</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -195,7 +195,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#mnar-missingness" id="toc-mnar-missingness" class="nav-link active" data-scroll-target="#mnar-missingness">MNAR missingness</a></li>
+  <li><a href="#non-ignorable-missingness" id="toc-non-ignorable-missingness" class="nav-link active" data-scroll-target="#non-ignorable-missingness">Non-ignorable missingness</a></li>
   <li><a href="#approaches-to-modeling-mnar-data-pattern-mixture-and-selection-models" id="toc-approaches-to-modeling-mnar-data-pattern-mixture-and-selection-models" class="nav-link" data-scroll-target="#approaches-to-modeling-mnar-data-pattern-mixture-and-selection-models">Approaches to modeling MNAR data: Pattern-mixture and selection models</a>
   <ul class="collapse">
   <li><a href="#example-univariate-nonresponse" id="toc-example-univariate-nonresponse" class="nav-link" data-scroll-target="#example-univariate-nonresponse">Example: Univariate nonresponse</a></li>
@@ -213,7 +213,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Missing data lecture 12: MNAR</h1>
+<h1 class="title">Missing data lecture 12: MNAR missingness</h1>
 </div>
 
 
@@ -230,8 +230,8 @@ window.Quarto = {
 </header>
 
 
-<section id="mnar-missingness" class="level2">
-<h2 class="anchored" data-anchor-id="mnar-missingness">MNAR missingness</h2>
+<section id="non-ignorable-missingness" class="level2">
+<h2 class="anchored" data-anchor-id="non-ignorable-missingness">Non-ignorable missingness</h2>
 <p>The past few lectures have assumed that we have had ignorable missingness, so that inferences under: <span class="math display">\[
 L_\text{full}(\theta, \phi \mid \tilde{m}, \tilde{y}_{(0)}) \propto \int_{\mathcal{Y}_{(1)}} f_Y(Y_{(0)} = \tilde{y}_{(0)}, Y_{(1)} = y_{(1)}\mid \theta) P(M = \tilde{m} \mid Y_{(0)} = \tilde{y}_{(0)}, Y_{(1)} = y_{(1)}, \phi) dy_{(1)}
 \]</span> were equivalent to inferences under <span class="math display">\[
@@ -351,6 +351,38 @@ z_{i} &amp; = x_i^T \gamma^\prime + \epsilon_{i2} \\
 m_i &amp; = \ind{z_i &gt; 0}
 \end{aligned}
 \]</span></p>
+<p>Why is this the case that identification follows from the normality assumption?</p>
+<p>The standard procedure for estimating these models is via a two step procedure:</p>
+<ol type="1">
+<li><p>Fit a probit model to the missingness indicators to learn <span class="math inline">\(\gamma^\prime\)</span>.</p></li>
+<li><p>Fit a linear regression model for <span class="math inline">\(y_{i1}\)</span> on <span class="math inline">\(x_i\)</span> and the conditional expectation of <span class="math inline">\(z_i \mid z_i &lt; 0\)</span>, which we get from the probit model.</p></li>
+</ol>
+<p>Let’s look at the conditional expectation of <span class="math inline">\(y_{i1} \mid z_i\)</span> given <span class="math inline">\(z_i &lt; 0\)</span>. We know the conditional expectation of <span class="math inline">\(y_{i1} \mid z_i = z\)</span>: <span class="math display">\[
+x_i^T \beta + \rho \sigma (z_i - x_i^T \gamma^\prime)
+\]</span> What is the conditional expectation of <span class="math inline">\(z \mid z &lt; 0\)</span>? This is called the inverse Mills ratio: <span class="math display">\[
+\Exp{z \mid z &lt; 0} = x_i^T \gamma^\prime - \frac{\phi(-x_i^T \gamma^\prime)}{\Phi(-x_i^T \gamma^\prime)}
+\]</span> Plugging this in above gives: <span class="math display">\[
+x_i^T \beta - \rho \sigma \frac{\phi(-x_i^T \gamma^\prime)}{\Phi(-x_i^T \gamma^\prime)}
+\]</span></p>
+<p>Thus, this is design matrix for the model we would fit to the units in which <span class="math inline">\(y_{i1}\)</span> is observed: <span class="math display">\[
+\begin{bmatrix}
+x_1^T &amp; \phi(-x_1^T \hat{\gamma}^\prime)/\Phi(-x_1^T \hat{\gamma}^\prime) \\
+x_2^T &amp; \phi(-x_2^T \hat{\gamma}^\prime)/\Phi(-x_2^T \hat{\gamma}^\prime) \\
+\vdots &amp; \vdots \\
+x_n^T &amp; \phi(-x_n^T \hat{\gamma}^\prime)/\Phi(-x_n^T \hat{\gamma}^\prime) \\
+\end{bmatrix}
+\]</span></p>
+<p>To the extent that the function <span class="math inline">\(\phi(\cdot)/\Phi(\cdot)\)</span>, which is called the inverse Mills ratio, is linear in its arguments, this extra term in the regression will be collinear with <span class="math inline">\(x_i^T \beta\)</span> and the parameter <span class="math inline">\(\rho\)</span> won’t be well-identified. Let’s plot the function to see what it looks like:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lecture-12-notes_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Thus, the regression for <span class="math inline">\(y_{i1}\)</span> on <span class="math inline">\(x_i\)</span> and the Inverse Mills Ratio in the selected units is identified solely by the shape of the Inverse Mills ratio.</p>
 <p>If we can write the model instead like: <span class="math display">\[
 \begin{aligned}
 y_{i1} &amp; \sim \text{Normal}(x_i^T \beta, \sigma^2) \\
@@ -409,7 +441,7 @@ P(y_{i1} = 1, m_i = 1) &amp; = \Phi(\mu_i^Y, \mu_i^M, \rho)
 <p>The researchers found that incidence estimates for differet subgroups could be impacted by refusal bias, so it was necessary to perform this adjustment.</p>
 </div>
 <p>There is another bivariate normal model that is identified by exclusion restrictions.</p>
-<div id="exm-bivar-nom" class="theorem example">
+<div id="exm-bivar-norm" class="theorem example">
 <p><span class="theorem-title"><strong>Example 2 (Bivariate Pattern mixture model)</strong></span> Imagine we’re running a household survey on income, so we can observe the address at which someone lives, but we might not learn household income due to refusals.</p>
 <p>Let <span class="math inline">\(Y_{i1}\)</span> be the log-household value, which we obtain from Zillow, or from property tax assessments, and <span class="math inline">\(Y_{i2}\)</span> be the log of the response to a question about household income on a survey. Let <span class="math inline">\(M_i = 1\)</span> when <span class="math inline">\(Y_{i2}\)</span> is missing and <span class="math inline">\(0\)</span> when it is observed. Let <span class="math inline">\(i = 1, \dots, r\)</span> be the cases for which we have observed log-income, and let <span class="math inline">\(i = r+1, \dots, n\)</span> be the observations that are missing log-income. We assume that we have log-houshold value for all survey respondents.</p>
 <p>We can use the pattern-mixture model for this scenario: <span class="math display">\[
@@ -440,6 +472,25 @@ f_Y(y_{i1} = y \mid Y_{i2} = y_{i2}, M_i = 1)  = f_Y(y_{i1} = y \mid Y_{i2} = y_
 \hat{\beta}_{10\cdot 2}^{(0)} = \bar{y}_1^{(0)} - \frac{s_{12}}{s_{22}}\bar{y}_2^{(0)}, \hat{\beta}_{12\cdot 2}^{(0)} = \frac{s_{12}}{s_{22}}
 \]</span> Thus we get the following MLE for the mean for <span class="math inline">\(y_{i2}\)</span> in the missing units: <span class="math display">\[
 \hat{\mu}_2^{(1)} = \bar{y}_2^{(0)} + \frac{\bar{y}_{1}^{(1)} - \bar{y}_{1}^{(0)}}{\frac{s_{12}}{s_{22}}}
+\]</span></p>
+</div>
+<div id="exm-bivar-pm" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3 (Sensitivity analysis for pattern-mixture models)</strong></span> Continuing from above</p>
+<p>We’ll suppose that we can construct a variable <span class="math inline">\(Y_{i2}^\star = Y_{i1} + \lambda Y_{i2}\)</span>, and that missingness depends only on <span class="math inline">\(Y_{i2}^\star\)</span>: We’ll suppose that the missingness mechanism has the following form: <span class="math display">\[
+P(M_i = 1 \mid Y_{i1} = y_{i1}, Y^\star_{i2} = y^\star_{i2}, \phi) = P(M_i = 1 \mid Y_{i2}^\star = y^\star_{i2}, \phi).
+\]</span> We would like to learn the following marginal expection for <span class="math inline">\(y_{i2}\)</span>: <span class="math display">\[
+\Exp{Y_{i2}} = \Exp{Y_{i2} \mid M_i = 0} (1 - \omega) + \Exp{Y_{i2} \mid M_i = 1} \omega
+\]</span> where we can’t calculate <span class="math inline">\(\Exp{Y_{i2} \mid M_i = 1}\)</span> directly. However, we can use the fact that the missingness mechanism does not depend on <span class="math inline">\(y_{i1}\)</span> to identify our model.</p>
+<p><span class="math display">\[
+\begin{aligned}
+f_Y(y_{i1} = y \mid Y^\star_{i2} = y^\star_{i2}, M_i = m) &amp; = \frac{f_Y(y_{i1} = y \mid Y^\star_{i2} = y^\star_{i2}) P(M_i = m \mid y_{i1} = y, Y^\star_{i2} = y^\star_{i2})}{P(M_i = m \mid Y^\star_{i2} = y^\star_{i2})} \\
+&amp; = \frac{f_Y(y_{i1} = y \mid Y^\star_{i2} = y^\star_{i2}) P(M_i = m \mid Y^\star_{i2} = y^\star_{i2})}{P(M_i = m \mid Y^\star_{i2} = y^\star_{i2})} \\
+&amp; = f_Y(y_{i1} = y \mid Y^\star_{i2} = y^\star_{i2})
+\end{aligned}
+\]</span> This means that the following holds: <span class="math display">\[
+f_Y(y_{i1} = y \mid Y^\star_{i2} = y^\star_{i2}, M_i = 1)  = f_Y(y_{i1} = y \mid Y^\star_{i2} = y^\star_{i2}, M_i = 0)
+\]</span> This means that we can infer the joint distribution of <span class="math inline">\(Y_{i2}, Y_{i1}\)</span> for <span class="math inline">\(M_i = 1\)</span> if the joint normality assumption holds. Some more algebra akin to <a href="#exm-bivar-norm" class="quarto-xref">Example&nbsp;2</a> leads to an expression of <span class="math inline">\(\mu_2^{(0)}\)</span>: <span class="math display">\[
+(\hat{\mu}_2)^{(1)} = \bar{y}_2^{(0)} + \frac{\lambda s_{22} + s_{12}}{\lambda s_{12} + s_{11}}(\bar{y}_{1}^{(1)} - \bar{y}_{1}^{(0)})
 \]</span></p>
 </div>
 
