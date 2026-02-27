@@ -205,6 +205,7 @@ window.Quarto = {
   <li><a href="#heckman-selection-model" id="toc-heckman-selection-model" class="nav-link" data-scroll-target="#heckman-selection-model">Heckman selection model</a></li>
   </ul></li>
   <li><a href="#selection-models-with-exclusion-restrictions" id="toc-selection-models-with-exclusion-restrictions" class="nav-link" data-scroll-target="#selection-models-with-exclusion-restrictions">Selection models with exclusion restrictions</a></li>
+  <li><a href="#further-investigations-of-identifiablity-and-tukeys-selection-model" id="toc-further-investigations-of-identifiablity-and-tukeys-selection-model" class="nav-link" data-scroll-target="#further-investigations-of-identifiablity-and-tukeys-selection-model">Further investigations of identifiablity and Tukey’s selection model</a></li>
   </ul>
 </nav>
     </div>
@@ -440,6 +441,30 @@ P(y_{i1} = 1, m_i = 1) &amp; = \Phi(\mu_i^Y, \mu_i^M, \rho)
 \]</span> This model is called the bivariate probit model, and you will fit this model in Stan for the next HW to a similar dataset.</p>
 <p>The researchers found that incidence estimates for differet subgroups could be impacted by refusal bias, so it was necessary to perform this adjustment.</p>
 </div>
+</section>
+<section id="further-investigations-of-identifiablity-and-tukeys-selection-model" class="level2">
+<h2 class="anchored" data-anchor-id="further-investigations-of-identifiablity-and-tukeys-selection-model">Further investigations of identifiablity and Tukey’s selection model</h2>
+<p><span class="citation" data-cites="wainerDrawingInferencesSelfSelected1986">Wainer (<a href="#ref-wainerDrawingInferencesSelfSelected1986" role="doc-biblioref">1986</a>)</span> presents Holland’s commentary on selection models and Tukey’s proposed alternative selection model. Let <span class="math inline">\(Y_{i}\)</span> be the measurement of interest, and let <span class="math inline">\(M_i\)</span> be the missingness indicator. The selection model factorizes the joint distribution for <span class="math inline">\(P(Y_i = y, M_i = m \mid \theta, \phi)\)</span> as <span class="math inline">\(P(Y_i = y \mid \theta) P(M_i = m \mid Y_i = y, \phi)\)</span>, while the pattern-mixture model factorizes the joint as <span class="math inline">\(P(M_i = m \mid \phi) P(Y_i = y \mid M_i = m, \theta)\)</span>. We can express the selection model in terms of the pattern mixture model: <span class="math display">\[
+P(M_i = m \mid Y_i = y, \phi) = \frac{P(M_i = m \mid \phi)P(Y_i = y \mid M_i = m, \theta)}{P(Y_i = y \mid M_i = 0, \theta)P(M_i = 0 \mid \phi) + P(Y_i = y \mid M_i = 1, \theta)P(M_i = 1 \mid \phi)}
+\]</span> Then we can write the odds of missingness, or <span class="math inline">\(P(M_i = 1 \mid Y_i = y, \phi)/P(M_i = 0 \mid Y_i = y, \phi)\)</span> as: <span id="eq-odds-miss"><span class="math display">\[
+\frac{P(M_i = 1 \mid Y_i = y, \phi)}{P(M_i = 0 \mid Y_i = y, \phi)} = \frac{P(M_i = 1 \mid \phi)P(Y_i = y \mid M_i = 1, \theta)}{P(M_i = 0 \mid \phi)P(Y_i = y \mid M_i = 0, \theta)}
+\tag{1}\]</span></span> In log-odds form we get:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\log\lp\frac{P(M_i = 1 \mid Y_i = y, \phi)}{P(M_i = 0 \mid Y_i = y, \phi)}\rp &amp; = \log\lp\frac{P(M_i = 1 \mid \phi)}{P(M_i = 0 \mid \phi)}\rp \\
+&amp; \quad + \log\lp P(Y_i = y \mid M_i = 1, \theta)\rp \\
+&amp; \quad - \log\lp P(Y_i = y \mid M_i = 0, \theta)\rp
+\end{aligned}
+\]</span> Holland argues that the uncertainty in the LHS is driven mainly by the unidentifiable term <span class="math inline">\(\log\lp P(Y_i = y \mid M_i = 1, \theta)\rp\)</span> on the RHS, which is unidentifiable. Instead, he advocates for Tukey’s idea which stems from rearranging <a href="#eq-odds-miss" class="quarto-xref">Equation&nbsp;1</a>:</p>
+<p><span class="math display">\[
+P(Y_i = y \mid M_i = 1, \theta) = \frac{P(M_i = 0 \mid \phi)}{P(M_i = 1 \mid \phi)}\frac{P(M_i = 1 \mid Y_i = y, \phi)}{P(M_i = 0 \mid Y_i = y, \phi)}P(Y_i = y \mid M_i = 0, \theta)
+\]</span> This is the so called simplified selection model; on the RHS the selection odds is unidentified so it allows for a principled approach to sensitivity analysis. For instance, we can parameterize the odds of selection given <span class="math inline">\(y\)</span> as an exponential function of <span class="math inline">\(y\)</span>.</p>
+<p><span class="math display">\[
+P(Y_i = y \mid M_i = 1, \theta) = \frac{P(M_i = 0 \mid \phi)}{P(M_i = 1 \mid \phi)}e^{\beta y}P(Y_i = y \mid M_i = 0, \theta)
+\]</span></p>
+<p>The resulting marginal distribution for <span class="math inline">\(Y_i\)</span> is: <span class="math display">\[
+P(Y_i = y \mid \theta) = (1 + e^{\beta y})P(M_i = 0 \mid \phi) P(Y_i = y \mid M_i = 0, \theta)
+\]</span> One can investigate how <span class="math inline">\(P(Y_i = y \mid \theta)\)</span> changes with respect to different <span class="math inline">\(\beta\)</span> values.</p>
 <p>There is another bivariate normal model that is identified by exclusion restrictions.</p>
 <div id="exm-bivar-norm" class="theorem example">
 <p><span class="theorem-title"><strong>Example 2 (Bivariate Pattern mixture model)</strong></span> Imagine we’re running a household survey on income, so we can observe the address at which someone lives, but we might not learn household income due to refusals.</p>
@@ -504,6 +529,9 @@ Janssens, Wendy, Jacques van der Gaag, Tobias F Rinke de Wit, and Zlata Tanović
 </div>
 <div id="ref-rothenberg" class="csl-entry" role="listitem">
 Rothenberg, Thomas J. 1971. <span>“Identification in <span>Parametric Models</span>.”</span> <em>Econometrica</em> 39 (3): 577–91. <a href="https://doi.org/10.2307/1913267">https://doi.org/10.2307/1913267</a>.
+</div>
+<div id="ref-wainerDrawingInferencesSelfSelected1986" class="csl-entry" role="listitem">
+Wainer, Howard. 1986. <em>Drawing <span>Inferences</span> from <span>Self</span>-<span>Selected</span> <span>Samples</span></em>. New York, NY: Springer New York.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
