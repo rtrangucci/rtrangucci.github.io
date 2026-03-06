@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 599 - W 26: Missing data and causal inference</title>
+<title>Missing data lecture 14: Propensity score methods</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +23,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-fd68462179fdb1eb8400a3e2e38edf1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +68,67 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+      \newcommand{\R}{\mathbb{R}}
+      \newcommand{\comp}{\mathsf{c}}
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Var}[1]{\text{Var} \lp #1 \rp}
+        \newcommand{\VarA}[2]{\text{Var}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\abs}[1]{\left| #1 \right|}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +144,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -117,18 +175,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set up</a>
   <ul class="collapse">
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives"><strong>Course objectives</strong></a></li>
-  <li><a href="#course-learning-outcomes" id="toc-course-learning-outcomes" class="nav-link" data-scroll-target="#course-learning-outcomes"><strong>Course learning outcomes</strong></a></li>
-  <li><a href="#schedule-and-readings" id="toc-schedule-and-readings" class="nav-link" data-scroll-target="#schedule-and-readings">Schedule and readings</a></li>
-  <li><a href="#course-syllabus" id="toc-course-syllabus" class="nav-link" data-scroll-target="#course-syllabus">Course syllabus</a></li>
-  <li><a href="#project-proposal" id="toc-project-proposal" class="nav-link" data-scroll-target="#project-proposal">Project proposal</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#mcmc-notes" id="toc-mcmc-notes" class="nav-link" data-scroll-target="#mcmc-notes">MCMC notes</a></li>
-  <li><a href="#hw" id="toc-hw" class="nav-link" data-scroll-target="#hw">HW</a></li>
+  <li><a href="#super-population-vs.-finite-sample-inference" id="toc-super-population-vs.-finite-sample-inference" class="nav-link" data-scroll-target="#super-population-vs.-finite-sample-inference">Super population vs.&nbsp;finite sample inference</a></li>
   </ul></li>
+  <li><a href="#balancing-scores" id="toc-balancing-scores" class="nav-link" data-scroll-target="#balancing-scores">Balancing scores</a></li>
   </ul>
 </nav>
     </div>
@@ -137,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 599 - W 26: Missing data and causal inference</h1>
+<h1 class="title">Missing data lecture 14: Propensity score methods</h1>
 </div>
 
 
@@ -154,241 +205,105 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level2">
-<h2 class="anchored" data-anchor-id="syllabus">Syllabus</h2>
-<section id="textbook" class="level3">
-<h3 class="anchored" data-anchor-id="textbook">Textbook:</h3>
-<ul>
-<li><p>Required: <em>Statistical Analysis with Missing Data, 3rd edition</em> Little and Rubin</p></li>
-<li><p>Required: <em>Causal Inference for Statistics, Social, and Biomedical Sciences</em>, Imbens and Rubin</p></li>
-<li><p>Optional: <em>Bayesian Inference for Partially Identified Models</em>, Gustafson</p></li>
-</ul>
+<section id="set-up" class="level1">
+<h1>Set up</h1>
+<p>Despite the importance of randomized trials, there are many causal queries we may wish to make for which a randomized trial is infeasible or unethical. In this case, if we can find an observational dataset in which <strong>unconfounded treatment assignment</strong> holds, then we may be able to do causal inference.</p>
+<p>The sampling properties of the estimators we will cover in this lecture will be derived from taking a bit different persepctive than in last lecture. In the previous lectures we were focused on inference under the randomization distribution of the treatment assignment. In this chapter, we will consider the sample at hand to have been drawn from a broader, often infinite, super population, and it is under repeated samples from the super population under which we will derive the sampling properties of our estimators.</p>
+<section id="super-population-vs.-finite-sample-inference" class="level2">
+<h2 class="anchored" data-anchor-id="super-population-vs.-finite-sample-inference">Super population vs.&nbsp;finite sample inference</h2>
+<p>In the previous lecture we investigated the properties of difference-in-means <strong>estimator</strong> which was shown to be unbiased for the causal <strong>estimand</strong> the finite sample average causal effect: <span class="math display">\[
+\tau_{\text{fs}} = \frac{1}{n}\sum_{i=1}^N (Y_i(1) - Y_i(0))
+\]</span> In the superpopulation perspective, we will be targeting the super-population average treatement effect: <span class="math display">\[
+\tau_{\text{sp}} = \ExpA{Y_i(1) - Y_i(0)}{\text{sp}}
+\]</span></p>
+<p>The generative model is something like: <span class="math display">\[
+\begin{aligned}
+(Y_i(0), Y_i(1), X_i) &amp; \overset{\text{iid}}{\sim} F,\, i = 1, \dots, n\\
+\mathbf{W} \mid (\mathbf{Y}(0), \mathbf{Y}(1), \mathbf{X}) &amp; \sim P_{\mathbf{W} \mid \mathbf{Y}(0), \mathbf{Y}(1), \mathbf{X}}
+\end{aligned}
+\]</span> In the setting of a randomized trial, the experimenter controls the assignment mechanism, but doesn’t control the sampling bit (though we could imagine exclusion critera in an RCT that excludes groups based on pretreatment covariates).</p>
+<p>In this expression, the expectation is taken over repeated sampling from the super-population. Note that the expectation of <span class="math inline">\(\tau_{\text{fs}}\)</span> over the super-population equals <span class="math inline">\(\tau_{\text{sp}}\)</span>.</p>
+<p>It’s important to keep in mind that the treatment assignment is still random, it’s just that there is another level of randomness,</p>
+<p>Let <span class="math display">\[\sigma_t^2 = \VarA{Y_i(1)}{\text{sp}},\]</span> <span class="math display">\[\sigma_c^2 = \VarA{Y_i(0)}{\text{sp}},\]</span><br>
+<span class="math display">\[\sigma_{tc}^2 = \VarA{Y_i(1) - Y_i(0)}{\text{sp}} = \ExpA{(Y_i(1) - Y_i(0) - \tau_{\text{sp}})^2}{\text{sp}}\]</span> Note that <span class="math inline">\(\VarA{\tau_{\text{fs}}}{\text{sp}} = \VarA{\bar{Y}_(1) - \bar{Y}_(0)}{\text{sp}} = \sigma^2_{tc} / n\)</span></p>
+<p>The total variance (over both the super-population sampling distribution and the finite sample distribution of the treatment assignment given the fixed potential outcomes) of the difference in means estimator: <span class="math display">\[
+\hat{\tau}^{\text{dif}} = \bar{Y}_t - \bar{Y}_c
+\]</span> has a nice expression: <span class="math display">\[
+\VarA{\hat{\tau}^{\text{dif}}}{(W, Y(0), Y(1))} = \frac{\sigma_c^2}{n_c} + \frac{\sigma_t^2}{n_t}
+\]</span> In what comes next, when we use <span class="math inline">\(\Var{Y}\)</span>, or <span class="math inline">\(\Exp{X}\)</span> we mean the variance over the joint distrubtion of <span class="math inline">\(\mathbf{W}, \mathbf{Y}(0), \mathbf{Y}(1)\)</span></p>
+<p>This comes from the following: <span class="math display">\[
+\begin{aligned}
+\Var{\hat{\tau}^{\text{dif}}} &amp; = \Exp{(\bar{Y}_t - \bar{Y}_c - \Exp{\bar{Y}_t - \bar{Y}_c})^2}\\
+&amp; = \Exp{\left(\bar{Y}_t - \bar{Y}_c - \ExpA{\ExpA{\bar{Y}_t - \bar{Y}_c \mid \mathbf{Y}(0),\mathbf{Y}(1)}{\mathbf{W} \mid \mathbf{Y}(0),\mathbf{Y}(1)}}{\text{sp}}\right)^2}\\
+&amp; = \Exp{\left(\bar{Y}_t - \bar{Y}_c - \ExpA{\tau_{\text{fs}}}{\text{sp}}\right)^2}\\
+&amp; = \Exp{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{sp}}\right)^2}\\
+&amp; = \Exp{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{fs}} + \tau_{\text{fs}} - \tau_{\text{sp}}\right)^2}\\
+&amp; = \Exp{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{fs}}\right)^2} + \Exp{\left(\tau_{\text{fs}} - \tau_{\text{sp}}\right)^2}\\
+&amp; \quad  + 2\Exp{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{fs}}\right)\left(\tau_{\text{fs}} - \tau_{\text{sp}}\right)}
+\end{aligned}
+\]</span> Note <span class="math display">\[
+\begin{aligned}
+\ExpA{\ExpA{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{fs}}\right)\left(\tau_{\text{fs}} - \tau_{\text{sp}}\right)}{\mathbf{W} \mid \mathbf{Y}(0), \mathbf{Y}(1)}}{\text{sp}} &amp; = \ExpA{\left(\tau_{\text{fs}} - \tau_{\text{sp}}\right)\ExpA{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{fs}}\right)}{\mathbf{W} \mid \mathbf{Y}(0), \mathbf{Y}(1)}}{\text{sp}} \\
+&amp; = \ExpA{\left(\tau_{\text{fs}} - \tau_{\text{sp}}\right)\ExpA{\left(\bar{Y}_t - \bar{Y}_c\right)}{\mathbf{W} \mid \mathbf{Y}(0), \mathbf{Y}(1)} - \tau_{\text{fs}}}{\text{sp}} \\
+&amp; = \ExpA{\left(\tau_{\text{fs}} - \tau_{\text{sp}}\right)\tau_{\text{fs}} - \tau_{\text{fs}}}{\text{sp}} \\
+&amp; = 0
+\end{aligned}
+\]</span> Thus our variance is the sum of two terms</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Var{\hat{\tau}^{\text{dif}}} &amp; = \Exp{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{fs}}\right)^2} + \Exp{\left(\tau_{\text{fs}} - \tau_{\text{sp}}\right)^2}\\
+&amp; = \Exp{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{fs}}\right)^2} + \ExpA{\left(\tau_{\text{fs}} - \tau_{\text{sp}}\right)^2}{\text{sp}}\\
+\end{aligned}
+\]</span></p>
+<p><span class="math inline">\(\ExpA{\left(\tau_{\text{fs}} - \tau_{\text{sp}}\right)^2}{\text{sp}}\)</span> is equal to <span class="math inline">\(\sigma^2_{tc} / n\)</span></p>
+<p>The first part <span class="math inline">\(\Exp{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{fs}}\right)^2}\)</span> can be decomposed using the law of iterated expectations: <span class="math display">\[
+\begin{aligned}
+\Exp{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{fs}}\right)^2} &amp; = \ExpA{\left(\bar{Y}_t - \bar{Y}_c - \tau_{\text{fs}}\right)^2}{\mathbf{W} \mid \mathbf{Y}(0), \mathbf{Y}(1)} \\
+&amp; = \ExpA{\frac{S^2_t}{n_t} + \frac{S^2_c}{n_c} - \frac{S^2_{tc}}{n}}{\text{sp}} \\
+&amp; = \frac{\sigma^2_t}{n_t} + \frac{\sigma^2_c}{n_c} - \frac{\sigma^2_{tc}}{n}
+\end{aligned}
+\]</span></p>
+<p>Combining the two results gives us the expression for the super population variance</p>
 </section>
-<section id="course-objectives" class="level3">
-<h3 class="anchored" data-anchor-id="course-objectives"><strong>Course objectives</strong></h3>
-<p>Upon completion of this course, students should be able to critically evaluate how published literature handles (or does not handle) missing data, and analyze datasets that have missing values by designing models that account for missingness. Students should also be able to read published literature using randomized study designs, and assess whether researchers’ causal conclusions are reasonable.</p>
 </section>
-<section id="course-learning-outcomes" class="level3">
-<h3 class="anchored" data-anchor-id="course-learning-outcomes"><strong>Course learning outcomes</strong></h3>
-<ol type="1">
-<li>Differentiate between missing-completely-at-random, missing-at-random (MAR), and missing-not-at-random (MNAR) processes via assumptions about the joint distribution of missingness indicators, outcomes, and covariates.</li>
-<li>Evaluate whether estimands of interest are appropriately estimated under missingness for a given missing data technique (complete case analysis, multiple imputation, data augmentation, etc.).</li>
-<li>Derive the identification region and limiting posterior density for partially-identified models.</li>
-<li>Derive a principal causal effect using the Neyman-Rubin causal model.</li>
-<li>Construct and fit maximum likelihood (in R)/Bayesian models (in Stan) for MAR, MNAR, and causal models.</li>
-</ol>
-</section>
-<section id="schedule-and-readings" class="level3">
-<h3 class="anchored" data-anchor-id="schedule-and-readings">Schedule and readings</h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Topic</th>
-<th>Reading</th>
-<th>LO</th>
-<th>Assignments</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1/6/2026</td>
-<td>Missingness mechanisms and patterns</td>
-<td>LR 1.1-1.4</td>
-<td>1, 2</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>1/8/2026</td>
-<td>Missing data techniques<br> Complete case analysis <br> Weighting</td>
-<td>LR Ch. 3</td>
-<td>1, 2</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>1/13/2026</td>
-<td>Single imputation techniques</td>
-<td>LR Ch. 4</td>
-<td>1, 2</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>1/15/2026</td>
-<td>Multiple imputation techniques</td>
-<td>LR Ch. 5</td>
-<td>1, 2</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>1/20/2026</td>
-<td>Likelihood theory</td>
-<td>LR Ch. 6</td>
-<td>1, 5</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>1/22/2026</td>
-<td>MV normal MLE, matrix differentials</td>
-<td>LR Ch. 6</td>
-<td>1, 5</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>1/27/2026</td>
-<td>Asymptotics of MLEs</td>
-<td>LR Ch. 6</td>
-<td>1, 5</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>1/29/2026</td>
-<td>Bayes intro</td>
-<td>LR Ch. 6</td>
-<td>1, 5</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>2/3/2026</td>
-<td>Bayes cont’d</td>
-<td>LR Ch. 6,10</td>
-<td>1, 5</td>
-<td>1</td>
-</tr>
-<tr class="even">
-<td>2/5/2026</td>
-<td>Likelihood with missingness</td>
-<td>LR Ch. 6,7</td>
-<td>2, 5</td>
-<td>1</td>
-</tr>
-<tr class="odd">
-<td>2/10/2026</td>
-<td>Coarsening</td>
-<td>LR Ch. 6</td>
-<td>2, 5</td>
-<td>2</td>
-</tr>
-<tr class="even">
-<td>2/12/2026</td>
-<td>Incorrect like. inf. under missingnness</td>
-<td>LR Ch. 6</td>
-<td>2, 5</td>
-<td>2</td>
-</tr>
-<tr class="odd">
-<td>2/17/2026</td>
-<td>EM</td>
-<td>LR Ch. 8,11</td>
-<td>2, 5</td>
-<td>3</td>
-</tr>
-<tr class="even">
-<td>2/19/2026</td>
-<td>EM cont’d and MNAR missingness</td>
-<td>LR Ch. 8,9,11,15</td>
-<td>2, 5</td>
-<td>3</td>
-</tr>
-<tr class="odd">
-<td>2/24/2026</td>
-<td>MNAR missingness</td>
-<td>LR Ch. 15</td>
-<td>1, 5</td>
-<td>3</td>
-</tr>
-<tr class="even">
-<td>2/26/2026</td>
-<td>Causal inference intro</td>
-<td>IR Ch. 1,3,4</td>
-<td>4</td>
-<td>4</td>
-</tr>
-<tr class="odd">
-<td>3/3/2026</td>
-<td>Propensity scores</td>
-<td>IR Ch. 4,6,12,13</td>
-<td>4</td>
-<td>4</td>
-</tr>
-<tr class="even">
-<td>3/5/2026</td>
-<td>Principal stratification</td>
-<td>IR Ch. 23, 24</td>
-<td>4</td>
-<td>4</td>
-</tr>
-<tr class="odd">
-<td>3/10/2026</td>
-<td>Presentations</td>
-<td>NA</td>
-<td>NA</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>3/12/2026</td>
-<td>Presentations</td>
-<td>NA</td>
-<td>NA</td>
-<td>NA</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="course-syllabus" class="level3">
-<h3 class="anchored" data-anchor-id="course-syllabus">Course syllabus</h3>
-<ul>
-<li><a href="missing-data-material-W-26/missing-data-syllabus-W26.pdf">Syllabus</a></li>
-</ul>
-</section>
-<section id="project-proposal" class="level3">
-<h3 class="anchored" data-anchor-id="project-proposal">Project proposal</h3>
-<ul>
-<li><a href="./missing-data-material-W-26/proposal.html">Project proposal</a></li>
-</ul>
-</section>
-<section id="course-notes" class="level3">
-<h3 class="anchored" data-anchor-id="course-notes">Course notes</h3>
-<ul>
-<li><a href="./missing-data-material-W-26/notes/lecture-1-notes.html">Lecture 1 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-2-notes.html">Lecture 2 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-3-notes.html">Lecture 3 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-4-notes.html">Lecture 4 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-5-notes.html">Lecture 5 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-6-notes.html">Lecture 6 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-7-notes.html">Lecture 7 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-8-notes.html">Lecture 8 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-9-notes.html">Lecture 9 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-10-notes.html">Lecture 10 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-11-notes.html">Lecture 11 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-12-notes.html">Lecture 12 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-13-notes.html">Lecture 13 notes</a></li>
-<li><a href="./missing-data-material-W-26/notes/lecture-14-notes.html">Lecture 14 notes</a></li>
-</ul>
-</section>
-<section id="mcmc-notes" class="level3">
-<h3 class="anchored" data-anchor-id="mcmc-notes">MCMC notes</h3>
-<ul>
-<li><a href="./missing-data-material-W-26/notes/MCMC-lecture-1.html">MCMC intro and diagnostics</a></li>
-<li><a href="./missing-data-material-W-26/notes/MCMC-lecture-2.html">Hamiltonian Monte Carlo</a></li>
-</ul>
-</section>
-<section id="hw" class="level3">
-<h3 class="anchored" data-anchor-id="hw">HW</h3>
-<ul>
-<li><a href="./missing-data-material-W-26/homeworks/HW-1.html">HW 1</a></li>
-<li><a href="./missing-data-material-W-26/homeworks/HW-2.html">HW 2</a></li>
-<li><a href="./missing-data-material-W-26/homeworks/HW-3.html">HW 3</a></li>
-</ul>
+<section id="balancing-scores" class="level1">
+<h1>Balancing scores</h1>
+<p>A balancing score <span class="math inline">\(b(X_i)\)</span> is such that <span class="math inline">\(W_i \indy X_i \mid b(X_i)\)</span>.</p>
+<p>We will show that <span class="math inline">\(P(W_i = 1 \mid X_i) = e(X_i)\)</span> is a balancing score, or <span class="math inline">\(P(W_i = 1 \mid X_i, e(X_i)) = P(W_i = 1 \mid e(X_i))\)</span></p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span><span class="math display">\[
+\begin{aligned}
+P(W_i = 1 \mid X_i, e(X_i)) &amp; = P(W_i = 1 \mid X_i)  \\
+&amp; = e(X_i)
+\end{aligned}
+\]</span></p>
+<p>Follows from the fact that <span class="math inline">\(e(X_i)\)</span> is a function of <span class="math inline">\(X_i\)</span>, so conditioning on <span class="math inline">\(X_i\)</span> already carries all the information in <span class="math inline">\(e(X_i)\)</span>.</p>
+<p>Now we need to show that <span class="math inline">\(P(W_i = 1 \mid e(X_i)) = e(X_i)\)</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+P(W_i = 1 \mid e(X_i)) &amp; = \ExpA{W_i \mid e(X_i)}{W_i} \\
+&amp; = \ExpA{\ExpA{W_i \mid X_i, e(X_i)}{W_i \mid X_i, e(X_i)}}{X_i \mid e(X_i)}\\
+&amp; = \ExpA{\ExpA{W_i \mid X_i}{W_i \mid X_i, e(X_i)}}{X_i \mid e(X_i)}\\
+&amp; = \ExpA{e(X_i)}{X_i \mid e(X_i)}\\
+&amp; = e(X_i)
+\end{aligned}
+\]</span></p>
+</div>
+<p>Now that we’ve established that <span class="math inline">\(e(X_i)\)</span> is a balancing score, we now show that under unconfounded treatment assignment, <span class="math inline">\(W_i \indy Y_i(0), Y_i(1) \mid b(X_i)\)</span></p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>We need to show that <span class="math inline">\(P(W_i = 1 \mid Y_i(0), Y_i(1), b(X_i)) = P(W_i = 1 \mid b(X_i))\)</span>. We have the following assumption, that <span class="math inline">\(W_i \indy Y_i(0), Y_i(1) \mid X_i\)</span>, and that by the definition of a balancing score, <span class="math inline">\(W_i \indy X_i \mid b(X_i)\)</span>. <span class="math display">\[
+\begin{aligned}
+P(W_i = 1 \mid Y_i(0), Y_i(1), b(X_i)) &amp; = \Exp{W_i \mid Y_i(0), Y_i(1), b(X_i)} \\
+&amp; = \ExpA{\ExpA{W_i \mid X_i, Y_i(0), Y_i(1), b(X_i)}{W_i \mid Y_i(0), Y_i(1), b(X_i), X_i}}{X_i \mid b(X_i)} \\
+&amp; = \ExpA{\ExpA{W_i \mid X_i, b(X_i)}{W_i \mid Y_i(0), Y_i(1), b(X_i), X_i}}{X_i \mid b(X_i)} \\
+&amp; = \ExpA{\ExpA{W_i \mid b(X_i)}{W_i \mid Y_i(0), Y_i(1), b(X_i), X_i}}{X_i \mid b(X_i)} \\
+&amp; = \ExpA{P(W_i = 1 \mid b(X_i))}{X_i \mid b(X_i)} \\
+&amp; = P(W_i = 1 \mid b(X_i))
+\end{aligned}
+\]</span></p>
+</div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

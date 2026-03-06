@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>HW 2 solutions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-fd68462179fdb1eb8400a3e2e38edf1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+      \newcommand{\R}{\mathbb{R}}
+      \newcommand{\comp}{\mathsf{c}}
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Var}[1]{\text{Var} \lp #1 \rp}
+        \newcommand{\VarA}[2]{\text{Var}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\abs}[1]{\left| #1 \right|}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../papers.html"> 
+<span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../courses.html"> 
+<span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#question-1" id="toc-question-1" class="nav-link active" data-scroll-target="#question-1">Question 1</a>
+  <ul class="collapse">
+  <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
+  <li><a href="#solution-1" id="toc-solution-1" class="nav-link" data-scroll-target="#solution-1">Solution</a></li>
+  <li><a href="#solution-2" id="toc-solution-2" class="nav-link" data-scroll-target="#solution-2">Solution</a></li>
+  <li><a href="#solution-3" id="toc-solution-3" class="nav-link" data-scroll-target="#solution-3">Solution</a></li>
+  </ul></li>
+  <li><a href="#question-2" id="toc-question-2" class="nav-link" data-scroll-target="#question-2">Question 2</a>
+  <ul class="collapse">
+  <li><a href="#part-1" id="toc-part-1" class="nav-link" data-scroll-target="#part-1">Part 1</a></li>
+  <li><a href="#solution-4" id="toc-solution-4" class="nav-link" data-scroll-target="#solution-4">Solution</a></li>
+  <li><a href="#solution-5" id="toc-solution-5" class="nav-link" data-scroll-target="#solution-5">Solution</a></li>
+  <li><a href="#part-2" id="toc-part-2" class="nav-link" data-scroll-target="#part-2">Part 2</a></li>
+  <li><a href="#solution-6" id="toc-solution-6" class="nav-link" data-scroll-target="#solution-6">Solution</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">HW 2 solutions</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="question-1" class="level2">
+<h2 class="anchored" data-anchor-id="question-1">Question 1</h2>
+<p>Load the <code>Surrogate</code> package in R and load the dataset <code>Schizo_PANSS</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Surrogate)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"Schizo_PANSS"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The dataset combines five clinical trials aimed at determining if risperidone decreases the Positive and Negative Syndrome Score (PANSS) over time compared to a control treatment for patients with schizophrenia. These are longitudinal trials where patients are assessed at weeks 1, 2, 4, 6 and 8 after being assigned to a treatment arm.</p>
+<p>Each row in the dataset is a different trial participant, and <code>Week1</code>, <code>Week2</code>, <code>Week4</code>, <code>Week6</code>, <code>Week8</code> records the change in PANSS from baseline. The variable <code>Treat</code> represents whether the patient was enrolled in the control (-1) or if the patient was in the risperidone arm (1).</p>
+<p>Subset the data to include only <code>Week1</code>, <code>Week4</code> and <code>Week8</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>hw_data <span class="ot">&lt;-</span> Schizo_PANSS[,<span class="fu">c</span>(<span class="st">"Id"</span>,<span class="st">"Treat"</span>,<span class="st">"Week1"</span>,<span class="st">"Week4"</span>,<span class="st">"Week8"</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol type="1">
+<li>Summarize the missingness patterns in the <code>hw_data</code> dataset. How many missingness patterns are there? What are they? What proportion of patients are associated with each missingness pattern?</li>
+</ol>
+<section id="solution" class="level3">
+<h3 class="anchored" data-anchor-id="solution">Solution</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gen_miss_patterns <span class="ot">&lt;-</span> <span class="cf">function</span>(mat) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  patterns <span class="ot">&lt;-</span> mat <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">is.na</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">apply</span>(<span class="dv">2</span>,as.integer) <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">apply</span>(<span class="dv">1</span>, \(row) {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste</span>(row,<span class="at">collapse =</span> <span class="st">"_"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(patterns)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>y_data <span class="ot">&lt;-</span> hw_data[,<span class="fu">c</span>(<span class="st">"Week1"</span>,<span class="st">"Week4"</span>,<span class="st">"Week8"</span>)]</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>miss_patterns <span class="ot">&lt;-</span> <span class="fu">gen_miss_patterns</span>(y_data)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>tab_miss <span class="ot">&lt;-</span> <span class="fu">table</span>(miss_patterns)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>prop_miss <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(tab_miss)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>prop_miss <span class="ot">&lt;-</span> <span class="fu">sort</span>(prop_miss,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(prop_miss, <span class="at">main =</span> <span class="st">"Missingness patterns"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-sols_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There are 8 missingness patterns, and the proportions are plotted above.</p>
+<ol start="2" type="1">
+<li>How would you assess whether there is evidence that treatment affects missingness? Is there evidence that treatment affects the missingness pattern?</li>
+</ol>
+</section>
+<section id="solution-1" class="level3">
+<h3 class="anchored" data-anchor-id="solution-1">Solution</h3>
+<p>There are many ways to do this; one could do a chi-squared test, an LRT test, one could do multinomial logistic regression, etc. Because I’m predisposed to find Bayesian solutions to things, I’ll fit two separate multinomial models with uniform dirichlet priors and compare the posteriors:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rdirichlet <span class="ot">&lt;-</span> <span class="cf">function</span>(n, alpha) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">length</span>(alpha)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  rates <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, d)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  gammas <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="at">n =</span> n,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">rgamma</span>(d, <span class="at">shape =</span> alpha,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">rate =</span> rates)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                      )</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  draws <span class="ot">&lt;-</span> <span class="fu">sweep</span>(gammas, <span class="at">MARGIN =</span> <span class="dv">2</span>, <span class="at">STATS =</span> <span class="fu">colSums</span>(gammas), <span class="at">FUN =</span> <span class="st">"/"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">t</span>(draws))</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>fac_levels <span class="ot">&lt;-</span> <span class="fu">names</span>(tab_miss)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>miss_patterns_treat <span class="ot">&lt;-</span> </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  hw_data <span class="sc">|&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(Treat <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  _[,<span class="fu">c</span>(<span class="st">"Week1"</span>,<span class="st">"Week4"</span>,<span class="st">"Week8"</span>)] <span class="sc">|&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gen_miss_patterns</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factor</span>(<span class="at">levels =</span> fac_levels)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>miss_patterns_control <span class="ot">&lt;-</span> </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  hw_data <span class="sc">|&gt;</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(Treat <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  _[,<span class="fu">c</span>(<span class="st">"Week1"</span>,<span class="st">"Week4"</span>,<span class="st">"Week8"</span>)] <span class="sc">|&gt;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gen_miss_patterns</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factor</span>(<span class="at">levels =</span> fac_levels)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>y_treat <span class="ot">&lt;-</span> <span class="fu">table</span>(miss_patterns_treat)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>y_control <span class="ot">&lt;-</span> <span class="fu">table</span>(miss_patterns_control)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">length</span>(y_treat)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>alpha_prior <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, d)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>post_treat <span class="ot">&lt;-</span> <span class="fu">rdirichlet</span>(<span class="at">n =</span> <span class="fl">1e5</span>, <span class="at">alpha =</span> alpha_prior <span class="sc">+</span> y_treat)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>post_control <span class="ot">&lt;-</span> <span class="fu">rdirichlet</span>(<span class="at">n =</span> <span class="fl">1e5</span>, <span class="at">alpha =</span> alpha_prior <span class="sc">+</span> y_control)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>diffs <span class="ot">&lt;-</span> post_treat <span class="sc">-</span> post_control</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The first column of the diffs matrix has information on whether there is a difference between the treatment and the control groups for the proportion of people who have missing observations. A histogram reveals that the posterior distribution for the proportion of the treatment group with missing data is greater than the proportion of the control group with missing data:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(diffs[,<span class="dv">1</span>], <span class="at">main =</span> <span class="st">"Posterior difference in proportions of missing</span><span class="sc">\n</span><span class="st"> observations between treatment and control"</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">bquote</span>(alpha[<span class="st">"1,"</span><span class="sc">~</span>treat]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[treat]<span class="sc">~</span><span class="st">" - "</span><span class="sc">~</span>alpha[<span class="st">"1,"</span><span class="sc">~</span>control]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[control]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-sols_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As for whether the treatment affects the missingness pattern, we can look at the conditional distribution of having a certain missing pattern given that an individual has missing data. The first pattern I’ll show is the posterior for dropping out between week 4 and week 8, conditional on having had a missing observation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(post_treat[,<span class="dv">2</span>] <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> post_treat[,<span class="dv">1</span>]) <span class="sc">-</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>     post_control[,<span class="dv">2</span>] <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> post_control[,<span class="dv">1</span>]) , <span class="at">main =</span> <span class="st">"Posterior difference in conditional proportions of missing last obs.</span><span class="sc">\n</span><span class="st"> between treatment and control"</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">bquote</span>(<span class="fu">over</span>(alpha[<span class="st">"2,"</span><span class="sc">~</span>treat]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[control],<span class="st">"1 - "</span><span class="sc">~</span>alpha[<span class="st">"1,"</span><span class="sc">~</span>treat]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[control])<span class="sc">~</span><span class="st">" - "</span><span class="sc">~</span><span class="fu">over</span>(alpha[<span class="st">"2,"</span><span class="sc">~</span>control]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[control],<span class="st">"1 - "</span><span class="sc">~</span>alpha[<span class="st">"1,"</span><span class="sc">~</span>control]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[control])))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-sols_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It appears there isn’t much difference in the proportion of people missing an observation who dropped out between week 4 and week 8 of the study. The same goes for people who dropped out between week 1 and week 4:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(post_treat[,<span class="dv">4</span>] <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> post_treat[,<span class="dv">1</span>]) <span class="sc">-</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>       post_control[,<span class="dv">4</span>] <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> post_control[,<span class="dv">1</span>]), <span class="at">main =</span> <span class="st">"Posterior difference in conditional proportions of missing last 2 obs.</span><span class="sc">\n</span><span class="st"> between controlment and control"</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">bquote</span>(<span class="fu">over</span>(alpha[<span class="st">"4,"</span><span class="sc">~</span>treat]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[treat],<span class="st">"1 - "</span><span class="sc">~</span>alpha[<span class="st">"1,"</span><span class="sc">~</span>treat]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[treat])<span class="sc">~</span><span class="st">" - "</span><span class="sc">~</span><span class="fu">over</span>(alpha[<span class="st">"4,"</span><span class="sc">~</span>control]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[control],<span class="st">"1 - "</span><span class="sc">~</span>alpha[<span class="st">"1,"</span><span class="sc">~</span>control]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[control])))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-sols_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Of course, marginally there is evidence that there are differences in these proportions (namely, marginalizing over whether the individual will have missingness or complete data):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(post_treat[,<span class="dv">4</span>] <span class="sc">-</span> post_control[,<span class="dv">4</span>] , <span class="at">main =</span> <span class="st">"Posterior difference in proportions of missing last 2 obs.</span><span class="sc">\n</span><span class="st"> between treatment and control"</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">bquote</span>(alpha[<span class="st">"4,"</span><span class="sc">~</span>treat]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[treat]<span class="sc">~</span><span class="st">" - "</span><span class="sc">~</span>alpha[<span class="st">"4,"</span><span class="sc">~</span>control]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[control]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-sols_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(post_treat[,<span class="dv">2</span>] <span class="sc">-</span> post_control[,<span class="dv">2</span>] , <span class="at">main =</span> <span class="st">"Posterior difference in proportions of missing last 2 obs.</span><span class="sc">\n</span><span class="st"> between treatment and control"</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">bquote</span>(alpha[<span class="st">"2,"</span><span class="sc">~</span>treat]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[treat]<span class="sc">~</span><span class="st">" - "</span><span class="sc">~</span>alpha[<span class="st">"2,"</span><span class="sc">~</span>control]<span class="sc">~</span><span class="st">"|"</span><span class="sc">~</span>y[control]))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-sols_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>How many people dropped out of the study after Week 1, or Week 4 vs.&nbsp;had intermittent missingness? For patients who dropped out, is there evidence that PANSS at the prior measurement predicted dropout? What about for the patients with intermittent missingness?</li>
+</ol>
+</section>
+<section id="solution-2" class="level3">
+<h3 class="anchored" data-anchor-id="solution-2">Solution</h3>
+<p>For the first part of the question:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>drop_out_btwn_4_8 <span class="ot">&lt;-</span> tab_miss[<span class="st">"0_0_1"</span>]</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>drop_out_btwn_1_4 <span class="ot">&lt;-</span> tab_miss[<span class="st">"0_1_1"</span>]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>intermittent_1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(tab_miss) <span class="sc">-</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  (tab_miss[<span class="st">"0_0_0"</span>] <span class="sc">+</span> drop_out_btwn_4_8 <span class="sc">+</span> drop_out_btwn_1_4)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>intermittent_2 <span class="ot">&lt;-</span> intermittent_1 <span class="sc">-</span> tab_miss[<span class="st">"1_1_1"</span>]</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>intermittent_3 <span class="ot">&lt;-</span> intermittent_2 <span class="sc">-</span> tab_miss[<span class="st">"1_1_0"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>I’ll accept many answers here, as long as students quantified dropout correctly as 430 dropouts between week 4 and 8, 323 dropouts between week 1 and 4, and were specific about what patterns they considered intermittent. I have examples above for 55, 24, 23, but anything is ok as long as they didn’t include the dropout or the complete observations in the intermittent count totals.</p>
+<p>As for whether prior PANSS affects dropout, I’ll just throw the people who dropped out between week 4 and week 8 into a logistic regression along with those who have complete cases. Because this question was pretty vague, I’ll take any sort of modeling of missingness on previous PANSS scores.</p>
+<p>Another way to look at this would be the following:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dropout_wk_4_8 <span class="ot">&lt;-</span> miss_patterns <span class="sc">==</span> <span class="st">"0_0_1"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>complete_cases <span class="ot">&lt;-</span> miss_patterns <span class="sc">==</span> <span class="st">"0_0_0"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>drop_4_8 <span class="ot">&lt;-</span> hw_data[dropout_wk_4_8,]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>completes <span class="ot">&lt;-</span> hw_data[complete_cases,]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>y2_drop_4_8 <span class="ot">&lt;-</span> drop_4_8<span class="sc">$</span>Week4</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>y2_complete <span class="ot">&lt;-</span> completes<span class="sc">$</span>Week4</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>y_prev <span class="ot">&lt;-</span> <span class="fu">c</span>(y2_drop_4_8, y2_complete) </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>miss <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(drop_4_8)),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>           <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">nrow</span>(completes)))</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">glm</span>(miss <span class="sc">~</span> y_prev, <span class="at">family =</span> <span class="st">"binomial"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = miss ~ y_prev, family = "binomial")
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -0.905862   0.069329  -13.07  &lt; 2e-16 ***
+y_prev       0.015473   0.003005    5.15 2.61e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1964.4  on 1772  degrees of freedom
+Residual deviance: 1936.7  on 1771  degrees of freedom
+AIC: 1940.7
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+<p>According to the glm output, there is evidence against dropout being independent of previous PANSS scores. The direction of the coefficient makessense here; this means that an increase in PANSS score in Week 4 predicts a higher probability of missingness in Week 8.</p>
+<p>We can do the same analysis for scores in week 1 predicting missingness in week 4:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dropout_wk_1_4 <span class="ot">&lt;-</span> miss_patterns <span class="sc">==</span> <span class="st">"0_1_1"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dropout_wk_4_8 <span class="ot">&lt;-</span> miss_patterns <span class="sc">==</span> <span class="st">"0_0_1"</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>complete_cases <span class="ot">&lt;-</span> miss_patterns <span class="sc">==</span> <span class="st">"0_0_0"</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>drop_4_8 <span class="ot">&lt;-</span> hw_data[dropout_wk_4_8,]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>drop_1_4 <span class="ot">&lt;-</span> hw_data[dropout_wk_1_4,]</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>completes <span class="ot">&lt;-</span> hw_data[complete_cases,]</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>y1_drop_4_8 <span class="ot">&lt;-</span> drop_4_8<span class="sc">$</span>Week1</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>y1_drop_1_4 <span class="ot">&lt;-</span> drop_1_4<span class="sc">$</span>Week1</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>y1_complete <span class="ot">&lt;-</span> completes<span class="sc">$</span>Week1</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>y_prev <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  y1_drop_1_4,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  y1_drop_4_8,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  y1_complete</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>miss <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(drop_1_4)),</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>          <span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">nrow</span>(drop_4_8)),</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>           <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">nrow</span>(completes)))</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">glm</span>(miss <span class="sc">~</span> y_prev, <span class="at">family =</span> <span class="st">"binomial"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = miss ~ y_prev, family = "binomial")
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -1.516007   0.062725 -24.169   &lt;2e-16 ***
+y_prev       0.047589   0.004902   9.708   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1801.6  on 2095  degrees of freedom
+Residual deviance: 1696.3  on 2094  degrees of freedom
+AIC: 1700.3
+
+Number of Fisher Scoring iterations: 5</code></pre>
+</div>
+</div>
+<p>Indeed, we find the same conclusion, that there is evidence against missingness in Week 4 being independent of Week 1’s PANSS score.</p>
+<ol start="4" type="1">
+<li>Is it reasonable to assume that missingness is MCAR for this dataset? Why or why not? What about MAR?</li>
+</ol>
+<p>No, missingness is certainly not MCAR given the results from question 3. I would argue that it may be unreasonable to assume that missingness is MAR, and instead may be MNAR because of the process we’re focused on. We already have evidence that PANSS in at Week 1 affects missingness in Week 4 and PANSS in Week 4 affects missingness in Week 8; these are fairly large intervals between measurements, so it would be reasonable to assume that PANSS scores closer in time to measurements could change the probability of missingness. At the extreme, it makes sense that if PANSS score is high, it would increase the probability of missingness.</p>
+<ol start="5" type="1">
+<li>Subset the data to complete cases only and, using the algorithm we learned in class:</li>
+</ol>
+<p><span class="math display">\[
+\beta^{(t+1)} = \lp \textstyle\sum_i X_i^T (\Sigma^{(t)})^{-1} X_i \rp^{-1} \textstyle \sum_i X_i^T (\Sigma^{(t)})^{-1} y_i
+\]</span></p>
+<p><span class="math display">\[
+\Sigma^{(t+1)} = \frac{1}{n} \textstyle\sum_i (y_i - X_i \beta^{(t)})(y_i - X_i \beta^{(t)})^T
+\]</span></p>
+<p>Fit the following model to the complete case data:</p>
+<p><span class="math display">\[
+y_i \mid \text{Treat}_i \sim \text{Normal}(\mu + \beta_1 \text{Treat}_i + \beta_2 t + \beta_3 \text{Treat}_i t, \Sigma)
+\]</span></p>
+<p>where <span class="math inline">\(t\)</span> is the vector <span class="math inline">\(1, 4, 8\)</span> indicating at what time points the measurements were taken and <span class="math inline">\(\mu\)</span> is a scalar mean.</p>
+<p>Include your MLEs for <span class="math inline">\(\Sigma\)</span> and the vector <span class="math inline">\((\mu, \beta_1, \beta_2, \beta_3)\)</span>, and be sure to interpret your inferred coefficients in the context of the PANSS dataset.</p>
+<p>It’ll help to reshape the data into long format from wide format:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>comp_case <span class="ot">&lt;-</span> hw_data <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span><span class="fu">is.na</span>(Week1) <span class="sc">&amp;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.na</span>(Week4) <span class="sc">&amp;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.na</span>(Week8)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>long_case <span class="ot">&lt;-</span> </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  stats<span class="sc">::</span><span class="fu">reshape</span>(</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    comp_case, </span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">direction =</span> <span class="st">"long"</span>, </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">varying =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">""</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  )[,<span class="sc">-</span><span class="dv">5</span>]</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(long_case) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Id"</span>,<span class="st">"Treat"</span>,<span class="st">"time"</span>,<span class="st">"panss"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>In order to make sure your algorithm is successful, include a test of your algorithm on on this simulated dataset, where you compare your algorithm’s inferences to the true values of <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\Sigma\)</span>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(p)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(K <span class="sc">*</span> K),K,K)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">&lt;-</span> L <span class="sc">%*%</span> <span class="fu">t</span>(L)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  X[[i]] <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(p <span class="sc">*</span> K),K,p)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  y[[i]] <span class="ot">&lt;-</span> X[[i]] <span class="sc">%*%</span> beta <span class="sc">+</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="at">mu =</span> <span class="fu">rep</span>(<span class="dv">0</span>,K), <span class="at">Sigma =</span> Sigma)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="solution-3" class="level3">
+<h3 class="anchored" data-anchor-id="solution-3">Solution</h3>
+<p>Here is my algorithm below:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mle <span class="ot">&lt;-</span> <span class="cf">function</span>(b_0, S_0, Xs, ys, K) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  S_old <span class="ot">&lt;-</span> S_0</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  b_old <span class="ot">&lt;-</span> b_0</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">length</span>(b_0)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  N <span class="ot">&lt;-</span> <span class="fu">length</span>(Xs)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">length</span>(ys[[<span class="dv">1</span>]])</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  epsilon <span class="ot">&lt;-</span> <span class="cn">Inf</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (k <span class="sc">&lt;</span> K <span class="sc">&amp;</span> epsilon <span class="sc">&gt;</span> <span class="fl">1e-8</span>) {</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    k <span class="ot">&lt;-</span> k <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    inv_sig <span class="ot">&lt;-</span> <span class="fu">solve</span>(S_old)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    XtX <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, p, p)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    Xty <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, p)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    cprod <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, d, d)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>      XtX_i <span class="ot">&lt;-</span> <span class="fu">t</span>(Xs[[i]]) <span class="sc">%*%</span> inv_sig <span class="sc">%*%</span> Xs[[i]]</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>      Xty_i <span class="ot">&lt;-</span> <span class="fu">t</span>(Xs[[i]]) <span class="sc">%*%</span> inv_sig <span class="sc">%*%</span> ys[[i]]</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>      XtX <span class="ot">&lt;-</span> XtX <span class="sc">+</span> XtX_i</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>      Xty <span class="ot">&lt;-</span> Xty <span class="sc">+</span> Xty_i</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>      error <span class="ot">&lt;-</span> ys[[i]] <span class="sc">-</span> Xs[[i]] <span class="sc">%*%</span> b_old</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>      cprod <span class="ot">&lt;-</span> cprod <span class="sc">+</span> <span class="fu">outer</span>(error[,<span class="dv">1</span>], error[,<span class="dv">1</span>])</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>    b_new <span class="ot">&lt;-</span> <span class="fu">solve</span>(XtX) <span class="sc">%*%</span> Xty</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    S_new <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>N <span class="sc">*</span> cprod</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    epsilon_b <span class="ot">&lt;-</span> <span class="fu">sum</span>((b_new <span class="sc">-</span> b_old)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    epsilon_S <span class="ot">&lt;-</span> <span class="fu">sum</span>((S_new <span class="sc">-</span> S_old)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    epsilon <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(epsilon_b <span class="sc">+</span> epsilon_S)</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    b_old <span class="ot">&lt;-</span> b_new</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    S_old <span class="ot">&lt;-</span> S_new</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">b =</span> b_old, <span class="at">S =</span> S_old))</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>which when applied to the simulated data returns:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sim_res <span class="ot">&lt;-</span> <span class="fu">mle</span>(<span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">ncol</span>(X[[<span class="dv">1</span>]])), <span class="fu">diag</span>(<span class="fu">length</span>(y[[<span class="dv">1</span>]])), X, y, <span class="dv">100</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>beta_mle <span class="ot">&lt;-</span> sim_res<span class="sc">$</span>b</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>Sigma_mle <span class="ot">&lt;-</span> sim_res<span class="sc">$</span>S</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(beta_mle, beta,<span class="at">main =</span> <span class="st">"beta mle vs. true beta"</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">bquote</span>(<span class="fu">hat</span>(beta)), <span class="at">ylab =</span> <span class="fu">bquote</span>(beta))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-sols_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">as.vector</span>(Sigma_mle), <span class="fu">as.vector</span>(Sigma),<span class="at">main =</span> <span class="st">"Sigma mle vs. true Sigma"</span>,</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">bquote</span>(<span class="fu">widehat</span>(Sigma)), <span class="at">ylab =</span> <span class="fu">bquote</span>(Sigma))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>,<span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-sols_files/figure-html/unnamed-chunk-16-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The results look good enough, though a true test of the algorithm would require a simulation study and a quantification of the asymptotic sampling variance of our estimators. It is possible to derive these for both <span class="math inline">\(\hat{\beta}\)</span> and <span class="math inline">\(\hat{\Sigma}\)</span>; we may do this in future classes.</p>
+<p>As for the results when we apply the model to the PANSS complete cases, we get:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> Treat<span class="sc">*</span>time, long_case)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>Id_list <span class="ot">&lt;-</span> <span class="fu">unique</span>(long_case<span class="sc">$</span>Id)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>X_panss <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>y_panss <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(Id_list)) {</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  id_i <span class="ot">&lt;-</span> Id_list[i]</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  sel_i <span class="ot">&lt;-</span> long_case<span class="sc">$</span>Id <span class="sc">==</span> id_i</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  X_panss[[i]] <span class="ot">&lt;-</span> mm[sel_i,]</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  y_panss[[i]] <span class="ot">&lt;-</span> long_case<span class="sc">$</span>panss[sel_i]</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>panss_res <span class="ot">&lt;-</span> <span class="fu">mle</span>(<span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">ncol</span>(mm)), <span class="fu">diag</span>(<span class="fu">length</span>(y_panss[[<span class="dv">1</span>]])), X_panss, y_panss, <span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Our coefficients are below:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>panss_res<span class="sc">$</span>b</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   [,1]
+(Intercept) -7.02068631
+Treat       -0.52528531
+time        -1.50797733
+Treat:time  -0.07061867</code></pre>
+</div>
+</div>
+<p>As long as students are interpreting the coefficients correctly as would be expected in a regresion class, these answers will be right. Given that the trial is randomized, it’s important to note that we can interpret the treatment coefficient causally, as in treatment with risperidone lead to a -0.52 decrease in PANSS score compared to those in the control group, all else being equal.</p>
+<p>Along with our inferered variance covariance matrix:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov2cor</span>(panss_res<span class="sc">$</span>S)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          1.1       1.4       1.8
+1.1 1.0000000 0.5742689 0.5052224
+1.4 0.5742689 1.0000000 0.7848130
+1.8 0.5052224 0.7848130 1.0000000</code></pre>
+</div>
+</div>
+<p>Which I’ve converted into correlations for easier interpretation. This says that the residual correlation between the PANSS measurements at week 1 and week 4, conditional on treatment group and the time of the measurement is around 0.6, while the residual correlation between the measurement at week 4 and week 8 is around 0.8. This means that we’ve likely missed including important data about our participants that shows up as correlations in our residuals.</p>
+<ol start="6" type="1">
+<li>How might you expand this model based on your initial data analysis? There are no wrong answers.</li>
+</ol>
+<p>Any answer here will do as long as it is somewhat thoughtful. I would add intercepts for each outcome <span class="math inline">\(y\)</span>.</p>
+</section>
+</section>
+<section id="question-2" class="level2">
+<h2 class="anchored" data-anchor-id="question-2">Question 2</h2>
+<p>In Question 1, you analyzed the complete cases in the PANSS meta-analysis dataset using the repeated measures model:</p>
+<p><span class="math display">\[
+y_i \mid \text{Treat}_i \sim \text{Normal}(\mu + \beta_1 \text{Treat}_i + \beta_2 t + \beta_3 \text{Treat}_i t, \Sigma)
+\]</span> Let <span class="math inline">\(\beta = (\mu, \beta_1, \beta_2, \beta_3)\)</span> in what follows. Fit the following Bayesian model for the complete cases:</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_i \mid \text{Treat}_i, \beta, \Sigma &amp; \sim \text{Normal}(\mu + \beta_1 \text{Treat}_i + \beta_2 t + \beta_3 \text{Treat}_i t, \Sigma) \\
+\beta \mid \mu_0, \Sigma_0 &amp; \sim \text{Normal}(\mu_0, \Sigma_0) \\
+\Sigma \mid \nu_0, V_0 &amp; \sim \text{Inv-Wishart}(\nu_0, V_0)
+\end{aligned}
+\]</span></p>
+<p>The sampling algorithm is as follows:</p>
+<ol type="1">
+<li><p>Repeat the following for <span class="math inline">\(b = 1, \dots, B\)</span> chains.</p></li>
+<li><p>Draw <span class="math inline">\(\beta^0, \Sigma^0\)</span> starting values from the priors for <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\Sigma\)</span>.</p></li>
+<li><p>For <span class="math inline">\(t=0, \dots, S-1\)</span></p>
+<ol type="a">
+<li><p>Draw <span class="math inline">\(\beta\)</span> according to the distribution <span class="math display">\[
+\begin{aligned}
+\beta^{t+1} \mid \Sigma^{t}, y, X &amp; \sim \text{Normal}(\bar{\beta}, (\textstyle\sum_i X_i^T (\Sigma^{(t)})^{-1} X_i + (\Sigma_0)^{-1})^{-1}) \\
+\bar{\beta} &amp; = (\textstyle\sum_i X_i^T (\Sigma^{(t)})^{-1} X_i + \Sigma_0^{-1})^{-1}(\textstyle\sum_i X_i^T (\Sigma^{(t)})^{-1} y_i + \Sigma_0^{-1} \mu_0)
+\end{aligned}
+\]</span></p></li>
+<li><p>Draw <span class="math inline">\(\Sigma^{t+1}\)</span> according to <span class="math display">\[
+\begin{aligned}
+\Sigma^{t+1} \mid \beta^{t+1}, y, X &amp; \sim \text{Inverse-Wishart}(n + \nu_0, V_0 + \textstyle\sum_i (y_i - X_i \beta^t)(y_i - X_i \beta^t)^T)
+\end{aligned}
+\]</span></p></li>
+</ol></li>
+<li><p>Discard the first <span class="math inline">\(\frac{S}{2}\)</span> iterations, and keep the set of draws <span class="math inline">\(\{ (\beta^s, \Sigma^s),\, s = \frac{S}{2},\dots, S-1\}\)</span>.</p></li>
+</ol>
+<p>The final set of draws <span class="math inline">\(B \times \frac{S}{2}\)</span> draws are approximately distributed according to <span class="math inline">\(p(\beta, \Sigma \mid y)\)</span></p>
+<section id="part-1" class="level3">
+<h3 class="anchored" data-anchor-id="part-1">Part 1</h3>
+<p>Before running your model, test your algorithm on the simulated dataset above, using the prior hyperparameters, with <span class="math inline">\(B = 4\)</span> and <span class="math inline">\(S = 500\)</span>: <span class="math display">\[
+\mu_0 = 0, \Sigma_0 = I_p, \nu_0 = 3, V_0 = I_p
+\]</span></p>
+<p>In order to run this model, you’ll need to be able to draw from an inverse Wishart distribution. Use the version that is implemented in the packages <code>MCMCpack</code>.</p>
+<p>When you run your chains, you’ll have 4 chains with 250 draws of each parameter per chain. You can use these draws to assess whether there is evidence against having reached the steady state distribution. Use the package <code>posterior</code> and <code>rhat</code> in the posterior package to report the univariate <span class="math inline">\(\hat{R}\)</span> statistics for each dimension of the beta vector.</p>
+<p>To do so, you’ll need to arrange the draws for each dimension of beta into a matrix with rows corresponding to the 250 iterations and columns corresponding to the chains. Then you can pass that matrix to <code>posterior::rhat</code> to get an estimate of how much the scale of the posterior distribution would shrink as <span class="math inline">\(S \to \infty\)</span>. Numbers near <span class="math inline">\(1\)</span>, or <span class="math inline">\(\hat{R} \leq 1.01\)</span> indicate that one may not have much to gain from running the chains for more iterations.</p>
+</section>
+<section id="solution-4" class="level3">
+<h3 class="anchored" data-anchor-id="solution-4">Solution</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>bayes <span class="ot">&lt;-</span> <span class="cf">function</span>(b_0, S_0, mu_0, Sigma_0, nu_0, V_0, Xs, ys, K) {</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  S_old <span class="ot">&lt;-</span> S_0</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  b_old <span class="ot">&lt;-</span> b_0</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">length</span>(b_0)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  N <span class="ot">&lt;-</span> <span class="fu">length</span>(Xs)</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">length</span>(ys[[<span class="dv">1</span>]])</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  big_y <span class="ot">&lt;-</span> <span class="fu">do.call</span>(c, ys)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  big_X <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, Xs)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  draws_Sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, K, d<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  draws_beta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, K, p)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  U_sig_0 <span class="ot">&lt;-</span> <span class="fu">chol</span>(Sigma_0)</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  sig_0_inv <span class="ot">&lt;-</span> <span class="fu">chol2inv</span>(U_sig_0)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (k <span class="sc">&lt;</span> K) {</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    k <span class="ot">&lt;-</span> k <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    U_sig <span class="ot">&lt;-</span> <span class="fu">chol</span>(S_old)</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    inv_sig <span class="ot">&lt;-</span> <span class="fu">chol2inv</span>(U_sig)</span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    XtX <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, p, p)</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    Xty <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, p)</span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>    cprod <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, d, d)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>      Xt_i <span class="ot">&lt;-</span> <span class="fu">t</span>(Xs[[i]]) <span class="sc">%*%</span> inv_sig</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>      XtX_i <span class="ot">&lt;-</span> Xt_i <span class="sc">%*%</span> Xs[[i]]</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>      Xty_i <span class="ot">&lt;-</span> Xt_i <span class="sc">%*%</span> ys[[i]]</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>      XtX <span class="ot">&lt;-</span> XtX <span class="sc">+</span> XtX_i</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>      Xty <span class="ot">&lt;-</span> Xty <span class="sc">+</span> Xty_i</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>    U_left <span class="ot">&lt;-</span> <span class="fu">chol</span>(XtX <span class="sc">+</span> sig_0_inv)</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>    bar_b <span class="ot">&lt;-</span> <span class="fu">backsolve</span>(U_left, Xty <span class="sc">+</span> sig_0_inv <span class="sc">%*%</span> mu_0, <span class="at">transpose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>    bar_b <span class="ot">&lt;-</span> <span class="fu">backsolve</span>(U_left, bar_b)</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>    b_new <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="dv">1</span>, <span class="at">mu =</span> bar_b, <span class="at">Sigma =</span> <span class="fu">chol2inv</span>(U_left))</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>    error <span class="ot">&lt;-</span> big_y <span class="sc">-</span> big_X <span class="sc">%*%</span> b_new</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>    error_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(error, d, N)</span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>    cprod <span class="ot">&lt;-</span> error_mat <span class="sc">%*%</span> <span class="fu">t</span>(error_mat)</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>    S_new <span class="ot">&lt;-</span> MCMCpack<span class="sc">::</span><span class="fu">riwish</span>(nu_0 <span class="sc">+</span> N, V_0 <span class="sc">+</span> cprod)</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>    draws_Sigma[k,] <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(S_new)</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>    draws_beta[k,] <span class="ot">&lt;-</span> b_new</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>    b_old <span class="ot">&lt;-</span> b_new</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>    S_old <span class="ot">&lt;-</span> S_new</span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">b =</span> draws_beta, <span class="at">S =</span> draws_Sigma))</span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>mcmc_sample <span class="ot">&lt;-</span> <span class="cf">function</span>(f_draw_beta, f_draw_Sigma, mu_0, Sigma_0, nu_0 , V_0,</span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>                        Xs, ys, <span class="at">K =</span> <span class="dv">1000</span>, <span class="at">n_chains =</span> <span class="dv">4</span>) {</span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>  draws_beta <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA_real_</span>, <span class="fu">c</span>(n_chains, K, <span class="fu">length</span>(mu_0)))</span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>  draws_Sigma <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA_real_</span>, <span class="fu">c</span>(n_chains, K, <span class="fu">prod</span>(<span class="fu">dim</span>(V_0))))</span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (chain_i <span class="cf">in</span> <span class="fu">seq_len</span>(n_chains)) {</span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a>    b_0 <span class="ot">&lt;-</span> <span class="fu">f_draw_beta</span>()</span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>    S_0 <span class="ot">&lt;-</span> <span class="fu">f_draw_Sigma</span>()</span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>    chain_res <span class="ot">&lt;-</span> <span class="fu">bayes</span>(b_0, S_0, <span class="at">mu_0 =</span> mu_0, <span class="at">Sigma_0 =</span> Sigma_0, <span class="at">nu_0 =</span> nu_0, <span class="at">V_0 =</span> V_0,</span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>                       <span class="at">Xs =</span> Xs, <span class="at">ys =</span> ys, <span class="at">K =</span> K)</span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>    draws_beta[chain_i,,] <span class="ot">&lt;-</span> chain_res<span class="sc">$</span>b</span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>    draws_Sigma[chain_i,,] <span class="ot">&lt;-</span> chain_res<span class="sc">$</span>S</span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">b =</span> draws_beta, <span class="at">S =</span> draws_Sigma))</span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">mcmc_sample</span>(\() {<span class="fu">rnorm</span>(p)}, \() {<span class="fu">diag</span>(<span class="fu">rexp</span>(K))}, <span class="at">mu_0 =</span> <span class="fu">rep</span>(<span class="dv">0</span>,p), <span class="at">Sigma_0 =</span> <span class="fu">diag</span>(p), <span class="at">nu_0 =</span> <span class="dv">2</span>, <span class="at">V_0 =</span> <span class="fu">diag</span>(K),</span>
+<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a><span class="at">Xs =</span> X, <span class="at">ys =</span> y, <span class="at">K =</span> <span class="dv">500</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>with Rhats of</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(samples<span class="sc">$</span>S)[<span class="dv">3</span>], \(i) posterior<span class="sc">::</span><span class="fu">rhat</span>(<span class="fu">t</span>(samples<span class="sc">$</span>S[,<span class="dv">251</span><span class="sc">:</span><span class="dv">500</span>,i])))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9998074 0.9992597 0.9999993 0.9992597 1.0011053 0.9997203 0.9999993
+[8] 0.9997203 1.0006502</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">dim</span>(samples<span class="sc">$</span>b)[<span class="dv">3</span>], \(i) posterior<span class="sc">::</span><span class="fu">rhat</span>(<span class="fu">t</span>(samples<span class="sc">$</span>b[,<span class="dv">251</span><span class="sc">:</span><span class="dv">500</span>,i]))) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.0000594 0.9996801 1.0019354 1.0028355 1.0041509</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(samples<span class="sc">$</span>b) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="cn">NULL</span>, <span class="fu">paste0</span>(<span class="st">"beta"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_recover_intervals</span>(<span class="fu">aperm</span>(samples<span class="sc">$</span>b,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">3</span>))[<span class="dv">251</span><span class="sc">:</span><span class="dv">500</span>,,], beta)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-sols_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(samples<span class="sc">$</span>S) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="cn">NULL</span>, <span class="fu">paste0</span>(<span class="st">"Sigma"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>))</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>bayesplot<span class="sc">::</span><span class="fu">mcmc_recover_intervals</span>(<span class="fu">aperm</span>(samples<span class="sc">$</span>S,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">3</span>))[<span class="dv">251</span><span class="sc">:</span><span class="dv">500</span>,,], <span class="fu">as.vector</span>(Sigma))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-sols_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Pretty good recovery of the parameters</p>
+<p>Can you describe a better way to test whether your algorithm is correctly written using simulated data and posterior quantiles? See <span class="citation" data-cites="talts2018validating">Talts et al. (<a href="#ref-talts2018validating" role="doc-biblioref">2018</a>)</span> for some ideas.</p>
+</section>
+<section id="solution-5" class="level3">
+<h3 class="anchored" data-anchor-id="solution-5">Solution</h3>
+<p>Use the simulation based calibaration described in the paper, which we also described in class:</p>
+<ol type="1">
+<li>Simulate from your priors</li>
+<li>Conditional on priors, simulate from your data</li>
+<li>Fit your model</li>
+<li>Draw <span class="math inline">\(L\)</span> samples from your posterior</li>
+<li>Compute the rank of the draw from your prior against the draws from your posterior</li>
+<li>Repeat</li>
+<li>Histogram of the ranks should be uniform, which can be tested in many different ways</li>
+</ol>
+</section>
+<section id="part-2" class="level3">
+<h3 class="anchored" data-anchor-id="part-2">Part 2</h3>
+<p>Run your model with the same priors as above on the <code>comp_case</code> data from above, and report 95% central posterior quantiles for each dimension of <span class="math inline">\(\beta\)</span>.</p>
+<p>Also report the 95% posterior quantiles for the parameters: <span class="math inline">\(\Sigma_{2,1} / \sqrt{\Sigma_{1,1}\Sigma_{2,2}}\)</span>, <span class="math inline">\(\Sigma_{3,1} / \sqrt{\Sigma_{1,1}\Sigma_{3,3}}\)</span>, and <span class="math inline">\(\Sigma_{3,2} / \sqrt{\Sigma_{2,2}\Sigma_{3,3}}\)</span>, or the correlation between the errors for each of the PANSS measurement occasions.</p>
+<p>This may be done by defining the appropriate transformations of the parameter draws.</p>
+</section>
+<section id="solution-6" class="level3">
+<h3 class="anchored" data-anchor-id="solution-6">Solution</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">mcmc_sample</span>(\() {<span class="fu">rnorm</span>(<span class="fu">ncol</span>(mm))}, \() {<span class="fu">diag</span>(<span class="fu">rexp</span>(<span class="fu">length</span>(y_panss[[<span class="dv">1</span>]])))}, <span class="at">mu_0 =</span> <span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">ncol</span>(mm)),</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">Sigma_0 =</span> <span class="dv">1</span> <span class="sc">*</span> <span class="fu">diag</span>(<span class="fu">ncol</span>(mm)),</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">nu_0 =</span> <span class="dv">3</span>, <span class="at">V_0 =</span> <span class="fu">diag</span>(<span class="fu">length</span>(y_panss[[<span class="dv">1</span>]])),</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">Xs =</span> X_panss, <span class="at">ys =</span> y_panss, <span class="at">K =</span> <span class="dv">500</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>post_draws_S <span class="ot">&lt;-</span> samples<span class="sc">$</span>S[,<span class="dv">251</span><span class="sc">:</span><span class="dv">500</span>,]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Intervals:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(samples<span class="sc">$</span>b[,<span class="dv">251</span><span class="sc">:</span><span class="dv">500</span>,], <span class="dv">3</span>, quantile, <span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]       [,2]      [,3]       [,4]
+2.5%  -6.662225 -1.7809288 -1.740822 -0.2002626
+97.5% -4.971769 -0.2523569 -1.390680  0.1095659</code></pre>
+</div>
+</div>
+<p>Central 95% quantiles for <span class="math inline">\(\Sigma_{2,1} / \sqrt{\Sigma_{1,1}\Sigma_{2,2}}\)</span>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(post_draws_S[,,<span class="dv">2</span>] <span class="sc">/</span> <span class="fu">sqrt</span>(post_draws_S[,,<span class="dv">1</span>] <span class="sc">*</span> post_draws_S[,,<span class="dv">5</span>]),<span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     2.5%     97.5% 
+0.5464869 0.6202370 </code></pre>
+</div>
+</div>
+<p>Quantiles for <span class="math inline">\(\Sigma_{3,1} / \sqrt{\Sigma_{1,1}\Sigma_{3,3}}\)</span>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(post_draws_S[,,<span class="dv">3</span>] <span class="sc">/</span> <span class="fu">sqrt</span>(post_draws_S[,,<span class="dv">1</span>] <span class="sc">*</span> post_draws_S[,,<span class="dv">9</span>]),<span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     2.5%     97.5% 
+0.4689281 0.5467009 </code></pre>
+</div>
+</div>
+<p>Quantiles for <span class="math inline">\(\Sigma_{3,2} / \sqrt{\Sigma_{2,2}\Sigma_{3,3}}\)</span>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(post_draws_S[,,<span class="dv">6</span>] <span class="sc">/</span> <span class="fu">sqrt</span>(post_draws_S[,,<span class="dv">5</span>] <span class="sc">*</span> post_draws_S[,,<span class="dv">9</span>]),<span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     2.5%     97.5% 
+0.7612633 0.8057481 </code></pre>
+</div>
+</div>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-talts2018validating" class="csl-entry" role="listitem">
+Talts, Sean, Michael Betancourt, Daniel Simpson, Aki Vehtari, and Andrew Gelman. 2018. <span>“Validating Bayesian Inference Algorithms with Simulation-Based Calibration.”</span> <em>arXiv Preprint arXiv:1804.06788</em>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -203,7 +203,10 @@ window.Quarto = {
   <li><a href="#causal-inference-as-a-missing-data-problem" id="toc-causal-inference-as-a-missing-data-problem" class="nav-link" data-scroll-target="#causal-inference-as-a-missing-data-problem">Causal inference as a missing data problem</a></li>
   <li><a href="#missingness-mechanisms" id="toc-missingness-mechanisms" class="nav-link" data-scroll-target="#missingness-mechanisms">Missingness mechanisms</a></li>
   <li><a href="#assignment-mechanisms" id="toc-assignment-mechanisms" class="nav-link" data-scroll-target="#assignment-mechanisms">Assignment mechanisms</a></li>
-  <li><a href="#causal-estimands" id="toc-causal-estimands" class="nav-link" data-scroll-target="#causal-estimands">Causal Estimands</a></li>
+  <li><a href="#causal-estimands-vs.-estimators" id="toc-causal-estimands-vs.-estimators" class="nav-link" data-scroll-target="#causal-estimands-vs.-estimators">Causal Estimands vs.&nbsp;estimators</a>
+  <ul class="collapse">
+  <li><a href="#conditional-variance-of-hattautextdif" id="toc-conditional-variance-of-hattautextdif" class="nav-link" data-scroll-target="#conditional-variance-of-hattautextdif">Conditional variance of <span class="math inline">\(\hat{\tau}^\text{dif}\)</span></a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -230,16 +233,16 @@ window.Quarto = {
 </header>
 
 
-<section id="set-up" class="level2">
-<h2 class="anchored" data-anchor-id="set-up">Set up</h2>
+<section id="set-up" class="level1">
+<h1>Set up</h1>
 <p>We’re often interested in making causal statements about the processes we study. Suppose we’re interested in whether a year-long jobs training program for disadvantaged workers leads to lower rates of unemployment in the year following the training program for these workers. Suppose we had data on post-training program employment records for these workers as well as those of workers with comparable backgrounds to the trainees in the same labor markets with putative access to the training program. This is a simplification of a question was examined in <span class="citation" data-cites="ashenfelter1978estimating">Ashenfelter (<a href="#ref-ashenfelter1978estimating" role="doc-biblioref">1978</a>)</span>. We’d probably compare the observed employment status in the year following the training program <span class="math inline">\(Y_{i}\)</span> for participants to nonparticipants. Let’s identify the units <span class="math inline">\(i=1, \dots, n\)</span> in the training program as those with <span class="math inline">\(W_i = t\)</span>, and those not in the program as those with <span class="math inline">\(W_i = c\)</span>. Let the value <span class="math inline">\(n_t\)</span> be the number of people in the training program, and <span class="math inline">\(n_c\)</span> as those who aren’t. The simple comparison of mean employment is: <span class="math display">\[
 \hat{\tau}^\text{dif} = \frac{1}{n_t} \sum_{i=1}^{n} Y_i\ind{W_i = t} - \frac{1}{n_c} \sum_{i=1}^{n} Y_i\ind{W_i = c}
 \]</span> We’d probably be tempted to ascribe causality to the comparison: “Participation in a jobs program decreased unemployment by 0.05 percentage points”, but we’ve learned that one should only say something like:“Participation in a jobs program predicted a decrease in unemployment of 0.05 percentage points”. Why can’t we use the causal language we’d prefer to use? When can we do so?</p>
 </section>
-<section id="core-principles" class="level2">
-<h2 class="anchored" data-anchor-id="core-principles">Core principles</h2>
-<section id="potential-outcomes-and-causal-effects" class="level3">
-<h3 class="anchored" data-anchor-id="potential-outcomes-and-causal-effects">Potential outcomes and causal effects</h3>
+<section id="core-principles" class="level1">
+<h1>Core principles</h1>
+<section id="potential-outcomes-and-causal-effects" class="level2">
+<h2 class="anchored" data-anchor-id="potential-outcomes-and-causal-effects">Potential outcomes and causal effects</h2>
 <p>The key idea, shared in <span class="citation" data-cites="imbens2015causal">Imbens and Rubin (<a href="#ref-imbens2015causal" role="doc-biblioref">2015</a>)</span> is that the effect of a cause is really a statement about the comparison of two outcomes for a single individual that correspond to different actions taken. In the job training example, there are two actions: participating in a job training program, and not participating in a job training program, which we denote <span class="math inline">\(W_i \in \{t,c\}\)</span> with <span class="math inline">\(c\)</span> indicating lack of participation. The outcome would be the employment status the year after each action; <span class="math inline">\(Y_{i}^{W=t}\)</span> would be the employment status after participating in the job training program, while <span class="math inline">\(Y_{i}^{W=c}\)</span> would be employment status if one did not participate in the jobs program. These variables are called <em>potential outcomes</em> because they exist without regards to <span class="math inline">\(W_i\)</span>, the treatment actually chosen by the participants. The causal effect of the action is defined as the difference between the potential outcomes, namely employment status if one had participated in the program and employment status if one had not participated in the program: <span class="math display">\[
 \tau_i = Y_{i}^{W=t} - Y_{i}^{W=c}
 \]</span></p>
@@ -288,8 +291,8 @@ window.Quarto = {
 </table>
 <p>Note that these causal effects are not dependent on which treatment was actually chosen because the effect compares two variables that don’t depend on the treatment chosen. The idea of potential outcomes is called the Rubin Causal Model (RCM). <em>Counterfactual outcome</em> is another term for these variables. In the RCM, these are considered fixed for each individual.</p>
 </section>
-<section id="stable-unit-treatment-value-assumption" class="level3">
-<h3 class="anchored" data-anchor-id="stable-unit-treatment-value-assumption">Stable Unit Treatment Value Assumption</h3>
+<section id="stable-unit-treatment-value-assumption" class="level2">
+<h2 class="anchored" data-anchor-id="stable-unit-treatment-value-assumption">Stable Unit Treatment Value Assumption</h2>
 <p>Crucially, this individual-level causal effect is also not estimable, because we only get to see one outcome, namely the outcome chosen by the individual. The data we would see for a single set of individuals is</p>
 <table class="caption-top table">
 <thead>
@@ -343,8 +346,8 @@ Y_{i(0)} = \ind{W_i=t} Y_i^{W=t}  + \ind{W_i=c} Y_i^{W=c}
 Y_{i(1)} = \ind{W_i=c} Y_i^{W=t}  + \ind{W_i=t} Y_i^{W=c}
 \]</span></p>
 </section>
-<section id="causal-inference-as-a-missing-data-problem" class="level3">
-<h3 class="anchored" data-anchor-id="causal-inference-as-a-missing-data-problem">Causal inference as a missing data problem</h3>
+<section id="causal-inference-as-a-missing-data-problem" class="level2">
+<h2 class="anchored" data-anchor-id="causal-inference-as-a-missing-data-problem">Causal inference as a missing data problem</h2>
 <p>We can invert these relationships to make the missingness more explicit:</p>
 <p><span class="math display">\[
 Y_i^{W=t}
@@ -359,8 +362,8 @@ Y_{i(0)} &amp; \text{if } W_i = c\\
 \end{cases}
 \]</span> Thus, if we wanted to predict individual causal effects, we would need to impute the missing observation depending on which treatment group they have been assigned to.</p>
 </section>
-<section id="missingness-mechanisms" class="level3">
-<h3 class="anchored" data-anchor-id="missingness-mechanisms">Missingness mechanisms</h3>
+<section id="missingness-mechanisms" class="level2">
+<h2 class="anchored" data-anchor-id="missingness-mechanisms">Missingness mechanisms</h2>
 <p>We know from our missing data material that if we want to make an inference about model parameters under missing data, we need to be in the MCAR or MAR setting. We can think of <span class="math inline">\(W_i\)</span> as the causal version of <span class="math inline">\(M_i\)</span>. In the missing data realm, we would have <span class="math inline">\(M_{it}\)</span> and <span class="math inline">\(M_{ic}\)</span>, with <span class="math inline">\(1\)</span>s representing missingness of <span class="math inline">\(Y_{it}\)</span> or <span class="math inline">\(Y_{ic}\)</span>, respectively. These variables give too many degrees of freedom for causal inference, however, because they are constrained so that <span class="math inline">\(M_{it} + M_{ic} = 1\)</span> for every <span class="math inline">\(i\)</span>. Thus, we can write our missing data mechanism as a mechanism for <span class="math inline">\(\mathbf{W}\)</span>, the set of assignments for all <span class="math inline">\(n\)</span> units under study. Let <span class="math inline">\(Y_{(0)}\)</span> be the observed data for all participants, and <span class="math inline">\(Y_{(1)}\)</span> be the missing values for all units. MCAR would be the following, with a slight change of notation: <span class="math display">\[
 P(\mathbf{W} = \tilde{w} \mid Y_{(0)} = y_{(0)}, Y_{(1)} = y_{(1)}) = P(\mathbf{W} = \tilde{w} \mid Y_{(0)} = y^\star_{(0)}, Y_{(1)} = y^\star_{(1)}), \forall y_{(0)}, y_{(1)}, y^\star_{(0)}, y^\star_{(1)}
 \]</span> While MACAR would be:</p>
@@ -375,8 +378,8 @@ P(\mathbf{W} = \tilde{w} \mid Y_{(0)} = \tilde{y}_{(0)}, Y_{(1)} = y_{(1)}, \mat
 \]</span></p>
 <p>For instance, given that the job training program is a one-year program, people who decide to select into the program might have fewer employment prospects than the people who don’t select into the program.</p>
 </section>
-<section id="assignment-mechanisms" class="level3">
-<h3 class="anchored" data-anchor-id="assignment-mechanisms">Assignment mechanisms</h3>
+<section id="assignment-mechanisms" class="level2">
+<h2 class="anchored" data-anchor-id="assignment-mechanisms">Assignment mechanisms</h2>
 <p>The causal term of art for a missingness mechanism is an “assignment mechanism.”</p>
 <p>As we showed above, we can write <span class="math inline">\(Y_{i(0)}\)</span> and <span class="math inline">\(Y_{i(1)}\)</span> in terms of the assignment <span class="math inline">\(W_i\)</span> and the potential outcomes <span class="math inline">\(Y_i^{W=t}\)</span> and <span class="math inline">\(Y_i^{W=c}\)</span><span class="math inline">\(Y_i^{W=t}\)</span>, so we can write <span class="math display">\[
 P(\mathbf{W} = w \mid Y_{(0)} = \tilde{y}_{(0)}, Y_{(1)} = y_{(1)}, \mathbf{X} = x)
@@ -432,33 +435,111 @@ P(\mathbf{W} = w \mid Y_{(0)} = y_{(0)}, Y_{(1)} = y_{(1)}, \mathbf{X} = x) = P(
 \]</span> for all <span class="math inline">\(y_{(1)}, y^\star_{(1)}\)</span>.</p>
 </div>
 <p>Note that this is a definition akin to MAR for missingness, where we moved back to missing data notation to highlight the potential dependence on observed outcomes but not unobserved outcomes.</p>
+<div id="exm-ignorable-treat" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1 (Sequential randomized trial)</strong></span> Suppose we have <span class="math inline">\(3\)</span> units which we label <span class="math inline">\(i=1,2,3\)</span>, and thus we have <span class="math inline">\(\mathbf{W} = (W_1, W_2, W_3)^T\)</span>.Let <span class="math inline">\(X=i\)</span>. In this example let the active treatment, denoted above as <span class="math inline">\(W_i = t\)</span>, be denoted as <span class="math inline">\(W_i = 1\)</span> and let <span class="math inline">\(W_i = 0\)</span> be denoted as control. The sample space for <span class="math inline">\(\mathbf{W}\)</span> has <span class="math inline">\(2^3\)</span> elements and is: <span class="math display">\[
+\mathbf{W} \in \left\{
+\begin{pmatrix}
+0 \\ 0 \\ 0
+\end{pmatrix},
+\begin{pmatrix}
+1 \\ 0 \\ 0
+\end{pmatrix},
+\begin{pmatrix}
+0 \\ 1 \\ 0
+\end{pmatrix},
+\begin{pmatrix}
+1 \\ 1 \\ 0
+\end{pmatrix},
+\begin{pmatrix}
+0 \\ 0 \\ 1
+\end{pmatrix},
+\begin{pmatrix}
+1 \\ 0 \\ 1
+\end{pmatrix},
+\begin{pmatrix}
+0 \\ 1 \\ 1
+\end{pmatrix},
+\begin{pmatrix}
+1 \\ 1 \\ 1
+\end{pmatrix}
+\right\}
+\]</span> The sampling routine is as follows:</p>
+<ol type="1">
+<li><p>Draw <span class="math inline">\(W_1 \sim \text{Bern}(0.5)\)</span></p></li>
+<li><p>Draw <span class="math inline">\(W_2 = 1 - W_1\)</span></p></li>
+<li><p><span class="math inline">\(W_3\)</span> is the treatment for which the observed causal effect is greatest, breaking ties towards active treatment: <span class="math display">\[
+W_3 =
+\begin{cases}
+1 &amp; \text{if } Y_1(1) \geq Y_2(0) \text{ and } W_1 = 1 \\
+1 &amp; \text{if } Y_2(1) \geq Y_1(0)  \text{ and } W_1 = 0 \\
+0 &amp; \text{if } Y_1(1) &lt; Y_2(0)   \text{ and } W_1 = 1 \\
+0 &amp; \text{if } Y_2(1) &lt; Y_1(0)  \text{ and } W_1 = 0
+\end{cases}
+\]</span> This is a case in which the treatment assignment is ignorable because it depends only on observed outcomes, not on unobserved outcomes</p></li>
+</ol>
+<p>Note that the first two steps in the treatment assignment scheme mean that <span class="math inline">\(P(\mathbf{W} = w \mid Y^{W=1} = y^{W=1}, Y^{W=0} = y^{W=0}) = 0\)</span> for any <span class="math inline">\(w \in \{0,1\}^3\)</span> with <span class="math inline">\(w_1 = w_2\)</span>.</p>
+</div>
+<div id="def-comp-rand-exp" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3 (Completely randomized experiment (CRE))</strong></span> For a given number of individuals in the active treatment group, <span class="math inline">\(N_t\)</span>, a completely randomized experiment has the following assignment mechanism:</p>
+<p><span class="math display">\[
+P(\mathbf{W} = w \mid Y^{W=1} = y^{W=1}, Y^{W=0} = y^{W=0}, \mathbf{X} = x) =
+\begin{cases}
+\binom{N}{N_t}^{-1} &amp; \text{if } \sum_{i=1}^N w_i = N_t \\
+0 &amp; \text{otherwise}
+\end{cases}
+\]</span></p>
+</div>
 </section>
-<section id="causal-estimands" class="level3">
-<h3 class="anchored" data-anchor-id="causal-estimands">Causal Estimands</h3>
+<section id="causal-estimands-vs.-estimators" class="level2">
+<h2 class="anchored" data-anchor-id="causal-estimands-vs.-estimators">Causal Estimands vs.&nbsp;estimators</h2>
 <p>Typically, we want to define an estimable quantity that is related to the population of interest. In causal inference, the population of interest tends to be the sample at hand, which is assumed to arise from an infinite superpopulation. In causal inference, we know that causal effects are comparisons of unit-level potential outcomes, so averages of these values would make for natural causal estimands.</p>
 <p>One would be be the finite-sample mean of the individual causal effects: <span class="math display">\[
-\tau_{\text{fs}} = \frac{1}{n} \sum_{i=1}^n (Y^{W=t}_{i} - Y^{W=c}_{i})
+\tau_{\text{fs}} = \frac{1}{n} \sum_{i=1}^n (Y^{W=1}_{i} - Y^{W=0}_{i})
 \]</span> Starting with the contrast from above: <span class="math display">\[
-\hat{\tau}^\text{dif} = \frac{1}{n_t} \sum_{i=1}^{n} Y_i\ind{W_i = t} - \frac{1}{n_c} \sum_{i=1}^{n} Y_i\ind{W_i = c}
-\]</span> we can show that this is an unbiased estimator for <span class="math inline">\(\tau_{\text{fs}}\)</span> under several assumptions. <span class="math display">\[
+\hat{\tau}^\text{dif} = \frac{1}{n_t} \sum_{i=1}^{n} Y_i\ind{W_i = t} - \frac{1}{n_c} \sum_{i=1}^{n} Y_i\ind{W_i = 0}
+\]</span> we can show that this is an unbiased estimator for <span class="math inline">\(\tau_{\text{fs}}\)</span> when the experiment is <strong>completely randomized</strong>.</p>
+<p><span class="math display">\[
 \begin{align}
-\hat{\tau}^\text{dif}&amp; = \frac{1}{n_t} \sum_{i=1}^n \ind{W_i = t}Y_{i(0)} - \frac{1}{n_c} \sum_{i=1}^n \ind{W_i = c}Y_{i(0)}\\
-&amp; = \frac{1}{n_t} \sum_{i=1}^n \ind{W_i = t}Y^{W=t}_{i} - \frac{1}{n_c} \sum_{i=1}^n \ind{W_i = c}Y^{W=c}_{i} \tag{Consistency}\\
-&amp; = \frac{1}{n} \sum_{i=1}^n \frac{\ind{W_i = t}Y^{W=t}_{i}}{n_t/n} - \frac{1}{n} \sum_{i=1}^n \frac{\ind{W_i = c}Y^{W=c}_{i}}{n_c/n} \\
+\hat{\tau}^\text{dif}&amp; = \frac{1}{n_t} \sum_{i=1}^n \ind{W_i = 1}Y_{i(0)} - \frac{1}{n_c} \sum_{i=1}^n \ind{W_i = 0}Y_{i(0)}\\
+&amp; = \frac{1}{n_t} \sum_{i=1}^n \ind{W_i = 1}Y^{W=1}_{i} - \frac{1}{n_c} \sum_{i=1}^n \ind{W_i = 0}Y^{W=0}_{i} \tag{Consistency}\\
+&amp; = \frac{1}{n} \sum_{i=1}^n \frac{\ind{W_i = 1}Y^{W=1}_{i}}{n_t/n} - \frac{1}{n} \sum_{i=1}^n \frac{\ind{W_i = 0}Y^{W=0}_{i}}{n_c/n} \\
 \end{align}
-\]</span> If we were under the MACAR scenario, we could take the expectation of both sides with respect to <span class="math inline">\(W_i \mid Y_{i(0)}, Y_{i(1)}\)</span> to get</p>
+\]</span> Given that we have a CRE, we could take the expectation of both sides with respect to <span class="math inline">\(W_i \mid Y_{i(0)}, Y_{i(1)}\)</span> to get</p>
 <p><span class="math display">\[
 \begin{align}
 &amp;\Exp{\hat{\tau}^\text{dif} \mid Y_{i(0)}, Y_{i(1)}} \\
-&amp; \quad = \frac{1}{n} \sum_{i=1}^n\lp  \frac{\Exp{\ind{W_i = t}\mid Y_{i(0)}, Y_{i(1)}}Y^{W=t}_{i}}{n_t/n} - \frac{\Exp{\ind{W_i = c}\mid Y_{(0)}, Y_{(1)}} Y^{W=c}_{i}}{n_c/n}\rp \\  
-&amp; \quad = \frac{1}{n} \sum_{i=1}^n \lp\frac{\Exp{\ind{W_i = t}}Y^{W=t}_{i}}{n_t/n} - \frac{\Exp{\ind{W_i = c}} Y^{W=c}_{i}}{n_c/n}\rp \tag{Unconfoundedness} \\  
-&amp; \quad = \frac{1}{n} \sum_{i=1}^n Y^{W=t}_{i} - Y^{W=c}_{i} \tag{Positivity}\\
+&amp; \quad = \frac{1}{n} \sum_{i=1}^n\lp  \frac{\Exp{\ind{W_i = 1}\mid Y_{i(0)}, Y_{i(1)}}Y^{W=1}_{i}}{n_t/n} - \frac{\Exp{\ind{W_i = 0}\mid Y_{(0)}, Y_{(1)}} Y^{W=0}_{i}}{n_c/n}\rp \\  
+&amp; \quad = \frac{1}{n} \sum_{i=1}^n \lp\frac{\Exp{\ind{W_i = 1}}Y^{W=1}_{i}}{n_t/n} - \frac{\Exp{\ind{W_i = 0}} Y^{W=0}_{i}}{n_c/n}\rp \tag{Unconfoundedness} \\  
+&amp; \quad = \frac{1}{n} \sum_{i=1}^n Y^{W=1}_{i} - Y^{W=0}_{i} \tag{Positivity}\\
 &amp; \quad = \tau_\text{fs}
 \end{align}
 \]</span> The second line came from our MACAR assumption, which we could satisfy in a randomized experiment.</p>
+<section id="conditional-variance-of-hattautextdif" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-variance-of-hattautextdif">Conditional variance of <span class="math inline">\(\hat{\tau}^\text{dif}\)</span></h3>
+<p>Let’s work through the case of <span class="math inline">\(N=2\)</span> in which <span class="math inline">\(N_t = 1\)</span> and <span class="math inline">\(N_c = 1\)</span>. The estimator has two values depending on what <span class="math inline">\(W_1\)</span> is. <span class="math display">\[
+\hat{\tau}^\text{dif} =
+\begin{cases}
+Y_1(1) - Y_2(0) &amp; \text{if } W_1 = 1 \\
+Y_2(1) - Y_1(0) &amp; \text{if } W_1 = 0
+\end{cases}
+\]</span></p>
+<p>We can write the in one line: <span class="math display">\[
+\hat{\tau}^\text{dif} = W_1 \lp Y_1(1) - Y_2(0) \rp + (1 - W_1)\lp Y_2(1) - Y_1(0) \rp
+\]</span></p>
+<p>Rewriting this in terms of <span class="math inline">\(D_i = 2 W_i - 1\)</span> leads to <span class="math inline">\(W_i = (D_i + 1) / 2\)</span>, which leads to: <span class="math display">\[
+\begin{aligned}
+\hat{\tau}^\text{dif} &amp; = \frac{D_1 + 1}{2} \lp Y_1(1) - Y_2(0) \rp + \frac{1 - D_1}{2}\lp Y_2(1) - Y_1(0) \rp \\
+&amp; = \frac{1}{2}\lp Y_1(1) - Y_1(0) + Y_2(1) - Y_2(0) \rp \\
+&amp; \quad + \frac{D_1}{2}\lp Y_1(1) + Y_1(0) - (Y_2(1) + Y_2(0))   \rp
+\end{aligned}
+\]</span> The expectation of <span class="math inline">\(D_1\)</span> is zero, so this shows that the mean of <span class="math inline">\(\hat{\tau}^{\text{dif}}\)</span> conditional on the potential outcomes is the finite sample causal effect.</p>
+<p>The variance is more complicated. The variance of <span class="math inline">\(D_1\)</span> is 1, so the conditional variance of <span class="math inline">\(\hat{\tau}^{\text{dif}}\)</span> is <span class="math display">\[
+\Var{\hat{\tau}^\text{dif} \mid \mathbf{Y}(1), \mathbf{Y}(0)} = \frac{1}{4}\lp Y_1(1) + Y_1(0) - (Y_2(1) + Y_2(0))   \rp^2
+\]</span></p>
 
 
 
+</section>
 </section>
 </section>
 
