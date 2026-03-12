@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -180,6 +200,15 @@ window.Quarto = {
   <li><a href="#super-population-vs.-finite-sample-inference" id="toc-super-population-vs.-finite-sample-inference" class="nav-link" data-scroll-target="#super-population-vs.-finite-sample-inference">Super population vs.&nbsp;finite sample inference</a></li>
   </ul></li>
   <li><a href="#balancing-scores" id="toc-balancing-scores" class="nav-link" data-scroll-target="#balancing-scores">Balancing scores</a></li>
+  <li><a href="#propensity-score-estimation" id="toc-propensity-score-estimation" class="nav-link" data-scroll-target="#propensity-score-estimation">Propensity score estimation</a></li>
+  <li><a href="#strategies-for-estimating-causal-effects" id="toc-strategies-for-estimating-causal-effects" class="nav-link" data-scroll-target="#strategies-for-estimating-causal-effects">Strategies for estimating causal effects</a>
+  <ul class="collapse">
+  <li><a href="#the-case-against-model-based-inference" id="toc-the-case-against-model-based-inference" class="nav-link" data-scroll-target="#the-case-against-model-based-inference">The case against model-based inference</a></li>
+  <li><a href="#the-case-against-weighting" id="toc-the-case-against-weighting" class="nav-link" data-scroll-target="#the-case-against-weighting">The case against weighting</a></li>
+  <li><a href="#the-argument-for-blocking" id="toc-the-argument-for-blocking" class="nav-link" data-scroll-target="#the-argument-for-blocking">The argument for blocking</a></li>
+  <li><a href="#matching" id="toc-matching" class="nav-link" data-scroll-target="#matching">Matching</a></li>
+  <li><a href="#mixtures-of-methods" id="toc-mixtures-of-methods" class="nav-link" data-scroll-target="#mixtures-of-methods">Mixtures of methods</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -209,6 +238,7 @@ window.Quarto = {
 <h1>Set up</h1>
 <p>Despite the importance of randomized trials, there are many causal queries we may wish to make for which a randomized trial is infeasible or unethical. In this case, if we can find an observational dataset in which <strong>unconfounded treatment assignment</strong> holds, then we may be able to do causal inference.</p>
 <p>The sampling properties of the estimators we will cover in this lecture will be derived from taking a bit different persepctive than in last lecture. In the previous lectures we were focused on inference under the randomization distribution of the treatment assignment. In this chapter, we will consider the sample at hand to have been drawn from a broader, often infinite, super population, and it is under repeated samples from the super population under which we will derive the sampling properties of our estimators.</p>
+<p>This lecture is nearly verbatim from <span class="citation" data-cites="imbens2015causal">Imbens and Rubin (<a href="#ref-imbens2015causal" role="doc-biblioref">2015</a>)</span>.</p>
 <section id="super-population-vs.-finite-sample-inference" class="level2">
 <h2 class="anchored" data-anchor-id="super-population-vs.-finite-sample-inference">Super population vs.&nbsp;finite sample inference</h2>
 <p>In the previous lecture we investigated the properties of difference-in-means <strong>estimator</strong> which was shown to be unbiased for the causal <strong>estimand</strong> the finite sample average causal effect: <span class="math display">\[
@@ -302,11 +332,123 @@ P(W_i = 1 \mid Y_i(0), Y_i(1), b(X_i)) &amp; = \Exp{W_i \mid Y_i(0), Y_i(1), b(X
 \end{aligned}
 \]</span></p>
 </div>
+</section>
+<section id="propensity-score-estimation" class="level1">
+<h1>Propensity score estimation</h1>
+<p>For this section, we’re going to need a little more notation. Let <span class="math display">\[
+\begin{aligned}
+\mu_c(x) &amp; = \ExpA{Y_i(0) \mid X_i = x}{\text{sp}} \\
+\mu_t(x) &amp; = \ExpA{Y_i(1) \mid X_i = x}{\text{sp}} \\
+\sigma^2_c(x) &amp; = \VarA{Y_i(0) \mid X_i = x}{\text{sp}} \\
+\sigma^2_t(x) &amp; = \VarA{Y_i(1) \mid X_i = x}{\text{sp}} \\
+\tau_{\text{sp}}(x) &amp; = \ExpA{Y_i(1) - Y_i(0) \mid X_i = x}{\text{sp}}
+\end{aligned}
+\]</span></p>
+<p>There are two causal estimands that are typically of interest (though there are of course others that could be of interest):</p>
+<p><span class="math display">\[
+\begin{aligned}
+\tau_{\text{sp}} &amp; = \ExpA{\tau_\text{sp}(X_i)}{\text{sp}}
+\tau_{\text{cond}} = \frac{1}{n} \sum_{i=1}^n \tau_{\text{sp}}(X_i)
+\end{aligned}
+\]</span></p>
+<p>The first is the population average treatment effect, which requires two pieces: inference on <span class="math inline">\(\tau_{\text{sp}}(x)\)</span> and <span class="math inline">\(f_\text{sp}(x)\)</span>. The second is the conditional average treatment effect, which subs in the empirical distribution in the sample, <span class="math inline">\(\mathbb{P}_n(x)\)</span> for <span class="math inline">\(f_\text{sp}(x)\)</span>.</p>
+<p>The nonparametric variance lower bound for <span class="math inline">\(\tau_{\text{sp}}\)</span> is as follows: <span class="math display">\[
+\begin{aligned}
+\VarA{\hat{\tau}_{\text{sp}}}{\text{sp}} = \ExpA{\frac{\sigma^2_c(X_i)}{1 - e(X_i)} + \frac{\sigma^2_t(X_i)}{e(X_i)} + (\tau_\text{sp}(X_i) - \tau_\text{sp})^2}{\text{sp}}
+\end{aligned}
+\]</span> This shows that population covariate balance between treated and control units will contribute to the asymptotic variance of our estimators.</p>
+<p>On the other hand, the nonparametric variance lower bound for <span class="math inline">\(\hat{\tau}_{\text{cond}}\)</span> is</p>
+<p><span class="math display">\[
+\begin{aligned}
+\VarA{\hat{\tau}_{\text{cond}}}{\text{sp}} = \ExpA{\frac{\sigma^2_c(X_i)}{1 - e(X_i)} + \frac{\sigma^2_t(X_i)}{e(X_i)}}{\text{sp}}
+\end{aligned}
+\]</span></p>
+<p>Importantly, the super-population variance estimate depends on what estimand we choose.</p>
+</section>
+<section id="strategies-for-estimating-causal-effects" class="level1">
+<h1>Strategies for estimating causal effects</h1>
+<p>There are three strategies our text lays out for estimating causal estimands. They are:</p>
+<ul>
+<li><p>Model-based inference</p></li>
+<li><p>Weighting estimators</p></li>
+<li><p>Blocking estimators</p></li>
+<li><p>Matching estimators</p></li>
+</ul>
+<p>The text argues against the first two and makes a case for the second two. The argument against model-based inference is straightforward.</p>
+<section id="the-case-against-model-based-inference" class="level2">
+<h2 class="anchored" data-anchor-id="the-case-against-model-based-inference">The case against model-based inference</h2>
+<p>Suppose we use a regression estimator to learn the distribution of <span class="math inline">\(Y_i(1) \mid X_i\)</span> within the treated units and <span class="math inline">\(Y_i(0) \mid X_i\)</span> within the control units with population parameters <span class="math inline">\(\beta_t, \beta_c\)</span> respectively.</p>
+<p>Using ols on each group yields estimators <span class="math inline">\(\hat{\beta}_t\)</span> and <span class="math inline">\(\hat{\beta}_c\)</span>. The estimand is <span class="math inline">\(\tau_{\text{sp}}\)</span>, or <span class="math display">\[
+\ExpA{ \frac{1}{n} \sum_{i=1}^n (Y_i(1) - Y_i(0)) }{\text{sp}}
+\]</span> In practice, we can estimate <span class="math inline">\(Y_i(0)\)</span> for those in the treated group by imputing the conditional mean of their outcome with <span class="math inline">\(\hat{Y}_i(0) = \hat{\beta}_c X_i\)</span>, and in the control group, we can similarly estimate <span class="math inline">\(\hat{Y}_i(1) = \hat{\beta}_t X_i\)</span>. Then the ols estimator for <span class="math inline">\(\tau_\text{sp}\)</span> is : <span class="math display">\[
+\hat{\tau}^{\text{ols}}_\text{sp} = \frac{1}{n} \sum_{i=1}^n W_i(Y_i(1) - \hat{Y}_i(0)) + (1 - W_i) (\hat{Y}_i(1) - Y_i(0))
+\]</span></p>
+<p>We can rewrite this estimator as a weighted average of the estimate of the treatment effect in the treated group and in the control group: <span class="math display">\[
+\hat{\tau}^{\text{ols}}_\text{sp} = \frac{n_t}{n} \hat{\tau}^{\text{ols}}_t + \frac{n_c}{n} \hat{\tau}^{\text{ols}}_c
+\]</span> where <span class="math display">\[
+\hat{\tau}^{\text{ols}}_t = \frac{1}{n_t}\sum_{i \mid W_i = 1} (Y_i - X_i \hat{\beta}_c)
+\]</span> and <span class="math display">\[
+\hat{\tau}^{\text{ols}}_c = \frac{1}{n_t}\sum_{i \mid W_i = 1} (X_i \hat{\beta}_t - Y_i)
+\]</span></p>
+<p>We can write <span class="math display">\[
+\begin{aligned}
+\hat{\tau}^{\text{ols}}_t &amp; = \bar{Y}_t - \bar{X}_t \hat{\beta}_c \\
+&amp; = \bar{Y}_t - \bar{X}_t \hat{\beta}_c - \bar{Y}_c + \bar{X}_c \hat{\beta}_c \\
+&amp; = \bar{Y}_t - \bar{Y}_c - (\bar{X}_t - \bar{X}_c) \hat{\beta}_c
+\end{aligned}
+\]</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\hat{\tau}^{\text{ols}}_c &amp; = \bar{X}_c \hat{\beta}_t - \bar{Y}_c  \\
+&amp; = \bar{X}_c \hat{\beta}_t - \bar{Y}_c + \bar{Y}_t - \bar{X}_t \hat{\beta}_t \\
+&amp; = \bar{Y}_t - \bar{Y}_c - (\bar{X}_t - \bar{X}_c) \hat{\beta}_t
+\end{aligned}
+\]</span></p>
+<p>The issue with both of these estimators are the terms <span class="math inline">\((\bar{X}_t - \bar{X}_c) \hat{\beta}_t\)</span> and <span class="math inline">\((\bar{X}_t - \bar{X}_c) \hat{\beta}_c\)</span>. This wasn’t an issue when we had random treatment assignment because <span class="math inline">\(\ExpA{\bar{X}_t - \bar{X}_c }{W} = 0\)</span>, but when this is not the case, our estimates will be sensitive to our linearity assumption.</p>
+</section>
+<section id="the-case-against-weighting" class="level2">
+<h2 class="anchored" data-anchor-id="the-case-against-weighting">The case against weighting</h2>
+<p>We encountered weighting estimators earlier in the course when discussing imputation of a population mean under nonresponse.</p>
+<p>The same issues that we discussed in that <a href="../../missing-data-material-W-26/notes/lecture-2-notes.html#inverse-probability-estimators">lecture</a> will apply here, but in a different form.</p>
+<p>Using the result <span class="math display">\[
+\begin{aligned}
+\ExpA{\frac{W_i Y_i}{e(X_i)}}{W, X, Y_i(0), Y_i(1)} &amp; = \ExpA{\ExpA{\frac{W_i Y_i}{e(X_i)}}{W_i \mid X, Y_i(0), Y_i(1)}}{X, Y_i(0), Y_i(1)} \\
+&amp; = \Exp{Y_i(1)}
+\end{aligned}
+\]</span> suggests the estimator: <span class="math display">\[
+\hat{\tau}^\text{ht}_{\text{sp}} = \frac{1}{n} \sum_{i=1}^n \frac{W_i Y_i}{\hat{e}(X_i)} - \frac{1}{n} \sum_{i=1}^n \frac{(1 - W_i) Y_i}{1 - \hat{e}(X_i)}
+\]</span> The issue is that when treatment isn’t randomly assigned, one will likely have some units where <span class="math inline">\(\hat{e}(X_i)\)</span> is near 1 or 0, leading to large weights and large variance.</p>
+</section>
+<section id="the-argument-for-blocking" class="level2">
+<h2 class="anchored" data-anchor-id="the-argument-for-blocking">The argument for blocking</h2>
+<p>The algorithm is as follows:</p>
+<ul>
+<li><p>Construct the estimator for the propensity score <span class="math inline">\(\hat{e}(X_i)\)</span></p></li>
+<li><p>Create <span class="math inline">\(J\)</span> strata based on propensity scores such that <span class="math inline">\(B_i(j) = 1\)</span> if <span class="math inline">\(b_{j-1} &lt; \hat{e}(X_i) &lt; b_j\)</span> and <span class="math inline">\(0\)</span> otherwise.</p></li>
+<li><p>Estimate causal effects within each stratum: <span class="math display">\[
+\hat{\tau}_j = \frac{1}{\sum_{i \mid B_i(j) = 1} W_i} \sum_{i \mid B_i(j) = 1} Y_i W_i - \frac{1}{\sum_{i \mid B_i(j) = 1} (1 - W_i)} \sum_{i \mid B_i(j) = 1} Y_i (1 - W_i)
+\]</span></p></li>
+<li><p>Estimate overall effect as <span class="math inline">\(\hat{\tau} = \sum_{j=1}^j \frac{\sum{i=1}^n B_i(j)}{n} \hat{\tau}_j\)</span></p></li>
+</ul>
+</section>
+<section id="matching" class="level2">
+<h2 class="anchored" data-anchor-id="matching">Matching</h2>
+<p>This is the simplest method to explain: for every treated unit in an analysis, match with one or more untreated units with the same covariates. The approach is simple, but not without issues when we have many covariates.</p>
+</section>
+<section id="mixtures-of-methods" class="level2">
+<h2 class="anchored" data-anchor-id="mixtures-of-methods">Mixtures of methods</h2>
+<p>The ultimate recommendation is to use a combination of approaches, like blocking + regression adjustment to get to efficient and less-biased estimators.</p>
+
 
 
 </section>
+</section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-imbens2015causal" class="csl-entry" role="listitem">
+Imbens, Guido W, and Donald B Rubin. 2015. <em>Causal Inference in Statistics, Social, and Biomedical Sciences</em>. Cambridge university press.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
