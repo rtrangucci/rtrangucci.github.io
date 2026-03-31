@@ -25,7 +25,7 @@
     "href": "courses.html",
     "title": "Courses",
     "section": "",
-    "text": "STAT 625 - Winter 2024\n\n\n\n\n\nSTAT 625 - Winter 2025\nSTAT 599 - Winter 2025\n\n\n\n\n\nSTAT 625 - Winter 2026\nSTAT 599 - Winter 2026"
+    "text": "STAT 625 - Winter 2024\n\n\n\n\n\nSTAT 625 - Winter 2025\nSTAT 599 - Winter 2025\n\n\n\n\n\nSTAT 625 - Winter 2026\nSTAT 599 - Winter 2026\n\n\n\n\n\nSTAT 559"
   },
   {
     "objectID": "posts/heckman-in-stan.html",
@@ -95,7 +95,7 @@
     "href": "courses.html#academic-courses",
     "title": "Courses",
     "section": "",
-    "text": "STAT 625 - Winter 2024\n\n\n\n\n\nSTAT 625 - Winter 2025\nSTAT 599 - Winter 2025\n\n\n\n\n\nSTAT 625 - Winter 2026\nSTAT 599 - Winter 2026"
+    "text": "STAT 625 - Winter 2024\n\n\n\n\n\nSTAT 625 - Winter 2025\nSTAT 599 - Winter 2025\n\n\n\n\n\nSTAT 625 - Winter 2026\nSTAT 599 - Winter 2026\n\n\n\n\n\nSTAT 559"
   },
   {
     "objectID": "st_599_w_26.html",
@@ -1012,7 +1012,7 @@
     "href": "blog.html",
     "title": "Random thoughts",
     "section": "",
-    "text": "Higher order asymptotics for MLEs\nREML"
+    "text": "Higher order asymptotics for MLEs\nREML three different ways"
   },
   {
     "objectID": "blog.html#posts",
@@ -1789,7 +1789,7 @@
     "href": "survival-material/frailty-examples.html",
     "title": "Frailty example",
     "section": "",
-    "text": "library(survival)\nlibrary(KMsurv)\nlibrary(cmdstanr)\n\nThis is cmdstanr version 0.9.0\n\n\n- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr\n\n\n- CmdStan path: /Users/robertntrangucci/.cmdstan/cmdstan-2.37.0\n\n\n- CmdStan version: 2.37.0\n\n\n\nA newer version of CmdStan is available. See ?install_cmdstan() to install it.\nTo disable this check set option or environment variable cmdstanr_no_ver_check=TRUE.\n\nlibrary(npreg)\n\nPackage 'npreg' version 1.1.0\nType 'citation(\"npreg\")' to cite this package.\n\nfinite_differences &lt;- function(x, y) {\n  n &lt;- length(x)\n  derivativeFunction &lt;- vector(length = n)\n  for (i in 2:n) {\n    derivativeFunction[i-1] &lt;- (y[i-1] - y[i]) / (x[i-1] - x[i])\n  }\n  derivativeFunction[n] &lt;- (y[n] - y[n - 1]) / (x[n] - x[n - 1])\n  return(derivativeFunction)\n}\n\nWe generate some data from the following model:\n\\[\nX_i \\mid \\lambda_i \\sim \\text{Weibull}(\\alpha, \\lambda_i)\n\\] where \\(\\lambda_i\\) is defined as:\n\\[\n\\lambda_i = \\xi_i \\gamma  \\alpha e^{\\beta^T z_i} t^{\\alpha - 1}\n\\] and \\(\\xi_i\\) is distributed \\(\\text{Gamma}(\\nu^{-1}, \\nu^{-1})\\) so that \\(\\Var{\\xi_i} = \\nu\\) and \\(\\Exp{\\xi_i} = 1\\).\n\nset.seed(123)\np &lt;- 2\nn &lt;- 1e3\nX &lt;- matrix(rnorm(p * n),n,p)\nre &lt;- rgamma(n,1/5,1/5)\nbeta &lt;- c(0.25, -0.25)\ngamma &lt;- 1/5\nalpha &lt;- 2\nhaz &lt;- re * exp(X %*% beta)\nx &lt;- sapply(haz, \\(x) rweibull(1, shape = alpha, scale = (1/(x * gamma))^(1/alpha)))\ncens &lt;- rexp(n,1/5)\nt &lt;- pmin(x, cens)\nstatus &lt;- as.integer(x &lt;= cens)\nsdat &lt;- \n  list(\n    N = n,\n    p = p,\n    X = X,\n    t = t,\n    delta = status\n  )\n\ndf_sim &lt;- data.frame(\n  X_1 = X[,1],\n  X_2 = X[,2],\n  time = t,\n  status = status\n)\n\nWe fit a Cox model to the data:\n\nph &lt;- coxph(Surv(time, status) ~ X_1 + X_2, df_sim)\ndf_new &lt;- data.frame(X_1 = 0, X_2 = 0)\nhz &lt;- basehaz(ph, df_new)\n\nderi &lt;- finite_differences(x = hz$time, y = hz$hazard)\nhz$baseline &lt;- deri\n\n# Non-parametric smooth curve for estimating baseline hazard function over time\nsmooth_baseline &lt;- ss(x = hz$time, y = hz$baseline, df = 4)\ntrue_baseline &lt;- alpha * gamma * smooth_baseline$x ^ (alpha - 1)\nylims &lt;- range(true_baseline)\n\nwith(smooth_baseline, plot(x,y, type = \"l\", ylim = ylims, col = \"blue\"))\nwith(smooth_baseline, lines(x, true_baseline, col = \"red\"))\n\n\n\n\n\n\n\n\n\nmod &lt;- cmdstan_model(\"~/Dropbox (Personal)/OSU/survival analysis/ST625-W-26/ST-625-W-24-lecutres/st-625-code/Stan code/weibull-gamma-frailty.stan\")\nfit &lt;- mod$sample(data = sdat, parallel_chains = 4, chains = 4, \n                  iter_warmup = 500, iter_sampling = 500)\n\nRunning MCMC with 4 parallel chains...\n\nChain 1 Iteration:   1 / 1000 [  0%]  (Warmup) \nChain 2 Iteration:   1 / 1000 [  0%]  (Warmup) \nChain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) \nChain 3 Iteration:   1 / 1000 [  0%]  (Warmup) \nChain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) \nChain 4 Iteration:   1 / 1000 [  0%]  (Warmup) \nChain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) \nChain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) \nChain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) \nChain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) \nChain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) \nChain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) \nChain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) \nChain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) \nChain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) \nChain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) \nChain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) \nChain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) \nChain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) \nChain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) \nChain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) \nChain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) \nChain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) \nChain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) \nChain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) \nChain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) \nChain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) \nChain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) \nChain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) \nChain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) \nChain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) \nChain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) \nChain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) \nChain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) \nChain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) \nChain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) \nChain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) \nChain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) \nChain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) \nChain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) \nChain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) \nChain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) \nChain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) \nChain 2 Iteration: 1000 / 1000 [100%]  (Sampling) \nChain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) \nChain 2 finished in 1.3 seconds.\nChain 1 Iteration: 1000 / 1000 [100%]  (Sampling) \nChain 3 Iteration: 1000 / 1000 [100%]  (Sampling) \nChain 4 Iteration: 1000 / 1000 [100%]  (Sampling) \nChain 1 finished in 1.4 seconds.\nChain 3 finished in 1.4 seconds.\nChain 4 finished in 1.4 seconds.\n\nAll 4 chains finished successfully.\nMean chain execution time: 1.4 seconds.\nTotal execution time: 1.5 seconds.\n\nfit$summary(\"beta\")\n\n# A tibble: 2 × 10\n  variable   mean median    sd   mad      q5     q95  rhat ess_bulk ess_tail\n  &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 beta[1]   0.138  0.138 0.134 0.132 -0.0823  0.363   1.00    1415.    1288.\n2 beta[2]  -0.302 -0.296 0.140 0.139 -0.551  -0.0842  1.00    1376.    1293."
+    "text": "library(survival)\nlibrary(KMsurv)\nlibrary(cmdstanr)\n\nThis is cmdstanr version 0.9.0\n\n\n- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr\n\n\n- CmdStan path: /Users/robertntrangucci/.cmdstan/cmdstan-2.37.0\n\n\n- CmdStan version: 2.37.0\n\n\n\nA newer version of CmdStan is available. See ?install_cmdstan() to install it.\nTo disable this check set option or environment variable cmdstanr_no_ver_check=TRUE.\n\nlibrary(npreg)\n\nPackage 'npreg' version 1.1.0\nType 'citation(\"npreg\")' to cite this package.\n\nlibrary(coxme)\n\nLoading required package: bdsmatrix\n\n\n\nAttaching package: 'bdsmatrix'\n\n\nThe following object is masked from 'package:base':\n\n    backsolve\n\nfinite_differences &lt;- function(x, y) {\n  n &lt;- length(x)\n  derivativeFunction &lt;- vector(length = n)\n  for (i in 2:n) {\n    derivativeFunction[i-1] &lt;- (y[i-1] - y[i]) / (x[i-1] - x[i])\n  }\n  derivativeFunction[n] &lt;- (y[n] - y[n - 1]) / (x[n] - x[n - 1])\n  return(derivativeFunction)\n}\n\nWe generate some data from the following model:\n\\[\nX_i \\mid \\lambda_i \\sim \\text{Weibull}(\\alpha, \\lambda_i)\n\\] where \\(\\lambda_i\\) is defined as:\n\\[\n\\lambda_i = \\xi_i \\gamma  \\alpha e^{\\beta^T z_i} t^{\\alpha - 1}\n\\] and \\(\\xi_i\\) is distributed \\(\\text{Gamma}(\\nu^{-1}, \\nu^{-1})\\) so that \\(\\Var{\\xi_i} = \\nu\\) and \\(\\Exp{\\xi_i} = 1\\).\n\nset.seed(123)\np &lt;- 2\nn &lt;- 1e3\nX &lt;- matrix(rnorm(p * n),n,p)\nre &lt;- rgamma(n,1/5,1/5)\nbeta &lt;- c(0.25, -0.25)\ngamma &lt;- 1/5\nalpha &lt;- 2\nhaz &lt;- re * exp(X %*% beta)\nx &lt;- sapply(haz, \\(x) \n            rweibull(1, \n                     shape = alpha, \n                     scale = (1/(x * gamma))^(1/alpha))\n            )\ncens &lt;- rexp(n,1/5)\nt &lt;- pmin(x, cens)\nstatus &lt;- as.integer(x &lt;= cens)\nsdat &lt;- \n  list(\n    N = n,\n    p = p,\n    X = X,\n    t = t,\n    delta = status\n  )\n\ndf_sim &lt;- data.frame(\n  X_1 = X[,1],\n  X_2 = X[,2],\n  time = t,\n  status = status,\n  id = 1:nrow(X)\n)\n\nWe fit a Cox model to the data:\n\nph &lt;- coxph(Surv(time, status) ~ X_1 + X_2, df_sim)\ndf_new &lt;- data.frame(X_1 = 0, X_2 = 0)\nhz &lt;- basehaz(ph, df_new)\n\nderi &lt;- finite_differences(x = hz$time, y = hz$hazard)\nhz$baseline &lt;- deri\n\n# Non-parametric smooth curve for estimating baseline hazard function over time\nsmooth_baseline &lt;- ss(x = hz$time, y = hz$baseline, df = 4)\ntrue_baseline &lt;- alpha * gamma * smooth_baseline$x ^ (alpha - 1)\nylims &lt;- range(true_baseline)\n\nwith(smooth_baseline, \n     plot(x,y, \n          type = \"l\", \n          ylim = ylims, col = \"blue\", \n          main = \"True baseline hazard (red) vs. inferred hazard (blue)\", \n          ylab = bquote(lambda[t]), \n          xlab = \"time\")\n     )\nwith(smooth_baseline, lines(x, true_baseline, col = \"red\"))\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\ndf_new &lt;- data.frame(X_1 = 0, X_2 = 0)\nhz &lt;- basehaz(ph, df_new)\n\nderi &lt;- finite_differences(x = hz$time, y = hz$hazard)\nhz$baseline &lt;- deri\n\n# Non-parametric smooth curve for estimating baseline hazard function over time\nsmooth_baseline &lt;- ss(x = hz$time, y = hz$baseline, df = 4)\ntrue_baseline &lt;- alpha * gamma * smooth_baseline$x ^ (alpha - 1)\nylims &lt;- range(true_baseline)\n\nwith(smooth_baseline, \n     plot(x,y, \n          type = \"l\", \n          ylim = ylims, col = \"blue\", \n          main = \"True baseline hazard (red) vs. inferred hazard (blue)\", \n          ylab = bquote(lambda[t]), \n          xlab = \"time\")\n     )\nwith(smooth_baseline, lines(x, true_baseline, col = \"red\"))\n\n\n\n\n\n\n\n\n\nmod &lt;- cmdstan_model(\"~/Dropbox (Personal)/OSU/survival analysis/ST625-W-26/ST-625-W-24-lecutres/st-625-code/Stan code/weibull-gamma-frailty.stan\")\nfit &lt;- mod$sample(data = sdat, parallel_chains = 4, chains = 4, \n                  iter_warmup = 500, iter_sampling = 500)\n\nRunning MCMC with 4 parallel chains...\n\nChain 1 Iteration:   1 / 1000 [  0%]  (Warmup) \nChain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) \nChain 2 Iteration:   1 / 1000 [  0%]  (Warmup) \nChain 3 Iteration:   1 / 1000 [  0%]  (Warmup) \nChain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) \nChain 4 Iteration:   1 / 1000 [  0%]  (Warmup) \nChain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) \nChain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) \nChain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) \nChain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) \nChain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) \nChain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) \nChain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) \nChain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) \nChain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) \nChain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) \nChain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) \nChain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) \nChain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) \nChain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) \nChain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) \nChain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) \nChain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) \nChain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) \nChain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) \nChain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) \nChain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) \nChain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) \nChain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) \nChain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) \nChain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) \nChain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) \nChain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) \nChain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) \nChain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) \nChain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) \nChain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) \nChain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) \nChain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) \nChain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) \nChain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) \nChain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) \nChain 2 Iteration: 1000 / 1000 [100%]  (Sampling) \nChain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) \nChain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) \nChain 2 finished in 1.3 seconds.\nChain 1 Iteration: 1000 / 1000 [100%]  (Sampling) \nChain 3 Iteration: 1000 / 1000 [100%]  (Sampling) \nChain 1 finished in 1.3 seconds.\nChain 3 finished in 1.3 seconds.\nChain 4 Iteration: 1000 / 1000 [100%]  (Sampling) \nChain 4 finished in 1.4 seconds.\n\nAll 4 chains finished successfully.\nMean chain execution time: 1.3 seconds.\nTotal execution time: 1.6 seconds.\n\nfit$summary(\"beta\")\n\n# A tibble: 2 × 10\n  variable   mean median    sd   mad      q5     q95  rhat ess_bulk ess_tail\n  &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;\n1 beta[1]   0.138  0.138 0.134 0.132 -0.0823  0.363   1.00    1415.    1288.\n2 beta[2]  -0.302 -0.296 0.140 0.139 -0.551  -0.0842  1.00    1376.    1293."
   },
   {
     "objectID": "missing-data-material-W-26/notes/lecture-14-notes.html",
@@ -1881,5 +1881,348 @@
     "title": "Missing data lecture 14: Propensity score methods",
     "section": "Mixtures of methods",
     "text": "Mixtures of methods\nThe ultimate recommendation is to use a combination of approaches, like blocking + regression adjustment to get to efficient and less-biased estimators."
+  },
+  {
+    "objectID": "survival-material/aoas-review.html",
+    "href": "survival-material/aoas-review.html",
+    "title": "Paper review",
+    "section": "",
+    "text": "1 Summary\nI’d like to thank the authors for their thoughtful responses to my questions and comments. Most of my concerns have been allayed by the revesions and responses.\nHowever, the MCMC convergence diagnostics for their simulated data examples that the authors provided in their response demand some more investigation. Typically, when I fit a model using MCMC, I’m looking for \\(\\hat{R}\\) values \\(&lt;1.01\\) for all parameters. I agree with the authors that looking at \\(\\hat{R}\\) values in tree space is not valuable, and I also agree that focusing on \\(\\hat{R}\\) for \\(P(C_i = 1 \\mid X_i = x)\\) and \\(P(Y_i = 1 \\mid X_i = x, A_i = 1, C_i = 1)\\) (henceforth referred to as estimands) is the right approach to monitoring convergence.\nIn light of the boxplots of these quantities, I’m concerned about the mixing of the MCMC chains. An \\(\\hat{R}\\) value of greater than \\(2\\) is concerning and would typically suggest MCMC chains are quite separated. The typical remedy for this is to run the chains for longer, rather than increasing the number of chains (though the advice is usually run as many chains as you can so you can ferret out problematic areas of the posterior). The ESS box plots are similarly concerning. It appears that many of the estimands have ESS near zero, which would make even estimating posterior means problematic, let alone posterior variances.\nAs a test of my own, I ran a simple example in R using the BART package.\nBased on these plots, I must recommend the authors revisit their algorithm to ensure that everything is in order."
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#bayesian-articles-over-time",
+    "href": "bayes-material/Week01/Week01-bayes.html#bayesian-articles-over-time",
+    "title": "ST 559: Introduction",
+    "section": "Bayesian Articles over Time",
+    "text": "Bayesian Articles over Time\n\n\n\n\n\n\n\nLynch and Bartlett (2019)"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#questions",
+    "href": "bayes-material/Week01/Week01-bayes.html#questions",
+    "title": "ST-559: Introduction",
+    "section": "Questions",
+    "text": "Questions\n\nWhat happenend in 1990?\nWhat has happened since then?"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#a-title",
+    "href": "bayes-material/Week01/Week01-bayes.html#a-title",
+    "title": "ST 559: Introduction",
+    "section": "A title",
+    "text": "A title\n\n\n\n\n\nWhat happened in 1990?\n\nGelfand and Smith (1990)\n\n\n\n\nWhat happened after 2005?\n\n\n\n\n\n\nGelfand, Alan E., and Adrian F. M. Smith. 1990. “Sampling-Based Approaches to Calculating Marginal Densities.” Journal of the American Statistical Association 85 (410): 398–409. https://doi.org/10.2307/2289776."
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#importance-of-context-in-statistics",
+    "href": "bayes-material/Week01/Week01-bayes.html#importance-of-context-in-statistics",
+    "title": "ST 559: Introduction",
+    "section": "Importance of context in statistics",
+    "text": "Importance of context in statistics\nA (modified) example from L.J. Savage:\n\nA self-described coffee expert claims to be able to determine whether his iced latte was made with milk poured into the cup prior to the espresso shot or if the espresso shot went in first followed by the milk. In a randomized experiment, he correctly identifies the order 10 out of 10 times\nAn internationally renowned beer expert claims to be able to distinguish West Coast IPAs from New England IPAs. She correctly identifies the beers in a randomized study 10 out 10 times.\nYou are celebrating an OSU win over UO baseball at Squirrel’s when you meet a dejected Duck fan who swears he is clairvoyant and can predict the outcome of a fair coin flip. He correctly predicts 10 out 10 flips.\n\n\nIn each example, the “standard” inference for"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#rough-outline",
+    "href": "bayes-material/Week01/Week01-bayes.html#rough-outline",
+    "title": "ST 559: Introduction",
+    "section": "Rough outline",
+    "text": "Rough outline\n\nReview of classical statstics\n\nFocus on sample information\n\nAdditional considerations necessary to make statistics useful\n\nConsequences of decisions\nContext of problem"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#zooming-in",
+    "href": "bayes-material/Week01/Week01-bayes.html#zooming-in",
+    "title": "ST 559: Introduction",
+    "section": "Zooming in",
+    "text": "Zooming in\n\n\n\n\n\nWhat happened in 1990?\n\nGelfand and Smith (1990) - Gibbs sampling\n\nWhat happened after 2005?\n\nPlummer et al. (2003) - JAGS (Just-Another-Gibbs-Sampler), open source Gibbs Sampler\nGelman, Lee, and Guo (2015) - Stan, second-gen PPL and inference algorithms"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#references",
+    "href": "bayes-material/Week01/Week01-bayes.html#references",
+    "title": "ST 559: Introduction",
+    "section": "References",
+    "text": "References\n\n\nBerger, James O. 2013. Statistical Decision Theory and Bayesian Analysis. Springer Science & Business Media.\n\n\nGelfand, Alan E., and Adrian F. M. Smith. 1990. “Sampling-Based Approaches to Calculating Marginal Densities.” Journal of the American Statistical Association 85 (410): 398–409. https://doi.org/10.2307/2289776.\n\n\nGelman, Andrew, Daniel Lee, and Jiqiang Guo. 2015. “Stan: A Probabilistic Programming Language for Bayesian Inference and Optimization.” Journal of Educational and Behavioral Statistics 40 (5): 530–43.\n\n\nPlummer, Martyn et al. 2003. “JAGS: A Program for Analysis of Bayesian Graphical Models Using Gibbs Sampling.” In Proceedings of the 3rd International Workshop on Distributed Statistical Computing, 124:1–10. 125.10. Vienna, Austria.\n\n\nSavage, Leonard J. 1972. The Foundations of Statistics. 2d rev. ed. New York: Dover Publications."
+  },
+  {
+    "objectID": "st_559_s_26.html",
+    "href": "st_559_s_26.html",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "Much of the material for this course was inspired/cribbed from Aki Vehtari’s Bayesian course at Aalto https://avehtari.github.io/BDA_course_Aalto/Aalto2025.html, and Ben Goodrich’s Bayesian course at Columbia https://github.com/bgoodri/GR5065_2024.\n\n\n\n\n\nRole\nName\nOffice hours\nContact\n\n\n\n\nInstructor\nRob Trangucci\nTBD WNGR 207\nrob.trangucci@oregonstate.edu\n\n\nGTA\nGauri Phatak\nTBD\nphatakg@oregonstate.edu\n\n\n\n\n\n\n\n\n\nActivity\nDays\nTime\nRoom\n\n\n\n\nLecture\nTR\n10a-11:20a\nKEAR 124\n\n\n\nAll lectures are in class and attendance is mandatory\n\n\n\nST 562 is the recommended prerequisite. This course is going to delve headfirst into comparisons between Bayesian and frequentist inference, so you should be fairly familiar with probability distributions, expectation, variance, Bayes’ rule.\n\n\n\n\nRequired: Bayesian Data Analysis, Third Ediction, Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin\nFreely available here: https://sites.stat.columbia.edu/gelman/book/\n\n\n\n\nTo introduce students to Bayesian statistics through practical examples and computation. To apply these techniques to real data using R code and Stan code. To understand the theory and methodology of Bayesian inference through math, practice and code.\n\n\n\nConcepts to be discussed include: Bayesian vs. frequentist inference, prior and posterior distributions, prior predictive and posterior predictive distributions, exchangeability, hierarchial models, modern Bayesian computation via Markov Chain Monte Carlo, modern probabilistic programming languages.\n\n\n\nDifferentiate between Bayesian inference and frequentist inference via quantification of uncertainty.\nDerive conjugate priors for a given likelihood family.\nCalculate and interpret MCMC and HMC diagnostic checks.\nDefine and perform inference for basic hierarchical models in Stan.\nPerform prior and posterior predictive checks while building models.\n\n\n\n\n\n\n\nDate\nTopic\nReading\nLO\nAssignments\n\n\n\n\n3/31/2026\nIntroduction to Bayesian Inference\nChapter 1\n1\nNA\n\n\n4/2/2026\nSingle parameter models\nChapter 2\n1, 2\nNA\n\n\n4/7/2026\nSingle parameter models\nChapter 2\n1, 2\nHW 1\n\n\n4/9/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/14/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/16/2026\nMonte Carlo Integration\nChapter 10\n1, 2\nNA\n\n\n4/21/2026\nMonte Carlo Integration\nChapter 10\n1, 2\nNA\n\n\n4/23/2026\nMCMC\nChapter 11\n3\nNA\n\n\n4/28/2026\nMCMC\nChapter 11\n3\nNA\n\n\n4/30/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/5/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/7/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/12/2026\nHierarchical Models\nChapter 5\n4\nNA\n\n\n5/14/2026\nHierarchical Models\nChapter 5\n4\nNA\n\n\n5/19/2026\nModel checking\nChapter 6\n5\nNA\n\n\n5/21/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/26/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/28/2026\nDecision analysis\nChapter 9\n4-5\nNA\n\n\n6/2/2026\nPresentations\nNA\n1-5\nNA\n\n\n6/4/2026\nPresentations\nNA\n1-5\nNA\n\n\n\n\n\n\n\n\nProject proposal\n\n\n\n\n\nLecture 1\n\n\n\n\n\n[HW 1]\n\n\n\n\nThe course will have five homework assignments, a final project proposal, a final project presentation and a project report. The breakdown is\n\n\n\nAssessment\nWeight\n\n\n\n\nHW\n50%\n\n\nProposal\n5%\n\n\nPresentation\n10%\n\n\nReport\n35%\n\n\n\n\n\nThe tentative grading scale is below:\n\n\n\nRange\nLetter Grade\n\n\n\n\n93% - 100%\nA\n\n\n90% - 92.9%\nA-\n\n\n87% - 89.9%\nB+\n\n\n83% - 86.9%\nB\n\n\n80% - 82.9%\nB-\n\n\n77% - 79.9%\nC+\n\n\n73% - 76.9%\nC\n\n\n70% - 72.9%\nC-\n\n\n67% - 69.9%\nD+\n\n\n63% - 66.9%\nD\n\n\n60% - 62.9%\nD-\n\n\n0% - 59.9%\nF\n\n\n\n\n\n\n\n\n\nAll students are subject to the registration and refund deadlines as stated in the Academic Calendar: https://registrar.oregonstate.edu/osu-academic-calendar\n\n\n\nAccommodations for students with disabilities are determined and approved by Disability Access Services (DAS). If you, as a student, believe you are eligible for accommodations but have not obtained approval please contact DAS immediately at 541-737-4098 or at http://ds.oregonstate.edu. DAS notifies students and faculty members of approved academic accommodations and coordinates implementation of those accommodations. While not required, students and faculty members are encouraged to discuss details of the implementation of individual accommodations.”\n\n\n\nLink: https://beav.es/codeofconduct\n\n\n\nOSU has twelve established student rights. They include due process in all university disciplinary processes, an equal opportunity to learn, and grading in accordance with the course syllabus: https://asosu.oregonstate.edu/advocacy/rights\n\n\n\nUniversity students encounter setbacks from time to time. If you encounter difficulties and need assistance, it’s important to reach out. Consider discussing the situation with an instructor or academic advisor. Learn about resources that assist with wellness and academic success at https://oregonstate.edu/reachout. If you are in immediate crisis, please contact the Crisis Text Line by texting OREGON to 741-741 or call the National Suicide Prevention Lifeline at 1-800-273-TALK (8255)\n\n\n\nDuring Fall, Winter, and Spring term the online Student Learning Experience surveys open to students the Wednesday of week 9 and close the Sunday before Finals Week. Students will receive notification, instructions and the link through their ONID email. They may also log into the system via MyOregonState or directly at https://beaves.es/Student-Learning-Survey. Survey results are extremely important and are used to help improve courses and the learning experience of future students. Responses are anonymous (unless a student chooses to “sign” their comments, agreeing to relinquish anonymity of written comments) and are not available to instructors until after grades have been posted. The results of scaled questions and signed comments go to both the instructor and their unit head/supervisor. Anonymous (unsigned) comments go to the instructor only."
+  },
+  {
+    "objectID": "st_559_s_26.html#syllabus",
+    "href": "st_559_s_26.html#syllabus",
+    "title": "ST 625 - W 26",
+    "section": "",
+    "text": "Much of the material for this course was inspired/cribbed from Aki Vehtari’s Bayesian course at Aalto https://avehtari.github.io/BDA_course_Aalto/Aalto2025.html, and Ben Goodrich’s Bayesian course at Columbia https://github.com/bgoodri/GR5065_2024."
+  },
+  {
+    "objectID": "st_559_s_26.html#course-statements",
+    "href": "st_559_s_26.html#course-statements",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "All students are subject to the registration and refund deadlines as stated in the Academic Calendar: https://registrar.oregonstate.edu/osu-academic-calendar\n\n\n\nAccommodations for students with disabilities are determined and approved by Disability Access Services (DAS). If you, as a student, believe you are eligible for accommodations but have not obtained approval please contact DAS immediately at 541-737-4098 or at http://ds.oregonstate.edu. DAS notifies students and faculty members of approved academic accommodations and coordinates implementation of those accommodations. While not required, students and faculty members are encouraged to discuss details of the implementation of individual accommodations.”\n\n\n\nLink: https://beav.es/codeofconduct\n\n\n\nOSU has twelve established student rights. They include due process in all university disciplinary processes, an equal opportunity to learn, and grading in accordance with the course syllabus: https://asosu.oregonstate.edu/advocacy/rights\n\n\n\nUniversity students encounter setbacks from time to time. If you encounter difficulties and need assistance, it’s important to reach out. Consider discussing the situation with an instructor or academic advisor. Learn about resources that assist with wellness and academic success at https://oregonstate.edu/reachout. If you are in immediate crisis, please contact the Crisis Text Line by texting OREGON to 741-741 or call the National Suicide Prevention Lifeline at 1-800-273-TALK (8255)\n\n\n\nDuring Fall, Winter, and Spring term the online Student Learning Experience surveys open to students the Wednesday of week 9 and close the Sunday before Finals Week. Students will receive notification, instructions and the link through their ONID email. They may also log into the system via MyOregonState or directly at https://beaves.es/Student-Learning-Survey. Survey results are extremely important and are used to help improve courses and the learning experience of future students. Responses are anonymous (unless a student chooses to “sign” their comments, agreeing to relinquish anonymity of written comments) and are not available to instructors until after grades have been posted. The results of scaled questions and signed comments go to both the instructor and their unit head/supervisor. Anonymous (unsigned) comments go to the instructor only."
+  },
+  {
+    "objectID": "st_559_s_26.html#instructor-info",
+    "href": "st_559_s_26.html#instructor-info",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "Role\nName\nOffice hours\nContact\n\n\n\n\nInstructor\nRob Trangucci\nTBD WNGR 207\nrob.trangucci@oregonstate.edu\n\n\nGTA\nGauri Phatak\nTBD\nphatakg@oregonstate.edu"
+  },
+  {
+    "objectID": "st_559_s_26.html#class-meetings",
+    "href": "st_559_s_26.html#class-meetings",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "Activity\nDays\nTime\nRoom\n\n\n\n\nLecture\nTR\n10a-11:20a\nKEAR 124\n\n\n\nAll lectures are in class and attendance is mandatory"
+  },
+  {
+    "objectID": "st_559_s_26.html#prerequisites",
+    "href": "st_559_s_26.html#prerequisites",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "ST 562 is the recommended prerequisite. This course is going to delve headfirst into comparisons between Bayesian and frequentist inference, so you should be fairly familiar with probability distributions, expectation, variance, Bayes’ rule."
+  },
+  {
+    "objectID": "st_559_s_26.html#textbook",
+    "href": "st_559_s_26.html#textbook",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "Required: Bayesian Data Analysis, Third Ediction, Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin\nFreely available here: https://sites.stat.columbia.edu/gelman/book/"
+  },
+  {
+    "objectID": "st_559_s_26.html#course-objectives",
+    "href": "st_559_s_26.html#course-objectives",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "To introduce students to Bayesian statistics through practical examples and computation. To apply these techniques to real data using R code and Stan code. To understand the theory and methodology of Bayesian inference through math, practice and code."
+  },
+  {
+    "objectID": "st_559_s_26.html#course-content",
+    "href": "st_559_s_26.html#course-content",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "Concepts to be discussed include: Bayesian vs. frequentist inference, prior and posterior distributions, prior predictive and posterior predictive distributions, exchangeability, hierarchial models, modern Bayesian computation via Markov Chain Monte Carlo, modern probabilistic programming languages.\n\n\n\nDifferentiate between Bayesian inference and frequentist inference via quantification of uncertainty.\nDerive conjugate priors for a given likelihood family.\nCalculate and interpret MCMC and HMC diagnostic checks.\nDefine and perform inference for basic hierarchical models in Stan.\nPerform prior and posterior predictive checks while building models.\n\n\n\n\n\n\n\nDate\nTopic\nReading\nLO\nAssignments\n\n\n\n\n3/31/2026\nIntroduction to Bayesian Inference\nChapter 1\n1\nNA\n\n\n4/2/2026\nSingle parameter models\nChapter 2\n1, 2\nNA\n\n\n4/7/2026\nSingle parameter models\nChapter 2\n1, 2\nHW 1\n\n\n4/9/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/14/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/16/2026\nMonte Carlo Integration\nChapter 10\n1, 2\nNA\n\n\n4/21/2026\nMonte Carlo Integration\nChapter 10\n1, 2\nNA\n\n\n4/23/2026\nMCMC\nChapter 11\n3\nNA\n\n\n4/28/2026\nMCMC\nChapter 11\n3\nNA\n\n\n4/30/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/5/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/7/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/12/2026\nHierarchical Models\nChapter 5\n4\nNA\n\n\n5/14/2026\nHierarchical Models\nChapter 5\n4\nNA\n\n\n5/19/2026\nModel checking\nChapter 6\n5\nNA\n\n\n5/21/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/26/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/28/2026\nDecision analysis\nChapter 9\n4-5\nNA\n\n\n6/2/2026\nPresentations\nNA\n1-5\nNA\n\n\n6/4/2026\nPresentations\nNA\n1-5\nNA"
+  },
+  {
+    "objectID": "st_559_s_26.html#project-proposal",
+    "href": "st_559_s_26.html#project-proposal",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "Project proposal"
+  },
+  {
+    "objectID": "st_559_s_26.html#course-notes",
+    "href": "st_559_s_26.html#course-notes",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "Lecture 1"
+  },
+  {
+    "objectID": "st_559_s_26.html#homework",
+    "href": "st_559_s_26.html#homework",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "[HW 1]"
+  },
+  {
+    "objectID": "st_559_s_26.html#assessments",
+    "href": "st_559_s_26.html#assessments",
+    "title": "ST 559 - S 26",
+    "section": "",
+    "text": "The course will have five homework assignments, a final project proposal, a final project presentation and a project report. The breakdown is\n\n\n\nAssessment\nWeight\n\n\n\n\nHW\n50%\n\n\nProposal\n5%\n\n\nPresentation\n10%\n\n\nReport\n35%\n\n\n\n\n\nThe tentative grading scale is below:\n\n\n\nRange\nLetter Grade\n\n\n\n\n93% - 100%\nA\n\n\n90% - 92.9%\nA-\n\n\n87% - 89.9%\nB+\n\n\n83% - 86.9%\nB\n\n\n80% - 82.9%\nB-\n\n\n77% - 79.9%\nC+\n\n\n73% - 76.9%\nC\n\n\n70% - 72.9%\nC-\n\n\n67% - 69.9%\nD+\n\n\n63% - 66.9%\nD\n\n\n60% - 62.9%\nD-\n\n\n0% - 59.9%\nF"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#classical-approach-to-statistics",
+    "href": "bayes-material/Week01/Week01-bayes.html#classical-approach-to-statistics",
+    "title": "ST 559: Introduction",
+    "section": "“Classical” approach to statistics",
+    "text": "“Classical” approach to statistics\n\nData \\(Y\\) is assumed to arise from a model \\(f_Y(y \\mid \\theta)\\)\nChoose a class of estimators (unbiased, maximum likelihood, least squares, etc.)\nInfer \\(\\hat{\\theta}\\) from \\(Y\\)\nCalculate the sampling distribution \\(\\hat{\\theta}\\) assuming repeated draws from \\(f_Y(y \\mid \\theta)\\)."
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#extentions-to-classical-statistics",
+    "href": "bayes-material/Week01/Week01-bayes.html#extentions-to-classical-statistics",
+    "title": "ST 559: Introduction",
+    "section": "Extentions to classical statistics",
+    "text": "Extentions to classical statistics\n\nOn its face, classical statistics seems fine\nHowever, as L.J. Savage puts it in Savage (1972):\n\n[…] the problems of statistics were almost always thought of as problems of deciding what to say rather than what to do\n\nBut Berger (2013) argues there are two pieces of information that are missing from classical statistics\n\nCalculate the sampling distribution \\(\\hat{\\theta}\\) assuming repeated draws from \\(f_Y(y \\mid \\theta)\\)."
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#issue-1-consequences-losses",
+    "href": "bayes-material/Week01/Week01-bayes.html#issue-1-consequences-losses",
+    "title": "ST 559: Introduction",
+    "section": "Issue 1: Consequences (losses)",
+    "text": "Issue 1: Consequences (losses)\n\nOn its face, classical statistics seems fine\nHowever, as L.J. Savage puts it in Savage (1972):\n\n[…] the problems of statistics were almost always thought of as problems of deciding what to say rather than what to do\n\nNamely, the end use (and end user) of an estimate isn’t considered\nConsider two scenarios:\n\n\\(\\theta\\) represents the expected proportion of NYTimes app users who click on a banner ad (what is the consequence of underestimation for the NYT?)\n\\(\\theta\\) represents the expected proportion of cancer patients for whom a new treatment leads to remission (what is the consequence of underestimation for the researchers?)"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#issue-2-importance-of-context-in-statistics",
+    "href": "bayes-material/Week01/Week01-bayes.html#issue-2-importance-of-context-in-statistics",
+    "title": "ST 559: Introduction",
+    "section": "Issue 2: Importance of context in statistics",
+    "text": "Issue 2: Importance of context in statistics\nA (modified) example from L.J. Savage: Consider the following experiments in which we are trying to infer \\(\\theta\\), the probability that a person will answer a question correctly:\n\nA self-described coffee expert claims to be able to determine whether his iced latte was made with milk poured into the cup prior to the espresso shot or if the espresso shot went in first followed by the milk. In a randomized experiment, he correctly identifies the order 10 out of 10 times\nAn internationally renowned beer expert claims to be able to distinguish West Coast IPAs from New England IPAs. She correctly identifies the beers in a randomized study 10 out 10 times.\nYou are celebrating an OSU win over UO baseball at Squirrel’s when you meet a dejected Duck fan who swears he is clairvoyant and can predict the outcome of a fair coin flip. He correctly predicts 10 out of 10 flips."
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#issue-2-importance-of-context-in-statistics-1",
+    "href": "bayes-material/Week01/Week01-bayes.html#issue-2-importance-of-context-in-statistics-1",
+    "title": "ST 559: Introduction",
+    "section": "Issue 2: Importance of context in statistics",
+    "text": "Issue 2: Importance of context in statistics\n\nBerger (2013) notes: each example in the previous slide would lead to an MLE for \\(\\theta = 1\\), and a classical hypothesis test would yield a p-value of \\(2^{-10}\\) under the null \\(\\theta = 1/2\\).\nHowever, the weight we would give the evidence in each example would differ (How would we weigh the different examples?)"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#solutions-to-problem-1-decision-theory-and-loss-functions",
+    "href": "bayes-material/Week01/Week01-bayes.html#solutions-to-problem-1-decision-theory-and-loss-functions",
+    "title": "ST 559: Introduction",
+    "section": "Solutions to problem 1: Decision theory and loss functions",
+    "text": "Solutions to problem 1: Decision theory and loss functions\n\nYou’ve already seen some decision theory in ST 562\n\nLet the set of actions one can take be \\(\\mathcal{A}\\) and let the true state of nature be \\(\\theta\\).\nA loss function for a single action, \\(a\\), is \\(L(a, \\theta)\\), which maps an action (or a decision) and the state of nature to a number representing the cost of the action\nExamples: squared error: \\(L(a,\\theta) = (a - \\theta)^2\\), absolute error: \\(L(a,\\theta) = \\abs{a - \\theta}\\)"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#solutions-to-problem-1-more-involved-loss-functions",
+    "href": "bayes-material/Week01/Week01-bayes.html#solutions-to-problem-1-more-involved-loss-functions",
+    "title": "ST 559: Introduction",
+    "section": "Solutions to problem 1: More involved loss functions",
+    "text": "Solutions to problem 1: More involved loss functions\n\nAsymmetric loss:\n\n\\[\nL(a,\\theta) = \\begin{cases}\n10(a - \\theta)^2 & a &lt; \\theta \\\\\n(a - \\theta)^2 & a \\geq \\theta\n\\end{cases}\n\\]\n\nLinear loss under discrete actions \\(a \\in \\{1, 2\\}\\)\n\n\\[\nL(a, \\theta) = \\begin{cases}\nK_1 + k_1 \\theta & a = 1 \\\\\nK_2 + k_2 \\theta & a = 2\n\\end{cases}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#bayesian-inference",
+    "href": "bayes-material/Week01/Week01-bayes.html#bayesian-inference",
+    "title": "ST 559: Introduction",
+    "section": "Bayesian inference",
+    "text": "Bayesian inference\n\nBayesian inference is a way of weighing evidence from the likelihood against a prior distribution\nA Bayesian probability model has two pieces\n\nLikelihood: \\(f_Y(y \\mid \\theta)\\), or the sampling distribution for the data\nPrior: \\(p(\\theta)\\), which measures the beliefs about \\(\\theta\\) prior to observing data \\(Y\\)"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#bayesian-inference-contd",
+    "href": "bayes-material/Week01/Week01-bayes.html#bayesian-inference-contd",
+    "title": "ST 559: Introduction",
+    "section": "Bayesian inference cont’d",
+    "text": "Bayesian inference cont’d\n\nBayesian inference uses Bayes’ rule to update the prior to a posterior:\n\n\\[\np(\\theta \\mid y) = \\frac{f_Y(y \\mid \\theta) p(\\theta)}{\\int_{\\Theta} f_Y(y \\mid \\theta) p(\\theta) d\\theta}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#sources-of-uncertainty",
+    "href": "bayes-material/Week01/Week01-bayes.html#sources-of-uncertainty",
+    "title": "ST 559: Introduction",
+    "section": "Sources of uncertainty",
+    "text": "Sources of uncertainty\n\n“Aleatoric” uncertainty means stochastic uncertainty; this is the uncertainty that frequentist statistics considers\n\nCoin flips, measurement error, sampling uncertainty\nFor a given dataset, there is no uncertainty in frequentism\n\n“Epistemic” uncertainty is uncertainty due to lack of knowledge: Bayesian inference adds epistemic uncertainty\n\nThe prior and the posterior track epistemic uncertainty\nThis is what allows us to make probability statements conditional on a given dataset\nDifferent observers can have different knowledge of a problem"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#examples",
+    "href": "bayes-material/Week01/Week01-bayes.html#examples",
+    "title": "ST 559: Introduction",
+    "section": "Examples",
+    "text": "Examples"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#fundamental-understandings-of-probability",
+    "href": "bayes-material/Week01/Week01-bayes.html#fundamental-understandings-of-probability",
+    "title": "ST 559: Introduction",
+    "section": "Fundamental understandings of probability",
+    "text": "Fundamental understandings of probability\n\nFrequentist probability is, as the name implies, defined by long-run frequencies of outcomes\n\nThis seems like a good mathematical model for simple outcomes like dice throws, or poker hands, but doesn’t make as much sense for modeling outcomes like the winner of the Michigan/Arizona Basketball game on Saturday\n\nBayesian probability, in contrast, measures degrees of belief, and can be constructed from a coherent betting strategy on the outcomes of events"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#hurdles-to-bayesian-inference",
+    "href": "bayes-material/Week01/Week01-bayes.html#hurdles-to-bayesian-inference",
+    "title": "ST 559: Introduction",
+    "section": "Hurdles to Bayesian inference",
+    "text": "Hurdles to Bayesian inference\nCalculating integrals in the denominator is hard\n\\[\np(\\theta \\mid y) = \\frac{f_Y(y \\mid \\theta) p(\\theta)}{\\int_{\\Theta} f_Y(y \\mid \\theta) p(\\theta) d\\theta}\n\\]\n\nDirectly approximating \\[\\int_{\\Theta} f_Y(y \\mid \\theta) p(\\theta) d\\theta,\\] is hard for reasons we’ll get into later in the course"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#bayesian-inference-and-computation",
+    "href": "bayes-material/Week01/Week01-bayes.html#bayesian-inference-and-computation",
+    "title": "ST 559: Introduction",
+    "section": "Bayesian inference and computation",
+    "text": "Bayesian inference and computation\n\nBayesian inference inextricably linked with computation\nLeaps forward in computation allow for more complex models\n…which in turn creates more demand for better samplers"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#approximating-integrals",
+    "href": "bayes-material/Week01/Week01-bayes.html#approximating-integrals",
+    "title": "ST 559: Introduction",
+    "section": "Approximating integrals",
+    "text": "Approximating integrals\n\nAn alternative is to approximate functionals of the posterior:\n\n\\(\\ExpA{f(\\theta)}{\\theta \\mid y} = \\int_{\\Theta} f(\\theta) p(\\theta \\mid y) d\\theta\\)\nIf we can draw \\(\\theta^{(s)}\\) from \\(p(\\theta \\mid y)\\), then \\(\\ExpA{f(\\theta)}{\\theta \\mid y} \\approx \\frac{1}{S} \\sum_{s=1}^S f(\\theta^{(s)})\\)"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#monte-carlo-approximation-of-integrals",
+    "href": "bayes-material/Week01/Week01-bayes.html#monte-carlo-approximation-of-integrals",
+    "title": "ST 559: Introduction",
+    "section": "Monte Carlo approximation of integrals",
+    "text": "Monte Carlo approximation of integrals\n\nAn alternative is to approximate functionals of the posterior:\n\n\\(\\ExpA{f(\\theta)}{\\theta \\mid y} = \\int_{\\Theta} f(\\theta) p(\\theta \\mid y) d\\theta\\)\nIf we can draw \\(\\theta^{(s)}, s = 1, \\dots, S\\) from \\(p(\\theta \\mid y)\\), then \\[\\ExpA{f(\\theta)}{\\theta \\mid y} \\approx \\frac{1}{S} \\sum_{s=1}^S f(\\theta^{(s)})\\] by the WLLN\n\nBut how do we draw \\(\\theta^{(s)} \\sim p(\\theta \\mid y)\\)?"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#frequentist-vs.-bayesian-uses-of-the-loss-function",
+    "href": "bayes-material/Week01/Week01-bayes.html#frequentist-vs.-bayesian-uses-of-the-loss-function",
+    "title": "ST 559: Introduction",
+    "section": "Frequentist vs. Bayesian uses of the loss function",
+    "text": "Frequentist vs. Bayesian uses of the loss function\n\nThe Bayesian approach to using the loss function is straightforward:\n\nGiven a posterior \\(p(\\theta \\mid y)\\), for each action \\(a\\) compute \\(\\rho(a) = \\ExpA{L(a, \\theta)}{\\theta \\mid y}\\)\nPick the action that minimizes the expected loss: \\(a^* = \\argmin_a \\rho(a)\\)\n\nThe Frequentist approach to using the loss function is more involved"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#frequentist-use-of-the-loss-function",
+    "href": "bayes-material/Week01/Week01-bayes.html#frequentist-use-of-the-loss-function",
+    "title": "ST 559: Introduction",
+    "section": "Frequentist use of the loss function",
+    "text": "Frequentist use of the loss function\n\nThere is no epistemic uncertainty in frequentist inference, so we can’t compute \\(\\rho(a)\\).\nInstead we need a way to choose an \\(a\\) given a dataset, \\(Y\\), which we’ll denote \\(\\delta_k(y)\\).\nThen we compute risk, \\(R(\\delta_k, \\theta) = \\ExpA{L(\\delta_k(Y), \\theta)}{Y \\mid \\theta}\\)\nWe can then rank decision rules \\(\\delta_m\\) vs. \\(\\delta_k\\) by comparing \\(R(\\delta_k, \\theta)\\) and \\(R(\\delta_j, \\theta)\\)\nFor instance, we can pick a decision rule by minimizing the maximum risk: \\(\\argmin_{k} \\sup_{\\theta} R(\\delta_k, \\theta)\\)"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#example",
+    "href": "bayes-material/Week01/Week01-bayes.html#example",
+    "title": "ST 559: Introduction",
+    "section": "Example",
+    "text": "Example\n\nProbability of red \\(\\theta = \\frac{\\textcolor{red}{\\text{\\#red}}}{\\textcolor{red}{\\text{\\#red}} + \\textcolor{orange}{\\text{\\#orange}}}\\)\n\\(Y_i\\) is the color of a draw from the bag, \\(p(Y_i = \\textcolor{red}{\\text{red}} \\mid \\theta)\\): aleatoric uncertainty\n\\(p(\\theta)\\): epistemic uncertainty\nPicking chips from the bag will change our uncertainty about the proportion\n\\(p(\\theta \\mid \\textcolor{red}{\\text{red}}, \\textcolor{orange}{\\text{orange}}, \\textcolor{orange}{\\text{orange}}, \\textcolor{red}{\\text{red}}, \\dots) = ?\\)\nUse Bayes rule: \\[\np(\\theta \\mid y) = \\frac{f_Y(y \\mid \\theta) p(\\theta)}{\\int_{\\Theta} f_Y(y \\mid \\theta) p(\\theta) d\\theta}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#example-drawing-colored-poker-chips-from-a-bag",
+    "href": "bayes-material/Week01/Week01-bayes.html#example-drawing-colored-poker-chips-from-a-bag",
+    "title": "ST 559: Introduction",
+    "section": "Example: Drawing colored poker chips from a bag",
+    "text": "Example: Drawing colored poker chips from a bag\n\nProbability of red \\(\\theta = \\frac{\\textcolor{red}{\\text{\\#red}}}{\\textcolor{red}{\\text{\\#red}} + \\textcolor{orange}{\\text{\\#orange}}}\\)\n\\(Y_i\\) is the color of a draw with replacement from the bag, \\(p(Y_i = \\textcolor{red}{\\text{red}} \\mid \\theta)\\): aleatoric uncertainty\n\\(p(\\theta)\\): epistemic uncertainty\nPicking chips from the bag will change our uncertainty about the proportion\n\\(p(\\theta \\mid \\textcolor{red}{\\text{red}}, \\textcolor{orange}{\\text{orange}}, \\textcolor{orange}{\\text{orange}}, \\textcolor{red}{\\text{red}}, \\dots) = ?\\)\nUse Bayes rule: \\[\np(\\theta \\mid y) = \\frac{f_Y(y \\mid \\theta) p(\\theta)}{\\int_{\\Theta} f_Y(y \\mid \\theta) p(\\theta) d\\theta}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#hurdle-to-bayesian-inference-computation",
+    "href": "bayes-material/Week01/Week01-bayes.html#hurdle-to-bayesian-inference-computation",
+    "title": "ST 559: Introduction",
+    "section": "Hurdle to Bayesian inference: Computation",
+    "text": "Hurdle to Bayesian inference: Computation\nCalculating integrals in the denominator is hard\n\\[\np(\\theta \\mid y) = \\frac{f_Y(y \\mid \\theta) p(\\theta)}{\\int_{\\Theta} f_Y(y \\mid \\theta) p(\\theta) d\\theta}\n\\]\n\nDirectly approximating \\[\\int_{\\Theta} f_Y(y \\mid \\theta) p(\\theta) d\\theta,\\] is hard for reasons we’ll get into later in the course"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#evolution-of-probabilistic-programming-languages-bugs",
+    "href": "bayes-material/Week01/Week01-bayes.html#evolution-of-probabilistic-programming-languages-bugs",
+    "title": "ST 559: Introduction",
+    "section": "Evolution of probabilistic programming languages: BUGS",
+    "text": "Evolution of probabilistic programming languages: BUGS"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#evolution-of-probabilistic-programming-languages-bugsjags",
+    "href": "bayes-material/Week01/Week01-bayes.html#evolution-of-probabilistic-programming-languages-bugsjags",
+    "title": "ST 559: Introduction",
+    "section": "Evolution of probabilistic programming languages: BUGS/JAGS",
+    "text": "Evolution of probabilistic programming languages: BUGS/JAGS\n\nBayesian inference Using Gibbs Sampling was one of the first probabilistic programming languages\nFlexible syntax allows for definition of (nearly) arbitrary statistical models\nSimulation algorithm can sample from (nearly) arbitrary posteriors\nHamstrung by reliance on Gibbs sampling, which doesn’t scale well to high dimensions"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#evolution-of-probabilistic-programming-languages-stan",
+    "href": "bayes-material/Week01/Week01-bayes.html#evolution-of-probabilistic-programming-languages-stan",
+    "title": "ST 559: Introduction",
+    "section": "Evolution of probabilistic programming languages: Stan",
+    "text": "Evolution of probabilistic programming languages: Stan\n\n2011: Andrew Gelman’s post-doc Matt Hoffman proposes a modification to an existing MCMC algorithm which allows for sampling from (nearly) arbitrary posteriors\n2012: First version of Stan released\n\nFlexible syntax allows for definition of arbitrary statistical models\nScales well to high dimensions due to the “magic” of Hamiltonian Monte Carlo"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#key-differences",
+    "href": "bayes-material/Week01/Week01-bayes.html#key-differences",
+    "title": "ST 559: Introduction",
+    "section": "Key differences",
+    "text": "Key differences\n\nBayesian model building is separate from a loss function\nFrequentist model building is dependent on the loss function"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#stan-programs",
+    "href": "bayes-material/Week01/Week01-bayes.html#stan-programs",
+    "title": "ST 559: Introduction",
+    "section": "Stan programs",
+    "text": "Stan programs\n\ndata {\n  int&lt;lower=0&gt; N;\n  vector[N] y;\n}\nparameters {\n  real&lt;lower=0&gt; sd_y;\n  real mean_y;\n}\nmodel {\n  y ~ normal(mean_y, sd_y);\n  mean_y ~ student_t(4, 0, 10);\n  sd_y ~ student_t(4, 0, 5);\n}"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#model-criticism-and-comparison",
+    "href": "bayes-material/Week01/Week01-bayes.html#model-criticism-and-comparison",
+    "title": "ST 559: Introduction",
+    "section": "Model criticism and comparison",
+    "text": "Model criticism and comparison\n\nGiven that Bayesian inference + modern computation allows for big models, how do we tell if they’re any good?\nPosterior predictive checks \\[\np(\\tilde{y} \\mid y) = \\int_{\\Theta} p(\\tilde{y} \\mid \\theta) p(\\theta \\mid y) d\\theta\n\\]\nLeave-one-out cross validation \\[\np(\\tilde{y}_i \\mid y) = \\int_{\\Theta} p(\\tilde{y}_i \\mid \\theta) p(\\theta \\mid y_{-i}) d\\theta\n\\]\nHow do we set priors?\nPrior predictive checks \\[\np(\\tilde{y}) = \\int_{\\Theta} p(\\tilde{y} \\mid \\theta) p(\\theta) d\\theta\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Week01/Week01-bayes.html#to-do-for-thursday",
+    "href": "bayes-material/Week01/Week01-bayes.html#to-do-for-thursday",
+    "title": "ST 559: Introduction",
+    "section": "To-do for Thursday",
+    "text": "To-do for Thursday\n\nRead Chapter 1 in Bayesian Data Analysis\nRefresh knowledge of\n\nProbability\nPDFs, PMFs, CDFs\nLikelihood, Bayes rule"
   }
 ]
