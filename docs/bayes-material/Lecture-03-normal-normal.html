@@ -28,6 +28,72 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     /* CSS for citations */
     div.csl-bib-body { }
     div.csl-entry {
@@ -153,12 +219,14 @@
           \newcommand{\lp}{\left(}
           \newcommand{\rp}{\right)}
           \newcommand{\R}{\mathbb{R}}
+          \newcommand{\Z}{\mathbb{Z}}
           \newcommand{\abs}[1]{\left| #1 \right|}
           \newcommand{\lb}{\left[}
           \newcommand{\rb}{\right]}
           \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
           \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
           \newcommand{\Var}[1]{\text{Var} \lp #1 \rp}
+          \newcommand{\VarA}[2]{\text{Var}_{#2} \lp #1 \rp}
           \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
           \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
           \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
@@ -196,6 +264,60 @@ Rob Trangucci
 <li class="fragment"><p>The material for this course is here: <a href="https://github.com/avehtari/BDA_course_Aalto">https://github.com/avehtari/BDA_course_Aalto</a></p></li>
 </ul>
 </section>
+<section id="clarifications-on-last-lecture" class="slide level2">
+<h2>Clarifications on last lecture</h2>
+<ul>
+<li class="fragment"><p>Prior predictive distribution for binomial likelihood and beta prior</p>
+<ul>
+<li class="fragment">Called the Beta-Binomial: We’ll derive on the ipad…</li>
+</ul></li>
+</ul>
+</section>
+<section id="walking-through-setting-the-prior" class="slide level2">
+<h2>Walking through setting the prior</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>beta_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(pars) {</span>
+<span id="cb1-2"><a></a>  alpha <span class="ot">&lt;-</span> <span class="fu">exp</span>(pars[<span class="dv">1</span>])</span>
+<span id="cb1-3"><a></a>  beta <span class="ot">&lt;-</span> <span class="fu">exp</span>(pars[<span class="dv">2</span>])</span>
+<span id="cb1-4"><a></a>  diff_1 <span class="ot">&lt;-</span> <span class="fu">qbeta</span>(<span class="fl">0.01</span>, <span class="at">shape1 =</span> alpha, <span class="at">shape2 =</span> beta) <span class="sc">-</span> <span class="fl">0.02</span></span>
+<span id="cb1-5"><a></a>  diff_2 <span class="ot">&lt;-</span> <span class="fu">qbeta</span>(<span class="fl">0.99</span>, <span class="at">shape1 =</span> alpha, <span class="at">shape2 =</span> beta) <span class="sc">-</span> <span class="fl">0.35</span></span>
+<span id="cb1-6"><a></a>  <span class="fu">return</span>(diff_1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> diff_2<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb1-7"><a></a>}</span>
+<span id="cb1-8"><a></a></span>
+<span id="cb1-9"><a></a>res <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="fu">log</span>(<span class="dv">8</span>), <span class="fu">log</span>(<span class="dv">60</span>)), beta_fun)</span>
+<span id="cb1-10"><a></a>alpha_use <span class="ot">&lt;-</span> <span class="fu">exp</span>(res<span class="sc">$</span>par[<span class="dv">1</span>])</span>
+<span id="cb1-11"><a></a>beta_use <span class="ot">&lt;-</span> <span class="fu">exp</span>(res<span class="sc">$</span>par[<span class="dv">2</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="exchangeability" class="slide level2">
+<h2>Exchangeability</h2>
+<div style="font-size: 50%;">
+<ul>
+<li class="fragment"><p>Exchangeability is a critical concept to understand when discussing Bayesian models</p></li>
+<li class="fragment"><p>Formally, when we say a sequence of random variables, <span class="math inline">\(Y_1, Y_2, Y_3, \dots, Y_n, \dots\)</span> are <strong>exchangeable</strong>, the joint distribution of these variables does not change under any permuation of indices, denoted as <span class="math inline">\(Y_{\sigma(1)}, Y_{\sigma(2)}, Y_{\sigma(3)}, \dots, Y_{\sigma(n)}, \dots\)</span></p></li>
+<li class="fragment"><p>Given a parametric density for <span class="math inline">\(Y_i\)</span> dependent on <span class="math inline">\(\theta\)</span>, the assumption that the <span class="math inline">\(Y_i\)</span> are conditionally indepdent given <span class="math inline">\(\theta\)</span> and a prior for <span class="math inline">\(\theta\)</span>, then the marginal joint density for <span class="math inline">\(Y_i\)</span> is exchangeable:</p></li>
+<li class="fragment"><p><span class="math display">\[
+p_{\mathbf{Y}}(y_1, y_2, \dots, y_n) = \int_{\Omega_\Theta} \prod_{i=1}^n p(y_i \mid \theta) p(\theta) d\theta
+\]</span></p></li>
+<li class="fragment"><p>The idea goes the opposite direction as well: Given an infinite sequence of exchangeable random variables (this is true if, for every <span class="math inline">\(n\)</span>, the finite sequences are exchangeable), then there must exist a random variable <span class="math inline">\(\Theta\)</span> such that the following holds <span class="math display">\[
+p_{\mathbf{Y}}(y_1, y_2, \dots, y_n) = \int_{\Omega_\Theta} \prod_{i=1}^n p(y_i \mid \theta) p(\theta) d\theta
+\]</span></p></li>
+<li class="fragment"><p>Further, <span class="math inline">\(\lim_{n\to\infty}\frac{1}{n}\sum_{i=1}^n \to \Theta\)</span></p></li>
+</ul>
+</div>
+</section>
+<section id="exchangeable-sequences-are-positively-correlated" class="slide level2">
+<h2>Exchangeable sequences are positively correlated</h2>
+<p>Let <span class="math inline">\(Y_i, i = 1, 2, \dots\)</span> be exchangeable</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{Cov}(Y_1, Y_2) &amp; = \ExpA{\text{Cov}(Y_1, Y_2 \mid \theta)}{\Theta} + \text{Cov}_{\Theta}(\Exp{Y_1 \mid \theta}, \Exp{Y_2 \mid \theta}) \\
+&amp; \class{fragment}{{} = \text{Cov}_{\Theta}(\Exp{Y_1 \mid \theta}, \Exp{Y_2 \mid \theta})} \\
+&amp; \class{fragment}{{} = \VarA{\Exp{Y_1 \mid \theta}}{\Theta}} \\
+&amp; \class{fragment}{{} \geq 0}
+\end{aligned}
+\]</span></p>
+</section>
 <section id="normal-models" class="slide level2">
 <h2>Normal models</h2>
 <ul>
@@ -208,6 +330,7 @@ Rob Trangucci
 <ul>
 <li class="fragment"><p>Easy to bound normal densities and CDFs</p></li>
 <li class="fragment"><p>Jointly normal RVs are conditionally normal</p></li>
+<li class="fragment"><p>Convolved normals are normal</p></li>
 </ul></li>
 </ul>
 </section>
@@ -228,11 +351,353 @@ p(\textcolor{red}{y} \mid \theta) = \frac{1}{\sqrt{2\pi}\sigma}\exp\lp-\frac{1}{
 <li class="fragment"><p>Likelihood for <span class="math inline">\(\theta\)</span> (assuming <span class="math inline">\(\sigma^2\)</span> is known!): <span class="math display">\[
 p(y \mid \textcolor{red}{\theta}) \propto \exp\lp-\frac{1}{2\sigma^2}(y - \textcolor{red}{\theta})^2 \rp
 \]</span></p></li>
-<li class="fragment"><p>Rearranging things will help us see the form of the conjugate prior</p></li>
+<li class="fragment"><p>In the binomial example, we had <span class="math inline">\(p(y \mid \theta) \propto \theta^{y} (1 - \theta)^{n - y}\)</span>, so we could read off the conjugate prior,</p></li>
+<li class="fragment"><p>Rearranging things in the normal likelihood will help us see the form of the conjugate prior</p></li>
 </ul>
 </section>
 <section id="normal-likelihood-in-exponential-family-form" class="slide level2">
 <h2>Normal likelihood in exponential family form</h2>
+<p><span class="math display">\[
+\scriptsize
+\begin{aligned}
+p(y \mid \theta) &amp; \propto \exp\lp-\frac{1}{2\sigma^2}(y - \theta)^2 \rp \\
+&amp; = \exp\lp-\frac{y^2}{2\sigma^2} + \frac{y}{\sigma^2} \theta -\frac{\theta^2}{2\sigma^2}\rp  \\
+&amp; \propto \exp\lp\frac{\theta}{\sigma^2} y -\frac{\theta^2}{2\sigma^2}\rp
+\end{aligned}
+\]</span></p>
+<aside class="notes">
+<p>when <span class="math inline">\(y\)</span> is normally dist. look at the natural parameter <span class="math inline">\(\theta / \sigma^2\)</span>. This suggests that a prior should have the same sort of parameterization for <span class="math inline">\(\theta\)</span></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="prior-form" class="slide level2">
+<h2>Prior Form</h2>
+<ul>
+<li class="fragment"><span class="math display">\[
+\begin{aligned}
+p(\theta \mid \mu_0, \tau_0) &amp; \propto \exp\lp \frac{\mu_0}{\tau_0^2} \theta - \frac{\theta^2}{2\tau_0^2}\rp \\
+\end{aligned}
+\]</span></li>
+<li class="fragment">Now we compute <span class="math inline">\(p(\theta \mid y, \mu_0, \tau_0) \propto p(y \mid \theta) p(\theta \mid \mu_0, \tau_0)\)</span> <span class="math display">\[
+p(\theta \mid y, \mu_0, \tau_0) \propto \exp\lp\frac{\theta}{\sigma^2} y -\frac{\theta^2}{2\sigma^2}\rp \exp\lp \frac{\mu_0}{\tau_0^2} \theta - \frac{\theta^2}{2\tau_0^2}\rp
+\]</span></li>
+</ul>
+</section>
+<section id="working-through-the-algebra" class="slide level2">
+<h2>Working through the algebra</h2>
+<p><span class="math display">\[
+\scriptsize
+\begin{aligned}
+&amp; \exp\lp\theta\lp\frac{y}{\sigma^2} + \frac{\mu_0}{\tau_0^2}\rp -\frac{\theta^2}{2}\lp\frac{1}{\sigma^2} + \frac{1}{\tau_0^2} \rp\rp \\
+&amp; = \exp\lp\theta\lp\frac{\mu_1}{\tau_1^2}\rp -\frac{\theta^2}{2}\lp\frac{1}{\tau_1^2}\rp\rp  \\
+&amp; \implies
+\end{aligned}
+\]</span> <span class="math display">\[
+\scriptsize
+\begin{aligned}
+\frac{1}{\tau_1} &amp;  = \frac{1}{\sigma^2} + \frac{1}{\tau_0^2} &amp;&amp; \frac{\mu_1}{\tau_1}  = \frac{y}{\sigma^2} + \frac{\mu_0}{\tau_0^2} \\
+\mu_1 &amp; = \lp \frac{y}{\sigma^2} + \frac{\mu_0}{\tau_0^2}\rp \tau_1 &amp;&amp;
+\mu_1  = \lp\frac{y}{\sigma^2} + \frac{\mu_0}{\tau_0^2}\rp / \lp \frac{1}{\sigma^2} + \frac{1}{\tau_0^2}\rp
+\end{aligned}
+\]</span></p>
+<aside class="notes">
+<p>System of nonlinear equations, solve for unknowns!</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="a-tale-of-two-likeihoods" class="slide level2">
+<h2>A tale of two likeihoods</h2>
+<div class="r-stack">
+<div class="fragment" data-fragment-index="1">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-03-normal-normal_files/figure-revealjs/unnamed-chunk-3-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="2">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-03-normal-normal_files/figure-revealjs/unnamed-chunk-4-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="3">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-03-normal-normal_files/figure-revealjs/unnamed-chunk-5-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="4">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-03-normal-normal_files/figure-revealjs/unnamed-chunk-6-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="5">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-03-normal-normal_files/figure-revealjs/unnamed-chunk-7-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="interpreting-the-parameters" class="slide level2">
+<h2>Interpreting the parameters</h2>
+<ul>
+<li class="fragment"><span class="math display">\[
+\mu_1 = \mu_0 + (y - \mu_0) \frac{\tau_0^2}{\tau_0^2 + \sigma^2}
+\]</span></li>
+<li class="fragment">vs.&nbsp; <span class="math display">\[
+\mu_1 = y - (y - \mu_0) \frac{\sigma^2}{\tau_0^2 + \sigma^2}
+\]</span></li>
+</ul>
+</section>
+<section id="posterior-predictive-distribution" class="slide level2 smaller">
+<h2>Posterior predictive distribution</h2>
+<ul>
+<li class="fragment"><p>We might want to make predictions for another observation</p></li>
+<li class="fragment"><p><span class="math display">\[
+p(\tilde{y} \mid y) = \int_{-\infty}^\infty p(\tilde{y} \mid \textcolor{red}{\theta}) p(\textcolor{red}{\theta} \mid y, \mu_0, \tau_0) d \textcolor{red}{\theta}
+\]</span></p></li>
+<li class="fragment"><p><span class="math display">\[
+\begin{aligned}
+&amp; \int_{-\infty}^\infty p(\tilde{y} \mid \textcolor{red}{\theta}) p(\textcolor{red}{\theta} \mid y, \mu_0, \tau_0) d \textcolor{red}{\theta} \\
+&amp; = \int_{-\infty}^\infty \frac{1}{\sqrt{2\pi}\sigma}\exp(-\frac{1}{2\sigma^2}(y - \theta)^2)\frac{1}{\sqrt{2\pi}\tau_1}\exp(-\frac{1}{2\tau_1^2}(\theta_1 - \mu_1)^2)  d \textcolor{red}{\theta}  
+\end{aligned}
+\]</span></p></li>
+<li class="fragment"><p>We can use the fact that <span class="math inline">\(\tilde{y} \mid \theta \sim \text{Normal}(\theta, \sigma^2)\)</span> which is equal in distribution to <span class="math inline">\(Y = \theta + Z\)</span> where <span class="math inline">\(Z \sim \text{Normal}(0, \sigma^2)\)</span>.</p></li>
+<li class="fragment"><p>Marginally, <span class="math inline">\(Y \sim \text{Normal}(\mu_1, \tau_1^2 + \sigma^2)\)</span></p></li>
+</ul>
+</section>
+<section id="exponential-families" class="slide level2 smaller">
+<h2>Exponential families</h2>
+<ul>
+<li class="fragment"><p>The normal and binomial distributions are examples of a more general class of densities called exponential families</p></li>
+<li class="fragment"><p>The exponential family distributions can be written in the following form</p></li>
+<li class="fragment"><p><span class="math display">\[
+p(y_i \mid \theta) = f(y_i) g(\theta)e^{\phi(\theta)^T u(y_i)}
+\]</span></p></li>
+<li class="fragment"><p>With <span class="math inline">\(n\)</span> iid observations, calling <span class="math inline">\(t(y) = \sum_{i=1}^n u(y_i)\)</span> the joint density is <span class="math display">\[
+p(y \mid \theta) = \lp \prod_{i=1}^n f(y_i)\rp g(\theta)^n \exp \lp \phi(\theta)^T t(y)\rp
+\]</span></p></li>
+<li class="fragment"><p>We can write the density as <span class="math display">\[
+p(y\mid \theta) \propto g(\theta)^n \exp \lp \phi(\theta)^T t(y)\rp
+\]</span></p></li>
+<li class="fragment"><p>This shows that <span class="math inline">\(t(y)\)</span> is sufficient for <span class="math inline">\(\theta\)</span></p></li>
+</ul>
+</section>
+<section id="conjugate-priors-in-exponential-families" class="slide level2">
+<h2>Conjugate priors in exponential families</h2>
+<ul>
+<li class="fragment"><p>When <span class="math display">\[
+p(y\mid \theta) \propto g(\theta)^n \exp \lp \phi(\theta)^T t(y)\rp
+\]</span></p></li>
+<li class="fragment"><p>Specifying <span class="math inline">\(p(\theta) \propto g(\theta)^\eta \exp\lp \phi(\theta)^T \nu \rp\)</span> yields the posterior:</p></li>
+<li class="fragment"><p><span class="math display">\[
+p(\theta \mid y) \propto g(\theta)^{n + \eta} \exp \lp\phi(\theta)^T(t(y) + \nu) \rp
+\]</span></p></li>
+</ul>
+</section>
+<section id="back-to-the-normal-again" class="slide level2 smaller">
+<h2>Back to the normal again</h2>
+<ul>
+<li class="fragment"><p>With <span class="math inline">\(n\)</span> observations, we know that <span class="math inline">\(\bar{y}\)</span> is sufficient for <span class="math inline">\(\mu\)</span> when <span class="math inline">\(y \sim \text{Normal}(\mu, \sigma^2)\)</span></p></li>
+<li class="fragment"><p>We know <span class="math inline">\(\bar{y} \sim \text{Normal}(\mu, \frac{\sigma^2}{n})\)</span>, so we can just use our earlier results to get the posterior <span class="math inline">\(\mu_n\)</span> and <span class="math inline">\(\tau_n\)</span> parameters</p></li>
+<li class="fragment"><p><span class="math display">\[
+\scriptsize
+\begin{aligned}
+\frac{1}{\tau_n} &amp;  = \frac{n}{\sigma^2} + \frac{1}{\tau_0^2} \\
+\mu_n  &amp; = \lp y \frac{n}{\sigma^2} + \frac{\mu_0}{\tau_0^2}\rp / \lp \frac{n}{\sigma^2} + \frac{1}{\tau_0^2}\rp
+\end{aligned}
+\]</span></p></li>
+<li class="fragment"><p>As <span class="math inline">\(n\to\infty\)</span> we get $_n <span class="math inline">\(\bar{y}\)</span> and <span class="math inline">\(\tau^2_n \to \frac{\sigma^2}{n}\)</span></p></li>
+<li class="fragment"><p>This shows that the posterior for <span class="math inline">\(\theta\)</span> converges to a normal distribution with mean <span class="math inline">\(\bar{y}\)</span> and <span class="math inline">\(\frac{\sigma^2}{n}\)</span></p></li>
+<li class="fragment"><p>We get the same convergence in distribution if <span class="math inline">\(\tau_0 \to \infty\)</span></p></li>
+</ul>
+</section>
+<section id="models-for-count-data" class="slide level2 smaller">
+<h2>Models for count data</h2>
+<ul>
+<li class="fragment"><p>When we have <span class="math inline">\(y_i \in \{0\} \cup \Z^+\)</span>, we’ll need to use something other than a normal</p></li>
+<li class="fragment"><p>One common model is <span class="math inline">\(y_i \sim \text{Poisson}(\theta)\)</span> <span class="math display">\[
+p(y_i \mid \theta) = \frac{e^{-\theta} \theta^y_i}{y_i!}
+\]</span></p></li>
+<li class="fragment"><p>Rewrite this in exponential family form: <span class="math display">\[
+e^{-\theta} e^{\log(\theta) y}
+\]</span></p></li>
+<li class="fragment"><p>Suggests a prior of the form <span class="math display">\[
+\begin{aligned}
+p(\theta) &amp; \propto e^{-\theta \eta} e^{\log(\theta) \nu} \\
+&amp; \propto \theta^\nu e^{-\theta \eta}
+\end{aligned}
+\]</span></p></li>
+<li class="fragment"><p>This is a Gamma distribution, or <span class="math inline">\(p(\theta) = \frac{\beta^\alpha}{\Gamma(\alpha)} \theta^{\alpha - 1} e^{-\beta \theta}\)</span></p></li>
+</ul>
+</section>
+<section id="multiple-observations" class="slide level2 smaller">
+<h2>Multiple observations</h2>
+<ul>
+<li class="fragment"><p>With <span class="math inline">\(n\)</span> iid observations the joint density for <span class="math inline">\(y\)</span> is <span class="math display">\[
+\begin{aligned}
+p(y \mid \theta) &amp; \propto e^{-n\theta} e^{\log(\theta) \sum_{i=1}^n y_i} \\
+&amp; \propto e^{-n\theta} \theta^{\sum_{i=1}^n y_i} \\
+&amp; \propto e^{-n\theta} \theta^{t(y)}
+\end{aligned}
+\]</span></p></li>
+<li class="fragment"><p>With a prior <span class="math inline">\(p(\theta) \propto \theta^{\alpha - 1} e^{-\beta \theta}\)</span> we get</p></li>
+<li class="fragment"><p>Posterior <span class="math display">\[
+p(\theta \mid y) \propto e^{-\theta(n + \beta)} \theta^{t(y) + \alpha}
+\]</span></p></li>
+<li class="fragment"><p>Or <span class="math inline">\(\theta \mid y \sim \text{Gamma}(\alpha + t(y), \beta + n)\)</span></p></li>
+</ul>
+</section>
+<section id="deriving-the-priorposterior-predictive-distribution" class="slide level2">
+<h2>Deriving the prior/posterior predictive distribution</h2>
+<p><span class="math display">\[
+\begin{aligned}
+&amp; \frac{\beta^\alpha}{y!\Gamma(\alpha)} \int_0^\infty e^{-\theta} \theta^y \theta^{\alpha - 1} e^{-\beta \theta} d\theta \\
+&amp; \class{fragment}{{} = \frac{\beta^\alpha}{y!\Gamma(\alpha)} \int_0^\infty \theta^{y + \alpha - 1} e^{-\theta(\beta + 1)} d\theta} \\
+&amp; \class{fragment}{{} = \frac{\beta^\alpha}{y!\Gamma(\alpha)}\frac{\Gamma(\alpha + y)}{(\beta + 1)^{\alpha + y}}} \\
+&amp; \class{fragment}{{}= \frac{\Gamma(\alpha + y)}{y!\Gamma(\alpha)}\lp\frac{\beta}{\beta + 1}\rp^\alpha \lp\frac{1}{\beta + 1}\rp^y}
+\end{aligned}
+\]</span></p>
+</section>
+<section id="negative-binomial-distribution" class="slide level2 smaller">
+<h2>Negative binomial distribution</h2>
+<ul>
+<li class="fragment"><p>Last slide we derived negative-binomial distribution with parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span></p></li>
+<li class="fragment"><p>How might we get the mean and variance of this distribution?</p></li>
+<li class="fragment"><p>We can get it by <span class="math inline">\(y \mid \theta \sim \text{Poisson}(\theta)\)</span> and <span class="math inline">\(\theta \sim \text{Gamma}(\alpha, \beta)\)</span>.</p></li>
+<li class="fragment"><p><span class="math inline">\(\Exp{y} = \ExpA{\Exp{y \mid \theta}}{\theta}\)</span></p></li>
+</ul>
+<ul>
+<li class="fragment"><span class="math inline">\(\Var{y} = \ExpA{\Var{y \mid \theta}}{\theta} + \VarA{\Exp{y \mid \theta}}{\theta}\)</span></li>
+</ul>
+<ul>
+<li class="fragment">Can be useful to reparameterize in terms of mean and dispersion parameter</li>
+</ul>
+</section>
+<section id="poisson-with-rateexposure-parameterization" class="slide level2 smaller">
+<h2>Poisson with rate/exposure parameterization</h2>
+<ul>
+<li class="fragment"><p>Many times it is useful to specify the model for count data <span class="math inline">\(y_i\)</span> as conditional on an unknown rate and a known exposure term <span class="math inline">\(x_i\)</span> <span class="math display">\[
+y_i \sim \text{Poisson}(x_i \theta)
+\]</span></p></li>
+<li class="fragment"><p>We can see that this model is no longer exchangeable in <span class="math inline">\(y_i\)</span>, but is exchangeable in <span class="math inline">\((y_i, x_i)\)</span></p></li>
+<li class="fragment"><p>Often useful in epidemiological settings, where we want to model the rate of, say, cancer cases per person per year</p></li>
+<li class="fragment"><p>Suppose we observe <span class="math inline">\(3\)</span> death from asthma over one year for a city of <span class="math inline">\(200,000\)</span></p></li>
+<li class="fragment"><p>We want to model the rate of deaths from asthma per <span class="math inline">\(100{,}000\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(y_1 \sim \text{Poisson}(2\, \theta) \rightarrow \theta \mid y_1 \sim \text{Gamma}(\alpha + 3, \beta + 2)\)</span></p></li>
+</ul>
+</section>
+<section id="scale-of-the-prior" class="slide level2">
+<h2>Scale of the prior</h2>
+<div class="r-stack">
+<div class="fragment" data-fragment-index="1">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-03-normal-normal_files/figure-revealjs/unnamed-chunk-8-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="2">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-03-normal-normal_files/figure-revealjs/unnamed-chunk-9-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="3">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-03-normal-normal_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="4">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-03-normal-normal_files/figure-revealjs/unnamed-chunk-11-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="5">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-03-normal-normal_files/figure-revealjs/unnamed-chunk-12-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="normal-with-known-mean" class="slide level2">
+<h2>Normal with known mean</h2>
+<ul>
+<li class="fragment"><p>Though not typical of real-world scenarios, under <span class="math inline">\(y_i \sim \text{Normal}(\theta, \sigma^2)\)</span> we can derive the posterior for <span class="math inline">\(\sigma^2\)</span> under the assumption that <span class="math inline">\(\theta\)</span> is known</p></li>
+<li class="fragment"></li>
+</ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>

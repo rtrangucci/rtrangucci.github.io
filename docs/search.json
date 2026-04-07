@@ -2230,14 +2230,14 @@
     "href": "bayes-material/Lecture-02-bayes-review.html#clarifications-from-last-lecture",
     "title": "Single parameter models",
     "section": "Clarifications from last lecture",
-    "text": "Clarifications from last lecture\n\nFrequency evaluation of Bayesian models: Lehmann and Casella (1998) (about minimax estimators, but I think the point holds more broadly)\n\n\nThe Bayesian paradigm is well suited [sic] for the construction of possibly optimal estimators, but is less well suited for their evaluation. Thew frequentist paradigm is complementary, as it is well suited for risk evaluations, but less well suited for construction.\n\nWe (us Bayesians) always check our models, though our checks a bit different than you might be used to\nQuestions before we move on?"
+    "text": "Clarifications from last lecture\n\n\nFrequency evaluation of Bayesian models: Lehmann and Casella (1998) (about minimax estimators, but I think the point holds more broadly)\n\n\nThe Bayesian paradigm is well suited [sic] for the construction of possibly optimal estimators, but is less well suited for their evaluation. Thew frequentist paradigm is complementary, as it is well suited for risk evaluations, but less well suited for construction.\n\nWe (us Bayesians) always check our models, though our checks a bit different than you might be used to\nQuestions before we move on?"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#binomial-distribution",
     "href": "bayes-material/Lecture-02-bayes-review.html#binomial-distribution",
     "title": "Single parameter models",
     "section": "Binomial distribution",
-    "text": "Binomial distribution\n\nSuppose we have repeated, independent observations of a binary event, such that “success” is coded as \\(X_i = 1\\) and a failure is coded as a \\(X_i = 0\\).\nFor each observation, we assume that \\(P(X_i = 1 \\mid \\theta) = \\theta\\)\nLet \\(Y = \\sum_{i=1}^n X_i\\) denote the number of successes in \\(n\\) trials (what information do we lose here?)\nThe probability mass function corresponding to the random variable \\(Y\\) given a value for \\(\\theta\\) is written: \\[\np(Y = \\textcolor{red}{y} \\mid \\theta, n) = {n \\choose \\textcolor{red}{y}} \\theta^{\\textcolor{red}{y}} (1 - \\theta)^{n-\\textcolor{red}{y}}\n\\]"
+    "text": "Binomial distribution\n\n\nSuppose we have repeated, independent observations of a binary event, such that “success” is coded as \\(X_i = 1\\) and a failure is coded as a \\(X_i = 0\\).\nFor each observation, we assume that \\(P(X_i = 1 \\mid \\theta) = \\theta\\)\nLet \\(Y = \\sum_{i=1}^n X_i\\) denote the number of successes in \\(n\\) trials (what information do we lose here?)\nThe probability mass function corresponding to the random variable \\(Y\\) given a value for \\(\\theta\\) is written: \\[\np(Y = \\textcolor{red}{y} \\mid \\theta, n) = {n \\choose \\textcolor{red}{y}} \\theta^{\\textcolor{red}{y}} (1 - \\theta)^{n-\\textcolor{red}{y}}\n\\]"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#references",
@@ -2265,7 +2265,7 @@
     "href": "bayes-material/Lecture-02-bayes-review.html",
     "title": "Single parameter models",
     "section": "",
-    "text": "This is cmdstanr version 0.9.0\n\n\n- CmdStanR documentation and vignettes: mc-stan.org/cmdstanr\n\n\n- CmdStan path: /Users/robertntrangucci/.cmdstan/cmdstan-2.37.0\n\n\n- CmdStan version: 2.37.0\n\n\n\nA newer version of CmdStan is available. See ?install_cmdstan() to install it.\nTo disable this check set option or environment variable cmdstanr_no_ver_check=TRUE."
+    "text": "These slides have been constructed from Aki Vehatri’s Bayesian Data Analysis course at Aalto University in Espoo, Finland\nThe material for this course is here: https://github.com/avehtari/BDA_course_Aalto"
   },
   {
     "objectID": "bayes-material/output.html#outline-of-lecture-2",
@@ -2328,49 +2328,49 @@
     "href": "bayes-material/Lecture-02-bayes-review.html#what-can-we-do-with-the-likelihood",
     "title": "Single parameter models",
     "section": "What can we do with the likelihood?",
-    "text": "What can we do with the likelihood?\n\nLikelihood is not a density, though it does describe uncertainty about \\(\\theta\\)\nintegrate(\\(theta) dbinom(6, 10, theta), 0, 1) \\(\\approx 0.09 \\neq 1\\)\nPaired with a prior \\(p(\\theta)\\) and using Bayes’ rule, we can probabilistically describe uncertainty about \\(\\theta\\)\nNote the conditioning on \\(n\\) below \\[\np(\\theta \\mid y, n) = \\frac{p(y \\mid \\theta, n)p(\\theta \\mid n)}{\\int_0^1 p(y \\mid \\theta, n) p(\\theta \\mid n)d \\theta}\n\\]"
+    "text": "What can we do with the likelihood?\n\n\nLikelihood is not a density, though it does describe uncertainty about \\(\\theta\\)\nintegrate(\\(theta) dbinom(6, 10, theta), 0, 1) \\(\\approx 0.09 \\neq 1\\)\nPaired with a prior \\(p(\\theta)\\) and using Bayes’ rule, we can probabilistically describe uncertainty about \\(\\theta\\)\nNote the conditioning on \\(n\\) below \\[\np(\\theta \\mid y, n) = \\frac{p(y \\mid \\theta, n)p(\\theta \\mid n)}{\\int_0^1 p(y \\mid \\theta, n) p(\\theta \\mid n)d \\theta}\n\\]"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#uniform-prior",
     "href": "bayes-material/Lecture-02-bayes-review.html#uniform-prior",
     "title": "Single parameter models",
     "section": "Uniform prior",
-    "text": "Uniform prior\n\nUsing the uniform prior: \\(p(\\theta \\mid n) = \\ind{0 \\leq \\theta \\leq 1}\\) gives\n\\[\np(\\theta \\mid y, n) = \\frac{{n \\choose y} \\theta^y (1 - \\theta)^{n-y}}{\\int_0^1 {n \\choose y} \\theta^y (1 - \\theta)^{n-y} d \\theta}\n\\]\nReverend Thomas Bayes’ contribution was working out the integral in the denominator"
+    "text": "Uniform prior\n\n\nUsing the uniform prior: \\(p(\\theta \\mid n) = \\ind{0 \\leq \\theta \\leq 1}\\) gives\n\\[\np(\\theta \\mid y, n) = \\frac{{n \\choose y} \\theta^y (1 - \\theta)^{n-y}}{\\int_0^1 {n \\choose y} \\theta^y (1 - \\theta)^{n-y} d \\theta}\n\\]\nReverend Thomas Bayes’ contribution was working out the integral in the denominator"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#worked-example-with-the-uniform",
     "href": "bayes-material/Lecture-02-bayes-review.html#worked-example-with-the-uniform",
     "title": "Single parameter models",
     "section": "Worked example with the uniform",
-    "text": "Worked example with the uniform\n\nWe can use some knowledge of another distribution to help us do the integration\nThe \\(\\text{Beta}(\\alpha, \\beta)\\), \\(\\alpha, \\beta &gt; 0\\) distribution is a distribution supported on \\([0,1]\\), with pdf \\[\np(\\theta \\mid \\alpha, \\beta) = \\frac{\\Gamma(\\alpha + \\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)} \\theta^{\\alpha - 1} (1 - \\theta)^{\\beta - 1}\n\\]\nThe Gamma function \\(\\Gamma(z)\\) is the integral defined for positive numbers \\(z\\): \\[\n\\Gamma(z) = \\int_0^\\infty t^{z - 1} e^{-t} dt\n\\]\nBy the fact that \\(\\int_0^1 p(\\theta \\mid \\alpha, \\beta) d \\theta = 1\\) for the beta pdf, we know: \\[\n\\frac{\\Gamma(\\alpha)\\Gamma(\\beta)}{\\Gamma(\\alpha + \\beta)} = \\int_0^1 \\theta^{\\alpha - 1} (1 - \\theta)^{\\beta - 1} d\\theta\n\\]"
+    "text": "Worked example with the uniform\n\n\nWe can use some knowledge of another distribution to help us do the integration\nThe \\(\\text{Beta}(\\alpha, \\beta)\\), \\(\\alpha, \\beta &gt; 0\\) distribution is a distribution supported on \\([0,1]\\), with pdf \\[\np(\\theta \\mid \\alpha, \\beta) = \\frac{\\Gamma(\\alpha + \\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)} \\theta^{\\alpha - 1} (1 - \\theta)^{\\beta - 1}\n\\]\nThe Gamma function \\(\\Gamma(z)\\) is the integral defined for positive numbers \\(z\\): \\[\n\\Gamma(z) = \\int_0^\\infty t^{z - 1} e^{-t} dt\n\\]\nBy the fact that \\(\\int_0^1 p(\\theta \\mid \\alpha, \\beta) d \\theta = 1\\) for the beta pdf, we know: \\[\n\\frac{\\Gamma(\\alpha)\\Gamma(\\beta)}{\\Gamma(\\alpha + \\beta)} = \\int_0^1 \\theta^{\\alpha - 1} (1 - \\theta)^{\\beta - 1} d\\theta\n\\]"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#worked-example-with-the-beta-continued",
     "href": "bayes-material/Lecture-02-bayes-review.html#worked-example-with-the-beta-continued",
     "title": "Single parameter models",
     "section": "Worked example with the Beta continued",
-    "text": "Worked example with the Beta continued\n\nThe integral \\(\\int_0^1 {n \\choose y} \\theta^y (1 - \\theta)^{n-y} d \\theta\\) is thus: \\[\np(y \\mid n) = {n \\choose y} \\frac{\\Gamma(y + 1)\\Gamma(n - y + 1)}{\\Gamma(n + 2)}\n\\]\nWe can use the properties of the gamma to simplify things. Note \\(\\Gamma(n + 1) = n!\\), so we can rewrite \\({n \\choose y}\\) as \\[\n{n \\choose y} = \\frac{\\Gamma(n + 1)}{\\Gamma(y + 1) \\Gamma(n - y + 1)}\n\\]"
+    "text": "Worked example with the Beta continued\n\n\nThe integral \\(\\int_0^1 {n \\choose y} \\theta^y (1 - \\theta)^{n-y} d \\theta\\) is thus: \\[\np(y \\mid n) = {n \\choose y} \\frac{\\Gamma(y + 1)\\Gamma(n - y + 1)}{\\Gamma(n + 2)}\n\\]\nWe can use the properties of the gamma to simplify things. Note \\(\\Gamma(n + 1) = n!\\), so we can rewrite \\({n \\choose y}\\) as \\[\n{n \\choose y} = \\frac{\\Gamma(n + 1)}{\\Gamma(y + 1) \\Gamma(n - y + 1)}\n\\]"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#worked-example-contd",
     "href": "bayes-material/Lecture-02-bayes-review.html#worked-example-contd",
     "title": "Single parameter models",
     "section": "Worked example cont’d",
-    "text": "Worked example cont’d\n\nCombining everything we get: \\[\np(y \\mid n) = \\frac{\\Gamma(n + 1)}{\\Gamma(n + 2)}\n\\]\nWe can use the property: \\(\\Gamma(a + 1) = a \\Gamma(a)\\) for the denominator \\[\n\\begin{aligned}\n\\Gamma(n + 2) & = \\class{fragment}{\\Gamma(n + 1 + 1)} \\\\\n&\\class{fragment}{{} = (n + 1) \\Gamma(n + 1)}\n\\end{aligned}\n\\]\nFinally \\[\n\\small\n\\begin{aligned}\np(y \\mid n) &\\class{fragment}{{} = \\frac{\\Gamma(n + 1)}{\\Gamma(n + 2)}} \\\\\n& \\class{fragment}{{} = \\frac{\\Gamma(n + 1)}{(n + 1)\\Gamma(n + 1)}} \\\\\n& \\class{fragment}{{} = \\frac{1}{(n + 1)}}\n\\end{aligned}\n\\]"
+    "text": "Worked example cont’d\n\n\nCombining everything we get: \\[\np(y \\mid n) = \\frac{\\Gamma(n + 1)}{\\Gamma(n + 2)}\n\\]\nWe can use the property: \\(\\Gamma(a + 1) = a \\Gamma(a)\\) for the denominator \\[\n\\begin{aligned}\n\\Gamma(n + 2) & = \\class{fragment}{\\Gamma(n + 1 + 1)} \\\\\n&\\class{fragment}{{} = (n + 1) \\Gamma(n + 1)}\n\\end{aligned}\n\\]\nFinally \\[\n\\small\n\\begin{aligned}\np(y \\mid n) &\\class{fragment}{{} = \\frac{\\Gamma(n + 1)}{\\Gamma(n + 2)}} \\\\\n& \\class{fragment}{{} = \\frac{\\Gamma(n + 1)}{(n + 1)\\Gamma(n + 1)}} \\\\\n& \\class{fragment}{{} = \\frac{1}{(n + 1)}}\n\\end{aligned}\n\\]"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#marginal-distribution-for-y",
     "href": "bayes-material/Lecture-02-bayes-review.html#marginal-distribution-for-y",
     "title": "Single parameter models",
     "section": "Marginal distribution for \\(y\\)",
-    "text": "Marginal distribution for \\(y\\)\n\nIn this problem, the uniform prior over \\(\\theta\\) induces a uniform prior over the marginal distribution of \\(y\\)\nWe might wonder the converse: does a uniform distribution for \\(y\\) imply a uniform prior over \\(\\theta\\)?\nThe answer is yes, but only if we specify that it holds for every \\(n\\) (see Banerjee and Richardson (2013) for more details)\nWith a finite \\(n\\), there are other non-uniform priors over \\(\\theta\\) that imply a uniform \\(p(y \\mid n)\\)\nThis is a good example of examining what our prior distribution implies about the marginal distribution of our outcome"
+    "text": "Marginal distribution for \\(y\\)\n\n\nIn this problem, the uniform prior over \\(\\theta\\) induces a uniform prior over the marginal distribution of \\(y\\)\nWe might wonder the converse: does a uniform distribution for \\(y\\) imply a uniform prior over \\(\\theta\\)?\nThe answer is yes, but only if we specify that it holds for every \\(n\\) (see Banerjee and Richardson (2013) for more details)\nWith a finite \\(n\\), there are other non-uniform priors over \\(\\theta\\) that imply a uniform \\(p(y \\mid n)\\)\nThis is a good example of examining what our prior distribution implies about the marginal distribution of our outcome"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#back-to-posteriors",
     "href": "bayes-material/Lecture-02-bayes-review.html#back-to-posteriors",
     "title": "Single parameter models",
     "section": "Back to posteriors",
-    "text": "Back to posteriors\n\nCombining the marginal distribution for \\(y\\) with the likelihood yields the following conditional density for \\(\\theta\\) given \\(Y = y\\): \\[\n\\small\n\\begin{aligned}\np(\\theta \\mid y, n) & = (n + 1){n \\choose y} \\theta^y (1 - \\theta)^{n - y} \\\\\n& = \\frac{(n + 1)\\Gamma(n + 1)}{\\Gamma(y + 1)\\Gamma(n - y + 1)} \\theta^y (1 - \\theta)^{n - y} \\\\\n& = \\frac{\\Gamma(n + 2)}{\\Gamma(y + 1)\\Gamma(n - y + 1)} \\theta^y (1 - \\theta)^{n - y}\n\\end{aligned}\n\\]\nWe recognize \\(\\theta \\mid y, n \\sim \\text{Beta}(y + 1, n - y + 1)\\)"
+    "text": "Back to posteriors\n\n\nCombining the marginal distribution for \\(y\\) with the likelihood yields the following conditional density for \\(\\theta\\) given \\(Y = y\\): \\[\n\\small\n\\begin{aligned}\np(\\theta \\mid y, n) & = (n + 1){n \\choose y} \\theta^y (1 - \\theta)^{n - y} \\\\\n& = \\frac{(n + 1)\\Gamma(n + 1)}{\\Gamma(y + 1)\\Gamma(n - y + 1)} \\theta^y (1 - \\theta)^{n - y} \\\\\n& = \\frac{\\Gamma(n + 2)}{\\Gamma(y + 1)\\Gamma(n - y + 1)} \\theta^y (1 - \\theta)^{n - y}\n\\end{aligned}\n\\]\nWe recognize \\(\\theta \\mid y, n \\sim \\text{Beta}(y + 1, n - y + 1)\\)"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#plotting-the-posterior",
@@ -2384,14 +2384,14 @@
     "href": "bayes-material/Lecture-02-bayes-review.html#posterior-predictive-distribution",
     "title": "Single parameter models",
     "section": "Posterior predictive distribution",
-    "text": "Posterior predictive distribution\n\nIf we’d like to predict the outcome of a single trial, or \\(P(\\tilde{X} = 1 \\mid \\theta)\\), we can use our posterior and combine it with a Bernoulli distribution: \\[\nP(\\tilde{X} = 1 \\mid y, n) = \\int_0^1 P(\\tilde{X} = 1 \\mid \\theta) p(\\theta \\mid y, n) d\\theta\n\\]\nIn this case, \\(P(\\tilde{X} = 1 \\mid \\theta) = \\theta\\), so the posterior predictive distribution is just the posterior mean, denoted \\(\\Exp{\\theta \\mid y}\\): \\[\nP(\\tilde{X} = 1 \\mid y, n) = \\int_0^1 \\theta p(\\theta \\mid y, n) d\\theta\n\\]\nThe mean of a Beta distribution is \\(\\frac{\\alpha}{\\alpha + \\beta}\\) so \\[\nP(\\tilde{X} = 1 \\mid y, n) = \\frac{y + 1}{n + 2}\n\\]"
+    "text": "Posterior predictive distribution\n\n\nIf we’d like to predict the outcome of a single trial, or \\(P(\\tilde{X} = 1 \\mid \\theta)\\), we can use our posterior and combine it with a Bernoulli distribution: \\[\nP(\\tilde{X} = 1 \\mid y, n) = \\int_0^1 P(\\tilde{X} = 1 \\mid \\theta) p(\\theta \\mid y, n) d\\theta\n\\]\nIn this case, \\(P(\\tilde{X} = 1 \\mid \\theta) = \\theta\\), so the posterior predictive distribution is just the posterior mean, denoted \\(\\Exp{\\theta \\mid y}\\): \\[\nP(\\tilde{X} = 1 \\mid y, n) = \\int_0^1 \\theta p(\\theta \\mid y, n) d\\theta\n\\]\nThe mean of a Beta distribution is \\(\\frac{\\alpha}{\\alpha + \\beta}\\) so \\[\nP(\\tilde{X} = 1 \\mid y, n) = \\frac{y + 1}{n + 2}\n\\]"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#benefits-of-bayes-again",
     "href": "bayes-material/Lecture-02-bayes-review.html#benefits-of-bayes-again",
     "title": "Single parameter models",
     "section": "Benefits of Bayes (again)",
-    "text": "Benefits of Bayes (again)\n\nThe posterior predictive distribution for a new trial when \\(y = n\\) or \\(y = 0\\) demonstrates another benefit of Bayes, which is integration\n\\(P(\\tilde{X} = 1 \\mid 0, n) = 1 / n + 2\\) and \\(P(\\tilde{X} = 1 \\mid n, n) = n + 1 / n + 2\\)\nCompare with the predictive distribution under the MLE, which would be \\(0\\) in the first case or \\(1\\) in the second case"
+    "text": "Benefits of Bayes (again)\n\n\nThe posterior predictive distribution for a new trial when \\(y = n\\) or \\(y = 0\\) demonstrates another benefit of Bayes, which is integration\n\\(P(\\tilde{X} = 1 \\mid 0, n) = 1 / n + 2\\) and \\(P(\\tilde{X} = 1 \\mid n, n) = n + 1 / n + 2\\)\nCompare with the predictive distribution under the MLE, which would be \\(0\\) in the first case or \\(1\\) in the second case"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#why-is-this-not-just-about-priors",
@@ -2405,7 +2405,7 @@
     "href": "bayes-material/Lecture-02-bayes-review.html#recaps-on-bayesian-predictive-distributions",
     "title": "Single parameter models",
     "section": "Recaps on Bayesian predictive distributions",
-    "text": "Recaps on Bayesian predictive distributions\n\nPrior predictive distribution for a new trial \\[\np(\\tilde{X} = 1 \\mid M) = \\int_0^1 p(\\tilde{X} = 1 \\mid \\theta) p(\\theta \\mid M) d\\theta\n\\]\nPosterior predictive distribution \\[\np(\\tilde{X} = 1 \\mid y, n, M) = \\int_0^1 p(\\tilde{X} = 1 \\mid \\theta) p(\\theta \\mid y, n, M) d\\theta\n\\]"
+    "text": "Recaps on Bayesian predictive distributions\n\n\nPrior predictive distribution for a new trial \\[\np(\\tilde{X} = 1 \\mid M) = \\int_0^1 p(\\tilde{X} = 1 \\mid \\theta) p(\\theta \\mid M) d\\theta\n\\]\nPosterior predictive distribution \\[\np(\\tilde{X} = 1 \\mid y, n, M) = \\int_0^1 p(\\tilde{X} = 1 \\mid \\theta) p(\\theta \\mid y, n, M) d\\theta\n\\]"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#kernels-and",
@@ -2419,14 +2419,14 @@
     "href": "bayes-material/Lecture-02-bayes-review.html#kernels-and-conjugate-priors",
     "title": "Single parameter models",
     "section": "Kernels and conjugate priors",
-    "text": "Kernels and conjugate priors\n\nReturning to our binomial posterior we had the following: \\[\np(\\theta \\mid y, n) = \\frac{{n \\choose y} \\theta^y (1 - \\theta)^{n - y}}{p(y \\mid n)}\n\\]\nWe can recognize that the numerator is the only bit that depends on \\(\\theta\\); our posterior is a function of \\(\\theta\\) (a special function that is positive and integrates to \\(1\\) over \\([0,1]\\))\nThus we can just as correctly write the posterior as “proportional to” instead of using an equality: \\[\np(\\theta \\mid y, n) \\propto \\theta^y (1 - \\theta)^{n - y}\n\\]\nIf we can recognize the functional form of the RHS of the propto symbol as a density function we know, then we can immediately deduce the posterior distribution\nIn fact, this motivates a concept called conjugate priors, or priors that have the same functional form as the likelihoods to which they’re matched"
+    "text": "Kernels and conjugate priors\n\n\nReturning to our binomial posterior we had the following: \\[\np(\\theta \\mid y, n) = \\frac{{n \\choose y} \\theta^y (1 - \\theta)^{n - y}}{p(y \\mid n)}\n\\]\nWe can recognize that the numerator is the only bit that depends on \\(\\theta\\); our posterior is a function of \\(\\theta\\) (a special function that is positive and integrates to \\(1\\) over \\([0,1]\\))\nThus we can just as correctly write the posterior as “proportional to” instead of using an equality: \\[\np(\\theta \\mid y, n) \\propto \\theta^y (1 - \\theta)^{n - y}\n\\]\nIf we can recognize the functional form of the RHS of the propto symbol as a density function we know, then we can immediately deduce the posterior distribution\nIn fact, this motivates a concept called conjugate priors, or priors that have the same functional form as the likelihoods to which they’re matched"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#conjugate-priors-again",
     "href": "bayes-material/Lecture-02-bayes-review.html#conjugate-priors-again",
     "title": "Single parameter models",
     "section": "Conjugate priors again",
-    "text": "Conjugate priors again\n\nFor the binomial likelihood, the Beta prior is conjugate\n\\(p(\\theta) \\propto \\theta^{\\alpha - 1}(1 - \\theta)^{\\beta - 1}\\)\nWhen using a beta prior with arbitrary \\(\\alpha, \\beta\\), we get \\(p(\\theta \\mid y, n) \\propto \\theta^{\\alpha + y - 1} (1 - \\theta)^{n - y + \\beta - 1}\\)\nThis normalizes to yield \\(\\theta \\mid y, n \\sim \\text{Beta}(\\alpha + y, n - y + \\beta)\\)\nWe get the uniform prior when \\(\\alpha = \\beta = 1\\)"
+    "text": "Conjugate priors again\n\n\nFor the binomial likelihood, the Beta prior is conjugate\n\\(p(\\theta) \\propto \\theta^{\\alpha - 1}(1 - \\theta)^{\\beta - 1}\\)\nWhen using a beta prior with arbitrary \\(\\alpha, \\beta\\), we get \\(p(\\theta \\mid y, n) \\propto \\theta^{\\alpha + y - 1} (1 - \\theta)^{n - y + \\beta - 1}\\)\nThis normalizes to yield \\(\\theta \\mid y, n \\sim \\text{Beta}(\\alpha + y, n - y + \\beta)\\)\nWe get the uniform prior when \\(\\alpha = \\beta = 1\\)"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#comparing-posteriors-under-different-priors",
@@ -2440,7 +2440,7 @@
     "href": "bayes-material/Lecture-02-bayes-review.html#posterior-quantities-under-beta-prior",
     "title": "Single parameter models",
     "section": "Posterior quantities under Beta prior",
-    "text": "Posterior quantities under Beta prior\n\nGiven a posterior of \\(\\theta \\mid y, n \\sim \\text{Beta}(\\alpha + y, n - y + \\beta)\\), we get the posterior mean: \\[\n\\Exp{\\theta \\mid y} = \\frac{\\alpha + y}{\\alpha + \\beta + n}\n\\]\nWe can rewrite this as a convex combination of prior mean and MLE \\[\n\\frac{\\alpha + y}{\\alpha + \\beta + n} = \\frac{\\alpha}{\\alpha + \\beta} \\frac{\\alpha + \\beta}{\\alpha + \\beta + n} + \\frac{y}{n}\\frac{n}{\\alpha + \\beta + n}\n\\]\nClear that \\(\\Exp{\\theta \\mid y} \\to \\frac{y}{n}\\) as \\(n \\to \\infty\\)\nVariance of the posterior is (recall variance of beta is \\(\\frac{\\Exp{\\theta}(1 - \\Exp{\\theta})}{\\alpha + \\beta + 1}\\): \\[\n\\Var{\\theta \\mid y} = \\frac{\\Exp{\\theta \\mid y}(1 - \\Exp{\\theta \\mid y})}{\\alpha + \\beta + n + 1}\n\\]\nVariance goes to zero as \\(n \\to \\infty\\)"
+    "text": "Posterior quantities under Beta prior\n\n\nGiven a posterior of \\(\\theta \\mid y, n \\sim \\text{Beta}(\\alpha + y, n - y + \\beta)\\), we get the posterior mean: \\[\n\\Exp{\\theta \\mid y} = \\frac{\\alpha + y}{\\alpha + \\beta + n}\n\\]\nWe can rewrite this as a convex combination of prior mean and MLE \\[\n\\frac{\\alpha + y}{\\alpha + \\beta + n} = \\frac{\\alpha}{\\alpha + \\beta} \\frac{\\alpha + \\beta}{\\alpha + \\beta + n} + \\frac{y}{n}\\frac{n}{\\alpha + \\beta + n}\n\\]\nClear that \\(\\Exp{\\theta \\mid y} \\to \\frac{y}{n}\\) as \\(n \\to \\infty\\)\nVariance of the posterior is (recall variance of beta is \\(\\frac{\\Exp{\\theta}(1 - \\Exp{\\theta})}{\\alpha + \\beta + 1}\\): \\[\n\\Var{\\theta \\mid y} = \\frac{\\Exp{\\theta \\mid y}(1 - \\Exp{\\theta \\mid y})}{\\alpha + \\beta + n + 1}\n\\]\nVariance goes to zero as \\(n \\to \\infty\\)"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#exponential-families",
@@ -2454,49 +2454,49 @@
     "href": "bayes-material/Lecture-02-bayes-review.html#comments-on-conjugate-priors",
     "title": "Single parameter models",
     "section": "Comments on conjugate priors",
-    "text": "Comments on conjugate priors\n\nConjugate priors arose due to constraints on computing; if you knew the form of the posterior kernel, there was no need to compute the denominator \\(\\int_{\\Theta} p(y \\mid \\theta) p(\\theta) d\\theta\\)\nConjugate priors may be insufficiently flexible to represent prior information in certain problems\nWhen models get larger, conjugate priors will typically not exist\nWith generalized MCMC algorithms, like that in Stan, there is no need to use conjugate priors"
+    "text": "Comments on conjugate priors\n\n\nConjugate priors arose due to constraints on computing; if you knew the form of the posterior kernel, there was no need to compute the denominator \\(\\int_{\\Theta} p(y \\mid \\theta) p(\\theta) d\\theta\\)\nConjugate priors may be insufficiently flexible to represent prior information in certain problems\nWhen models get larger, conjugate priors will typically not exist\nWith generalized MCMC algorithms, like that in Stan, there is no need to use conjugate priors"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#prior-vs.-posterior-variance",
     "href": "bayes-material/Lecture-02-bayes-review.html#prior-vs.-posterior-variance",
     "title": "Single parameter models",
     "section": "Prior vs. posterior variance",
-    "text": "Prior vs. posterior variance\n\nUsing the law of total variance sheds some light on what we can expect from a Bayesian analysis: \\[\n\\Var{\\theta} = \\Exp{\\Var{\\theta \\mid y}} + \\Var{\\Exp{\\theta \\mid y}}\n\\]\nThis says that in expectation the posterior variance will be smaller than the prior variance\nThe expected change in variance is related to the variance of the posterior means over the marginal distribution of the data\nIn the Beta binomial example this can be worked out: \\[\n\\begin{aligned}\n\\Var{\\Exp{\\theta \\mid y}} & = \\Var{\\theta} \\frac{n}{\\alpha + \\beta + n}  \\\\\n\\Exp{\\Var{\\theta \\mid y}} & = \\Var{\\theta}(1 - \\frac{n}{\\alpha + \\beta + n})\n\\end{aligned}\n\\]"
+    "text": "Prior vs. posterior variance\n\n\nUsing the law of total variance sheds some light on what we can expect from a Bayesian analysis: \\[\n\\Var{\\theta} = \\Exp{\\Var{\\theta \\mid y}} + \\Var{\\Exp{\\theta \\mid y}}\n\\]\nThis says that in expectation the posterior variance will be smaller than the prior variance\nThe expected change in variance is related to the variance of the posterior means over the marginal distribution of the data\nIn the Beta binomial example this can be worked out: \\[\n\\begin{aligned}\n\\Var{\\Exp{\\theta \\mid y}} & = \\Var{\\theta} \\frac{n}{\\alpha + \\beta + n}  \\\\\n\\Exp{\\Var{\\theta \\mid y}} & = \\Var{\\theta}(1 - \\frac{n}{\\alpha + \\beta + n})\n\\end{aligned}\n\\]"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#prior-types",
     "href": "bayes-material/Lecture-02-bayes-review.html#prior-types",
     "title": "Single parameter models",
     "section": "Prior types",
-    "text": "Prior types\n\nNoninformative/vague/diffuse/flat priors\n\nAttempt to introduce as little information as possible into analysis\nSometimes these priors can be informative in their own right (Is 1e10 as likely as 1 for a regression coefficient?)\nFlat priors aren’t invariant to reparameterization\n\nProper priors\n\nProper priors integrate to \\(1\\) over the support of the parameter space\n\nImproper priors\n\nThese priors have integrals that diverge (example is a flat prior over \\(\\R\\))\nPosteriors can still be well-defined\n\nNeed \\(\\int_{\\Theta} p(y \\mid \\theta) p(\\theta) d\\theta\\) to be finite, which can happen for certain likelihoods"
+    "text": "Prior types\n\n\nNoninformative/vague/diffuse/flat priors\n\nAttempt to introduce as little information as possible into analysis\nSometimes these priors can be informative in their own right (Is 1e10 as likely as 1 for a regression coefficient?)\nFlat priors aren’t invariant to reparameterization\n\nProper priors\n\nProper priors integrate to \\(1\\) over the support of the parameter space\n\nImproper priors\n\nThese priors have integrals that diverge (example is a flat prior over \\(\\R\\))\nPosteriors can still be well-defined\n\nNeed \\(\\int_{\\Theta} p(y \\mid \\theta) p(\\theta) d\\theta\\) to be finite, which can happen for certain likelihoods"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#weakly-informative-priors",
     "href": "bayes-material/Lecture-02-bayes-review.html#weakly-informative-priors",
     "title": "Single parameter models",
     "section": "Weakly informative priors",
-    "text": "Weakly informative priors\n\nWhen there is scale information about an unknown parameter, weakly informative priors can encode this scale information\n\ne.g. regression problems with standardized predictors, something like \\(t(4, 0, 10)\\) is weakly informative\nIt’s hard to avoid encoding location information in these priors, but it is considered safer to pick a location centered on a “reduced” model (see Simpson et al. (2017))\n\nWays of constructing a weakly informative prior\n\nPrior predictive checks: start with a noninformative prior (though must be proper), and increase concentration until prior predictions look reasonable"
+    "text": "Weakly informative priors\n\n\nWhen there is scale information about an unknown parameter, weakly informative priors can encode this scale information\n\ne.g. regression problems with standardized predictors, something like \\(t(4, 0, 10)\\) is weakly informative\nIt’s hard to avoid encoding location information in these priors, but it is considered safer to pick a location centered on a “reduced” model (see Simpson et al. (2017))\n\nWays of constructing a weakly informative prior\n\nPrior predictive checks: start with a noninformative prior (though must be proper), and increase concentration until prior predictions look reasonable"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#attribution",
     "href": "bayes-material/Lecture-02-bayes-review.html#attribution",
     "title": "Single parameter models",
-    "section": "Attribution",
-    "text": "Attribution\n\nThese slides have been constructed from Aki Vehatri’s Bayesian Data Analysis course at Aalto University in Espoo, Finland\nThe material for this course is here: https://github.com/avehtari/BDA_course_Aalto"
+    "section": "",
+    "text": "These slides have been constructed from Aki Vehatri’s Bayesian Data Analysis course at Aalto University in Espoo, Finland\nThe material for this course is here: https://github.com/avehtari/BDA_course_Aalto"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#reparameterizing-in-bayes",
     "href": "bayes-material/Lecture-02-bayes-review.html#reparameterizing-in-bayes",
     "title": "Single parameter models",
     "section": "Reparameterizing in Bayes",
-    "text": "Reparameterizing in Bayes\n\nIn maximum likelihood, the MLE for \\(g(\\theta)\\) is just \\(g(\\hat{\\theta})\\), which is called invariance of the MLE (see Casella and Berger (2024) Theorem 7.2.10)\nBut with Bayes, we have to consider how the density changes after reparameterizing from \\(\\theta \\to g(\\theta)\\), which involves keeping track of the Jacobian of the transformation\nLet \\(\\phi = g(\\theta)\\), so \\(\\theta = g^{-1}(\\phi)\\) \\[\n\\begin{aligned}\n\\abs{\\frac{d\\theta}{d\\phi}} = \\abs{\\frac{d}{d\\phi} g^{-1}(\\phi)}\n\\end{aligned}\n\\]\nSuppose we have a prior \\(p(\\theta)\\) and we want to get \\(p(\\phi)\\). Then \\[\np(\\phi) = p(g^{-1}(\\phi))\\abs{\\frac{d}{d\\phi} g^{-1}(\\phi)}\n\\]"
+    "text": "Reparameterizing in Bayes\n\n\nIn maximum likelihood, the MLE for \\(g(\\theta)\\) is just \\(g(\\hat{\\theta})\\), which is called invariance of the MLE (see Casella and Berger (2024) Theorem 7.2.10)\nBut with Bayes, we have to consider how the density changes after reparameterizing from \\(\\theta \\to g(\\theta)\\), which involves keeping track of the Jacobian of the transformation\nLet \\(\\phi = g(\\theta)\\), so \\(\\theta = g^{-1}(\\phi)\\) \\[\n\\begin{aligned}\n\\abs{\\frac{d\\theta}{d\\phi}} = \\abs{\\frac{d}{d\\phi} g^{-1}(\\phi)}\n\\end{aligned}\n\\]\nSuppose we have a prior \\(p(\\theta)\\) and we want to get \\(p(\\phi)\\). Then \\[\np(\\phi) = p(g^{-1}(\\phi))\\abs{\\frac{d}{d\\phi} g^{-1}(\\phi)}\n\\]"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#implications-of-reparameterizing",
     "href": "bayes-material/Lecture-02-bayes-review.html#implications-of-reparameterizing",
     "title": "Single parameter models",
     "section": "Implications of reparameterizing",
-    "text": "Implications of reparameterizing\n\nNoninformative priors in one parameterization are not noninformative in another\nIn our Binomial example, let \\(p(\\theta) = \\ind{0 \\leq \\theta \\leq 1}\\) and suppose we want to reparameterize with \\(\\phi = \\theta^2\\).\nThen \\(\\theta = \\sqrt{\\phi}\\) the flat prior becomes \\[\np(\\phi) = \\ind{0 \\leq \\sqrt{\\phi} \\leq 1} \\frac{1}{2} \\phi^{-1/2}\n\\]\nThis is very much not flat; thus “no knowledge” of \\(\\theta\\) translates to information about \\(\\theta^2\\)."
+    "text": "Implications of reparameterizing\n\n\nNoninformative priors in one parameterization are not noninformative in another\nIn our Binomial example, let \\(p(\\theta) = \\ind{0 \\leq \\theta \\leq 1}\\) and suppose we want to reparameterize with \\(\\phi = \\theta^2\\).\nThen \\(\\theta = \\sqrt{\\phi}\\) the flat prior becomes \\[\np(\\phi) = \\ind{0 \\leq \\sqrt{\\phi} \\leq 1} \\frac{1}{2} \\phi^{-1/2}\n\\]\nThis is very much not flat; thus “no knowledge” of \\(\\theta\\) translates to information about \\(\\theta^2\\)."
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#priors-in-practice",
@@ -2510,7 +2510,7 @@
     "href": "bayes-material/Lecture-02-bayes-review.html#informative-priors-based-on-past-information",
     "title": "Single parameter models",
     "section": "Informative priors based on past information",
-    "text": "Informative priors based on past information\n\nWe’re in charge of buying scissors for the library, so we need to figure out how many pairs of left-handed scissors to buy\nSuppose we run a survey to learn the proportion of OSU students who are left-handed\nWe randomly email \\(300\\) students and ask them their handedness\nA 2020 meta-analysis on left-handedness gives a range of left-handedness from 9.3% to 18.1%, depending on how handedness is measured"
+    "text": "Informative priors based on past information\n\n\nWe’re in charge of buying scissors for the library, so we need to figure out how many pairs of left-handed scissors to buy\nSuppose we run a survey to learn the proportion of OSU students who are left-handed\nWe randomly email \\(300\\) students and ask them their handedness\nA 2020 meta-analysis on left-handedness gives a range of left-handedness from 9.3% to 18.1%, depending on how handedness is measured"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#setting-a-prior",
@@ -2552,14 +2552,14 @@
     "href": "bayes-material/Lecture-02-bayes-review.html#conditioning-on-a-model-m",
     "title": "Single parameter models",
     "section": "Conditioning on a model \\(M\\)",
-    "text": "Conditioning on a model \\(M\\)\n\nSometimes we explicitly condition on \\(M\\) to indicate that our posterior for \\(\\theta\\) is dependent on a choice of model\n\\[\np(\\theta \\mid y, n, M) = \\frac{p(y \\mid \\theta, n, M) p(\\theta \\mid n, M)}{\\int_0^1 p(y \\mid \\theta, n, M) p(\\theta \\mid n, M)d \\theta}\n\\]\nNote that the denominator \\(p(y \\mid n, M) = \\int_0^1 p(y \\mid \\theta, n, M) p(\\theta \\mid n, M)d \\theta\\)\nIf we have two models, we can compare marginal likelihoods: \\(p(y \\mid n, M_1)\\) vs. \\(p(y \\mid n, M_2)\\) (though this is computationally hard and can be sensitive to priors in way that a posterior is not)"
+    "text": "Conditioning on a model \\(M\\)\n\n\nSometimes we explicitly condition on \\(M\\) to indicate that our posterior for \\(\\theta\\) is dependent on a choice of model\n\\[\np(\\theta \\mid y, n, M) = \\frac{p(y \\mid \\theta, n, M) p(\\theta \\mid n, M)}{\\int_0^1 p(y \\mid \\theta, n, M) p(\\theta \\mid n, M)d \\theta}\n\\]\nNote that the denominator \\(p(y \\mid n, M) = \\int_0^1 p(y \\mid \\theta, n, M) p(\\theta \\mid n, M)d \\theta\\)\nIf we have two models, we can compare marginal likelihoods: \\(p(y \\mid n, M_1)\\) vs. \\(p(y \\mid n, M_2)\\) (though this is computationally hard and can be sensitive to priors in way that a posterior is not)"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#normal-models",
     "href": "bayes-material/Lecture-02-bayes-review.html#normal-models",
     "title": "Single parameter models",
     "section": "Normal models",
-    "text": "Normal models\n\nNormal likelihoods are special for us statisticians because of the CLT (see § 5.5.3 in Casella and Berger (2024))"
+    "text": "Normal models\n\n\nNormal likelihoods are special for us statisticians because of the CLT (see § 5.5.3 in Casella and Berger (2024))"
   },
   {
     "objectID": "bayes-material/Lecture-02-bayes-review.html#section",
@@ -2615,7 +2615,7 @@
     "href": "bayes-material/Lecture-02-bayes-review.html#prior-for-which-exptheta-mid-y-n-yn",
     "title": "Single parameter models",
     "section": "Prior for which \\(\\Exp{\\theta \\mid y, n} = y/n\\)",
-    "text": "Prior for which \\(\\Exp{\\theta \\mid y, n} = y/n\\)\n\nIf we want \\(\\Exp{\\theta \\mid y, n} = y/n\\) then we can use the following \\(\\text{Beta}(0,0)\\) prior\n\\[\np(\\theta) \\propto \\theta^{-1}(1 - \\theta)^{-1}\n\\]\nThis is an example of an improper prior because the integral diverges\nNote however \\(p(y \\mid n)\\) doesn’t diverge for certain \\(y, n\\) values: \\[\np(y \\mid n) = {n \\choose y} \\int_0^1 \\theta^{y - 1} (1 - \\theta)^{n - y - 1}d\\theta\n\\]\n\\[\n\\int_0^1 \\theta^{y - 1} (1 - \\theta)^{n - y - 1}d\\theta = \\frac{\\Gamma(n)}{\\Gamma(y)\\Gamma(n - y)}\n\\]\nWe need \\(y &gt; 0\\) and \\(n &gt; y\\) for this integral to exist\nIn order to use Bayes rule, we need a finite \\(p(y \\mid n)\\)!"
+    "text": "Prior for which \\(\\Exp{\\theta \\mid y, n} = y/n\\)\n\n\nIf we want \\(\\Exp{\\theta \\mid y, n} = y/n\\) then we can use the following \\(\\text{Beta}(0,0)\\) prior\n\\[\np(\\theta) \\propto \\theta^{-1}(1 - \\theta)^{-1}\n\\]\nThis is an example of an improper prior because the integral diverges\nNote however \\(p(y \\mid n)\\) doesn’t diverge for certain \\(y, n\\) values: \\[\np(y \\mid n) = {n \\choose y} \\int_0^1 \\theta^{y - 1} (1 - \\theta)^{n - y - 1}d\\theta\n\\]\n\\[\n\\int_0^1 \\theta^{y - 1} (1 - \\theta)^{n - y - 1}d\\theta = \\frac{\\Gamma(n)}{\\Gamma(y)\\Gamma(n - y)}\n\\]\nWe need \\(y &gt; 0\\) and \\(n &gt; y\\) for this integral to exist\nIn order to use Bayes rule, we need a finite \\(p(y \\mid n)\\)!"
   },
   {
     "objectID": "bayes-material/Lecture-03-normal-normalqmd.html#attribution",
@@ -2944,7 +2944,7 @@
     "href": "bayes-material/Lecture-03-normal-normal.html#normal-models",
     "title": "Single parameter models",
     "section": "Normal models",
-    "text": "Normal models\n\nNormal likelihoods are special for us statisticians because of the CLT (see § 5.5.3 in Casella and Berger (2024))\nIt is computationally convenient\n\npnorm is implented in many many math libraries\n\nIt has nice analytical properties\n\nEasy to bound normal densities and CDFs\nJointly normal RVs are conditionally normal"
+    "text": "Normal models\n\nNormal likelihoods are special for us statisticians because of the CLT (see § 5.5.3 in Casella and Berger (2024))\nIt is computationally convenient\n\npnorm is implented in many many math libraries\n\nIt has nice analytical properties\n\nEasy to bound normal densities and CDFs\nJointly normal RVs are conditionally normal\nConvolved normals are normal"
   },
   {
     "objectID": "bayes-material/Lecture-03-normal-normal.html#normally-distributed-outcomes",
@@ -2958,14 +2958,14 @@
     "href": "bayes-material/Lecture-03-normal-normal.html#normal-likelihood",
     "title": "Single parameter models",
     "section": "Normal likelihood",
-    "text": "Normal likelihood\n\nLikelihood for \\(\\theta\\) (assuming \\(\\sigma^2\\) is known!): \\[\np(y \\mid \\textcolor{red}{\\theta}) \\propto \\exp\\lp-\\frac{1}{2\\sigma^2}(y - \\textcolor{red}{\\theta})^2 \\rp\n\\]\nRearranging things will help us see the form of the conjugate prior"
+    "text": "Normal likelihood\n\nLikelihood for \\(\\theta\\) (assuming \\(\\sigma^2\\) is known!): \\[\np(y \\mid \\textcolor{red}{\\theta}) \\propto \\exp\\lp-\\frac{1}{2\\sigma^2}(y - \\textcolor{red}{\\theta})^2 \\rp\n\\]\nIn the binomial example, we had \\(p(y \\mid \\theta) \\propto \\theta^{y} (1 - \\theta)^{n - y}\\), so we could read off the conjugate prior,\nRearranging things in the normal likelihood will help us see the form of the conjugate prior"
   },
   {
     "objectID": "bayes-material/Lecture-03-normal-normal.html#normal-likelihood-in-exponential-family-form",
     "href": "bayes-material/Lecture-03-normal-normal.html#normal-likelihood-in-exponential-family-form",
     "title": "Single parameter models",
     "section": "Normal likelihood in exponential family form",
-    "text": "Normal likelihood in exponential family form"
+    "text": "Normal likelihood in exponential family form\n\\[\n\\scriptsize\n\\begin{aligned}\np(y \\mid \\theta) & \\propto \\exp\\lp-\\frac{1}{2\\sigma^2}(y - \\theta)^2 \\rp \\\\\n& = \\exp\\lp-\\frac{y^2}{2\\sigma^2} + \\frac{y}{\\sigma^2} \\theta -\\frac{\\theta^2}{2\\sigma^2}\\rp  \\\\\n& \\propto \\exp\\lp\\frac{\\theta}{\\sigma^2} y -\\frac{\\theta^2}{2\\sigma^2}\\rp\n\\end{aligned}\n\\]\n\nwhen \\(y\\) is normally dist. look at the natural parameter \\(\\theta / \\sigma^2\\). This suggests that a prior should have the same sort of parameterization for \\(\\theta\\)"
   },
   {
     "objectID": "bayes-material/Lecture-03-normal-normal.html#references",
@@ -2973,5 +2973,159 @@
     "title": "Single parameter models",
     "section": "References",
     "text": "References\n\n\nCasella, George, and Roger Berger. 2024. Statistical Inference. Chapman; Hall/CRC."
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#prior-form",
+    "href": "bayes-material/Lecture-03-normal-normal.html#prior-form",
+    "title": "Single parameter models",
+    "section": "Prior Form",
+    "text": "Prior Form\n\n\\[\n\\begin{aligned}\np(\\theta \\mid \\mu_0, \\tau_0) & \\propto \\exp\\lp \\frac{\\mu_0}{\\tau_0^2} \\theta - \\frac{\\theta^2}{2\\tau_0^2}\\rp \\\\\n\\end{aligned}\n\\]\nNow we compute \\(p(\\theta \\mid y, \\mu_0, \\tau_0) \\propto p(y \\mid \\theta) p(\\theta \\mid \\mu_0, \\tau_0)\\) \\[\np(\\theta \\mid y, \\mu_0, \\tau_0) \\propto \\exp\\lp\\frac{\\theta}{\\sigma^2} y -\\frac{\\theta^2}{2\\sigma^2}\\rp \\exp\\lp \\frac{\\mu_0}{\\tau_0^2} \\theta - \\frac{\\theta^2}{2\\tau_0^2}\\rp\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#working-through-the-algebra",
+    "href": "bayes-material/Lecture-03-normal-normal.html#working-through-the-algebra",
+    "title": "Single parameter models",
+    "section": "Working through the algebra",
+    "text": "Working through the algebra\n\\[\n\\scriptsize\n\\begin{aligned}\n& \\exp\\lp\\theta\\lp\\frac{y}{\\sigma^2} + \\frac{\\mu_0}{\\tau_0^2}\\rp -\\frac{\\theta^2}{2}\\lp\\frac{1}{\\sigma^2} + \\frac{1}{\\tau_0^2} \\rp\\rp \\\\\n& = \\exp\\lp\\theta\\lp\\frac{\\mu_1}{\\tau_1^2}\\rp -\\frac{\\theta^2}{2}\\lp\\frac{1}{\\tau_1^2}\\rp\\rp  \\\\\n& \\implies\n\\end{aligned}\n\\] \\[\n\\scriptsize\n\\begin{aligned}\n\\frac{1}{\\tau_1} &  = \\frac{1}{\\sigma^2} + \\frac{1}{\\tau_0^2} && \\frac{\\mu_1}{\\tau_1}  = \\frac{y}{\\sigma^2} + \\frac{\\mu_0}{\\tau_0^2} \\\\\n\\mu_1 & = \\lp \\frac{y}{\\sigma^2} + \\frac{\\mu_0}{\\tau_0^2}\\rp \\tau_1 &&\n\\mu_1  = \\lp\\frac{y}{\\sigma^2} + \\frac{\\mu_0}{\\tau_0^2}\\rp / \\lp \\frac{1}{\\sigma^2} + \\frac{1}{\\tau_0^2}\\rp\n\\end{aligned}\n\\]\n\nSystem of nonlinear equations, solve for unknowns!"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#interpreting-the-parameters",
+    "href": "bayes-material/Lecture-03-normal-normal.html#interpreting-the-parameters",
+    "title": "Single parameter models",
+    "section": "Interpreting the parameters",
+    "text": "Interpreting the parameters\n\n\\[\n\\mu_1 = \\mu_0 + (y - \\mu_0) \\frac{\\tau_0^2}{\\tau_0^2 + \\sigma^2}\n\\]\nvs.  \\[\n\\mu_1 = y - (y - \\mu_0) \\frac{\\sigma^2}{\\tau_0^2 + \\sigma^2}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#posterior-predictive-distribution",
+    "href": "bayes-material/Lecture-03-normal-normal.html#posterior-predictive-distribution",
+    "title": "Single parameter models",
+    "section": "Posterior predictive distribution",
+    "text": "Posterior predictive distribution\n\nWe might want to make predictions for another observation\n\\[\np(\\tilde{y} \\mid y) = \\int_{-\\infty}^\\infty p(\\tilde{y} \\mid \\textcolor{red}{\\theta}) p(\\textcolor{red}{\\theta} \\mid y, \\mu_0, \\tau_0) d \\textcolor{red}{\\theta}\n\\]\n\\[\n\\begin{aligned}\n& \\int_{-\\infty}^\\infty p(\\tilde{y} \\mid \\textcolor{red}{\\theta}) p(\\textcolor{red}{\\theta} \\mid y, \\mu_0, \\tau_0) d \\textcolor{red}{\\theta} \\\\\n& = \\int_{-\\infty}^\\infty \\frac{1}{\\sqrt{2\\pi}\\sigma}\\exp(-\\frac{1}{2\\sigma^2}(y - \\theta)^2)\\frac{1}{\\sqrt{2\\pi}\\tau_1}\\exp(-\\frac{1}{2\\tau_1^2}(\\theta_1 - \\mu_1)^2)  d \\textcolor{red}{\\theta}  \n\\end{aligned}\n\\]\nWe can use the fact that \\(\\tilde{y} \\mid \\theta \\sim \\text{Normal}(\\theta, \\sigma^2)\\) which is equal in distribution to \\(Y = \\theta + Z\\) where \\(Z \\sim \\text{Normal}(0, \\sigma^2)\\).\nMarginally, \\(Y \\sim \\text{Normal}(\\mu_1, \\tau_1^2 + \\sigma^2)\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#clarifications-on-last-lecture",
+    "href": "bayes-material/Lecture-03-normal-normal.html#clarifications-on-last-lecture",
+    "title": "Single parameter models",
+    "section": "Clarifications on last lecture",
+    "text": "Clarifications on last lecture\n\nPrior predictive distribution for binomial likelihood and beta prior\n\nCalled the Beta-Binomial: We’ll derive on the ipad…"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#walking-through-setting-the-prior",
+    "href": "bayes-material/Lecture-03-normal-normal.html#walking-through-setting-the-prior",
+    "title": "Single parameter models",
+    "section": "Walking through setting the prior",
+    "text": "Walking through setting the prior\n\nbeta_fun &lt;- function(pars) {\n  alpha &lt;- exp(pars[1])\n  beta &lt;- exp(pars[2])\n  diff_1 &lt;- qbeta(0.01, shape1 = alpha, shape2 = beta) - 0.02\n  diff_2 &lt;- qbeta(0.99, shape1 = alpha, shape2 = beta) - 0.35\n  return(diff_1^2 + diff_2^2)\n}\n\nres &lt;- optim(c(log(8), log(60)), beta_fun)\nalpha_use &lt;- exp(res$par[1])\nbeta_use &lt;- exp(res$par[2])"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#a-tale-of-two-likeihoods",
+    "href": "bayes-material/Lecture-03-normal-normal.html#a-tale-of-two-likeihoods",
+    "title": "Single parameter models",
+    "section": "A tale of two likeihoods",
+    "text": "A tale of two likeihoods"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#a-tale-of-two-likeihoods-sharp-likelihood",
+    "href": "bayes-material/Lecture-03-normal-normal.html#a-tale-of-two-likeihoods-sharp-likelihood",
+    "title": "Single parameter models",
+    "section": "A tale of two likeihoods: Sharp likelihood",
+    "text": "A tale of two likeihoods: Sharp likelihood"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#a-tale-of-two-likeihoods-weaker-likelihood",
+    "href": "bayes-material/Lecture-03-normal-normal.html#a-tale-of-two-likeihoods-weaker-likelihood",
+    "title": "Single parameter models",
+    "section": "A tale of two likeihoods: Weaker likelihood",
+    "text": "A tale of two likeihoods: Weaker likelihood"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#exponential-families",
+    "href": "bayes-material/Lecture-03-normal-normal.html#exponential-families",
+    "title": "Single parameter models",
+    "section": "Exponential families",
+    "text": "Exponential families\n\nThe normal and binomial distributions are examples of a more general class of densities called exponential families\nThe exponential family distributions can be written in the following form\n\\[\np(y_i \\mid \\theta) = f(y_i) g(\\theta)e^{\\phi(\\theta)^T u(y_i)}\n\\]\nWith \\(n\\) iid observations, calling \\(t(y) = \\sum_{i=1}^n u(y_i)\\) the joint density is \\[\np(y \\mid \\theta) = \\lp \\prod_{i=1}^n f(y_i)\\rp g(\\theta)^n \\exp \\lp \\phi(\\theta)^T t(y)\\rp\n\\]\nWe can write the density as \\[\np(y\\mid \\theta) \\propto g(\\theta)^n \\exp \\lp \\phi(\\theta)^T t(y)\\rp\n\\]\nThis shows that \\(t(y)\\) is sufficient for \\(\\theta\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#conjugate-priors-in-exponential-families",
+    "href": "bayes-material/Lecture-03-normal-normal.html#conjugate-priors-in-exponential-families",
+    "title": "Single parameter models",
+    "section": "Conjugate priors in exponential families",
+    "text": "Conjugate priors in exponential families\n\nWhen \\[\np(y\\mid \\theta) \\propto g(\\theta)^n \\exp \\lp \\phi(\\theta)^T t(y)\\rp\n\\]\nSpecifying \\(p(\\theta) \\propto g(\\theta)^\\eta \\exp\\lp \\phi(\\theta)^T \\nu \\rp\\) yields the posterior:\n\\[\np(\\theta \\mid y) \\propto g(\\theta)^{n + \\eta} \\exp \\lp\\phi(\\theta)^T(t(y) + \\nu) \\rp\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#back-to-the-normal-again",
+    "href": "bayes-material/Lecture-03-normal-normal.html#back-to-the-normal-again",
+    "title": "Single parameter models",
+    "section": "Back to the normal again",
+    "text": "Back to the normal again\n\nWith \\(n\\) observations, we know that \\(\\bar{y}\\) is sufficient for \\(\\mu\\) when \\(y \\sim \\text{Normal}(\\mu, \\sigma^2)\\)\nWe know \\(\\bar{y} \\sim \\text{Normal}(\\mu, \\frac{\\sigma^2}{n})\\), so we can just use our earlier results to get the posterior \\(\\mu_n\\) and \\(\\tau_n\\) parameters\n\\[\n\\scriptsize\n\\begin{aligned}\n\\frac{1}{\\tau_n} &  = \\frac{n}{\\sigma^2} + \\frac{1}{\\tau_0^2} \\\\\n\\mu_n  & = \\lp y \\frac{n}{\\sigma^2} + \\frac{\\mu_0}{\\tau_0^2}\\rp / \\lp \\frac{n}{\\sigma^2} + \\frac{1}{\\tau_0^2}\\rp\n\\end{aligned}\n\\]\nAs \\(n\\to\\infty\\) we get $_n \\(\\bar{y}\\) and \\(\\tau^2_n \\to \\frac{\\sigma^2}{n}\\)\nThis shows that the posterior for \\(\\theta\\) converges to a normal distribution with mean \\(\\bar{y}\\) and \\(\\frac{\\sigma^2}{n}\\)\nWe get the same convergence in distribution if \\(\\tau_0 \\to \\infty\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#models-for-count-data",
+    "href": "bayes-material/Lecture-03-normal-normal.html#models-for-count-data",
+    "title": "Single parameter models",
+    "section": "Models for count data",
+    "text": "Models for count data\n\nWhen we have \\(y_i \\in \\{0\\} \\cup \\Z^+\\), we’ll need to use something other than a normal\nOne common model is \\(y_i \\sim \\text{Poisson}(\\theta)\\) \\[\np(y_i \\mid \\theta) = \\frac{e^{-\\theta} \\theta^y_i}{y_i!}\n\\]\nRewrite this in exponential family form: \\[\ne^{-\\theta} e^{\\log(\\theta) y}\n\\]\nSuggests a prior of the form \\[\n\\begin{aligned}\np(\\theta) & \\propto e^{-\\theta \\eta} e^{\\log(\\theta) \\nu} \\\\\n& \\propto \\theta^\\nu e^{-\\theta \\eta}\n\\end{aligned}\n\\]\nThis is a Gamma distribution, or \\(p(\\theta) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)} \\theta^{\\alpha - 1} e^{-\\beta \\theta}\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#multiple-observations",
+    "href": "bayes-material/Lecture-03-normal-normal.html#multiple-observations",
+    "title": "Single parameter models",
+    "section": "Multiple observations",
+    "text": "Multiple observations\n\nWith \\(n\\) iid observations the joint density for \\(y\\) is \\[\n\\begin{aligned}\np(y \\mid \\theta) & \\propto e^{-n\\theta} e^{\\log(\\theta) \\sum_{i=1}^n y_i} \\\\\n& \\propto e^{-n\\theta} \\theta^{\\sum_{i=1}^n y_i} \\\\\n& \\propto e^{-n\\theta} \\theta^{t(y)}\n\\end{aligned}\n\\]\nWith a prior \\(p(\\theta) \\propto \\theta^{\\alpha - 1} e^{-\\beta \\theta}\\) we get\nPosterior \\[\np(\\theta \\mid y) \\propto e^{-\\theta(n + \\beta)} \\theta^{t(y) + \\alpha}\n\\]\nOr \\(\\theta \\mid y \\sim \\text{Gamma}(\\alpha + t(y), \\beta + n)\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#posterior-predictive-distribution-1",
+    "href": "bayes-material/Lecture-03-normal-normal.html#posterior-predictive-distribution-1",
+    "title": "Single parameter models",
+    "section": "Posterior predictive distribution",
+    "text": "Posterior predictive distribution"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#deriving-the-priorposterior-predictive-distribution",
+    "href": "bayes-material/Lecture-03-normal-normal.html#deriving-the-priorposterior-predictive-distribution",
+    "title": "Single parameter models",
+    "section": "Deriving the prior/posterior predictive distribution",
+    "text": "Deriving the prior/posterior predictive distribution\n\\[\n\\begin{aligned}\n& \\frac{\\beta^\\alpha}{y!\\Gamma(\\alpha)} \\int_0^\\infty e^{-\\theta} \\theta^y \\theta^{\\alpha - 1} e^{-\\beta \\theta} d\\theta \\\\\n& \\class{fragment}{{} = \\frac{\\beta^\\alpha}{y!\\Gamma(\\alpha)} \\int_0^\\infty \\theta^{y + \\alpha - 1} e^{-\\theta(\\beta + 1)} d\\theta} \\\\\n& \\class{fragment}{{} = \\frac{\\beta^\\alpha}{y!\\Gamma(\\alpha)}\\frac{\\Gamma(\\alpha + y)}{(\\beta + 1)^{\\alpha + y}}} \\\\\n& \\class{fragment}{{}= \\frac{\\Gamma(\\alpha + y)}{y!\\Gamma(\\alpha)}\\lp\\frac{\\beta}{\\beta + 1}\\rp^\\alpha \\lp\\frac{1}{\\beta + 1}\\rp^y}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#negative-binomial-distribution",
+    "href": "bayes-material/Lecture-03-normal-normal.html#negative-binomial-distribution",
+    "title": "Single parameter models",
+    "section": "Negative binomial distribution",
+    "text": "Negative binomial distribution\n\nLast slide we derived negative-binomial distribution with parameters \\(\\alpha\\) and \\(\\beta\\)\nHow might we get the mean and variance of this distribution?\nWe can get it by \\(y \\mid \\theta \\sim \\text{Poisson}(\\theta)\\) and \\(\\theta \\sim \\text{Gamma}(\\alpha, \\beta)\\).\n\\(\\Exp{y} = \\ExpA{\\Exp{y \\mid \\theta}}{\\theta}\\)\n\n\n\\(\\Var{y} = \\ExpA{\\Var{y \\mid \\theta}}{\\theta} + \\VarA{\\Exp{y \\mid \\theta}}{\\theta}\\)\n\n\nCan be useful to reparameterize in terms of mean and dispersion parameter"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#exchangeability",
+    "href": "bayes-material/Lecture-03-normal-normal.html#exchangeability",
+    "title": "Single parameter models",
+    "section": "Exchangeability",
+    "text": "Exchangeability\n\n\nExchangeability is a critical concept to understand when discussing Bayesian models\nFormally, when we say a sequence of random variables, \\(Y_1, Y_2, Y_3, \\dots, Y_n, \\dots\\) are exchangeable, the joint distribution of these variables does not change under any permuation of indices, denoted as \\(Y_{\\sigma(1)}, Y_{\\sigma(2)}, Y_{\\sigma(3)}, \\dots, Y_{\\sigma(n)}, \\dots\\)\nGiven a parametric density for \\(Y_i\\) dependent on \\(\\theta\\), the assumption that the \\(Y_i\\) are conditionally indepdent given \\(\\theta\\) and a prior for \\(\\theta\\), then the marginal joint density for \\(Y_i\\) is exchangeable:\n\\[\np_{\\mathbf{Y}}(y_1, y_2, \\dots, y_n) = \\int_{\\Omega_\\Theta} \\prod_{i=1}^n p(y_i \\mid \\theta) p(\\theta) d\\theta\n\\]\nThe idea goes the opposite direction as well: Given an infinite sequence of exchangeable random variables (this is true if, for every \\(n\\), the finite sequences are exchangeable), then there must exist a random variable \\(\\Theta\\) such that the following holds \\[\np_{\\mathbf{Y}}(y_1, y_2, \\dots, y_n) = \\int_{\\Omega_\\Theta} \\prod_{i=1}^n p(y_i \\mid \\theta) p(\\theta) d\\theta\n\\]\nFurther, \\(\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n \\to \\Theta\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#normal-with-known-mean",
+    "href": "bayes-material/Lecture-03-normal-normal.html#normal-with-known-mean",
+    "title": "Single parameter models",
+    "section": "Normal with known mean",
+    "text": "Normal with known mean\n\nThough not typical of real-world scenarios, under \\(y_i \\sim \\text{Normal}(\\theta, \\sigma^2)\\) we can derive the posterior for \\(\\sigma^2\\) under the assumption that \\(\\theta\\) is known"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#exchangeable-sequences-are-positively-correlated",
+    "href": "bayes-material/Lecture-03-normal-normal.html#exchangeable-sequences-are-positively-correlated",
+    "title": "Single parameter models",
+    "section": "Exchangeable sequences are positively correlated",
+    "text": "Exchangeable sequences are positively correlated\nLet \\(Y_i, i = 1, 2, \\dots\\) be exchangeable\n\\[\n\\begin{aligned}\n\\text{Cov}(Y_1, Y_2) & = \\ExpA{\\text{Cov}(Y_1, Y_2 \\mid \\theta)}{\\Theta} + \\text{Cov}_{\\Theta}(\\Exp{Y_1 \\mid \\theta}, \\Exp{Y_2 \\mid \\theta}) \\\\\n& \\class{fragment}{{} = \\text{Cov}_{\\Theta}(\\Exp{Y_1 \\mid \\theta}, \\Exp{Y_2 \\mid \\theta})} \\\\\n& \\class{fragment}{{} = \\VarA{\\Exp{Y_1 \\mid \\theta}}{\\Theta}} \\\\\n& \\class{fragment}{{} \\geq 0}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#poisson-with-rateexposure-parameterization",
+    "href": "bayes-material/Lecture-03-normal-normal.html#poisson-with-rateexposure-parameterization",
+    "title": "Single parameter models",
+    "section": "Poisson with rate/exposure parameterization",
+    "text": "Poisson with rate/exposure parameterization\n\nMany times it is useful to specify the model for count data \\(y_i\\) as conditional on an unknown rate and a known exposure term \\(x_i\\) \\[\ny_i \\sim \\text{Poisson}(x_i \\theta)\n\\]\nWe can see that this model is no longer exchangeable in \\(y_i\\), but is exchangeable in \\((y_i, x_i)\\)\nOften useful in epidemiological settings, where we want to model the rate of, say, cancer cases per person per year\nSuppose we observe \\(3\\) death from asthma over one year for a city of \\(200,000\\)\nWe want to model the rate of deaths from asthma per \\(100{,}000\\)\n\\(y_1 \\sim \\text{Poisson}(2\\, \\theta) \\rightarrow \\theta \\mid y_1 \\sim \\text{Gamma}(\\alpha + 3, \\beta + 2)\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-03-normal-normal.html#scale-of-the-prior",
+    "href": "bayes-material/Lecture-03-normal-normal.html#scale-of-the-prior",
+    "title": "Single parameter models",
+    "section": "Scale of the prior",
+    "text": "Scale of the prior"
   }
 ]
