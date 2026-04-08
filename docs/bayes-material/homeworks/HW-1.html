@@ -278,12 +278,12 @@ window.Quarto = {
 </section>
 <section id="section-8" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="section-8"><span class="header-section-number">2</span> </h2>
-<p>Consider the exponential family distributions for a random variable <span class="math inline">\(X\)</span> of the form <span class="math display">\[
-p(x \mid \eta) = h(x) \exp\lp\eta^T x - A(\eta)\rp, \eta \in H
-\]</span></p>
+<p>Consider the exponential family distributions for a random variable <span class="math inline">\(X \mid \eta\)</span> of the form <span class="math display">\[
+p(x \mid \eta) = h(x) \exp\lp\eta x - A(\eta)\rp, \eta \in H,
+\]</span> with support over <span class="math inline">\(\R\)</span>,</p>
 <p>and a conjugate prior of the form, with support over <span class="math inline">\(H\)</span>:</p>
 <p><span class="math display">\[
-p(\eta \mid k, \mu) = c(k,\mu) \exp\lp k \eta^T \mu - k A(\eta)\rp
+p(\eta \mid k, \mu) = c(k,\mu) \exp\lp k \eta \mu - k A(\eta)\rp
 \]</span></p>
 <section id="section-9" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="section-9"><span class="header-section-number">2.1</span> </h3>
@@ -292,7 +292,7 @@ p(\eta \mid k, \mu) = c(k,\mu) \exp\lp k \eta^T \mu - k A(\eta)\rp
 <section id="section-10" class="level3" data-number="2.2">
 <h3 data-number="2.2" class="anchored" data-anchor-id="section-10"><span class="header-section-number">2.2</span> </h3>
 <p>Show that the conditional mean of <span class="math inline">\(X \mid \eta\)</span> is equal to <span class="math inline">\(A'(\eta)\)</span> and that the conditional variance of <span class="math inline">\(X \mid \eta\)</span> is <span class="math inline">\(A''(\eta)\)</span>.</p>
-<p>Hint: Use the cumulant generating function of <span class="math inline">\(X\)</span>, <span class="math inline">\(\log \Exp{e^{t^T X}}\)</span></p>
+<p>Hint: Calculate the log of the moment generating function of <span class="math inline">\(X \mid \eta\)</span>, <span class="math inline">\(\log \ExpA{e^{t X}}{X \mid \eta}\)</span> and show that this is equal to <span class="math inline">\(A(\eta + t) - A(\eta)\)</span>.</p>
 </section>
 <section id="section-11" class="level3" data-number="2.3">
 <h3 data-number="2.3" class="anchored" data-anchor-id="section-11"><span class="header-section-number">2.3</span> </h3>

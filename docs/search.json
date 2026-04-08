@@ -3154,6 +3154,181 @@
     "href": "bayes-material/homeworks/HW-1.html#section-8",
     "title": "HW 1",
     "section": "2 ",
-    "text": "2 \nConsider the exponential family distributions for a random variable \\(X\\) of the form \\[\np(x \\mid \\eta) = h(x) \\exp\\lp\\eta^T x - A(\\eta)\\rp, \\eta \\in H\n\\]\nand a conjugate prior of the form, with support over \\(H\\):\n\\[\np(\\eta \\mid k, \\mu) = c(k,\\mu) \\exp\\lp k \\eta^T \\mu - k A(\\eta)\\rp\n\\]\n\n2.1 \nDerive the posterior distribution, up to a constant of proportionality for \\(p(\\eta \\mid x, k, \\mu)\\)\n\n\n2.2 \nShow that the conditional mean of \\(X \\mid \\eta\\) is equal to \\(A'(\\eta)\\) and that the conditional variance of \\(X \\mid \\eta\\) is \\(A''(\\eta)\\).\nHint: Use the cumulant generating function of \\(X\\), \\(\\log \\Exp{e^{t^T X}}\\)\n\n\n2.3 \nShow that the implied marginal mean of \\(X\\) \\(\\Exp{X \\mid k, \\mu} = \\ExpA{\\Exp{X \\mid \\eta}}{\\eta \\mid k, \\mu} = \\mu\\).\nHint: You may take the following fact about \\(p(\\eta \\mid k, \\mu)\\) for granted:\n\\[\n\\int_{H} \\frac{\\partial}{\\partial \\eta} p(\\eta \\mid k, \\mu) d\\eta = \\frac{\\partial}{\\partial \\eta}\\int_{H}  p(\\eta \\mid k, \\mu) d\\eta\n\\]\n\n\n2.4 \nShow that the posterior mean for \\(A'(\\eta) \\mid x, k, \\mu\\) is\n\\[\n\\ExpA{A'(\\eta) \\mid x, k, \\mu}{\\eta \\mid x, k, \\mu} = \\frac{n \\bar{x} + k \\mu}{n + k}\n\\]"
+    "text": "2 \nConsider the exponential family distributions for a random variable \\(X \\mid \\eta\\) of the form \\[\np(x \\mid \\eta) = h(x) \\exp\\lp\\eta x - A(\\eta)\\rp, \\eta \\in H,\n\\] with support over \\(\\R\\),\nand a conjugate prior of the form, with support over \\(H\\):\n\\[\np(\\eta \\mid k, \\mu) = c(k,\\mu) \\exp\\lp k \\eta \\mu - k A(\\eta)\\rp\n\\]\n\n2.1 \nDerive the posterior distribution, up to a constant of proportionality for \\(p(\\eta \\mid x, k, \\mu)\\)\n\n\n2.2 \nShow that the conditional mean of \\(X \\mid \\eta\\) is equal to \\(A'(\\eta)\\) and that the conditional variance of \\(X \\mid \\eta\\) is \\(A''(\\eta)\\).\nHint: Calculate the log of the moment generating function of \\(X \\mid \\eta\\), \\(\\log \\ExpA{e^{t X}}{X \\mid \\eta}\\) and show that this is equal to \\(A(\\eta + t) - A(\\eta)\\).\n\n\n2.3 \nShow that the implied marginal mean of \\(X\\) \\(\\Exp{X \\mid k, \\mu} = \\ExpA{\\Exp{X \\mid \\eta}}{\\eta \\mid k, \\mu} = \\mu\\).\nHint: You may take the following fact about \\(p(\\eta \\mid k, \\mu)\\) for granted:\n\\[\n\\int_{H} \\frac{\\partial}{\\partial \\eta} p(\\eta \\mid k, \\mu) d\\eta = \\frac{\\partial}{\\partial \\eta}\\int_{H}  p(\\eta \\mid k, \\mu) d\\eta\n\\]\n\n\n2.4 \nShow that the posterior mean for \\(A'(\\eta) \\mid x, k, \\mu\\) is\n\\[\n\\ExpA{A'(\\eta) \\mid x, k, \\mu}{\\eta \\mid x, k, \\mu} = \\frac{n \\bar{x} + k \\mu}{n + k}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#attribution",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#attribution",
+    "title": "Single parameter models",
+    "section": "Attribution",
+    "text": "Attribution\n\nThese slides have been constructed from Aki Vehatri’s Bayesian Data Analysis course at Aalto University in Espoo, Finland\nThe material for this course is here: https://github.com/avehtari/BDA_course_Aalto"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#clarifications-on-last-lecture",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#clarifications-on-last-lecture",
+    "title": "Single parameter models",
+    "section": "Clarifications on last lecture",
+    "text": "Clarifications on last lecture\n\nPrior predictive distribution for binomial likelihood and beta prior\n\nCalled the Beta-Binomial: We’ll derive on the ipad…"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#walking-through-setting-the-prior",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#walking-through-setting-the-prior",
+    "title": "Single parameter models",
+    "section": "Walking through setting the prior",
+    "text": "Walking through setting the prior\n\nbeta_fun &lt;- function(pars) {\n  alpha &lt;- exp(pars[1])\n  beta &lt;- exp(pars[2])\n  diff_1 &lt;- qbeta(0.01, shape1 = alpha, shape2 = beta) - 0.02\n  diff_2 &lt;- qbeta(0.99, shape1 = alpha, shape2 = beta) - 0.35\n  return(diff_1^2 + diff_2^2)\n}\n\nres &lt;- optim(c(log(8), log(60)), beta_fun)\nalpha_use &lt;- exp(res$par[1])\nbeta_use &lt;- exp(res$par[2])"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#exchangeability",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#exchangeability",
+    "title": "Single parameter models",
+    "section": "Exchangeability",
+    "text": "Exchangeability\n\n\nExchangeability is a critical concept to understand when discussing Bayesian models\nFormally, when we say a sequence of random variables, \\(Y_1, Y_2, Y_3, \\dots, Y_n, \\dots\\) are exchangeable, the joint distribution of these variables does not change under any permuation of indices, denoted as \\(Y_{\\sigma(1)}, Y_{\\sigma(2)}, Y_{\\sigma(3)}, \\dots, Y_{\\sigma(n)}, \\dots\\)\nGiven a parametric density for \\(Y_i\\) dependent on \\(\\theta\\), the assumption that the \\(Y_i\\) are conditionally indepdent given \\(\\theta\\) and a prior for \\(\\theta\\), then the marginal joint density for \\(Y_i\\) is exchangeable:\n\\[\np_{\\mathbf{Y}}(y_1, y_2, \\dots, y_n) = \\int_{\\Omega_\\Theta} \\prod_{i=1}^n p(y_i \\mid \\theta) p(\\theta) d\\theta\n\\]\nThe idea goes the opposite direction as well: Given an infinite sequence of exchangeable random variables (this is true if, for every \\(n\\), the finite sequences are exchangeable), then there must exist a random variable \\(\\Theta\\) such that the following holds \\[\np_{\\mathbf{Y}}(y_1, y_2, \\dots, y_n) = \\int_{\\Omega_\\Theta} \\prod_{i=1}^n p(y_i \\mid \\theta) p(\\theta) d\\theta\n\\]\nFurther, \\(\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n \\to \\Theta\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#exchangeable-sequences-are-positively-correlated",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#exchangeable-sequences-are-positively-correlated",
+    "title": "Single parameter models",
+    "section": "Exchangeable sequences are positively correlated",
+    "text": "Exchangeable sequences are positively correlated\nLet \\(Y_i, i = 1, 2, \\dots\\) be exchangeable\n\\[\n\\begin{aligned}\n\\text{Cov}(Y_1, Y_2) & = \\ExpA{\\text{Cov}(Y_1, Y_2 \\mid \\theta)}{\\Theta} + \\text{Cov}_{\\Theta}(\\Exp{Y_1 \\mid \\theta}, \\Exp{Y_2 \\mid \\theta}) \\\\\n& \\class{fragment}{{} = \\text{Cov}_{\\Theta}(\\Exp{Y_1 \\mid \\theta}, \\Exp{Y_2 \\mid \\theta})} \\\\\n& \\class{fragment}{{} = \\VarA{\\Exp{Y_1 \\mid \\theta}}{\\Theta}} \\\\\n& \\class{fragment}{{} \\geq 0}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#normal-models",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#normal-models",
+    "title": "Single parameter models",
+    "section": "Normal models",
+    "text": "Normal models\n\nNormal likelihoods are special for us statisticians because of the CLT (see § 5.5.3 in Casella and Berger (2024))\nIt is computationally convenient\n\npnorm is implented in many many math libraries\n\nIt has nice analytical properties\n\nEasy to bound normal densities and CDFs\nJointly normal RVs are conditionally normal\nConvolved normals are normal"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#normally-distributed-outcomes",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#normally-distributed-outcomes",
+    "title": "Single parameter models",
+    "section": "Normally distributed outcomes",
+    "text": "Normally distributed outcomes\n\nNormal outcome \\(y\\) is real-valued\nMean \\(\\theta\\) and variance \\(\\sigma^2\\)\nDensity \\[\np(\\textcolor{red}{y} \\mid \\theta) = \\frac{1}{\\sqrt{2\\pi}\\sigma}\\exp\\lp-\\frac{1}{2\\sigma^2}(\\textcolor{red}{y} - \\theta)^2 \\rp\n\\]\n\\(\\int_{-\\infty}^{\\infty} p(\\textcolor{red}{y} \\mid \\theta) d\\textcolor{red}{y} = 1\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#normal-likelihood",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#normal-likelihood",
+    "title": "Single parameter models",
+    "section": "Normal likelihood",
+    "text": "Normal likelihood\n\nLikelihood for \\(\\theta\\) (assuming \\(\\sigma^2\\) is known!): \\[\np(y \\mid \\textcolor{red}{\\theta}) \\propto \\exp\\lp-\\frac{1}{2\\sigma^2}(y - \\textcolor{red}{\\theta})^2 \\rp\n\\]\nIn the binomial example, we had \\(p(y \\mid \\theta) \\propto \\theta^{y} (1 - \\theta)^{n - y}\\), so we could read off the conjugate prior,\nRearranging things in the normal likelihood will help us see the form of the conjugate prior"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#normal-likelihood-in-exponential-family-form",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#normal-likelihood-in-exponential-family-form",
+    "title": "Single parameter models",
+    "section": "Normal likelihood in exponential family form",
+    "text": "Normal likelihood in exponential family form\n\\[\n\\scriptsize\n\\begin{aligned}\np(y \\mid \\theta) & \\propto \\exp\\lp-\\frac{1}{2\\sigma^2}(y - \\theta)^2 \\rp \\\\\n& = \\exp\\lp-\\frac{y^2}{2\\sigma^2} + \\frac{y}{\\sigma^2} \\theta -\\frac{\\theta^2}{2\\sigma^2}\\rp  \\\\\n& \\propto \\exp\\lp\\frac{\\theta}{\\sigma^2} y -\\frac{\\theta^2}{2\\sigma^2}\\rp\n\\end{aligned}\n\\]\n\nwhen \\(y\\) is normally dist. look at the natural parameter \\(\\theta / \\sigma^2\\). This suggests that a prior should have the same sort of parameterization for \\(\\theta\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#prior-form",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#prior-form",
+    "title": "Single parameter models",
+    "section": "Prior Form",
+    "text": "Prior Form\n\n\\[\n\\begin{aligned}\np(\\theta \\mid \\mu_0, \\tau_0) & \\propto \\exp\\lp \\frac{\\mu_0}{\\tau_0^2} \\theta - \\frac{\\theta^2}{2\\tau_0^2}\\rp \\\\\n\\end{aligned}\n\\]\nNow we compute \\(p(\\theta \\mid y, \\mu_0, \\tau_0) \\propto p(y \\mid \\theta) p(\\theta \\mid \\mu_0, \\tau_0)\\) \\[\np(\\theta \\mid y, \\mu_0, \\tau_0) \\propto \\exp\\lp\\frac{\\theta}{\\sigma^2} y -\\frac{\\theta^2}{2\\sigma^2}\\rp \\exp\\lp \\frac{\\mu_0}{\\tau_0^2} \\theta - \\frac{\\theta^2}{2\\tau_0^2}\\rp\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#working-through-the-algebra",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#working-through-the-algebra",
+    "title": "Single parameter models",
+    "section": "Working through the algebra",
+    "text": "Working through the algebra\n\\[\n\\scriptsize\n\\begin{aligned}\n& \\exp\\lp\\theta\\lp\\frac{y}{\\sigma^2} + \\frac{\\mu_0}{\\tau_0^2}\\rp -\\frac{\\theta^2}{2}\\lp\\frac{1}{\\sigma^2} + \\frac{1}{\\tau_0^2} \\rp\\rp \\\\\n& = \\exp\\lp\\theta\\lp\\frac{\\mu_1}{\\tau_1^2}\\rp -\\frac{\\theta^2}{2}\\lp\\frac{1}{\\tau_1^2}\\rp\\rp  \\\\\n& \\implies\n\\end{aligned}\n\\] \\[\n\\scriptsize\n\\begin{aligned}\n\\frac{1}{\\tau_1} &  = \\frac{1}{\\sigma^2} + \\frac{1}{\\tau_0^2} && \\frac{\\mu_1}{\\tau_1}  = \\frac{y}{\\sigma^2} + \\frac{\\mu_0}{\\tau_0^2} \\\\\n\\mu_1 & = \\lp \\frac{y}{\\sigma^2} + \\frac{\\mu_0}{\\tau_0^2}\\rp \\tau_1 &&\n\\mu_1  = \\lp\\frac{y}{\\sigma^2} + \\frac{\\mu_0}{\\tau_0^2}\\rp / \\lp \\frac{1}{\\sigma^2} + \\frac{1}{\\tau_0^2}\\rp\n\\end{aligned}\n\\]\n\nSystem of nonlinear equations, solve for unknowns!"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#a-tale-of-two-likeihoods",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#a-tale-of-two-likeihoods",
+    "title": "Single parameter models",
+    "section": "A tale of two likeihoods",
+    "text": "A tale of two likeihoods"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#interpreting-the-parameters",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#interpreting-the-parameters",
+    "title": "Single parameter models",
+    "section": "Interpreting the parameters",
+    "text": "Interpreting the parameters\n\n\\[\n\\mu_1 = \\mu_0 + (y - \\mu_0) \\frac{\\tau_0^2}{\\tau_0^2 + \\sigma^2}\n\\]\nvs.  \\[\n\\mu_1 = y - (y - \\mu_0) \\frac{\\sigma^2}{\\tau_0^2 + \\sigma^2}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#posterior-predictive-distribution",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#posterior-predictive-distribution",
+    "title": "Single parameter models",
+    "section": "Posterior predictive distribution",
+    "text": "Posterior predictive distribution\n\nWe might want to make predictions for another observation\n\\[\np(\\tilde{y} \\mid y) = \\int_{-\\infty}^\\infty p(\\tilde{y} \\mid \\textcolor{red}{\\theta}) p(\\textcolor{red}{\\theta} \\mid y, \\mu_0, \\tau_0) d \\textcolor{red}{\\theta}\n\\]\n\\[\n\\begin{aligned}\n& \\int_{-\\infty}^\\infty p(\\tilde{y} \\mid \\textcolor{red}{\\theta}) p(\\textcolor{red}{\\theta} \\mid y, \\mu_0, \\tau_0) d \\textcolor{red}{\\theta} \\\\\n& = \\int_{-\\infty}^\\infty \\frac{1}{\\sqrt{2\\pi}\\sigma}\\exp(-\\frac{1}{2\\sigma^2}(y - \\theta)^2)\\frac{1}{\\sqrt{2\\pi}\\tau_1}\\exp(-\\frac{1}{2\\tau_1^2}(\\theta_1 - \\mu_1)^2)  d \\textcolor{red}{\\theta}  \n\\end{aligned}\n\\]\nWe can use the fact that \\(\\tilde{y} \\mid \\theta \\sim \\text{Normal}(\\theta, \\sigma^2)\\) which is equal in distribution to \\(Y = \\theta + Z\\) where \\(Z \\sim \\text{Normal}(0, \\sigma^2)\\).\nMarginally, \\(Y \\sim \\text{Normal}(\\mu_1, \\tau_1^2 + \\sigma^2)\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#exponential-families",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#exponential-families",
+    "title": "Single parameter models",
+    "section": "Exponential families",
+    "text": "Exponential families\n\nThe normal and binomial distributions are examples of a more general class of densities called exponential families\nThe exponential family distributions can be written in the following form\n\\[\np(y_i \\mid \\theta) = f(y_i) g(\\theta)e^{\\phi(\\theta)^T u(y_i)}\n\\]\nWith \\(n\\) iid observations, calling \\(t(y) = \\sum_{i=1}^n u(y_i)\\) the joint density is \\[\np(y \\mid \\theta) = \\lp \\prod_{i=1}^n f(y_i)\\rp g(\\theta)^n \\exp \\lp \\phi(\\theta)^T t(y)\\rp\n\\]\nWe can write the density as \\[\np(y\\mid \\theta) \\propto g(\\theta)^n \\exp \\lp \\phi(\\theta)^T t(y)\\rp\n\\]\nThis shows that \\(t(y)\\) is sufficient for \\(\\theta\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#conjugate-priors-in-exponential-families",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#conjugate-priors-in-exponential-families",
+    "title": "Single parameter models",
+    "section": "Conjugate priors in exponential families",
+    "text": "Conjugate priors in exponential families\n\nWhen \\[\np(y\\mid \\theta) \\propto g(\\theta)^n \\exp \\lp \\phi(\\theta)^T t(y)\\rp\n\\]\nSpecifying \\(p(\\theta) \\propto g(\\theta)^\\eta \\exp\\lp \\phi(\\theta)^T \\nu \\rp\\) yields the posterior:\n\\[\np(\\theta \\mid y) \\propto g(\\theta)^{n + \\eta} \\exp \\lp\\phi(\\theta)^T(t(y) + \\nu) \\rp\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#back-to-the-normal-again",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#back-to-the-normal-again",
+    "title": "Single parameter models",
+    "section": "Back to the normal again",
+    "text": "Back to the normal again\n\nWith \\(n\\) observations, we know that \\(\\bar{y}\\) is sufficient for \\(\\mu\\) when \\(y \\sim \\text{Normal}(\\mu, \\sigma^2)\\)\nWe know \\(\\bar{y} \\sim \\text{Normal}(\\mu, \\frac{\\sigma^2}{n})\\), so we can just use our earlier results to get the posterior \\(\\mu_n\\) and \\(\\tau_n\\) parameters\n\\[\n\\scriptsize\n\\begin{aligned}\n\\frac{1}{\\tau_n} &  = \\frac{n}{\\sigma^2} + \\frac{1}{\\tau_0^2} \\\\\n\\mu_n  & = \\lp y \\frac{n}{\\sigma^2} + \\frac{\\mu_0}{\\tau_0^2}\\rp / \\lp \\frac{n}{\\sigma^2} + \\frac{1}{\\tau_0^2}\\rp\n\\end{aligned}\n\\]\nAs \\(n\\to\\infty\\) we get $_n \\(\\bar{y}\\) and \\(\\tau^2_n \\to \\frac{\\sigma^2}{n}\\)\nThis shows that the posterior for \\(\\theta\\) converges to a normal distribution with mean \\(\\bar{y}\\) and \\(\\frac{\\sigma^2}{n}\\)\nWe get the same convergence in distribution if \\(\\tau_0 \\to \\infty\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#models-for-count-data",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#models-for-count-data",
+    "title": "Single parameter models",
+    "section": "Models for count data",
+    "text": "Models for count data\n\nWhen we have \\(y_i \\in \\{0\\} \\cup \\Z^+\\), we’ll need to use something other than a normal\nOne common model is \\(y_i \\sim \\text{Poisson}(\\theta)\\) \\[\np(y_i \\mid \\theta) = \\frac{e^{-\\theta} \\theta^y_i}{y_i!}\n\\]\nRewrite this in exponential family form: \\[\ne^{-\\theta} e^{\\log(\\theta) y}\n\\]\nSuggests a prior of the form \\[\n\\begin{aligned}\np(\\theta) & \\propto e^{-\\theta \\eta} e^{\\log(\\theta) \\nu} \\\\\n& \\propto \\theta^\\nu e^{-\\theta \\eta}\n\\end{aligned}\n\\]\nThis is a Gamma distribution, or \\(p(\\theta) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)} \\theta^{\\alpha - 1} e^{-\\beta \\theta}\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#multiple-observations",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#multiple-observations",
+    "title": "Single parameter models",
+    "section": "Multiple observations",
+    "text": "Multiple observations\n\nWith \\(n\\) iid observations the joint density for \\(y\\) is \\[\n\\begin{aligned}\np(y \\mid \\theta) & \\propto e^{-n\\theta} e^{\\log(\\theta) \\sum_{i=1}^n y_i} \\\\\n& \\propto e^{-n\\theta} \\theta^{\\sum_{i=1}^n y_i} \\\\\n& \\propto e^{-n\\theta} \\theta^{t(y)}\n\\end{aligned}\n\\]\nWith a prior \\(p(\\theta) \\propto \\theta^{\\alpha - 1} e^{-\\beta \\theta}\\) we get\nPosterior \\[\np(\\theta \\mid y) \\propto e^{-\\theta(n + \\beta)} \\theta^{t(y) + \\alpha}\n\\]\nOr \\(\\theta \\mid y \\sim \\text{Gamma}(\\alpha + t(y), \\beta + n)\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#deriving-the-priorposterior-predictive-distribution",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#deriving-the-priorposterior-predictive-distribution",
+    "title": "Single parameter models",
+    "section": "Deriving the prior/posterior predictive distribution",
+    "text": "Deriving the prior/posterior predictive distribution\n\\[\n\\begin{aligned}\n& \\frac{\\beta^\\alpha}{y!\\Gamma(\\alpha)} \\int_0^\\infty e^{-\\theta} \\theta^y \\theta^{\\alpha - 1} e^{-\\beta \\theta} d\\theta \\\\\n& \\class{fragment}{{} = \\frac{\\beta^\\alpha}{y!\\Gamma(\\alpha)} \\int_0^\\infty \\theta^{y + \\alpha - 1} e^{-\\theta(\\beta + 1)} d\\theta} \\\\\n& \\class{fragment}{{} = \\frac{\\beta^\\alpha}{y!\\Gamma(\\alpha)}\\frac{\\Gamma(\\alpha + y)}{(\\beta + 1)^{\\alpha + y}}} \\\\\n& \\class{fragment}{{}= \\frac{\\Gamma(\\alpha + y)}{y!\\Gamma(\\alpha)}\\lp\\frac{\\beta}{\\beta + 1}\\rp^\\alpha \\lp\\frac{1}{\\beta + 1}\\rp^y}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#negative-binomial-distribution",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#negative-binomial-distribution",
+    "title": "Single parameter models",
+    "section": "Negative binomial distribution",
+    "text": "Negative binomial distribution\n\nLast slide we derived negative-binomial distribution with parameters \\(\\alpha\\) and \\(\\beta\\)\nHow might we get the mean and variance of this distribution?\nWe can get it by \\(y \\mid \\theta \\sim \\text{Poisson}(\\theta)\\) and \\(\\theta \\sim \\text{Gamma}(\\alpha, \\beta)\\).\n\\(\\Exp{y} = \\ExpA{\\Exp{y \\mid \\theta}}{\\theta}\\)\n\n\n\\(\\Var{y} = \\ExpA{\\Var{y \\mid \\theta}}{\\theta} + \\VarA{\\Exp{y \\mid \\theta}}{\\theta}\\)\n\n\nCan be useful to reparameterize in terms of mean and dispersion parameter"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#poisson-with-rateexposure-parameterization",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#poisson-with-rateexposure-parameterization",
+    "title": "Single parameter models",
+    "section": "Poisson with rate/exposure parameterization",
+    "text": "Poisson with rate/exposure parameterization\n\nMany times it is useful to specify the model for count data \\(y_i\\) as conditional on an unknown rate and a known exposure term \\(x_i\\) \\[\ny_i \\sim \\text{Poisson}(x_i \\theta)\n\\]\nWe can see that this model is no longer exchangeable in \\(y_i\\), but is exchangeable in \\((y_i, x_i)\\)\nOften useful in epidemiological settings, where we want to model the rate of, say, cancer cases per person per year\nSuppose we observe \\(3\\) death from asthma over one year for a city of \\(200,000\\)\nWe want to model the rate of deaths from asthma per \\(100{,}000\\)\n\\(y_1 \\sim \\text{Poisson}(2\\, \\theta) \\rightarrow \\theta \\mid y_1 \\sim \\text{Gamma}(\\alpha + 3, \\beta + 2)\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#scale-of-the-prior",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#scale-of-the-prior",
+    "title": "Single parameter models",
+    "section": "Scale of the prior",
+    "text": "Scale of the prior"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#normal-with-known-mean",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#normal-with-known-mean",
+    "title": "Single parameter models",
+    "section": "Normal with known mean",
+    "text": "Normal with known mean\n\nThough not typical of real-world scenarios, under \\(y_i \\sim \\text{Normal}(\\theta, \\sigma^2)\\) we can derive the posterior for \\(\\sigma^2\\) under the assumption that \\(\\theta\\) is known"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#references",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#references",
+    "title": "Single parameter models",
+    "section": "References",
+    "text": "References\n\n\nCasella, George, and Roger Berger. 2024. Statistical Inference. Chapman; Hall/CRC."
   }
 ]
