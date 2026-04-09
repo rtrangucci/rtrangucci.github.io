@@ -3105,7 +3105,7 @@
     "href": "bayes-material/Lecture-03-normal-normal.html#normal-with-known-mean",
     "title": "Single parameter models",
     "section": "Normal with known mean",
-    "text": "Normal with known mean\n\nThough not typical of real-world scenarios, under \\(y_i \\sim \\text{Normal}(\\theta, \\sigma^2)\\) we can derive the posterior for \\(\\sigma^2\\) under the assumption that \\(\\theta\\) is known"
+    "text": "Normal with known mean\n\n\nThough not typical of real-world scenarios, under \\(y_i \\mid \\theta, \\sigma^2 \\sim \\text{Normal}(\\theta, \\sigma^2)\\) we can derive the posterior for \\(\\sigma^2\\) under the assumption that \\(\\theta\\) is known\nThe likelihood corresponding the joint distribution of \\(Y_1, Y_2, \\dots, Y_n\\) is \\[\np(y \\mid \\sigma^2, \\theta) = \\prod_{i=1}^n \\frac{1}{\\sqrt{2\\pi\\sigma^2}} \\exp \\lp -\\frac{1}{2\\sigma^2} (y_i - \\theta)^2 \\rp\n\\]\nSimplifying and dropping constants \\[\np(y \\mid \\sigma^2, \\theta) \\propto (\\sigma^2)^{-n/2}\\exp \\lp -\\frac{1}{2\\sigma^2} \\sum_{i=1}^n (y_i - \\theta)^2 \\rp\n\\]\nLet’s represent \\(\\sum_{i=1}^n (y_i - \\theta)^2\\) as \\(n v\\), so we rewrite this as: \\[\np(y \\mid \\sigma^2, \\theta) \\propto (\\sigma^2)^{-n/2}\\exp \\lp -\\frac{n}{2\\sigma^2} v  \\rp\n\\]\nThe conjugate prior here is called the inverse gamma, \\[\np(\\sigma^2 \\mid \\alpha, \\beta) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)} (\\sigma^2)^{-(\\alpha+1)} e^{-\\beta/\\sigma^2}\n\\]\nThe posterior gives \\[\np(\\sigma^2 \\mid y, \\theta, \\alpha, \\beta) \\propto (\\sigma^2)^{-(n/2 + \\alpha+1)} \\exp \\lp -(\\frac{n}{2} v + \\beta)/\\sigma^2\\rp\n\\]"
   },
   {
     "objectID": "bayes-material/Lecture-03-normal-normal.html#exchangeable-sequences-are-positively-correlated",
@@ -3159,9 +3159,9 @@
   {
     "objectID": "bayes-material/Lecture-04-multiple-parameter.html#attribution",
     "href": "bayes-material/Lecture-04-multiple-parameter.html#attribution",
-    "title": "Single parameter models",
+    "title": "Multiple parameter models",
     "section": "Attribution",
-    "text": "Attribution\n\nThese slides have been constructed from Aki Vehatri’s Bayesian Data Analysis course at Aalto University in Espoo, Finland\nThe material for this course is here: https://github.com/avehtari/BDA_course_Aalto"
+    "text": "Attribution\n\nThese slides are largely based on Aki Vehatri’s Bayesian Data Analysis course at Aalto University in Espoo, Finland\nThe material for this course is here: https://github.com/avehtari/BDA_course_Aalto"
   },
   {
     "objectID": "bayes-material/Lecture-04-multiple-parameter.html#clarifications-on-last-lecture",
@@ -3327,8 +3327,155 @@
   {
     "objectID": "bayes-material/Lecture-04-multiple-parameter.html#references",
     "href": "bayes-material/Lecture-04-multiple-parameter.html#references",
-    "title": "Single parameter models",
+    "title": "Multiple parameter models",
     "section": "References",
-    "text": "References\n\n\nCasella, George, and Roger Berger. 2024. Statistical Inference. Chapman; Hall/CRC."
+    "text": "References\n\n\nSeverini, Thomas A. 2000. Likelihood Methods in Statistics. Oxford University Press."
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#multiple-parameters-in-statistical-inference",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#multiple-parameters-in-statistical-inference",
+    "title": "Multiple parameter models",
+    "section": "Multiple parameters in statistical inference",
+    "text": "Multiple parameters in statistical inference\n\n\nAs the number of parameters grow, statistical inference can get harder\nFor example, asymptotically we know that when we have a single parameter, say \\(\\theta_1\\), our asymptotic variance is bounded below by the inverse of the Fisher information for \\(\\theta\\), or \\(i_{\\theta_1, \\theta_1}^{-1}(\\theta_1)\\)\nWhen we have an additional parameter \\(\\theta_2\\) that is then unkown, the asymptotic variance for \\(\\theta_1\\) is now bounded below by \\[\n(i_{\\theta_1,\\theta_1}(\\theta) - i_{\\theta_1,\\theta_2}(\\theta)i_{\\theta_2,\\theta_2}^{-1}(\\theta) i_{\\theta_2,\\theta_1}(\\theta))^{-1} \\geq i_{\\theta_1, \\theta_1}^{-1}(\\theta_1)\n\\]\nThe term \\(i_{\\theta_1,\\theta_2}(\\theta)i_{\\theta_2,\\theta_2}^{-1}(\\theta) i_{\\theta_2,\\theta_1}(\\theta)\\) is the loss in information from having to estimate \\(\\theta_2\\) (This material is from Severini (2000) § 3.6.3)\nOften we’ll be able to partition our parameter space into a parameter of interest, \\(\\theta_1\\) and will consider \\(\\theta_2\\) a “nuisance” parameter"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#classical-ways-of-dealing-with",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#classical-ways-of-dealing-with",
+    "title": "Multiple parameter models",
+    "section": "Classical ways of dealing with",
+    "text": "Classical ways of dealing with"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#classical-ways-of-dealing-with-nuisance-parameters-more-from-severini2000likelihood",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#classical-ways-of-dealing-with-nuisance-parameters-more-from-severini2000likelihood",
+    "title": "Multiple parameter models",
+    "section": "Classical ways of dealing with nuisance parameters (more from Severini (2000))",
+    "text": "Classical ways of dealing with nuisance parameters (more from Severini (2000))\n\n\nConditional inference\n\nFind a statistic \\(s\\) that is sufficient for \\(\\theta_2\\): \\[p(t,s \\mid \\theta_1, \\theta_2) = p(t \\mid s, \\theta_1)p(s \\mid \\theta_1, \\theta_2)\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#survey-from-severini2000likelihood-on-dealing-with-nuisance",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#survey-from-severini2000likelihood-on-dealing-with-nuisance",
+    "title": "Multiple parameter models",
+    "section": "Survey from Severini (2000) on dealing with nuisance",
+    "text": "Survey from Severini (2000) on dealing with nuisance\n\n\nConditional inference\n\nFind a statistic \\(s\\) that is sufficient for \\(\\theta_2\\): \\[p(t,s \\mid \\theta_1, \\theta_2) = p(t \\mid s, \\theta_1)p(s \\mid \\theta_1, \\theta_2)\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#survey-from-severini2000likelihood-on-dealing-with-nuisance-parameters",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#survey-from-severini2000likelihood-on-dealing-with-nuisance-parameters",
+    "title": "Multiple parameter models",
+    "section": "Survey from Severini (2000) on dealing with nuisance parameters",
+    "text": "Survey from Severini (2000) on dealing with nuisance parameters\n\n\nUse a conditional likelihood for inference\n\nFind a statistic \\(s\\) that is sufficient for \\(\\theta_2\\): \\(p(t,s \\mid \\theta_1, \\theta_2) = p(t \\mid s, \\theta_1)p(s \\mid \\theta_1, \\theta_2)\\) and do inference using \\(p(t \\mid s, \\theta_1)\\)\nOne issue with this is that we can lose information about \\(\\theta_1\\) from ignoring \\(p(s \\mid \\theta_1, \\theta_2)\\) in our\n\nUse a marginal likelihood for inference\n\nFind a statistic \\(t\\) for which the following holds \\(p(y \\mid \\theta_1, \\theta_2) = p(t \\mid \\theta_1)p(y \\mid t, \\theta_1, \\theta_2)\\)\nAgain, we lose information about \\(\\theta_1\\) from ignoring the factor \\(p(y \\mid t, \\theta_1, \\theta_2)\\)\n\nUse a profile likelihood\n\n“Profile out” \\(\\theta_2\\), via: \\(\\log p(y \\mid \\theta_1, \\hat{\\theta}_2(y, \\theta_1))\\)\nIsn’t a “true likelihood” because it isn’t derived from the distribution of a random variable\n\nUse a marginal likelihood\n\nIntegrate \\(p(y \\mid \\theta_1, \\theta_2)\\) with respect to some weight function for \\(\\theta_2\\)\nAlso not a true likelihood\n\n\n\n\nHow might you fix this issue about losing information? How could you choose \\(s\\)?"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#bayesin-approach-to-nuisance-parameters",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#bayesin-approach-to-nuisance-parameters",
+    "title": "Multiple parameter models",
+    "section": "Bayesin approach to nuisance parameters",
+    "text": "Bayesin approach to nuisance parameters\nLet \\(\\theta_1\\) be the parameter of interest and \\(\\theta_2\\) be the nuisance parameter\n\n\\[\np(\\theta_1 \\mid y) = \\int_{\\Omega_{\\theta_2}} p(\\theta_1, \\theta_2 \\mid y) d\\theta_2\n\\]\n\n\nAlternatively, we can write the same quantity as\n\n\n\\[\np(\\theta_1 \\mid y) = \\int_{\\Omega_{\\theta_2}} p(\\theta_1 \\mid \\theta_2, y)p(\\theta_2 \\mid y) d\\theta_2\n\\] :::{.notes} Gelman notes that the posterior of interest is a mixture over conditional posterior distributions with the weighting being the marginal distribution This is how we will approach computation in the normal with two unknown parameter example :::"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#normal-model-with-two-unknown-parameters",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#normal-model-with-two-unknown-parameters",
+    "title": "Multiple parameter models",
+    "section": "Normal model with two unknown parameters",
+    "text": "Normal model with two unknown parameters\n\n\nLet \\(Y_i \\mid \\mu, \\sigma^2 \\sim \\text{Normal}(\\mu, \\sigma^2)\\)\nWhat prior should we use for \\(\\sigma^2\\)?\nGelman argues that a noninformative prior for a parameter \\(\\theta\\), and \\(u = \\frac{y}{\\theta}\\) for which \\[\np(\\frac{y}{\\theta} \\mid \\theta) = g(u)\n\\] should lead to a posterior that equals \\(g(u)\\). This means that the posterior distribution for the quantity \\(\\frac{y}{\\theta}\\), or \\(p(\\frac{y}{\\theta} \\mid y)\\) should still be free of \\(\\theta\\) and be equal to \\(g(u)\\).\nThe derivation goes like this:\n\nDerive the implied density in \\(y\\), \\(p(y \\mid \\theta)\\) in terms of \\(p(u \\mid \\theta) = g(u)\\)\nDerive the implied density for \\(\\theta \\mid y\\), \\(p(\\theta \\mid y)\\) in terms of \\(p(u \\mid y) = g(u)\\)\nFigure out what this implies for \\(p(\\theta)\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#reminder-transformation-of-variables",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#reminder-transformation-of-variables",
+    "title": "Multiple parameter models",
+    "section": "Reminder: transformation of variables",
+    "text": "Reminder: transformation of variables\n\nSuppose we have a density for \\(y\\), \\(p(y)\\) and let \\(u = f(y)\\), which we suppose is 1-1 on the domain\nThen \\(y(u) = f^{-1}(u)\\) and \\(p(u) = p(y) \\abs{\\frac{d}{du}f^{-1}(u)}\\), aka the Jacobian of the \\(y(u)\\) transformation\nUseful mnemonic for figuring out which Jacobian is needed\n\\[\np(y) dy = p(u) du \\to p(y)\\abs{\\frac{dy}{du}} = p(u)\n\\]\n\\[\np(y) dy = p(u) du \\to p(y) = p(u)\\abs{\\frac{du}{dy}}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#derivation-of-prior-for-scale-parameters",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#derivation-of-prior-for-scale-parameters",
+    "title": "Multiple parameter models",
+    "section": "Derivation of prior for scale parameters",
+    "text": "Derivation of prior for scale parameters\n\n\nWant \\(p(y \\mid \\theta)\\) expressed in terms of \\(u = \\frac{y}{\\theta}\\)\nThis means \\[\n\\begin{aligned}\np(y \\mid \\theta) & = p(u\\mid \\theta)\\abs{\\frac{du(y)}{dy}} \\\\\n& = p(u\\mid \\theta)\\frac{1}{\\theta}\n\\end{aligned}\n\\]\nNow want \\(p(\\theta \\mid y)\\) expressed in terms of \\(u = \\frac{y}{\\theta}\\)\nThis means \\[\n\\begin{aligned}\np(\\theta \\mid y) d\\theta & = p(u \\mid y)du \\\\\np(\\theta \\mid y)  & = p(u \\mid y)\\abs{\\frac{du}{d\\theta}} \\\\\n& = p(u \\mid y)\\frac{y}{\\theta^2} \\\\\n\\end{aligned}\n\\]\nNow we equate \\(p(u \\mid \\theta) = p(u \\mid y) = g(u)\\) by assumption\nWe have \\(p(\\theta \\mid y) = \\frac{y}{\\theta^2} g(u)\\) and we have \\(p(y \\mid \\theta) = \\frac{1}{\\theta} g(u)\\)\nThus \\(p(\\theta \\mid y) = \\frac{y}{\\theta} p(y \\mid \\theta)\\), or \\[\np(\\theta \\mid y) \\propto \\frac{1}{\\theta} p(y \\mid \\theta) \\to p(\\theta) \\propto \\frac{1}{\\theta}\n\\]\nIf we reparameterize to \\(\\eta = \\theta^2\\) so \\(\\eta^{1/2} = \\theta\\) and \\(d\\theta = \\frac{1}{2} \\eta^{-1/2}\\) then \\[\np(\\eta) \\propto \\frac{1}{\\eta}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#back-to-normal-example",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#back-to-normal-example",
+    "title": "Multiple parameter models",
+    "section": "Back to normal example",
+    "text": "Back to normal example\n\n\nOur likelihood for the normal case is \\[\np(y \\mid \\sigma^2, \\mu) \\propto (\\sigma^2)^{-n/2}\\exp \\lp -\\frac{1}{2\\sigma^2} \\sum_{i=1}^n (y_i - \\mu)^2 \\rp\n\\]\nThe joint prior for \\(\\mu, \\sigma^2\\) is \\(p(\\mu, \\sigma^2) \\propto (\\sigma^2)^{-1}\\)\nWe can rewrite the sum of squares in the exponential like \\[\n\\begin{aligned}\n\\sum_{i=1}^n (y_i - \\mu)^2 & = \\sum_{i=1}^n (y_i - \\bar{y} + \\bar{y} - \\mu)^2 \\\\\n& = \\sum_{i=1}^n (y_i - \\bar{y})^2 + n (\\bar{y} - \\mu)^2 + (\\bar{y} - \\mu)\\sum_{i=1}^n (y_i - \\bar{y}) \\\\\n& = \\sum_{i=1}^n (y_i - \\bar{y})^2 + n (\\bar{y} - \\mu)^2 \\\\\n& = (n-1)s^2 + n (\\bar{y} - \\mu)^2\n\\end{aligned}\n\\]\nAfter substituting in the expression and multiplying by the prior, we’re left with \\[\np(\\sigma^2, \\mu \\mid y) \\propto (\\sigma^2)^{-(n/2 + 1)}\\exp \\lp -\\frac{1}{2\\sigma^2} ((n-1)s^2 + n (\\bar{y} - \\mu)^2)  \\rp\n\\]\nWe can integrate out \\(\\mu\\) by recognizing the kernel of the normal density \\[\n\\int_{-\\infty}^\\infty \\exp \\lp -\\frac{1}{2\\sigma^2/n} (\\bar{y} - \\mu)^2  \\rp = \\sqrt{2\\pi \\sigma^2 / n}\n\\]\nLeaving \\[\np(\\sigma^2 \\mid y) \\propto (\\sigma^2)^{-((n - 1)/2 + 1)}\\exp \\lp -\\frac{(n-1)s^2}{2\\sigma^2}   \\rp\n\\]\n\n\n\nWalk through matching the inverse gamma distribution where exponent goes from \\((n + 1) / 2\\) to \\((n - 1) / 2 + 1\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#conditional-distribution-for-mu-mid-sigma2-y",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#conditional-distribution-for-mu-mid-sigma2-y",
+    "title": "Multiple parameter models",
+    "section": "Conditional distribution for \\(\\mu \\mid \\sigma^2, y\\)",
+    "text": "Conditional distribution for \\(\\mu \\mid \\sigma^2, y\\)\n\nLast lecture we showed that \\(\\mu \\mid \\sigma^2, y \\sim \\text{Normal}(\\bar{y}, \\sigma^2/ n)\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#joint-distribution",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#joint-distribution",
+    "title": "Multiple parameter models",
+    "section": "Joint distribution",
+    "text": "Joint distribution\n\nLast lecture we showed that \\(\\mu \\mid \\sigma^2, y \\sim \\text{Normal}(\\bar{y}, \\sigma^2/ n)\\)\nThen the joint distribution is \\[\np(\\mu, \\sigma^2 \\mid y) = p(\\mu \\mid \\sigma^2, y) p(\\sigma^2 \\mid y)\n\\]\nFrom the last slide we have that \\(p(\\sigma^2 \\mid y)\\) is inverse gamma with parameters \\(\\alpha = \\frac{n-1}{2}\\) and \\(\\beta = \\frac{(n-1)s^2}{2}\\)\nSimulating joint distribution:\n\nDraw \\(1 / \\sigma^2\\) from a rgamma shape \\(\\frac{n-1}{2}\\), rate \\(\\frac{(n-1)s^2}{2\\sigma^2})\\)\nDraw \\(\\mu\\) from rnorm with mean \\(\\bar{y}\\) and scale \\(\\sigma / \\sqrt{n}\\)\n\n\n\nNote connection between inverse gamma and inverse scaled chi-squared"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#draws-from-the-joint",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#draws-from-the-joint",
+    "title": "Multiple parameter models",
+    "section": "Draws from the joint",
+    "text": "Draws from the joint\nWe take \\(n = 50\\) draws from rnorm(1, 5, 3), and we’ll generate \\(S = 1\\times10^4\\) draws from the posterior\n\nset.seed(23)\ny &lt;- rnorm(50, 5, 3)\nbar_y &lt;- mean(y)\nn &lt;- length(y)\ns_sq &lt;- var(y)\n\nS &lt;- 1e4\ninv_sigma_sq &lt;- rgamma(S, shape = (n - 1) / 2, rate = (n - 1) * s_sq / 2)\nmu &lt;- rnorm(S, mean = bar_y, sd = sqrt(1/inv_sigma_sq)/sqrt(n))"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#plotting-the-joint",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#plotting-the-joint",
+    "title": "Multiple parameter models",
+    "section": "Plotting the joint",
+    "text": "Plotting the joint"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#plotting-the-marginal-for-mu",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#plotting-the-marginal-for-mu",
+    "title": "Multiple parameter models",
+    "section": "Plotting the marginal for \\(\\mu\\)",
+    "text": "Plotting the marginal for \\(\\mu\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#way-to-numerically-marginalize",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#way-to-numerically-marginalize",
+    "title": "Multiple parameter models",
+    "section": "Way to numerically marginalize",
+    "text": "Way to numerically marginalize\n\n\nSeems intuitive that if you want to see what the posterior for \\(\\mu\\) is ignoring the draws for \\(\\sigma^2\\), you should just look at the one-dimensional histogram instead of a scatter as we did in the first plot\nWe can view this through the lens of Monte Carlo approximation of expectations, where we have \\(\\mu^{(s)} \\sim p(\\mu \\mid y)\\): \\[\n\\Exp{g(\\mu)} \\approx \\frac{1}{S} \\sum_{s=1}^S g(\\mu^{(s)})\n\\]\nOur histogram displays an approximation to the density of \\(\\mu\\); each bin’s height multiplied by the width approximates \\(p(\\mu \\in \\text{bin})\\)\nIn this case our \\(g_i(\\mu) = \\ind{\\mu \\in \\text{bin}_i}\\), so the histogram can be seen as a Monte Carlo approximation to \\(p(\\mu \\in \\text{bin}_i)\\), or \\[\n\\frac{1}{S} \\sum_{s=1}^S \\ind{\\mu^{(s)} \\in \\text{bin}_i} \\approx p(\\mu \\in \\text{bin}_i) = \\int_{\\text{bin}_i}p(\\mu \\mid y ) d\\mu\n\\]\nThis indicator function should be expanded to include \\((\\sigma^2)^{(s)}\\), so we get: \\[\n\\frac{1}{S} \\sum_{s=1}^S \\ind{\\mu^{(s)}\\in \\text{bin}_i, (\\sigma^2)^{(s)} &gt; 0} \\approx \\int_{\\text{bin}_i} \\int_{0}^\\infty p(\\mu, \\sigma^2 \\mid y) d\\sigma^2 d\\mu\n\\]\nThus computing empirical averages of one variable is akin to marginalizing over all the other variables"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#exact-marginal-for-mu-mid-y",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#exact-marginal-for-mu-mid-y",
+    "title": "Multiple parameter models",
+    "section": "Exact marginal for \\(\\mu \\mid y\\)",
+    "text": "Exact marginal for \\(\\mu \\mid y\\)\n\n\nThe exact marginal for \\(\\mu \\mid y\\) can be derived from the joint posterior \\[\np(\\sigma^2, \\mu \\mid y) \\propto (\\sigma^2)^{-((n - 1)/2 + 1)}\\exp \\lp -\\frac{1}{2\\sigma^2} ((n-1)s^2 + n (\\bar{y} - \\mu)^2)  \\rp\n\\]\nMarginalizing over \\(\\sigma^2\\) just involves accounting for the inverse of the normalizing constant of an inverse gamma RV, or \\(\\Gamma(\\alpha) / \\beta^\\alpha\\)\nWe know that \\(\\alpha = (n-1)/2\\), but here \\(\\beta = ((n-1)s^2 + n(\\mu - \\bar{y})^2)/2\\), so we get: \\[\n\\begin{aligned}\np(\\mu \\mid y) & \\propto \\lp(n-1)s^2 + n(\\mu - \\bar{y})^2\\rp^{-(n-1)/2} \\\\\n& \\propto \\lp 1 + \\frac{n(\\mu - \\bar{y})^2}{(n-1)s^2 }\\rp^{-(n-1)/2}\n\\end{aligned}\n\\]\nThus, \\(\\mu \\mid y\\) is a \\(t_{n-1}(\\bar{y}, s^2 / n)\\) distributed\nTrue to form, the pivot is free of parameters \\(\\mu\\) or \\(\\sigma\\) \\[\\frac{\\mu - \\bar{y}}{s/\\sqrt{n}} \\mid y \\sim t_{n-1}\\]\nParallels the sampling theory result, that \\[\n\\frac{\\bar{y} - \\mu}{s/\\sqrt{n}} \\mid \\mu, \\sigma^2 \\sim t_{n-1}\n\\]\n\n\n\nAsk where did \\(\\Gamma(\\alpha)\\) and the \\(2\\) go in the denominatro"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#comparison-between-sigma2-posteriors",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#comparison-between-sigma2-posteriors",
+    "title": "Multiple parameter models",
+    "section": "Comparison between \\(\\sigma^2\\) posteriors",
+    "text": "Comparison between \\(\\sigma^2\\) posteriors\n\nPosterior for \\(\\sigma^2\\) when mean is known was shown to be: \\[\np(\\sigma^2 \\mid y) \\equiv \\text{InvGamma}(\\frac{n}{2}, \\frac{nv}{2})\n\\]\nVs. when mean is unknown \\[\np(\\sigma^2 \\mid y) \\equiv \\text{InvGamma}(\\frac{n-1}{2}, \\frac{(n-1)s^2}{2})\n\\]\nBayesian inference preserves the idea of losing a degree of freedom from estimating the mean, but it comes from integrating over the posterior for \\(\\mu\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#another-way-to-plot-the-marginal-for-mu-mid-y",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#another-way-to-plot-the-marginal-for-mu-mid-y",
+    "title": "Multiple parameter models",
+    "section": "Another way to plot the marginal for \\(\\mu \\mid y\\)",
+    "text": "Another way to plot the marginal for \\(\\mu \\mid y\\)\n\n\n\nx &lt;- curve(\n dnorm(x, bar_y, sd = sqrt(scale)/sqrt(n)), \n from = 3, to = 8, \n lty = 2, \n col = scales::alpha(\"black\",0.1),\n lwd = 1\n)\ndens_draws[idx_max,] &lt;- x$y\n\nfor (idx in plt_draws) {\n  sv &lt;- curve(\n    dnorm(x, bar_y, \n          sd = sqrt(1/inv_sigma_sq[idx])/sqrt(n)), \n    add = TRUE, lty = 2, \n    col = scales::alpha(\"black\",0.1),\n    lwd = 1\n  )\n  dens_draws[idx,] &lt;- sv$y\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nx &lt;- curve(\n dnorm(x, bar_y, sd = sqrt(scale)/sqrt(n)), \n from = 3, to = 8, \n lty = 2, \n col = scales::alpha(\"black\",0.1),\n lwd = 1\n)\ndens_draws[idx_max,] &lt;- x$y\n\nfor (idx in plt_draws) {\n  sv &lt;- curve(\n    dnorm(x, bar_y, \n          sd = sqrt(1/inv_sigma_sq[idx])/sqrt(n)), \n    add = TRUE, lty = 2, \n    col = scales::alpha(\"black\",0.1),\n    lwd = 1\n  )\n  dens_draws[idx,] &lt;- sv$y\n}\n\nlines(grid, colMeans(dens_draws), col = \"red\", lwd = 4)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#comparison-of-exact-to-mc-estimate",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#comparison-of-exact-to-mc-estimate",
+    "title": "Multiple parameter models",
+    "section": "Comparison of exact to MC estimate",
+    "text": "Comparison of exact to MC estimate"
+  },
+  {
+    "objectID": "bayes-material/Lecture-04-multiple-parameter.html#conjugate-prior-for-mu-sigma2",
+    "href": "bayes-material/Lecture-04-multiple-parameter.html#conjugate-prior-for-mu-sigma2",
+    "title": "Multiple parameter models",
+    "section": "Conjugate prior for \\(\\mu, \\sigma^2\\)",
+    "text": "Conjugate prior for \\(\\mu, \\sigma^2\\)\n\nThe conjugate prior for \\(\\mu, \\sigma^2\\) is going to be of the same form of the posterior we derived under the noninformative prior\nIn sampling notation we get: \\[\n\\begin{aligned}\n\\sigma^2 & \\sim \\text{InvGamma}(\\frac{\\alpha_0}{2}, \\frac{\\alpha_0}{2} \\nu_0) \\\\\n\\mu \\mid \\sigma^2 & \\sim \\text{Normal}(\\mu_0, \\sigma^2 / \\kappa_0)\n\\end{aligned}\n\\]\nThe posterior is thus: \\[\n\\begin{aligned}\n\\sigma^2 \\mid y & \\sim \\text{InvGamma}(\\frac{\\alpha_0 + n}{2}, \\frac{\\alpha_0 + n}{2} \\nu_0) \\\\\n\\mu \\mid \\sigma^2 & \\sim \\text{Normal}(\\mu_0, \\sigma^2 / \\kappa_0)\n\\end{aligned}\n\\]"
   }
 ]

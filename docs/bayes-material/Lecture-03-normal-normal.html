@@ -694,10 +694,26 @@ y_i \sim \text{Poisson}(x_i \theta)
 </section>
 <section id="normal-with-known-mean" class="slide level2">
 <h2>Normal with known mean</h2>
+<div style="font-size: 40%;">
 <ul>
-<li class="fragment"><p>Though not typical of real-world scenarios, under <span class="math inline">\(y_i \sim \text{Normal}(\theta, \sigma^2)\)</span> we can derive the posterior for <span class="math inline">\(\sigma^2\)</span> under the assumption that <span class="math inline">\(\theta\)</span> is known</p></li>
-<li class="fragment"></li>
+<li class="fragment"><p>Though not typical of real-world scenarios, under <span class="math inline">\(y_i \mid \theta, \sigma^2 \sim \text{Normal}(\theta, \sigma^2)\)</span> we can derive the posterior for <span class="math inline">\(\sigma^2\)</span> under the assumption that <span class="math inline">\(\theta\)</span> is known</p></li>
+<li class="fragment"><p>The likelihood corresponding the joint distribution of <span class="math inline">\(Y_1, Y_2, \dots, Y_n\)</span> is <span class="math display">\[
+p(y \mid \sigma^2, \theta) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp \lp -\frac{1}{2\sigma^2} (y_i - \theta)^2 \rp
+\]</span></p></li>
+<li class="fragment"><p>Simplifying and dropping constants <span class="math display">\[
+p(y \mid \sigma^2, \theta) \propto (\sigma^2)^{-n/2}\exp \lp -\frac{1}{2\sigma^2} \sum_{i=1}^n (y_i - \theta)^2 \rp
+\]</span></p></li>
+<li class="fragment"><p>Let’s represent <span class="math inline">\(\sum_{i=1}^n (y_i - \theta)^2\)</span> as <span class="math inline">\(n v\)</span>, so we rewrite this as: <span class="math display">\[
+p(y \mid \sigma^2, \theta) \propto (\sigma^2)^{-n/2}\exp \lp -\frac{n}{2\sigma^2} v  \rp
+\]</span></p></li>
+<li class="fragment"><p>The conjugate prior here is called the inverse gamma, <span class="math display">\[
+p(\sigma^2 \mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)} (\sigma^2)^{-(\alpha+1)} e^{-\beta/\sigma^2}
+\]</span></p></li>
+<li class="fragment"><p>The posterior gives <span class="math display">\[
+p(\sigma^2 \mid y, \theta, \alpha, \beta) \propto (\sigma^2)^{-(n/2 + \alpha+1)} \exp \lp -(\frac{n}{2} v + \beta)/\sigma^2\rp
+\]</span></p></li>
 </ul>
+</div>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
