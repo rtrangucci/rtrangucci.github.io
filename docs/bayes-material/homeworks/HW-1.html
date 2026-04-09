@@ -253,7 +253,14 @@ window.Quarto = {
 </section>
 <section id="section-4" class="level3" data-number="1.4">
 <h3 data-number="1.4" class="anchored" data-anchor-id="section-4"><span class="header-section-number">1.4</span> </h3>
-<p>Derive the posterior predictive distribution for a new trial with <span class="math inline">\(n = 400\)</span> individuals.</p>
+<p>Derive the posterior predictive distribution for a new trial with <span class="math inline">\(n = 400\)</span> individuals. Draw <span class="math inline">\(1\times 10^4\)</span> samples from the posterior predictive distribution for <span class="math inline">\(y\)</span> in a new trial with <span class="math inline">\(400\)</span> individuals with the following procedure:</p>
+<ol type="1">
+<li>For <span class="math inline">\(s \text{ in } \{1, 2, \dots, 1e4\}\)</span>
+<ol type="a">
+<li>Draw <span class="math inline">\(\theta^{(s)} \mid y \sim \text{Beta}(\alpha_n, \beta_n)\)</span> where <span class="math inline">\(\alpha_n\)</span> and <span class="math inline">\(\beta_n\)</span> will depend on your data</li>
+<li>Draw <span class="math inline">\(y \mid \theta^{(s)}, n\)</span> from a binomial distribution with <span class="math inline">\(400\)</span> trials and a probability of success parameter <span class="math inline">\(\theta^{(s)}\)</span></li>
+</ol></li>
+</ol>
 </section>
 <section id="section-5" class="level3" data-number="1.5">
 <h3 data-number="1.5" class="anchored" data-anchor-id="section-5"><span class="header-section-number">1.5</span> </h3>
@@ -261,18 +268,18 @@ window.Quarto = {
 </section>
 <section id="section-6" class="level3" data-number="1.6">
 <h3 data-number="1.6" class="anchored" data-anchor-id="section-6"><span class="header-section-number">1.6</span> </h3>
-<p>In the group that received the trivalent inactived vaccine, there were 19 cases of symptomatic influenza confirmed by culture or by serologic analysis out of 867 total patients.</p>
-<p>Model the positive influenza cases, <span class="math inline">\(y = 169\)</span> as binomial with <span class="math inline">\(n = 867\)</span> trials and unknown probability parameter <span class="math inline">\(\theta_t\)</span>. Use a Beta(1,1) prior. What is the posterior for <span class="math inline">\(\theta_t \mid y, n\)</span>?</p>
+<p>In the group that received the trivalent inactiatved vaccine, there were 19 cases of symptomatic influenza confirmed by culture or by serologic analysis out of 867 total patients.</p>
+<p>Model the positive influenza cases, <span class="math inline">\(y = 19\)</span> as binomial with <span class="math inline">\(n = 867\)</span> trials and unknown probability parameter <span class="math inline">\(\theta_t\)</span>. Use a Beta(1,1) prior. What is the posterior for <span class="math inline">\(\theta_t \mid y, n\)</span>?</p>
 </section>
 <section id="section-7" class="level3" data-number="1.7">
 <h3 data-number="1.7" class="anchored" data-anchor-id="section-7"><span class="header-section-number">1.7</span> </h3>
 <ol type="1">
 <li><p>Simulate 1e5 draws from the posterior you derived for <span class="math inline">\(\theta_t \mid y, n\)</span> in 1.F</p></li>
 <li><p>Simulate 1e5 draws from the posterior you derived for <span class="math inline">\(\theta_p \mid y, n\)</span> in 1.E</p></li>
-<li><p>Compute the vaccine efficacy by computing the following quantity for each draw <span class="math inline">\(\theta_p^{(s)}\)</span> in steps 1 and 2 <span class="math inline">\(\theta_t^{(s)}\)</span>: <span class="math display">\[
+<li><p>Compute the vaccine efficacy (VE) by computing the following quantity for each draw <span class="math inline">\(\theta_p^{(s)}\)</span> in steps 1 and 2 <span class="math inline">\(\theta_t^{(s)}\)</span>: <span class="math display">\[
 \text{VE}^{(s)} = 1 - \frac{\theta_t^{(s)}}{\theta_p^{(s)}}
 \]</span></p></li>
-<li><p>Report the mean, variance and posterior equi-tailed 50%, 90%, and 95% posterior intervals, each to two decimal places.</p></li>
+<li><p>Report the mean, variance and posterior equi-tailed 50%, 90%, and 95% posterior interval of the VE, each to two decimal places.</p></li>
 </ol>
 </section>
 </section>
