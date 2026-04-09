@@ -253,12 +253,12 @@ window.Quarto = {
 </section>
 <section id="section-4" class="level3" data-number="1.4">
 <h3 data-number="1.4" class="anchored" data-anchor-id="section-4"><span class="header-section-number">1.4</span> </h3>
-<p>Derive the posterior predictive distribution for a new trial with <span class="math inline">\(n = 400\)</span> individuals. Draw <span class="math inline">\(1\times 10^4\)</span> samples from the posterior predictive distribution for <span class="math inline">\(y\)</span> in a new trial with <span class="math inline">\(400\)</span> individuals with the following procedure:</p>
+<p>Derive the posterior predictive distribution for a new trial with <span class="math inline">\(n = 400\)</span> individuals. Make a histogram with <span class="math inline">\(1\times 10^4\)</span> samples from the posterior predictive distribution for <span class="math inline">\(\tilde{y}\)</span> in a new trial with <span class="math inline">\(400\)</span> individuals with the following procedure:</p>
 <ol type="1">
 <li>For <span class="math inline">\(s \text{ in } \{1, 2, \dots, 1e4\}\)</span>
 <ol type="a">
 <li>Draw <span class="math inline">\(\theta^{(s)} \mid y \sim \text{Beta}(\alpha_n, \beta_n)\)</span> where <span class="math inline">\(\alpha_n\)</span> and <span class="math inline">\(\beta_n\)</span> will depend on your data</li>
-<li>Draw <span class="math inline">\(y \mid \theta^{(s)}, n\)</span> from a binomial distribution with <span class="math inline">\(400\)</span> trials and a probability of success parameter <span class="math inline">\(\theta^{(s)}\)</span></li>
+<li>Draw <span class="math inline">\(\tilde{y} \mid \theta^{(s)}, n\)</span> from a binomial distribution with <span class="math inline">\(400\)</span> trials and a probability of success parameter <span class="math inline">\(\theta^{(s)}\)</span></li>
 </ol></li>
 </ol>
 </section>
