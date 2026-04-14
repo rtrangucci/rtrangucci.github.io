@@ -133,6 +133,7 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
+      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -297,7 +298,7 @@ Rob Trangucci
 <li class="fragment">“Profile out” <span class="math inline">\(\theta_2\)</span>, via: <span class="math inline">\(\log p(y \mid \theta_1, \hat{\theta}_2(y, \theta_1))\)</span></li>
 <li class="fragment">Isn’t a “true likelihood” because it isn’t derived from the distribution of a random variable</li>
 </ul></li>
-<li class="fragment">Use a marginal likelihood
+<li class="fragment">Use an integrated likelihood
 <ul>
 <li class="fragment">Integrate <span class="math inline">\(p(y \mid \theta_1, \theta_2)\)</span> with respect to some weight function for <span class="math inline">\(\theta_2\)</span></li>
 <li class="fragment">Also not a true likelihood</li>
@@ -318,9 +319,9 @@ Rob Trangucci
           display:block!important;
       }</style></aside>
 </section>
-<section id="bayesin-approach-to-nuisance-parameters" class="slide level2 smaller">
-<h2>Bayesin approach to nuisance parameters</h2>
-<p>Let <span class="math inline">\(\theta_1\)</span> be the parameter of interest and <span class="math inline">\(\theta_2\)</span> be the nuisance parameter</p>
+<section id="bayesian-approach-to-nuisance-parameters" class="slide level2 smaller">
+<h2>Bayesian approach to nuisance parameters</h2>
+<p>Let <span class="math inline">\(\theta_1\)</span> be the parameter of interest and <span class="math inline">\(\theta_2 \in \Omega_{\theta_2}\)</span> be the nuisance parameter</p>
 <div class="fragment">
 <p><span class="math display">\[
 p(\theta_1 \mid y) = \int_{\Omega_{\theta_2}} p(\theta_1, \theta_2 \mid y) d\theta_2
@@ -332,7 +333,20 @@ p(\theta_1 \mid y) = \int_{\Omega_{\theta_2}} p(\theta_1, \theta_2 \mid y) d\the
 <div class="fragment">
 <p><span class="math display">\[
 p(\theta_1 \mid y) = \int_{\Omega_{\theta_2}} p(\theta_1 \mid \theta_2, y)p(\theta_2 \mid y) d\theta_2
-\]</span> :::{.notes} Gelman notes that the posterior of interest is a mixture over conditional posterior distributions with the weighting being the marginal distribution This is how we will approach computation in the normal with two unknown parameter example :::</p>
+\]</span></p>
+<aside class="notes">
+<p>Gelman notes that the posterior of interest is a mixture over conditional posterior distributions with the weighting being the marginal distribution This is how we will approach computation in the normal with two unknown parameter example</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
 </section>
 <section id="normal-model-with-two-unknown-parameters" class="slide level2">
@@ -634,7 +648,26 @@ p(\mu \mid y) &amp; \propto \lp(n-1)s^2 + n(\mu - \bar{y})^2\rp^{-(n-1)/2} \\
 <h2>Comparison of exact to MC estimate</h2>
 
 <img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
-<section id="conjugate-prior-for-mu-sigma2" class="slide level2">
+<section id="posterior-predictive-distribution" class="slide level2 smaller">
+<h2>Posterior predictive distribution</h2>
+<div class="fragment" data-fragment-index="1">
+<p>Want to find <span class="math inline">\(p(\tilde{y} \mid y)\)</span>, but we’ll start with <span class="math inline">\(p(\tilde{y} \mid \sigma^2, y)\)</span></p>
+</div>
+<div class="fragment" data-fragment-index="2">
+<p><span class="math display">\[p(\tilde{y} \mid \sigma^2, y) = \int_{\R} p(\tilde{y} \mid \mu, \sigma^2) p(\mu \mid \sigma^2, y) d\mu\]</span></p>
+</div>
+<div class="fragment" data-fragment-index="3">
+<p><span class="math display">\[\phantom{p(\tilde{y} \mid \sigma^2, y)} = \int_{\R} \textrm{N}(\tilde{y} \mid \mu, \sigma^2) \textrm{N}(\mu \mid \bar{y}, \sigma^2/n) d\mu\]</span></p>
+</div>
+<div class="fragment" data-fragment-index="4">
+<p><span class="math display">\[\phantom{p(\tilde{y} \mid \sigma^2, y)} = \textrm{N}\lp \tilde{y} \mid \bar{y}, \sigma^2\lp 1  + \frac{1}{n}\rp\rp\]</span></p>
+</div>
+<div class="fragment" data-fragment-index="5">
+<p>Almost <span class="math inline">\(\textrm{N}(\mu \mid \bar{y}, \sigma^2/n) d\mu\)</span>, so</p>
+<p><span class="math display">\[p(\tilde{y} \mid y) = \textrm{t}_{n-1}\lp \bar{y}, \lp1 + \frac{1}{n}\rp s^2\rp\]</span></p>
+</div>
+</section>
+<section id="conjugate-prior-for-mu-sigma2" class="slide level2 smaller">
 <h2>Conjugate prior for <span class="math inline">\(\mu, \sigma^2\)</span></h2>
 <ul>
 <li class="fragment"><p>The conjugate prior for <span class="math inline">\(\mu, \sigma^2\)</span> is going to be of the same form of the posterior we derived under the noninformative prior</p></li>
@@ -646,15 +679,182 @@ p(\mu \mid y) &amp; \propto \lp(n-1)s^2 + n(\mu - \bar{y})^2\rp^{-(n-1)/2} \\
 \]</span></p></li>
 <li class="fragment"><p>The posterior is thus: <span class="math display">\[
 \begin{aligned}
-\sigma^2 \mid y &amp; \sim \text{InvGamma}(\frac{\alpha_0 + n}{2}, \frac{\alpha_0 + n}{2} \nu_0) \\
-\mu \mid \sigma^2 &amp; \sim \text{Normal}(\mu_0, \sigma^2 / \kappa_0)
+\sigma^2 \mid y &amp; \sim \text{InvGamma}\lp\frac{\alpha_0 + n}{2}, \frac{1}{2}\lp \alpha_0\nu_0 + (n-1)s^2 + \frac{n\kappa_0}{\kappa_0 + n}(\mu_0 - \bar{y})\rp\rp \\
+\mu \mid \sigma^2, y &amp; \sim \text{Normal}(\frac{\kappa_0 \mu_0 + n \bar{y}}{\kappa_0 + n}, \sigma^2 / (\kappa_0 + n))
 \end{aligned}
 \]</span></p></li>
 </ul>
 </section>
+<section id="lets-derive-it" class="slide level2">
+<h2>Let’s derive it</h2>
+<div style="font-size: 40%;">
+<ul>
+<li class="fragment">Prior for <span class="math inline">\(\sigma^2\)</span>: <span class="math display">\[p(\sigma^2 \mid \alpha_0, \nu_0) \propto (\sigma^2)^{-(\alpha_0/2 + 1)} e^{-\frac{\alpha_0 \nu_0}{2\sigma^2}}\]</span></li>
+<li class="fragment">Prior for <span class="math inline">\(\mu\)</span>: <span class="math display">\[p(\mu \mid \mu_0, \kappa_0, \sigma^2) \propto (\sigma^2)^{-1/2}\exp\lp-\frac{1}{2\sigma^2/\kappa_0}(\mu - \mu_0)^2 \rp\]</span></li>
+<li class="fragment">Likelihood <span class="math inline">\(p(y \mid \mu, \sigma^2)\)</span>: <span class="math display">\[
+p(y \mid \mu, \sigma^2) \propto (\sigma^2)^{-\frac{n}{2}}\exp \lp-\frac{1}{2\sigma^2}((n-1)s^2 + n(\bar{y} - \mu)^2) \rp
+\]</span></li>
+<li class="fragment">Posterior <span class="math display">\[
+\begin{aligned}
+p(\mu, \sigma^2 \mid y) &amp; \propto (\sigma^2)^{-(\frac{1}{2} + \frac{n}{2} + \frac{\alpha_0}{2} + 1)} \\
+&amp; \exp\lp-\frac{1}{2\sigma^2}\lp(n-1) s^2 + n(\mu - \bar{y})^2 + \kappa_0(\mu - \mu_0)^2 \rp \rp
+\end{aligned}
+\]</span></li>
+<li class="fragment">Now need to integrate over <span class="math inline">\(\mu\)</span> to get <span class="math inline">\(p(\sigma^2 \mid y, \text{hyperparameters})\)</span></li>
+<li class="fragment">Focus on the term: <span class="math display">\[
+\exp\lp-\frac{1}{2\sigma^2}\lp n(\mu - \bar{y})^2 + \kappa_0(\mu - \mu_0)^2 \rp \rp
+\]</span></li>
+<li class="fragment">Expand out the square: <span class="math display">\[
+n\mu^2 - 2n \bar{y}\mu + n \bar{y}^2 + \kappa_0\mu^2 - 2 \kappa_0 \mu \mu_0 + \kappa_0 \mu_0^2
+\]</span></li>
+<li class="fragment">Collect terms: <span class="math display">\[
+(n + \kappa_0)\mu^2 - 2\mu(n \bar{y} + \kappa_0 \mu_0) + n \bar{y}^2 + \kappa_0 \mu_0^2
+\]</span></li>
+<li class="fragment">Factor our <span class="math inline">\(n + \kappa_0\)</span>: <span class="math display">\[
+(n + \kappa_0)\lp \mu^2 - 2\mu\frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)} + \frac{n \bar{y}^2 + \kappa_0 \mu_0^2}{n + \kappa_0}\rp
+\]</span></li>
+<li class="fragment">Complete the square by adding and subtracting <span class="math inline">\(\lp\frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)}\rp^2\)</span>: <span class="math display">\[
+(n + \kappa_0)\lp (\mu - \frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)})^2 + \frac{n \bar{y}^2 + \kappa_0 \mu_0^2}{n + \kappa_0} - \lp\frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)}\rp^2\rp
+\]</span></li>
+</ul>
+</div>
+</section>
+<section id="generalized-linear-models" class="slide level2">
+<h2>Generalized linear models</h2>
+<ul>
+<li class="fragment"><p><span class="math inline">\(y_i \sim p(g^{-1}(\alpha + \beta x_i), \phi)\)</span> <span class="math inline">\(i = 1, \dots, n\)</span></p>
+<ul>
+<li class="fragment"><p><span class="math inline">\(p\)</span> is non-normal</p></li>
+<li class="fragment"><p><span class="math inline">\(g\)</span> is a link function <span class="math inline">\(\Exp{y_i \mid x_i, \alpha, \beta} = g^{-1}(\alpha + \beta x_i)\)</span></p></li>
+</ul></li>
+<li class="fragment"><p>We’ll use the Challenger data as an example</p></li>
+</ul>
+</section>
+<section id="challenger-disaster" class="slide level2">
+<h2>Challenger disaster</h2>
+
+<img data-src="challenger.png" width="300" class="r-stretch quarto-figure-center"><p class="caption">Space shuttle diagram from <span class="citation" data-cites="dalal1989">Dalal, Fowlkes, and Hoadley (<a href="#/references" role="doc-biblioref" onclick="">1989</a>)</span></p></section>
+<section id="preflight-data" class="slide level2">
+<h2>Preflight data</h2>
+
+<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
+<section id="analysis-performed-night-prior-to-launch" class="slide level2">
+<h2><span class="r-fit-text">Analysis performed night prior to launch (!)</span></h2>
+
+<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<section id="model" class="slide level2">
+<h2>Model</h2>
+<ul>
+<li class="fragment"><p><span class="math inline">\(y_i \mid K_i, \theta_i \sim \text{Binomial}(6, \theta_i)\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(\text{logit}(\theta_i) = \alpha + \beta \,\text{temp}_i\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(\text{logit}(\theta_i) = \log \lp\frac{\theta_i}{1 - \theta_i} \rp\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(g^{-1}(\alpha + \beta \, \text{temp}_i) = \text{logit}^{-1}(\alpha + \beta \, \text{temp}_i)\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(\text{logit}^{-1}(z) = \frac{1}{1 + e^{-z}} = \frac{e^z}{1 + e^z}\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(p(\alpha, \beta \mid y) \propto \prod_{i=1}^n \theta_i^{y_i}(1-\theta_i)^{6 - y_i} p(\alpha, \beta)\)</span></p></li>
+</ul>
+</section>
+<section id="posterior-over-alphabeta" class="slide level2 smaller">
+<h2>Posterior over <span class="math inline">\(\alpha,\beta\)</span></h2>
+<ul>
+<li class="fragment"><p>Can’t compute the normalizing constant so we need to approximate it</p></li>
+<li class="fragment"><p>One option is to compute the posterior over a predefined set of grid points</p>
+<ul>
+<li class="fragment"><p>Define <span class="math inline">\([\alpha_{\text{min}}, \alpha_{\text{max}}] \times [\beta_{\text{min}}, \beta_{\text{max}}]\)</span></p></li>
+<li class="fragment"><p>Compute <span class="math inline">\(\prod_{i=1}^n \theta_i^{y_i}(1-\theta_i)^{6 - y_i} p(\alpha, \beta)\)</span> at the midpoint of each grid cell</p></li>
+<li class="fragment"><p>Multiply by the area of the cell to get <span class="math inline">\(C p(\alpha, \beta \mid y)\)</span></p></li>
+<li class="fragment"><p>Sum over all the cells to get <span class="math inline">\(C\)</span></p></li>
+<li class="fragment"><p>Posterior mass at a point in the grid is <span class="math inline">\(\prod_{i=1}^n \theta_i^{y_i}(1-\theta_i)^{6 - y_i} p(\alpha, \beta) / C\)</span></p></li>
+</ul></li>
+</ul>
+</section>
+<section id="plotting-the-approximate-posterior" class="slide level2">
+<h2>Plotting the approximate posterior</h2>
+<div class="r-stack">
+<div class="fragment" data-fragment-index="1">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-13-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="2">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-14-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="3">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-15-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="4">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-16-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="5">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-17-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="grid-sampling" class="slide level2 smaller">
+<h2>Grid sampling</h2>
+<ul>
+<li class="fragment">We can use samples from the grid to compute something like the probability of a failure on the morning of the launch, which was expected to be 31 degrees F: <span class="math display">\[
+\Exp{\text{logit}^{-1}(\alpha + \beta \times 31) \mid y} \approx \frac{1}{S}\sum_{s=1}^S \text{logit}^{-1}(\alpha^{(s)} + \beta^{(s)} \times 31)
+\]</span></li>
+<li class="fragment">We can also compute the same quantity using the values from the grid: <span class="math display">\[
+\Exp{\text{logit}^{-1}(\alpha + \beta \times 31) \mid y} \approx \sum_{g=1}^G \text{logit}^{-1}(\alpha^{(g)} + \beta^{(g)} \times 31)w_g
+\]</span></li>
+<li class="fragment">Perhaps a more useful quantity is the posterior pre-launch probability of at least 1 failed O-ring: <span class="math display">\[
+\Exp{\text{At least 1 failure} \mid y} \approx \frac{1}{S}\sum_{s=1}^S 1 - (1 - \text{logit}^{-1}(\alpha^{(s)} + \beta^{(s)} \times 31))^6
+\]</span></li>
+</ul>
+</section>
+<section id="posterior-for-thetax_i" class="slide level2">
+<h2>Posterior for <span class="math inline">\(\theta(x_i)\)</span></h2>
+
+<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<section id="posterior-for-tildey_textlaunch" class="slide level2">
+<h2>Posterior for <span class="math inline">\(\tilde{y}_{\text{launch}}\)</span></h2>
+
+<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-dalal1989" class="csl-entry" role="listitem">
+Dalal, Siddhartha R., Edward B. Fowlkes, and Bruce Hoadley. 1989. <span>“Risk <span>Analysis</span> of the <span>Space</span> <span>Shuttle</span>: <span>Pre</span>-<span>Challenger</span> <span>Prediction</span> of <span>Failure</span>.”</span> <em>Journal of the American Statistical Association</em> 84 (408): 945–57. <a href="https://doi.org/10.2307/2290069">https://doi.org/10.2307/2290069</a>.
+</div>
 <div id="ref-severini2000likelihood" class="csl-entry" role="listitem">
 Severini, Thomas A. 2000. <em>Likelihood Methods in Statistics</em>. Oxford University Press.
 </div>
