@@ -28,6 +28,72 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     /* CSS for citations */
     div.csl-bib-body { }
     div.csl-entry {
@@ -66,6 +132,7 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
+      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -190,19 +257,419 @@ Rob Trangucci
 </div>
 
 </section>
-<section id="attribution" class="slide level2">
-<h2>Attribution</h2>
-<ul>
-<li class="fragment"><p>These slides are largely based on Aki Vehatri’s Bayesian Data Analysis course at Aalto University in Espoo, Finland</p></li>
-<li class="fragment"><p>The material for this course is here: <a href="https://github.com/avehtari/BDA_course_Aalto">https://github.com/avehtari/BDA_course_Aalto</a></p></li>
-</ul>
-</section>
-<section id="section" class="slide level2">
-<h2></h2>
-</section>
 <section id="multivariate-normal-distribution" class="slide level2">
 <h2>Multivariate normal distribution</h2>
-
+<ul>
+<li class="fragment">Important to understand how to work with the multivariate normal (MVN) distribution</li>
+<li class="fragment">Serves as a useful building block in many models</li>
+<li class="fragment">Linear regression, inference on several normal means, time series models, Kalman filters, Bayesian nonparameteric regression can all be formulated as problems in multivariate normal inference</li>
+<li class="fragment">We can’t always do so analytically when covariance parameters are unknown, but we’ll still need to be handy with the various ways we can decompose a multivariate normal distribution</li>
+</ul>
+</section>
+<section id="characterizing-the-mvn" class="slide level2">
+<h2>Characterizing the MVN</h2>
+<p>Let <span class="math inline">\(y\)</span> be a <span class="math inline">\(d\)</span>-dimensional random variable, written in sampling notation</p>
+<div class="fragment" data-fragment-index="1">
+<p><span class="math display">\[
+y \mid \mu, \Sigma \sim \text{MVN}(\mu, \Sigma)
+\]</span></p>
+</div>
+<div class="fragment" data-fragment-index="2">
+<p>The density of <span class="math inline">\(y\)</span> is</p>
+</div>
+<div class="fragment" data-fragment-index="3">
+<p><span class="math display">\[
+p(y\mid \mu, \Sigma) \propto \det\lp \Sigma \rp^{-1/2}\exp\lp -\frac{1}{2}(y - \mu)^T \Sigma^{-1} (y - \mu) \rp
+\]</span></p>
+</div>
+<div class="fragment" data-fragment-index="4">
+<p>Parameters: <span class="math inline">\(\Exp{y \mid \mu, \Sigma} = \mu\)</span>, <span class="fragment"><span class="math inline">\(\Exp{(y - \mu)(y - \mu)^T \mid \mu, \Sigma} = \Sigma\)</span></span> <span class="fragment"><span class="math inline">\(\Sigma\)</span> is <strong>positive definite</strong></span></p>
+</div>
+</section>
+<section id="equivalences-between-mvns" class="slide level2">
+<h2>Equivalences between MVNs</h2>
+<ul>
+<li class="fragment"><p>Let <span class="math inline">\(I_d\)</span> be the <span class="math inline">\(d\)</span>-dimensional identity matrix</p></li>
+<li class="fragment"><p>If <span class="math inline">\(z \sim \text{MVN}(0, I_d)\)</span>, <span class="fragment">then for an <span class="math inline">\(d \times d\)</span> nonsingular matrix <span class="math inline">\(A\)</span></span> <span class="fragment">and a <span class="math inline">\(d\)</span>-dimensional vector <span class="math inline">\(b\)</span>,</span> <span class="fragment"><span class="math inline">\(y = b + A z\)</span> is distributed as multivariate normal</span> <span class="fragment">with mean <span class="math inline">\(b\)</span> and covariance matrix <span class="math inline">\(AA^T\)</span>.</span></p></li>
+<li class="fragment"><p>Reminder: Positive definite (<strong>p.d.</strong>) matrices are characterized by the relation <span class="fragment"><span class="math display">\[\alpha^T B \alpha &gt; 0, \forall \alpha \in \R^d \neq 0 \]</span></span></p></li>
+</ul>
+</section>
+<section id="cholesky-decomposition" class="slide level2 smaller">
+<h2>Cholesky decomposition</h2>
+<ul>
+<li class="fragment"><p>Let <span class="math inline">\(\Sigma\)</span> be a <span class="math inline">\(d \times d\)</span> p.d. matrix</p></li>
+<li class="fragment"><p>Then there exists a lower-triangular matrix <span class="math inline">\(L\)</span> such that <span class="math inline">\(\Sigma = LL^T\)</span></p></li>
+<li class="fragment"><p>In R code <span class="fragment"><code>L &lt;- t(chol(Sigma))</code></span></p></li>
+<li class="fragment"><p>Efficient computation of <span class="math display">\[\Sigma^{-1} b = (L L^T)^{-1} b = (L^-1)^T L^{-1} b, b \in \R^d\]</span>:</p>
+<ul>
+<li class="fragment"><p>Compute <span class="math inline">\(L\)</span>, <span class="fragment"><code>L &lt;- t(chol(Sigma))</code></span></p></li>
+<li class="fragment"><p>Compute <span class="math inline">\(L^{-1}b\)</span>, <span class="fragment"><code>inv_Lb &lt;- forwardsolve(L, b)</code></span></p></li>
+<li class="fragment"><p>Compute <span class="math inline">\((L^{-1})^T L^{-1} b\)</span> <span class="fragment"><code>inv_Sigma_b &lt;- backwardsolve(L, inv_Lb)</code></span></p></li>
+</ul></li>
+<li class="fragment"><p>Why is this efficient? Cholesky decomposition has complexity <span class="math inline">\(n^3 / 3\)</span>, and back and forward solving are complexity <span class="math inline">\(n^2\)</span></p></li>
+</ul>
+</section>
+<section id="generating-draws-from-a-mvn" class="slide level2 smaller">
+<h2>Generating draws from a MVN</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="fragment" data-fragment-index="1">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a></a>d <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1-2"><a></a>S <span class="ot">&lt;-</span> <span class="fl">1e5</span></span>
+<span id="cb1-3"><a></a>Sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb1-4"><a></a>  <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.9</span>, <span class="fl">0.8</span>,</span>
+<span id="cb1-5"><a></a>    <span class="fl">0.9</span>, <span class="dv">1</span>, <span class="fl">0.9</span>,</span>
+<span id="cb1-6"><a></a>    <span class="fl">0.8</span>, <span class="fl">0.9</span>, <span class="dv">1</span>), </span>
+<span id="cb1-7"><a></a><span class="at">nrow =</span> d,  <span class="at">ncol =</span> d)</span>
+<span id="cb1-8"><a></a>L <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(Sigma))</span>
+<span id="cb1-9"><a></a>b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb1-10"><a></a></span>
+<span id="cb1-11"><a></a>z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb1-12"><a></a>  <span class="fu">rnorm</span>(S <span class="sc">*</span> d),</span>
+<span id="cb1-13"><a></a>  <span class="at">nrow =</span> d, <span class="at">ncol =</span> S</span>
+<span id="cb1-14"><a></a>)</span>
+<span id="cb1-15"><a></a></span>
+<span id="cb1-16"><a></a>y_mean_zero <span class="ot">&lt;-</span> L <span class="sc">%*%</span> z</span>
+<span id="cb1-17"><a></a>y <span class="ot">&lt;-</span> <span class="fu">sweep</span>(y_mean_zero, </span>
+<span id="cb1-18"><a></a>           <span class="at">MARGIN =</span> <span class="dv">1</span>, </span>
+<span id="cb1-19"><a></a>           <span class="at">STATS =</span> b, </span>
+<span id="cb1-20"><a></a>           <span class="at">FUN =</span> <span class="st">"+"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="fragment" data-fragment-index="2">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">round</span>(<span class="fu">cov</span>(<span class="fu">t</span>(y)),<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,]  1.0  0.9  0.8
+[2,]  0.9  1.0  0.9
+[3,]  0.8  0.9  1.0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">round</span>(<span class="fu">rowMeans</span>(y),<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3</code></pre>
+</div>
+</div>
+</div>
+</div></div>
+</section>
+<section id="more-useful-facts" class="slide level2">
+<h2>More useful facts</h2>
+<ul>
+<li class="fragment"><p><span class="math inline">\(d\)</span>-dim <span class="math inline">\(X\)</span> is MVN if <span class="math inline">\(\alpha^T X\)</span> is univariate normal for all <span class="math inline">\(\alpha \in \R^d\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(X_j\)</span> and <span class="math inline">\(X_i\)</span> are independent if and only if <span class="math inline">\(\Sigma_{ij} = 0\)</span></p></li>
+<li class="fragment"><p>Linear transformations of MVNs are MVN:</p>
+<ul>
+<li class="fragment"><p>Let <span class="math inline">\(d\)</span>-dim <span class="math inline">\(X\)</span> be dstributed <span class="math inline">\(\text{MVN}(\mu, \Sigma)\)</span></p></li>
+<li class="fragment"><p>Let <span class="math inline">\(M\)</span> be a <span class="math inline">\(k \times d\)</span> matrix and let <span class="math inline">\(b\)</span> be a <span class="math inline">\(k\)</span>-vector</p></li>
+<li class="fragment"><p>Define <span class="math inline">\(Y = b + MX\)</span></p></li>
+<li class="fragment"><p>Then <span class="math inline">\(Y \sim \text{MVN}(b + M \mu, B\Sigma B^T)\)</span></p></li>
+</ul></li>
+</ul>
+</section>
+<section id="partitions-of-mvn" class="slide level2 smaller">
+<h2>Partitions of MVN</h2>
+<ul>
+<li class="fragment">Let <span class="math inline">\(Y = (Y_1, Y_2)\)</span>, <span class="math inline">\(Y_1\)</span> <span class="math inline">\(d_1\)</span>-dim and <span class="math inline">\(Y_2\)</span> <span class="math inline">\(d_2\)</span> dim with the following distribution:</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{bmatrix}
+Y_1 \\
+Y_2
+\end{bmatrix} \sim \text{MVN}\lp\begin{bmatrix}
+\mu_1 \\
+\mu_2
+\end{bmatrix},
+\begin{bmatrix}
+\Sigma_{11} &amp; \Sigma_{12} \\
+\Sigma_{21} &amp; \Sigma_{22}
+\end{bmatrix} \rp
+\]</span></p>
+</div>
+<ul>
+<li class="fragment"><span class="math inline">\(Y_1\)</span> is marginally MVN with <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\Sigma_{11}\)</span></li>
+</ul>
+<div class="fragment">
+<p>Can show this by defining <span class="math inline">\(Y_1 = b + M Y\)</span></p>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+b=0 &amp;&amp;  M = \begin{bmatrix}
+I_{d_1} &amp; 0_{d_1 \times d_2}
+\end{bmatrix}
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</section>
+<section id="dist-of-y_1-mid-y_2" class="slide level2 smaller">
+<h2>Dist of <span class="math inline">\(Y_1 \mid Y_2\)</span></h2>
+<ul>
+<li class="fragment"><p>Let <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_2\)</span> be jointly MVN as in the last slide</p></li>
+<li class="fragment"><p>Let <span class="math inline">\(X_1 = Y_1 - \Sigma_{12}\Sigma_{22}^{-1} Y_2\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(X_1 \indy Y_2\)</span> (How can we show this?)</p></li>
+<li class="fragment"><p><span class="math inline">\(\text{Cov}(X_1) = \text{Cov}(Y_1 - \Sigma_{12}\Sigma_{22}^{-1} Y_2, Y_1 - \Sigma_{12}\Sigma_{22}^{-1} Y_2)\)</span></p></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+&amp; \text{Cov}(Y_1) - \text{Cov}(\Sigma_{12}\Sigma_{22}^{-1} Y_2,Y_1) - \text{Cov}(Y_1,\Sigma_{12}\Sigma_{22}^{-1} Y_2) + \text{Cov}(\Sigma_{12}\Sigma_{22}^{-1} Y_2)\\
+&amp; = \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21}
+\end{aligned}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment"><p><span class="math inline">\(\Exp{X_1} = \mu_1 - \Sigma_{12}\Sigma_{22}^{-1} \mu_2\)</span></p></li>
+<li class="fragment"><p>Now write <span class="math inline">\(Y_1 = X_1 + \Sigma_{12}\Sigma_{22}^{-1} Y_2\)</span></p></li>
+<li class="fragment"><p>Condition <span class="math inline">\(Y_1\)</span> on <span class="math inline">\(Y_2 = y\)</span></p></li>
+<li class="fragment"><p>Note that <span class="math inline">\(X_1\)</span> doesn’t depend on <span class="math inline">\(Y_2\)</span> due to <span class="math inline">\(\indy\)</span>, so its distribution is unchanged by conditioning</p></li>
+<li class="fragment"><p>Then <span class="math inline">\(Y_1\)</span> is just <span class="math inline">\(X_1\)</span> shifted by <span class="math inline">\(+\Sigma_{12}\Sigma_{22}^{-1} y\)</span></p></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+Y_1 \mid Y_2 = y \sim \text{MVN}(\mu_1 + \Sigma_{12}\Sigma_{22}^{-1}(y - \mu_2), \Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21})
+\]</span></p>
+</div>
+</section>
+<section id="back-to-bayes-ics" class="slide level2 smaller">
+<h2>Back to Bayes-ics</h2>
+<ul>
+<li class="fragment"><p>Suppose we have <span class="math inline">\(y_1 \mid \mu \sim \text{MNV}(\mu, \Sigma)\)</span> with <span class="math inline">\(\Sigma\)</span> known</p></li>
+<li class="fragment"><p>Furthermore, let <span class="math inline">\(\mu \sim \text{MVN}(\mu_0, \Lambda_0)\)</span></p></li>
+<li class="fragment"><p>We can write <span class="math inline">\(y_1 = \mu + z\)</span> where <span class="math inline">\(z \sim \text{MVN}(0, \Sigma)\)</span>, <span class="math inline">\(z \indy \mu\)</span> (sort of the converse of what we just proved in the last slide)</p></li>
+<li class="fragment"><p>Then using the fact that <span class="math inline">\(\text{Cov}(y_1,\mu) = \Lambda\)</span>, <span class="math inline">\(\Exp{y_1} = \mu_0\)</span> and <span class="math inline">\(\text{Cov}(y_1) = \Sigma + \Lambda_0\)</span>, we can write</p></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{bmatrix}
+y_1 \\
+\mu
+\end{bmatrix} \sim
+\text{MVN}\lp
+\begin{bmatrix}
+\mu_0 \\
+\mu_0
+\end{bmatrix},
+\begin{bmatrix}
+\Sigma + \Lambda_0 &amp; \Lambda_0 \\
+\Lambda_0 &amp; \Lambda_0
+\end{bmatrix}
+\rp
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">This allows us to use our facts about conditional distributions to get the posterior for <span class="math inline">\(\mu \mid y_1\)</span>:</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+\mu \mid y_1 \sim
+\text{MVN}(&amp;
+\mu_0 + \Lambda_0(\Sigma + \Lambda_0)^{-1}(y_1 - \mu_0) ,\\
+&amp;\Lambda_0 - \Lambda_0(\Sigma + \Lambda_0)^{-1}\Lambda_0
+)
+\end{aligned}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">To get this to look more like the book’s results, there is a matrix identity:</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+(A + B)^{-1} = A^{-1} - A^{-1}(B^{-1} + A^{-1})^{-1}A^{-1}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">Using this result we get a different form of the covariance matrix:</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\Lambda_0 - \Lambda_0(\Sigma + \Lambda_0)^{-1}\Lambda_0 = (\Lambda_0^{-1} + \Sigma^{-1})^{-1}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">We can also rewrite the conditional mean <span class="math inline">\(\Lambda_0(\Sigma + \Lambda_0)^{-1}\)</span> by multiplying the above on the right by <span class="math inline">\(\Lambda_0^{-1}\)</span> as</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\Lambda_0(\Sigma + \Lambda_0)^{-1} = I - (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Lambda_0^{-1}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">Which yields a conditional mean</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+&amp; y - (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Lambda_0^{-1}(y - \mu_0) \\
+&amp; = (I - (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Lambda_0^{-1})y + (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Lambda_0^{-1}\mu_0
+\end{aligned}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">We note the following</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+I &amp; = (\Lambda_0^{-1} + \Sigma^{-1})^{-1}(\Sigma^{-1} + \Lambda_0^{-1})\\
+I &amp; = (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Sigma^{-1} + (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Lambda_0^{-1}\\
+I - (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Lambda_0^{-1} &amp; = (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Sigma^{-1}
+\end{aligned}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">Finally yielding</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+&amp; (I - (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Lambda_0^{-1})y + (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Lambda_0^{-1}\mu_0 \\
+&amp; = (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Sigma^{-1} y + (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\Lambda_0^{-1}\mu_0 \\
+&amp; = (\Lambda_0^{-1} + \Sigma^{-1})^{-1}\lp\Sigma^{-1} y + \Lambda_0^{-1}\mu_0 \rp
+\end{aligned}
+\]</span></p>
+</div>
+</section>
+<section id="with-n-observations" class="slide level2 smaller">
+<h2>With <span class="math inline">\(n\)</span> observations</h2>
+<ul>
+<li class="fragment">We can use the fact that <span class="math inline">\(\bar{y} \mid \mu \sim \text{MVN}(\mu, n^{-1}\Sigma)\)</span> and use the previous results</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+\mu \mid \bar{y} \sim \text{MVN}(&amp;(\Lambda_0^{-1} + n\Sigma^{-1})^{-1}\lp n\Sigma^{-1} \bar{y} + \Lambda_0^{-1}\mu_0 \rp,\\
+&amp; (\Lambda_0^{-1} + n\Sigma^{-1})^{-1})
+\end{aligned}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">This parallels the univariate normal results (recall):</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\mu \mid \bar{y} \sim \text{Normal}(\lp n\frac{\bar{y}}{\sigma} + \frac{\mu_0}{\tau_0}\rp(\frac{n}{\sigma} + \frac{1}{\tau_0})^{-1}, (\frac{n}{\sigma} + \frac{1}{\tau_0})^{-1})
+\]</span></p>
+</div>
+</section>
+<section id="bayesian-linear-regression" class="slide level2 smaller">
+<h2>Bayesian Linear regression</h2>
+<ul>
+<li class="fragment"><p>Often we have covariates <span class="math inline">\(x_i \in \R^p\)</span> paired with our observations <span class="math inline">\(y_i\)</span> which we want to use to better describe the distribution of <span class="math inline">\(y_i\)</span></p></li>
+<li class="fragment"><p>Let <span class="math inline">\((x_i, y_i), i=1, \dots, n\)</span> comprise the observed data</p></li>
+<li class="fragment"><p>Let <span class="math inline">\(x\)</span> be the <span class="math inline">\(n \times p\)</span> matrix where the <span class="math inline">\(i^\mathrm{th}\)</span> row is <span class="math inline">\(x_i\)</span> and let <span class="math inline">\(y\)</span> be the <span class="math inline">\(n\)</span>-vector with the <span class="math inline">\(i^\mathrm{th}\)</span> element equal to <span class="math inline">\(y_i\)</span></p></li>
+<li class="fragment"><p>A full model; for <span class="math inline">\((x, y)\)</span> would be be a likelihood <span class="math inline">\(p(x,y \mid \theta)\)</span>, along with a prior <span class="math inline">\(p(\theta)\)</span>. Let <span class="math inline">\(\theta = (\psi, \phi)\)</span> where <span class="math inline">\(\psi\)</span> governs the conditional distribution <span class="math inline">\(p(x \mid \psi)\)</span> and <span class="math inline">\(\phi\)</span> enters into the conditional distribution <span class="math inline">\(p(y \mid x, \phi, \psi)\)</span></p></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{align}
+p(\theta \mid x, y) &amp; \propto p(x, y \mid \theta) p(\theta) \\
+&amp; \propto p(x \mid \psi) p(y \mid x, \phi, \psi)p(\phi, \psi)
+\end{align}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment"><p>In general, <span class="math inline">\(p(y \mid x, \phi, \psi)\)</span> can depend on <span class="math inline">\(\psi\)</span> and <span class="math inline">\(\phi \not \indy \psi\)</span> apriori</p></li>
+<li class="fragment"><p>If <span class="math inline">\(p(y \mid x, \phi, \psi) = p(y \mid x, \phi)\)</span> <strong>and</strong> <span class="math inline">\(p(\phi, \psi) = p(\phi)p(\psi)\)</span> we get a nice property</p></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{align}
+p(\theta \mid x, y)  &amp; \propto p(x \mid \textcolor{green}{\psi}) p(y \mid x, \phi, \psi)p(\phi, \psi) \\
+&amp; \propto p(x \mid \psi) p(y \mid x, \phi)p(\phi)p(\psi) \\
+&amp; \propto [p(x \mid \psi) p(\psi)] [p(y \mid x, \phi)p(\phi)] \\
+&amp; \propto [p(\psi \mid x)][p(\phi \mid y, x)]
+\end{align}
+\]</span></p>
+</div>
+</section>
+<section id="the-usual-model" class="slide level2 smaller">
+<h2>The usual model</h2>
+<ul>
+<li class="fragment">For <span class="math inline">\(i=1, \dots, n\)</span></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+y_i \sim \text{Normal}(x_i^T \beta, \sigma^2)
+\]</span></p>
+</div>
+<ul>
+<li class="fragment"><p>Then <span class="math inline">\(\phi = (\beta, \sigma^2)\)</span></p></li>
+<li class="fragment"><p>Conjugate priors for <span class="math inline">\(\sigma^2, \beta\)</span></p></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+p(\sigma^2) \propto (\sigma^2)^{-(\nu_0/2 + 1)} \exp\lp -\frac{\nu_0 s_0}{2 \sigma^2} \rp
+\]</span></p>
+</div>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+p(\beta \mid \sigma^2) \propto (\sigma^2)^{-p / 2} \exp\lp-\frac{1}{2\sigma^2}(\beta - \mu_0)^T \Sigma_0^{-1}(\beta - \mu_0) \rp
+\end{aligned}
+\]</span></p>
+</div>
+</section>
+<section id="dealing-with-the-likelihood" class="slide level2 smaller">
+<h2>Dealing with the likelihood</h2>
+<ul>
+<li class="fragment">The data are conditionally independent by <span class="math inline">\(i\)</span>, implying</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+p(y \mid x, \beta, \sigma^2) \propto \prod_{i=1}^n  (\sigma^2)^{-1/2} \exp\lp-\frac{1}{2\sigma^2}(y_i - x_i^T \beta) \rp^2
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">We can of course combine the product</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+p(y \mid x, \beta, \sigma^2) \propto (\sigma^2)^{-n/2} \exp\lp-\frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - x_i^T \beta) \rp^2
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">We can use the fact that, jointly, <span class="math inline">\(y \sim \text{MVN}(x \beta, \sigma^2 I_n)\)</span> to write our likelihood more succinctly</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+p(y \mid x, \beta, \sigma^2) \propto (\sigma^2)^{-n/2} \exp\lp-\frac{1}{2\sigma^2}(y - x \beta)^T(y - x \beta) \rp
+\]</span></p>
+</div>
+</section>
+<section id="the-posterior" class="slide level2 smaller">
+<h2>The posterior</h2>
+<ul>
+<li class="fragment">We now express our posterior the way we have so far:</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+p(\beta, \sigma^2 \mid y, x) &amp; \propto (\sigma^2)^{-n/2} \exp\lp-\frac{1}{2\sigma^2}(y - x \beta)^T(y - x \beta) \rp  \\
+&amp; \quad \times (\sigma^2)^{-p / 2} \exp\lp-\frac{1}{2\sigma^2}(\beta - \mu_0)^T \Sigma_0^{-1}(\beta - \mu_0) \rp \\
+&amp; \quad \times (\sigma^2)^{-(\nu_0/2 + 1)} \exp\lp -\frac{\nu_0 s_0}{2 \sigma^2} \rp
+\end{aligned}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment"><p>We can sort of squint at this expression and glean that we’ll get some sort of normal distribution conditional on <span class="math inline">\(\sigma^2\)</span> and a marginal distribution over <span class="math inline">\(\sigma^2\)</span>, but we don’t know what the parameters will be of those posteriors</p></li>
+<li class="fragment"><p>The first thing we’ll need to do is to combine the expression for <span class="math inline">\(\beta\)</span> in the prior and in the likelihood into one term</p></li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[
+\begin{aligned}
+&amp; \exp\lp-\frac{1}{2\sigma^2}(y - x \beta)^T(y - x \beta) \rp\exp\lp-\frac{1}{2\sigma^2}(\beta - \mu_0)^T \Sigma_0^{-1}(\beta - \mu_0) \rp \\
+&amp; =\exp\lp-\frac{1}{2\sigma^2}\lp \rp (y - x \beta)^T(y - x \beta) + (\beta - \mu_0)^T \Sigma_0^{-1}(\beta - \mu_0)
+\end{aligned}
+\]</span></p>
+</div>
+<ul>
+<li class="fragment">Recall the Cholesky decomposition</li>
+</ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>

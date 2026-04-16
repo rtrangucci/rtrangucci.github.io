@@ -539,39 +539,17 @@ p(\mu, \sigma^2 \mid y) = p(\mu \mid \sigma^2, y) p(\sigma^2 \mid y)
 <div class="r-stack">
 <div class="fragment" data-fragment-index="1">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>x <span class="ot">&lt;-</span> <span class="fu">curve</span>(</span>
-<span id="cb2-2"><a></a> <span class="fu">dnorm</span>(x, bar_y, <span class="at">sd =</span> <span class="fu">sqrt</span>(scale)<span class="sc">/</span><span class="fu">sqrt</span>(n)), </span>
-<span id="cb2-3"><a></a> <span class="at">from =</span> <span class="dv">3</span>, <span class="at">to =</span> <span class="dv">8</span>, </span>
-<span id="cb2-4"><a></a> <span class="at">lty =</span> <span class="dv">2</span>, </span>
-<span id="cb2-5"><a></a> <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(<span class="st">"black"</span>,<span class="fl">0.1</span>),</span>
-<span id="cb2-6"><a></a> <span class="at">lwd =</span> <span class="dv">1</span></span>
-<span id="cb2-7"><a></a>)</span>
-<span id="cb2-8"><a></a>dens_draws[idx_max,] <span class="ot">&lt;-</span> x<span class="sc">$</span>y</span>
-<span id="cb2-9"><a></a></span>
-<span id="cb2-10"><a></a><span class="cf">for</span> (idx <span class="cf">in</span> plt_draws) {</span>
-<span id="cb2-11"><a></a>  sv <span class="ot">&lt;-</span> <span class="fu">curve</span>(</span>
-<span id="cb2-12"><a></a>    <span class="fu">dnorm</span>(x, bar_y, </span>
-<span id="cb2-13"><a></a>          <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span>inv_sigma_sq[idx])<span class="sc">/</span><span class="fu">sqrt</span>(n)), </span>
-<span id="cb2-14"><a></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">lty =</span> <span class="dv">2</span>, </span>
-<span id="cb2-15"><a></a>    <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(<span class="st">"black"</span>,<span class="fl">0.1</span>),</span>
-<span id="cb2-16"><a></a>    <span class="at">lwd =</span> <span class="dv">1</span></span>
-<span id="cb2-17"><a></a>  )</span>
-<span id="cb2-18"><a></a>  dens_draws[idx,] <span class="ot">&lt;-</span> sv<span class="sc">$</span>y</span>
-<span id="cb2-19"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
+<span id="cb2-2"><a></a>bar_y <span class="ot">&lt;-</span> <span class="fu">mean</span>(y)</span>
+<span id="cb2-3"><a></a>s_sq <span class="ot">&lt;-</span> <span class="fu">var</span>(y)</span>
+<span id="cb2-4"><a></a>inv_sigma_sq <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(S, <span class="at">shape =</span> (n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">2</span>, <span class="at">rate =</span> (n <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> s_sq <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb2-5"><a></a>scale <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="fu">max</span>(inv_sigma_sq)</span>
+<span id="cb2-6"><a></a>idx_max <span class="ot">&lt;-</span> <span class="fu">which.max</span>(inv_sigma_sq)</span>
+<span id="cb2-7"><a></a>idx_draws <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>S</span>
+<span id="cb2-8"><a></a>plt_draws <span class="ot">&lt;-</span> idx_draws[<span class="sc">-</span>idx_max]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 <div class="fragment" data-fragment-index="2">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-7-1.png" width="960"></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment" data-fragment-index="3">
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a>x <span class="ot">&lt;-</span> <span class="fu">curve</span>(</span>
 <span id="cb3-2"><a></a> <span class="fu">dnorm</span>(x, bar_y, <span class="at">sd =</span> <span class="fu">sqrt</span>(scale)<span class="sc">/</span><span class="fu">sqrt</span>(n)), </span>
@@ -591,17 +569,51 @@ p(\mu, \sigma^2 \mid y) = p(\mu \mid \sigma^2, y) p(\sigma^2 \mid y)
 <span id="cb3-16"><a></a>    <span class="at">lwd =</span> <span class="dv">1</span></span>
 <span id="cb3-17"><a></a>  )</span>
 <span id="cb3-18"><a></a>  dens_draws[idx,] <span class="ot">&lt;-</span> sv<span class="sc">$</span>y</span>
-<span id="cb3-19"><a></a>}</span>
-<span id="cb3-20"><a></a></span>
-<span id="cb3-21"><a></a><span class="fu">lines</span>(grid, <span class="fu">colMeans</span>(dens_draws), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-19"><a></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
-<div class="fragment" data-fragment-index="4">
+<div class="fragment" data-fragment-index="3">
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-9-1.png" width="960"></p>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-8-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="4">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>x <span class="ot">&lt;-</span> <span class="fu">curve</span>(</span>
+<span id="cb4-2"><a></a> <span class="fu">dnorm</span>(x, bar_y, <span class="at">sd =</span> <span class="fu">sqrt</span>(scale)<span class="sc">/</span><span class="fu">sqrt</span>(n)), </span>
+<span id="cb4-3"><a></a> <span class="at">from =</span> <span class="dv">3</span>, <span class="at">to =</span> <span class="dv">8</span>, </span>
+<span id="cb4-4"><a></a> <span class="at">lty =</span> <span class="dv">2</span>, </span>
+<span id="cb4-5"><a></a> <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(<span class="st">"black"</span>,<span class="fl">0.1</span>),</span>
+<span id="cb4-6"><a></a> <span class="at">lwd =</span> <span class="dv">1</span></span>
+<span id="cb4-7"><a></a>)</span>
+<span id="cb4-8"><a></a>dens_draws[idx_max,] <span class="ot">&lt;-</span> x<span class="sc">$</span>y</span>
+<span id="cb4-9"><a></a></span>
+<span id="cb4-10"><a></a><span class="cf">for</span> (idx <span class="cf">in</span> plt_draws) {</span>
+<span id="cb4-11"><a></a>  sv <span class="ot">&lt;-</span> <span class="fu">curve</span>(</span>
+<span id="cb4-12"><a></a>    <span class="fu">dnorm</span>(x, bar_y, </span>
+<span id="cb4-13"><a></a>          <span class="at">sd =</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span>inv_sigma_sq[idx])<span class="sc">/</span><span class="fu">sqrt</span>(n)), </span>
+<span id="cb4-14"><a></a>    <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">lty =</span> <span class="dv">2</span>, </span>
+<span id="cb4-15"><a></a>    <span class="at">col =</span> scales<span class="sc">::</span><span class="fu">alpha</span>(<span class="st">"black"</span>,<span class="fl">0.1</span>),</span>
+<span id="cb4-16"><a></a>    <span class="at">lwd =</span> <span class="dv">1</span></span>
+<span id="cb4-17"><a></a>  )</span>
+<span id="cb4-18"><a></a>  dens_draws[idx,] <span class="ot">&lt;-</span> sv<span class="sc">$</span>y</span>
+<span id="cb4-19"><a></a>}</span>
+<span id="cb4-20"><a></a></span>
+<span id="cb4-21"><a></a><span class="fu">lines</span>(grid, <span class="fu">colMeans</span>(dens_draws), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div class="fragment" data-fragment-index="5">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -647,7 +659,7 @@ p(\mu \mid y) &amp; \propto \lp(n-1)s^2 + n(\mu - \bar{y})^2\rp^{-(n-1)/2} \\
 <section id="comparison-of-exact-to-mc-estimate" class="slide level2">
 <h2>Comparison of exact to MC estimate</h2>
 
-<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
 <section id="posterior-predictive-distribution" class="slide level2 smaller">
 <h2>Posterior predictive distribution</h2>
 <div class="fragment" data-fragment-index="1">
@@ -689,33 +701,56 @@ p(\mu \mid y) &amp; \propto \lp(n-1)s^2 + n(\mu - \bar{y})^2\rp^{-(n-1)/2} \\
 <h2>Let’s derive it</h2>
 <div style="font-size: 40%;">
 <ul>
-<li class="fragment">Prior for <span class="math inline">\(\sigma^2\)</span>: <span class="math display">\[p(\sigma^2 \mid \alpha_0, \nu_0) \propto (\sigma^2)^{-(\alpha_0/2 + 1)} e^{-\frac{\alpha_0 \nu_0}{2\sigma^2}}\]</span></li>
-<li class="fragment">Prior for <span class="math inline">\(\mu\)</span>: <span class="math display">\[p(\mu \mid \mu_0, \kappa_0, \sigma^2) \propto (\sigma^2)^{-1/2}\exp\lp-\frac{1}{2\sigma^2/\kappa_0}(\mu - \mu_0)^2 \rp\]</span></li>
-<li class="fragment">Likelihood <span class="math inline">\(p(y \mid \mu, \sigma^2)\)</span>: <span class="math display">\[
+<li class="fragment"><p>Prior for <span class="math inline">\(\sigma^2\)</span>: <span class="math display">\[p(\sigma^2 \mid \alpha_0, \nu_0) \propto (\sigma^2)^{-(\alpha_0/2 + 1)} e^{-\frac{\alpha_0 \nu_0}{2\sigma^2}}\]</span></p></li>
+<li class="fragment"><p>Prior for <span class="math inline">\(\mu\)</span>: <span class="math display">\[p(\mu \mid \mu_0, \kappa_0, \sigma^2) \propto (\sigma^2)^{-1/2}\exp\lp-\frac{1}{2\sigma^2/\kappa_0}(\mu - \mu_0)^2 \rp\]</span></p></li>
+<li class="fragment"><p>Likelihood <span class="math inline">\(p(y \mid \mu, \sigma^2)\)</span>: <span class="math display">\[
 p(y \mid \mu, \sigma^2) \propto (\sigma^2)^{-\frac{n}{2}}\exp \lp-\frac{1}{2\sigma^2}((n-1)s^2 + n(\bar{y} - \mu)^2) \rp
-\]</span></li>
-<li class="fragment">Posterior <span class="math display">\[
+\]</span></p></li>
+<li class="fragment"><p>Posterior <span class="math display">\[
 \begin{aligned}
 p(\mu, \sigma^2 \mid y) &amp; \propto (\sigma^2)^{-(\frac{1}{2} + \frac{n}{2} + \frac{\alpha_0}{2} + 1)} \\
-&amp; \exp\lp-\frac{1}{2\sigma^2}\lp(n-1) s^2 + n(\mu - \bar{y})^2 + \kappa_0(\mu - \mu_0)^2 \rp \rp
+&amp; \exp\lp-\frac{1}{2\sigma^2}\lp(n-1) s^2 + n(\mu - \bar{y})^2 + \kappa_0(\mu - \mu_0)^2 + \frac{\alpha_0 \nu_0}{2} \rp \rp
 \end{aligned}
-\]</span></li>
-<li class="fragment">Now need to integrate over <span class="math inline">\(\mu\)</span> to get <span class="math inline">\(p(\sigma^2 \mid y, \text{hyperparameters})\)</span></li>
-<li class="fragment">Focus on the term: <span class="math display">\[
+\]</span></p></li>
+<li class="fragment"><p>Now need to integrate over <span class="math inline">\(\mu\)</span> to get <span class="math inline">\(p(\sigma^2 \mid y, \text{hyperparameters})\)</span></p></li>
+<li class="fragment"><p>Focus on the term: <span class="math display">\[
 \exp\lp-\frac{1}{2\sigma^2}\lp n(\mu - \bar{y})^2 + \kappa_0(\mu - \mu_0)^2 \rp \rp
-\]</span></li>
-<li class="fragment">Expand out the square: <span class="math display">\[
+\]</span></p></li>
+<li class="fragment"><p>Expand out the square: <span class="math display">\[
 n\mu^2 - 2n \bar{y}\mu + n \bar{y}^2 + \kappa_0\mu^2 - 2 \kappa_0 \mu \mu_0 + \kappa_0 \mu_0^2
-\]</span></li>
-<li class="fragment">Collect terms: <span class="math display">\[
+\]</span></p></li>
+<li class="fragment"><p>Collect terms: <span class="math display">\[
 (n + \kappa_0)\mu^2 - 2\mu(n \bar{y} + \kappa_0 \mu_0) + n \bar{y}^2 + \kappa_0 \mu_0^2
-\]</span></li>
-<li class="fragment">Factor our <span class="math inline">\(n + \kappa_0\)</span>: <span class="math display">\[
+\]</span></p></li>
+<li class="fragment"><p>Factor our <span class="math inline">\(n + \kappa_0\)</span>: <span class="math display">\[
 (n + \kappa_0)\lp \mu^2 - 2\mu\frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)} + \frac{n \bar{y}^2 + \kappa_0 \mu_0^2}{n + \kappa_0}\rp
-\]</span></li>
-<li class="fragment">Complete the square by adding and subtracting <span class="math inline">\(\lp\frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)}\rp^2\)</span>: <span class="math display">\[
+\]</span></p></li>
+<li class="fragment"><p>Complete the square by adding and subtracting <span class="math inline">\(\lp\frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)}\rp^2\)</span>: <span class="math display">\[
 (n + \kappa_0)\lp (\mu - \frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)})^2 + \frac{n \bar{y}^2 + \kappa_0 \mu_0^2}{n + \kappa_0} - \lp\frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)}\rp^2\rp
-\]</span></li>
+\]</span></p></li>
+<li class="fragment"><p>Now the density in <span class="math inline">\(\mu\)</span> is <span class="math display">\[
+p(\mu \mid y, \sigma^2) \propto \exp\lp-\lp\frac{n + \kappa_0}{2\sigma^2}\lp \mu - \frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)}\rp^2 \rp\rp
+\]</span> To get this to integrate to <span class="math inline">\(1\)</span> we need a normalizing constant <span class="math inline">\(\lp 2\pi \sigma^2/(n + \kappa_0)\rp^{-1/2}\)</span></p></li>
+<li class="fragment"><p>This leaves the following density after integration: <span class="math display">\[
+\lp 2\pi \sigma^2/(n + \kappa_0)\rp^{1/2}\exp\lp-\lp\frac{n + \kappa_0}{2\sigma^2}\lp \frac{n \bar{y}^2 + \kappa_0 \mu_0^2}{n + \kappa_0} - \lp\frac{n \bar{y} + \kappa_0 \mu_0}{(n + \kappa_0)}\rp^2\rp \rp\rp
+\]</span></p></li>
+<li class="fragment"><p>Expand <span class="math inline">\((n\bar{y} + \kappa_0 \mu_0)^2 = n^2 \bar{y}^2 + 2 \kappa_0 n \bar{y} \mu_0 + \kappa_0^2 \mu_0^2\)</span></p></li>
+<li class="fragment"><p>Multiply the first term by <span class="math inline">\(n - \kappa_0\)</span> to yield <span class="math inline">\(n^2 \bar{y}^2 + n \kappa_0 \mu_0^2 + \kappa_0 n \bar{y}^2 + \kappa_0 \mu_0^2\)</span></p></li>
+<li class="fragment"><p>Combining leaves: <span class="math display">\[
+\frac{n \kappa_0 \mu_0^2 + \kappa_0 n \bar{y}^2 - 2 \kappa_0 n \bar{y}\mu_0}{(n + \kappa_0)^2} = \frac{n\kappa_0 (\bar{y}^2 - \mu_0)^2}{(n + \kappa_0)^2}
+\]</span></p></li>
+<li class="fragment"><p>Finally: <span class="math display">\[
+\lp 2\pi \sigma^2/(n + \kappa_0)\rp^{1/2}\exp\lp-\lp\frac{1}{2\sigma^2}\lp\frac{n\kappa_0}{n + \kappa_0} (\bar{y}^2 - \mu_0)^2 \rp \rp\rp
+\]</span></p></li>
+<li class="fragment"><p>Combining with the rest of the terms we’ve been carrying around: <span class="math display">\[
+\begin{aligned}
+p(\mu, \sigma^2 \mid y) &amp; \propto (\sigma^2)^{-(\frac{1}{2} + \frac{n}{2} + \frac{\alpha_0}{2} + 1)}(\sigma^2)^{\frac{1}{2}} \\
+&amp; \exp\lp-\frac{1}{2\sigma^2}\lp(n-1) s^2 + \frac{n\kappa_0}{n + \kappa_0} (\bar{y}^2 - \mu_0)^2+ \frac{\alpha_0 \nu_0}{2} \rp \rp
+\end{aligned}
+\]</span></p></li>
+<li class="fragment"><p>This is an inverse gamma density with <span class="math inline">\(\frac{n}{2} + \frac{\alpha_0}{2}\)</span> shape parameter and the rate parameter <span class="math display">\[
+\frac{(n-1) s^2 + \frac{n\kappa_0}{n + \kappa_0} (\bar{y}^2 - \mu_0)^2+ \frac{\alpha_0 \nu_0}{2}}{2}
+\]</span></p></li>
 </ul>
 </div>
 </section>
@@ -737,11 +772,11 @@ n\mu^2 - 2n \bar{y}\mu + n \bar{y}^2 + \kappa_0\mu^2 - 2 \kappa_0 \mu \mu_0 + \k
 <section id="preflight-data" class="slide level2">
 <h2>Preflight data</h2>
 
-<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
+<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
 <section id="analysis-performed-night-prior-to-launch" class="slide level2">
 <h2><span class="r-fit-text">Analysis performed night prior to launch (!)</span></h2>
 
-<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-12-1.png" width="960" class="r-stretch"></section>
+<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"></section>
 <section id="model" class="slide level2">
 <h2>Model</h2>
 <ul>
@@ -775,7 +810,7 @@ n\mu^2 - 2n \bar{y}\mu + n \bar{y}^2 + \kappa_0\mu^2 - 2 \kappa_0 \mu \mu_0 + \k
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-13-1.png" width="960"></p>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-14-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -786,7 +821,7 @@ n\mu^2 - 2n \bar{y}\mu + n \bar{y}^2 + \kappa_0\mu^2 - 2 \kappa_0 \mu \mu_0 + \k
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-14-1.png" width="960"></p>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-15-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -797,7 +832,7 @@ n\mu^2 - 2n \bar{y}\mu + n \bar{y}^2 + \kappa_0\mu^2 - 2 \kappa_0 \mu \mu_0 + \k
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-15-1.png" width="960"></p>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-16-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -808,7 +843,7 @@ n\mu^2 - 2n \bar{y}\mu + n \bar{y}^2 + \kappa_0\mu^2 - 2 \kappa_0 \mu \mu_0 + \k
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-16-1.png" width="960"></p>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-17-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -819,7 +854,7 @@ n\mu^2 - 2n \bar{y}\mu + n \bar{y}^2 + \kappa_0\mu^2 - 2 \kappa_0 \mu \mu_0 + \k
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-17-1.png" width="960"></p>
+<p><img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-18-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -844,11 +879,11 @@ n\mu^2 - 2n \bar{y}\mu + n \bar{y}^2 + \kappa_0\mu^2 - 2 \kappa_0 \mu \mu_0 + \k
 <section id="posterior-for-thetax_i" class="slide level2">
 <h2>Posterior for <span class="math inline">\(\theta(x_i)\)</span></h2>
 
-<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-18-1.png" width="960" class="r-stretch"></section>
+<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
 <section id="posterior-for-tildey_textlaunch" class="slide level2">
 <h2>Posterior for <span class="math inline">\(\tilde{y}_{\text{launch}}\)</span></h2>
 
-<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-19-1.png" width="960" class="r-stretch"></section>
+<img data-src="Lecture-04-multiple-parameter_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"></section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
