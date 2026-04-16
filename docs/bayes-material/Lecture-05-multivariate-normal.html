@@ -343,13 +343,13 @@ p(y\mid \mu, \Sigma) \propto \det\lp \Sigma \rp^{-1/2}\exp\lp -\frac{1}{2}(y - \
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a></a><span class="fu">round</span>(<span class="fu">cov</span>(<span class="fu">t</span>(y)),<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3]
-[1,]  1.0  0.9  0.8
-[2,]  0.9  1.0  0.9
-[3,]  0.8  0.9  1.0</code></pre>
+[1,]  1.0 0.90  0.8
+[2,]  0.9 1.01  0.9
+[3,]  0.8 0.90  1.0</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">round</span>(<span class="fu">rowMeans</span>(y),<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1 2 3</code></pre>
+<pre><code>[1] 0.99 1.99 2.99</code></pre>
 </div>
 </div>
 </div>
@@ -663,12 +663,12 @@ p(\beta, \sigma^2 \mid y, x) &amp; \propto (\sigma^2)^{-n/2} \exp\lp-\frac{1}{2\
 <p><span class="math display">\[
 \begin{aligned}
 &amp; \exp\lp-\frac{1}{2\sigma^2}(y - x \beta)^T(y - x \beta) \rp\exp\lp-\frac{1}{2\sigma^2}(\beta - \mu_0)^T \Sigma_0^{-1}(\beta - \mu_0) \rp \\
-&amp; =\exp\lp-\frac{1}{2\sigma^2}\lp \rp (y - x \beta)^T(y - x \beta) + (\beta - \mu_0)^T \Sigma_0^{-1}(\beta - \mu_0)
+&amp; =\exp\lp-\frac{1}{2\sigma^2}\lp(y - x \beta)^T(y - x \beta) + (\beta - \mu_0)^T \Sigma_0^{-1}(\beta - \mu_0) \rp \rp
 \end{aligned}
 \]</span></p>
 </div>
 <ul>
-<li class="fragment">Recall the Cholesky decomposition</li>
+<li class="fragment">For the rest of the derivation, see my notes <a href="../missing-data-material-W-26/notes/lecture-7-notes.html#linear-regression-with-conjugate-priors">here</a></li>
 </ul>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
