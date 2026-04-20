@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>ST 559 - S 26</title>
+<title>HW 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,9 +103,65 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -86,19 +177,19 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./papers.html"> 
+    <a class="nav-link" href="../../papers.html"> 
 <span class="menu-text">My papers</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Random thoughts</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./courses.html"> 
+    <a class="nav-link" href="../../courses.html"> 
 <span class="menu-text">Courses</span></a>
   </li>  
 </ul>
@@ -117,34 +208,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#syllabus" id="toc-syllabus" class="nav-link active" data-scroll-target="#syllabus">Syllabus</a>
+  <li><a href="#marginal-priors-in-regression-problems" id="toc-marginal-priors-in-regression-problems" class="nav-link active" data-scroll-target="#marginal-priors-in-regression-problems"><span class="header-section-number">1</span> Marginal priors in regression problems</a></li>
+  <li><a href="#binomial-with-unknown-number-of-trials" id="toc-binomial-with-unknown-number-of-trials" class="nav-link" data-scroll-target="#binomial-with-unknown-number-of-trials"><span class="header-section-number">2</span> Binomial with unknown number of trials</a>
   <ul class="collapse">
-  <li><a href="#instructor-info" id="toc-instructor-info" class="nav-link" data-scroll-target="#instructor-info">Instructor Info</a></li>
-  <li><a href="#class-meetings" id="toc-class-meetings" class="nav-link" data-scroll-target="#class-meetings">Class meetings</a></li>
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
-  <li><a href="#textbook" id="toc-textbook" class="nav-link" data-scroll-target="#textbook">Textbook:</a></li>
-  <li><a href="#course-objectives" id="toc-course-objectives" class="nav-link" data-scroll-target="#course-objectives">Course objectives</a></li>
-  <li><a href="#course-content" id="toc-course-content" class="nav-link" data-scroll-target="#course-content">Course content</a>
-  <ul class="collapse">
-  <li><a href="#course-learning-outcomes" id="toc-course-learning-outcomes" class="nav-link" data-scroll-target="#course-learning-outcomes">Course learning outcomes</a></li>
-  <li><a href="#rough-schedule-and-readings" id="toc-rough-schedule-and-readings" class="nav-link" data-scroll-target="#rough-schedule-and-readings">Rough schedule and readings</a></li>
-  </ul></li>
-  <li><a href="#project-proposal" id="toc-project-proposal" class="nav-link" data-scroll-target="#project-proposal">Project proposal</a></li>
-  <li><a href="#course-notes" id="toc-course-notes" class="nav-link" data-scroll-target="#course-notes">Course notes</a></li>
-  <li><a href="#homework" id="toc-homework" class="nav-link" data-scroll-target="#homework">Homework</a></li>
-  <li><a href="#assessments" id="toc-assessments" class="nav-link" data-scroll-target="#assessments">Assessments</a>
-  <ul class="collapse">
-  <li><a href="#grading-scale" id="toc-grading-scale" class="nav-link" data-scroll-target="#grading-scale">Grading scale</a></li>
-  </ul></li>
-  <li><a href="#course-statements" id="toc-course-statements" class="nav-link" data-scroll-target="#course-statements">Course Statements</a>
-  <ul class="collapse">
-  <li><a href="#academic-calendar" id="toc-academic-calendar" class="nav-link" data-scroll-target="#academic-calendar">Academic Calendar</a></li>
-  <li><a href="#statement-regarding-students-with-disabilities" id="toc-statement-regarding-students-with-disabilities" class="nav-link" data-scroll-target="#statement-regarding-students-with-disabilities">Statement Regarding Students with Disabilities</a></li>
-  <li><a href="#student-conduct-expectations" id="toc-student-conduct-expectations" class="nav-link" data-scroll-target="#student-conduct-expectations">Student Conduct Expectations</a></li>
-  <li><a href="#student-bill-of-rights" id="toc-student-bill-of-rights" class="nav-link" data-scroll-target="#student-bill-of-rights">Student Bill of Rights</a></li>
-  <li><a href="#reach-out-for-success" id="toc-reach-out-for-success" class="nav-link" data-scroll-target="#reach-out-for-success">Reach Out for Success</a></li>
-  <li><a href="#student-evaluation-of-courses" id="toc-student-evaluation-of-courses" class="nav-link" data-scroll-target="#student-evaluation-of-courses">Student Evaluation of Courses</a></li>
-  </ul></li>
+  <li><a href="#sec-prior" id="toc-sec-prior" class="nav-link" data-scroll-target="#sec-prior"><span class="header-section-number">2.1</span> Implied prior for <span class="math inline">\(\mu\)</span></a></li>
+  <li><a href="#posterior-for-n-mu-theta" id="toc-posterior-for-n-mu-theta" class="nav-link" data-scroll-target="#posterior-for-n-mu-theta"><span class="header-section-number">2.2</span> Posterior for <span class="math inline">\(N, \mu, \theta\)</span></a></li>
+  <li><a href="#posterior-for-n-theta" id="toc-posterior-for-n-theta" class="nav-link" data-scroll-target="#posterior-for-n-theta"><span class="header-section-number">2.3</span> Posterior for <span class="math inline">\(N, \theta\)</span></a></li>
+  <li><a href="#sec-post-n" id="toc-sec-post-n" class="nav-link" data-scroll-target="#sec-post-n"><span class="header-section-number">2.4</span> Marginal posterior for <span class="math inline">\(N\)</span></a></li>
+  <li><a href="#sec-sim-n" id="toc-sec-sim-n" class="nav-link" data-scroll-target="#sec-sim-n"><span class="header-section-number">2.5</span> Simulating from <span class="math inline">\(N\)</span></a></li>
+  <li><a href="#posterior-probabilities" id="toc-posterior-probabilities" class="nav-link" data-scroll-target="#posterior-probabilities"><span class="header-section-number">2.6</span> Posterior probabilities</a></li>
+  <li><a href="#simulate-theta-mid-n" id="toc-simulate-theta-mid-n" class="nav-link" data-scroll-target="#simulate-theta-mid-n"><span class="header-section-number">2.7</span> Simulate <span class="math inline">\(\theta \mid N\)</span></a></li>
   </ul></li>
   </ul>
 </nav>
@@ -154,7 +227,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">ST 559 - S 26</h1>
+<h1 class="title">HW 2</h1>
 </div>
 
 
@@ -171,381 +244,89 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="syllabus" class="level1">
-<h1>Syllabus</h1>
-<p>Much of the material for this course was inspired/cribbed from Aki Vehtari’s Bayesian course at Aalto <a href="https://avehtari.github.io/BDA_course_Aalto/Aalto2025.html" class="uri">https://avehtari.github.io/BDA_course_Aalto/Aalto2025.html</a>, and Ben Goodrich’s Bayesian course at Columbia <a href="https://github.com/bgoodri/GR5065_2024" class="uri">https://github.com/bgoodri/GR5065_2024</a>.</p>
-<section id="instructor-info" class="level2">
-<h2 class="anchored" data-anchor-id="instructor-info">Instructor Info</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Role</th>
-<th>Name</th>
-<th>Office hours</th>
-<th>Contact</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Instructor</td>
-<td>Rob Trangucci</td>
-<td>Tues 3p-4p WNGR 207</td>
-<td><a href="mailto:rob.trangucci@oregonstate.edu">rob.trangucci@oregonstate.edu</a></td>
-</tr>
-<tr class="even">
-<td>GTA</td>
-<td>Gauri Phatak</td>
-<td>TBD</td>
-<td><a href="mailto:phatakg@oregonstate.edu">phatakg@oregonstate.edu</a></td>
-</tr>
-</tbody>
-</table>
+<section id="marginal-priors-in-regression-problems" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="marginal-priors-in-regression-problems"><span class="header-section-number">1</span> Marginal priors in regression problems</h2>
+<p>Derive the marginal prior for <span class="math inline">\(\beta \in \R^p\)</span> under the following joint prior for <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma^2\)</span>: <span class="math display">\[
+\begin{aligned}
+\sigma^2 &amp; \sim \text{InvGamma}(\alpha_0/2, \nu_0 \alpha_0 / 2) \\
+\beta \mid \sigma^2 &amp; \sim \text{MVN}(\beta_0, \sigma^2 \Sigma_0)
+\end{aligned}
+\]</span></p>
 </section>
-<section id="class-meetings" class="level2">
-<h2 class="anchored" data-anchor-id="class-meetings">Class meetings</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Activity</th>
-<th>Days</th>
-<th>Time</th>
-<th>Room</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Lecture</td>
-<td>TR</td>
-<td>10a-11:20a</td>
-<td>KEAR 124</td>
-</tr>
-</tbody>
-</table>
-<p>All lectures are in class and attendance is mandatory</p>
+<section id="binomial-with-unknown-number-of-trials" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="binomial-with-unknown-number-of-trials"><span class="header-section-number">2</span> Binomial with unknown number of trials</h2>
+<p>This is exercise 3.6 from BDA 3.</p>
+<p>These are counts of waterbuck (a large antelope according to Wikipedia <a href="https://en.wikipedia.org/wiki/Waterbuck">https://en.wikipedia.org/wiki/Waterbuck</a>) deterimined from remote photography over the course of five days in Kruger Park in South Africa:</p>
+<p><span class="math display">\[
+53, 57, 66, 67, 72
+\]</span> Assume the following model holds for these data: <span class="math display">\[
+\begin{aligned}
+y_i \mid \theta, N &amp; \overset{\text{iid}}{\sim} \text{Binomial}(N, \theta) \\
+N \mid \mu &amp; \sim \text{Poisson}(\mu)
+\end{aligned}
+\]</span></p>
+<p>Define the parameter <span class="math inline">\(\lambda = \mu \theta\)</span>. We’ll put a joint prior on <span class="math inline">\(\lambda, \theta\)</span>, <span class="math display">\[
+p(\lambda, \theta) \propto \lambda^{-1}
+\]</span></p>
+<section id="sec-prior" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="sec-prior"><span class="header-section-number">2.1</span> Implied prior for <span class="math inline">\(\mu\)</span></h3>
+<p>What is the implied joint prior for <span class="math inline">\(\mu, \theta\)</span>?</p>
 </section>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
-<p>ST 562 is the recommended prerequisite. This course is going to delve headfirst into comparisons between Bayesian and frequentist inference, so you should be fairly familiar with probability distributions, expectation, variance, Bayes’ rule.</p>
+<section id="posterior-for-n-mu-theta" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="posterior-for-n-mu-theta"><span class="header-section-number">2.2</span> Posterior for <span class="math inline">\(N, \mu, \theta\)</span></h3>
+<p>Using the prior obtained in <a href="#sec-prior" class="quarto-xref">Section&nbsp;2.1</a>, derive the joint posterior, up to a constant of proportionality <span class="math display">\[
+p(N, \mu, \theta) \propto
+\]</span></p>
 </section>
-<section id="textbook" class="level2">
-<h2 class="anchored" data-anchor-id="textbook">Textbook:</h2>
-<ul>
-<li><p>Required: <em>Bayesian Data Analysis, Third Ediction,</em> Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin</p></li>
-<li><p>Freely available here: <a href="https://sites.stat.columbia.edu/gelman/book/" class="uri">https://sites.stat.columbia.edu/gelman/book/</a></p></li>
-</ul>
+<section id="posterior-for-n-theta" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="posterior-for-n-theta"><span class="header-section-number">2.3</span> Posterior for <span class="math inline">\(N, \theta\)</span></h3>
+<p>Integrate over <span class="math inline">\(\mu\)</span> to get the expression that is proportional to the posterior for <span class="math inline">\(N\)</span> and <span class="math inline">\(\theta\)</span>, <span class="math inline">\(p(N, \theta \mid y)\)</span></p>
+<p>Hint: You’ll need to use the gamma density:</p>
+<p><span class="math display">\[
+p(x \mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha - 1} e^{-\beta x},
+\]</span></p>
+<p>and <span class="math inline">\(\int_{0}^\infty p(x \mid \beta, \alpha)dx = 1\)</span>.</p>
+<p>Make sure you give the exact support of the posterior <span class="math inline">\([N_{\text{min}}, N_{\text{max}}]\)</span> (i.e.&nbsp;what are the values of <span class="math inline">\(N\)</span> for which <span class="math inline">\(p(N, \theta \mid y)\)</span> evaluates to a finite number?)</p>
 </section>
-<section id="course-objectives" class="level2">
-<h2 class="anchored" data-anchor-id="course-objectives">Course objectives</h2>
-<p>To introduce students to Bayesian statistics through practical examples and computation. To apply these techniques to real data using R code and Stan code. To understand the theory and methodology of Bayesian inference through math, practice and code.</p>
+<section id="sec-post-n" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="sec-post-n"><span class="header-section-number">2.4</span> Marginal posterior for <span class="math inline">\(N\)</span></h3>
+<p>Integrate over <span class="math inline">\(\theta\)</span> to obtain the expression proportional to the posterior for <span class="math inline">\(N\)</span>, <span class="math inline">\(p(N \mid y)\)</span></p>
+<p>Hint: You’ll need to use the Beta density result that</p>
+<p><span class="math display">\[
+p(x \mid \alpha, \beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} x^{\alpha - 1} (1 - x)^{\beta - 1}
+\]</span></p>
+<p>and <span class="math inline">\(\int_{0}^1 p(x \mid \beta, \alpha)dx = 1\)</span></p>
 </section>
-<section id="course-content" class="level2">
-<h2 class="anchored" data-anchor-id="course-content">Course content</h2>
-<p>Concepts to be discussed include: Bayesian vs.&nbsp;frequentist inference, prior and posterior distributions, prior predictive and posterior predictive distributions, exchangeability, hierarchial models, modern Bayesian computation via Markov Chain Monte Carlo, modern probabilistic programming languages.</p>
-<section id="course-learning-outcomes" class="level3">
-<h3 class="anchored" data-anchor-id="course-learning-outcomes">Course learning outcomes</h3>
+<section id="sec-sim-n" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="sec-sim-n"><span class="header-section-number">2.5</span> Simulating from <span class="math inline">\(N\)</span></h3>
+<p>Compute the approximate posterior using <code>R</code> for <span class="math inline">\(N\)</span> using the expression you derived in <a href="#sec-post-n" class="quarto-xref">Section&nbsp;2.4</a>.</p>
 <ol type="1">
-<li>Differentiate between Bayesian inference and frequentist inference via quantification of uncertainty.</li>
-<li>Derive conjugate priors for a given likelihood family.</li>
-<li>Calculate and interpret MCMC and HMC diagnostic checks.</li>
-<li>Define and perform inference for basic hierarchical models in Stan.</li>
-<li>Perform prior and posterior predictive checks while building models.</li>
+<li><p>Write a function that evaluates the log of the expression for a given <span class="math inline">\(N\)</span>.</p></li>
+<li><p>Compute the expression in <span class="math inline">\(1\)</span> on a grid from <span class="math inline">\(N \in [N_{\text{min}}, 2000]\)</span> and save this in an object called <code>log_p_n_grid</code></p></li>
+<li><p>Compute the log of the approximate normalizing constant as</p></li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>approx_log_const <span class="ot">&lt;-</span> matrixStats<span class="sc">::</span><span class="fu">logSumExp</span>(log_p_n_grid)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="4" type="1">
+<li>Compute the approximate posterior <span class="math inline">\(p(N = n \mid y)\)</span> as</li>
+</ol>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>approx_post <span class="ot">&lt;-</span> <span class="fu">exp</span>(log_p_n_grid  <span class="sc">-</span> approx_log_const)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="5" type="1">
+<li>Use sample to draw <span class="math inline">\(1{,}000\)</span> samples from <span class="math inline">\(p(N \mid y)\)</span></li>
 </ol>
 </section>
-<section id="rough-schedule-and-readings" class="level3">
-<h3 class="anchored" data-anchor-id="rough-schedule-and-readings">Rough schedule and readings</h3>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Date</th>
-<th>Topic</th>
-<th>Reading</th>
-<th>LO</th>
-<th>Assignments</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>3/31/2026</td>
-<td><a href="./bayes-material/Week01/Week01-bayes.html">Introduction to Bayesian Inference</a></td>
-<td>Chapter 1</td>
-<td>1</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>4/2/2026</td>
-<td><a href="./bayes-material/Lecture-02-bayes-review.html">Single parameter models</a></td>
-<td>Chapter 2</td>
-<td>1, 2</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>4/7/2026</td>
-<td><a href="./bayes-material/Lecture-03-normal-normal.html">Single parameter models</a></td>
-<td>Chapter 2</td>
-<td>1, 2</td>
-<td><a href="./bayes-material/homeworks/HW-1.html">HW 1</a></td>
-</tr>
-<tr class="even">
-<td>4/9/2026</td>
-<td><a href="./bayes-material/Lecture-04-multiple-parameter.html">Multi parameter models</a></td>
-<td>Chapter 3</td>
-<td>1, 2</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>4/14/2026</td>
-<td><a href="./bayes-material/Lecture-04-multiple-parameter.html">Multi parameter models</a></td>
-<td>Chapter 3</td>
-<td>1, 2</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>4/16/2026</td>
-<td><a href="./bayes-material/Lecture-05-multivariate-normal.html">Multivariate normal models</a></td>
-<td>Chapters 3, 10</td>
-<td>1, 2</td>
-<td><a href="./bayes-material/homeworks/HW-2.html">HW 2</a></td>
-</tr>
-<tr class="odd">
-<td>4/21/2026</td>
-<td>Monte Carlo Integration</td>
-<td>Chapter 10</td>
-<td>1, 2</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>4/23/2026</td>
-<td>MCMC</td>
-<td>Chapter 11</td>
-<td>3</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>4/28/2026</td>
-<td>MCMC</td>
-<td>Chapter 11</td>
-<td>3</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>4/30/2026</td>
-<td>Stan/HMC/PPL</td>
-<td>Chapter 12</td>
-<td>3-4</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>5/5/2026</td>
-<td>Stan/HMC/PPL</td>
-<td>Chapter 12</td>
-<td>3-4</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>5/7/2026</td>
-<td>Stan/HMC/PPL</td>
-<td>Chapter 12</td>
-<td>3-4</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>5/12/2026</td>
-<td>Hierarchical Models</td>
-<td>Chapter 5</td>
-<td>4</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>5/14/2026</td>
-<td>Hierarchical Models</td>
-<td>Chapter 5</td>
-<td>4</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>5/19/2026</td>
-<td>Model checking</td>
-<td>Chapter 6</td>
-<td>5</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>5/21/2026</td>
-<td>Bayesian Workflow</td>
-<td>Chapter 6</td>
-<td>4-5</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>5/26/2026</td>
-<td>Bayesian Workflow</td>
-<td>Chapter 6</td>
-<td>4-5</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>5/28/2026</td>
-<td>Decision analysis</td>
-<td>Chapter 9</td>
-<td>4-5</td>
-<td>NA</td>
-</tr>
-<tr class="odd">
-<td>6/2/2026</td>
-<td>Presentations</td>
-<td>NA</td>
-<td>1-5</td>
-<td>NA</td>
-</tr>
-<tr class="even">
-<td>6/4/2026</td>
-<td>Presentations</td>
-<td>NA</td>
-<td>1-5</td>
-<td>NA</td>
-</tr>
-</tbody>
-</table>
+<section id="posterior-probabilities" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="posterior-probabilities"><span class="header-section-number">2.6</span> Posterior probabilities</h3>
+<p>Give a 95% posterior interval for <span class="math inline">\(N\)</span></p>
 </section>
-</section>
-<section id="project-proposal" class="level2">
-<h2 class="anchored" data-anchor-id="project-proposal">Project proposal</h2>
-<ul>
-<li><a href="#project-proposal">Project proposal</a></li>
-</ul>
-</section>
-<section id="course-notes" class="level2">
-<h2 class="anchored" data-anchor-id="course-notes">Course notes</h2>
-<ul>
-<li><a href="./bayes-material/Week01/Week01-bayes.html">Lecture 1</a></li>
-</ul>
-</section>
-<section id="homework" class="level2">
-<h2 class="anchored" data-anchor-id="homework">Homework</h2>
-<ul>
-<li><a href="./bayes-material/homeworks/HW-1.html">HW 1</a></li>
-</ul>
-</section>
-<section id="assessments" class="level2">
-<h2 class="anchored" data-anchor-id="assessments">Assessments</h2>
-<p>The course will have five homework assignments, a final project proposal, a final project presentation and a project report. The breakdown is</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Assessment</th>
-<th>Weight</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>HW</td>
-<td>50%</td>
-</tr>
-<tr class="even">
-<td>Proposal</td>
-<td>5%</td>
-</tr>
-<tr class="odd">
-<td>Presentation</td>
-<td>10%</td>
-</tr>
-<tr class="even">
-<td>Report</td>
-<td>35%</td>
-</tr>
-</tbody>
-</table>
-<section id="grading-scale" class="level3">
-<h3 class="anchored" data-anchor-id="grading-scale">Grading scale</h3>
-<p>The tentative grading scale is below:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Range</th>
-<th>Letter Grade</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>93% - 100%</td>
-<td>A</td>
-</tr>
-<tr class="even">
-<td>90% - 92.9%</td>
-<td>A-</td>
-</tr>
-<tr class="odd">
-<td>87% - 89.9%</td>
-<td>B+</td>
-</tr>
-<tr class="even">
-<td>83% - 86.9%</td>
-<td>B</td>
-</tr>
-<tr class="odd">
-<td>80% - 82.9%</td>
-<td>B-</td>
-</tr>
-<tr class="even">
-<td>77% - 79.9%</td>
-<td>C+</td>
-</tr>
-<tr class="odd">
-<td>73% - 76.9%</td>
-<td>C</td>
-</tr>
-<tr class="even">
-<td>70% - 72.9%</td>
-<td>C-</td>
-</tr>
-<tr class="odd">
-<td>67% - 69.9%</td>
-<td>D+</td>
-</tr>
-<tr class="even">
-<td>63% - 66.9%</td>
-<td>D</td>
-</tr>
-<tr class="odd">
-<td>60% - 62.9%</td>
-<td>D-</td>
-</tr>
-<tr class="even">
-<td>0% - 59.9%</td>
-<td>F</td>
-</tr>
-</tbody>
-</table>
-</section>
-</section>
-<section id="course-statements" class="level2">
-<h2 class="anchored" data-anchor-id="course-statements">Course Statements</h2>
-<section id="academic-calendar" class="level3">
-<h3 class="anchored" data-anchor-id="academic-calendar">Academic Calendar</h3>
-<p>All students are subject to the registration and refund deadlines as stated in the Academic Calendar: <a href="https://registrar.oregonstate.edu/osu-academic-calendar" class="uri">https://registrar.oregonstate.edu/osu-academic-calendar</a></p>
-</section>
-<section id="statement-regarding-students-with-disabilities" class="level3">
-<h3 class="anchored" data-anchor-id="statement-regarding-students-with-disabilities">Statement Regarding Students with Disabilities</h3>
-<p>Accommodations for students with disabilities are determined and approved by Disability Access Services (DAS). If you, as a student, believe you are eligible for accommodations but have not obtained approval please contact DAS immediately at <span style="color: red;">541-737-4098</span> or at <a href="http://ds.oregonstate.edu" class="uri">http://ds.oregonstate.edu</a>. DAS notifies students and faculty members of approved academic accommodations and coordinates implementation of those accommodations. While not required, students and faculty members are encouraged to discuss details of the implementation of individual accommodations.”</p>
-</section>
-<section id="student-conduct-expectations" class="level3">
-<h3 class="anchored" data-anchor-id="student-conduct-expectations">Student Conduct Expectations</h3>
-<p>Link: <a href="https://beav.es/codeofconduct" class="uri">https://beav.es/codeofconduct</a></p>
-</section>
-<section id="student-bill-of-rights" class="level3">
-<h3 class="anchored" data-anchor-id="student-bill-of-rights">Student Bill of Rights</h3>
-<p>OSU has twelve established student rights. They include due process in all university disciplinary processes, an equal opportunity to learn, and grading in accordance with the course syllabus: <a href="https://asosu.oregonstate.edu/advocacy/rights" class="uri">https://asosu.oregonstate.edu/advocacy/rights</a></p>
-</section>
-<section id="reach-out-for-success" class="level3">
-<h3 class="anchored" data-anchor-id="reach-out-for-success">Reach Out for Success</h3>
-<p>University students encounter setbacks from time to time. If you encounter difficulties and need assistance, it’s important to reach out. Consider discussing the situation with an instructor or academic advisor. Learn about resources that assist with wellness and academic success at <a href="https://oregonstate.edu/reachout" class="uri">https://oregonstate.edu/reachout</a>. If you are in immediate crisis, please contact the Crisis Text Line by texting OREGON to 741-741 or call the National Suicide Prevention Lifeline at <span style="color:red;">1-800-273-TALK</span> (8255)</p>
-</section>
-<section id="student-evaluation-of-courses" class="level3">
-<h3 class="anchored" data-anchor-id="student-evaluation-of-courses">Student Evaluation of Courses</h3>
-<p>During Fall, Winter, and Spring term the online Student Learning Experience surveys open to students the Wednesday of week 9 and close the Sunday before Finals Week. Students will receive notification, instructions and the link through their ONID email. They may also log into the system via MyOregonState or directly at <a href="https://beaves.es/Student-Learning-Survey" class="uri">https://beaves.es/Student-Learning-Survey</a>. Survey results are extremely important and are used to help improve courses and the learning experience of future students. Responses are anonymous (unless a student chooses to “sign” their comments, agreeing to relinquish anonymity of written comments) and are not available to instructors until after grades have been posted. The results of scaled questions and signed comments go to both the instructor and their unit head/supervisor. Anonymous (unsigned) comments go to the instructor only.</p>
+<section id="simulate-theta-mid-n" class="level3" data-number="2.7">
+<h3 data-number="2.7" class="anchored" data-anchor-id="simulate-theta-mid-n"><span class="header-section-number">2.7</span> Simulate <span class="math inline">\(\theta \mid N\)</span></h3>
+<p>Using the simulations of <span class="math inline">\(N\)</span> obtained in <a href="#sec-sim-n" class="quarto-xref">Section&nbsp;2.5</a>, simulate <span class="math inline">\(\theta \mid N, y\)</span> from the appropriate distribution for <span class="math inline">\(\theta \mid N, y\)</span></p>
 
 
-</section>
 </section>
 </section>
 
