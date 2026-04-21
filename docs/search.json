@@ -4135,5 +4135,131 @@
     "title": "HW 2",
     "section": "2 Binomial with unknown number of trials",
     "text": "2 Binomial with unknown number of trials\nThis is exercise 3.6 from BDA 3.\nThese are counts of waterbuck (a large antelope according to Wikipedia https://en.wikipedia.org/wiki/Waterbuck) deterimined from remote photography over the course of five days in Kruger Park in South Africa:\n\\[\n53, 57, 66, 67, 72\n\\] Assume the following model holds for these data: \\[\n\\begin{aligned}\ny_i \\mid \\theta, N & \\overset{\\text{iid}}{\\sim} \\text{Binomial}(N, \\theta) \\\\\nN \\mid \\mu & \\sim \\text{Poisson}(\\mu)\n\\end{aligned}\n\\]\nDefine the parameter \\(\\lambda = \\mu \\theta\\). We’ll put a joint prior on \\(\\lambda, \\theta\\), \\[\np(\\lambda, \\theta) \\propto \\lambda^{-1}\n\\]\n\n2.1 Implied prior for \\(\\mu\\)\nWhat is the implied joint prior for \\(\\mu, \\theta\\)?\n\n\n2.2 Posterior for \\(N, \\mu, \\theta\\)\nUsing the prior obtained in Section 2.1, derive the joint posterior, up to a constant of proportionality \\[\np(N, \\mu, \\theta) \\propto\n\\]\n\n\n2.3 Posterior for \\(N, \\theta\\)\nIntegrate over \\(\\mu\\) to get the expression that is proportional to the posterior for \\(N\\) and \\(\\theta\\), \\(p(N, \\theta \\mid y)\\)\nHint: You’ll need to use the gamma density:\n\\[\np(x \\mid \\alpha, \\beta) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)} x^{\\alpha - 1} e^{-\\beta x},\n\\]\nand \\(\\int_{0}^\\infty p(x \\mid \\beta, \\alpha)dx = 1\\).\nMake sure you give the exact support of the posterior \\([N_{\\text{min}}, N_{\\text{max}}]\\) (i.e. what are the values of \\(N\\) for which \\(p(N, \\theta \\mid y)\\) evaluates to a finite number?)\n\n\n2.4 Marginal posterior for \\(N\\)\nIntegrate over \\(\\theta\\) to obtain the expression proportional to the posterior for \\(N\\), \\(p(N \\mid y)\\)\nHint: You’ll need to use the Beta density result that\n\\[\np(x \\mid \\alpha, \\beta) = \\frac{\\Gamma(\\alpha + \\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)} x^{\\alpha - 1} (1 - x)^{\\beta - 1}\n\\]\nand \\(\\int_{0}^1 p(x \\mid \\beta, \\alpha)dx = 1\\)\n\n\n2.5 Simulating from \\(N\\)\nCompute the approximate posterior using R for \\(N\\) using the expression you derived in Section 2.4.\n\nWrite a function that evaluates the log of the expression for a given \\(N\\).\nCompute the expression in \\(1\\) on a grid from \\(N \\in [N_{\\text{min}}, 2000]\\) and save this in an object called log_p_n_grid\nCompute the log of the approximate normalizing constant as\n\n\napprox_log_const &lt;- matrixStats::logSumExp(log_p_n_grid)\n\n\nCompute the approximate posterior \\(p(N = n \\mid y)\\) as\n\n\napprox_post &lt;- exp(log_p_n_grid  - approx_log_const)\n\n\nUse sample to draw \\(1{,}000\\) samples from \\(p(N \\mid y)\\)\n\n\n\n2.6 Posterior probabilities\nGive a 95% posterior interval for \\(N\\)\n\n\n2.7 Simulate \\(\\theta \\mid N\\)\nUsing the simulations of \\(N\\) obtained in Section 2.5, simulate \\(\\theta \\mid N, y\\) from the appropriate distribution for \\(\\theta \\mid N, y\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#how-many-draws-do-we-need",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#how-many-draws-do-we-need",
+    "title": "Monte Carlo methods",
+    "section": "How many draws do we need?",
+    "text": "How many draws do we need?\n\n\nWant to find \\(\\Exp{\\theta}\\)\n\n\n\n\nWe have \\(\\theta^{(s)} \\overset{\\text{iid}}{\\sim} p(\\theta)\\)\n\n\n\n\nLet \\(\\bar{\\theta} = \\sum_{s=1}^S \\theta^{(s)}\\), \\(\\sigma_\\theta^2 = \\text{Var}(\\theta)\\)\n\n\n\n\nWe know that \\(\\sqrt{S}(\\bar{\\theta} - \\Exp{\\theta}) \\overset{\\text{d}}{\\to} N(0, \\sigma_\\theta^2)\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#references",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#references",
+    "title": "Monte Carlo methods",
+    "section": "References",
+    "text": "References"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#attribution",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#attribution",
+    "title": "Monte Carlo methods",
+    "section": "Attribution",
+    "text": "Attribution\n\nThese slides are largely based on Aki Vehatri’s Bayesian Data Analysis course at Aalto University in Espoo, Finland\nThe material for this course is here: https://github.com/avehtari/BDA_course_Aalto"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#dealing-with-denisties-in-computing",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#dealing-with-denisties-in-computing",
+    "title": "Monte Carlo methods",
+    "section": "Dealing with denisties in computing",
+    "text": "Dealing with denisties in computing\n\nBecause we have limited accuracy, we can’t always compute things the way we write them mathematically\nFor example, suppose we want to evaluate the likelihood for \\(600\\) data points we assume come from a normal distribution:\n\n\n\\[\n\\begin{aligned}\ny_i \\mid \\mu & \\overset{\\text{iid}}{\\sim} \\text{Normal}(\\mu, 1), i = 1, \\dots, 600 \\\\\np(y \\mid \\mu) & = \\prod_{i=1}^{600} \\frac{1}{\\sqrt{2 \\pi}} e^{-\\frac{1}{2}(y_i - \\mu)^2}\n\\end{aligned}\n\\]\n\n\nWriting this in R code, and evaluating \\(p(y \\mid 0)\\) gives:\n\n\n\ny &lt;- rnorm(600)\nprod(dnorm(y, mean = 0, sd = 1))\n\n[1] 0\n\n\n\n\nThis is called underflow, when the target value exceeds the precision of floating point representation\nIntead, we need to compute things on the log scale:\n\n\n\\[\n\\begin{aligned}\n\\log p(y \\mid \\mu) & = \\sum_{i=1}^{600} -\\frac{1}{2} \\log(2\\pi) -\\frac{1}{2}(y_i - \\mu)^2\n\\end{aligned}\n\\]\n\n\n\nsum(dnorm(y, mean = 0, sd = 1, log = TRUE))\n\n[1] -836.7567\n\n\n\n\nIn order to keep everything as stable as possible, compute \\(\\exp\\) as late as you can in calculations"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#floating-point-representation",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#floating-point-representation",
+    "title": "Monte Carlo methods",
+    "section": "Floating point representation",
+    "text": "Floating point representation\n\nMathematical theorems deal with constructs like \\(\\R\\), but when we’re computing things, we need to contend with limited accuracy\nIn 64-bit computing, we have 1 bit to determine the sign of the number, 11 bits for the exponent and 52 bits for the mantissa (all of these are in binary): \\[\n1.2345 \\times 10^5\n\\]\nThis would be \\(12{,}345\\) in floating point\nBecause of this representation, we can represent numbers near \\(0\\) very accurately, and we lose accuracy as we increase the magnitude\nSmallest number we can represent is about \\(2.2\\times 10^{-308}\\), while closest value to \\(1\\) is around \\(1 \\pm 2.2 \\times 10^{-16}\\)\n\n\n\npbeta(0.5, 241945, 251527)\n\n[1] 1\n\npbeta(0.5, 241945, 251527, lower.tail = FALSE)\n\n[1] 1.145624e-42"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#log-sum-exp-trick",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#log-sum-exp-trick",
+    "title": "Monte Carlo methods",
+    "section": "…Log-sum-exp trick",
+    "text": "…Log-sum-exp trick\n\nSuppose you want to compute the log-likelihood in for a mixture model with two components\nThe likelihood looks like \\[\np(y_i \\mid \\theta) = \\phi p(y_i \\mid \\eta_1) + (1 - \\phi) p(y_i \\mid \\eta_2)\n\\]\nWe just talked about the importance of keeping things on the log scale so we write: \\[\n\\ell(y_i \\mid \\eta_1) = \\log p(y_i \\mid \\eta_1)\n\\]\nThen our log-likelihood would be\n\n\n\\[\n\\begin{aligned}\n\\log p(y_i \\mid \\theta) & = \\log( \\exp \\lp \\log(\\phi) + \\ell(y_i \\mid \\eta_1) \\rp \\\\\n\\quad\\quad & \\exp \\lp \\log(1 - \\phi) + \\ell(y_i \\mid \\eta_2) \\rp )\n\\end{aligned}\n\\]\n\n\nFor arguments sake, suppose this evaluates to something like \\(\\log(\\exp(800) + \\exp(801))\\)\n\n\n\nlog(exp(800) + exp(801))\n\n[1] Inf\n\n\n\n\nInstead we can write this as \\(\\log(\\exp(800)(1 + \\exp(801 - 800))\\), or \\(800 + \\log(1 + \\exp(1))\\)\n\n\n\n800 + log(1 + exp(1))\n\n[1] 801.3133"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#expectations",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#expectations",
+    "title": "Monte Carlo methods",
+    "section": "Expectations",
+    "text": "Expectations\n\nIn Bayesian inference, everything is a posterior expectation:\n\n\n\\[\n\\ExpA{h(\\theta)}{p(\\theta \\mid y)} = \\int h(\\theta)p(\\theta \\mid y)d\\theta\n\\]\n\n\n\\[\np(\\theta \\mid y) = \\frac{\\textcolor{green}{p(y \\mid \\theta) p(\\theta)}}{\\textcolor{red}{\\int p(y \\mid \\theta) p(\\theta) d\\theta}}\n\\]\n\n\nWe can typically evaluate \\(\\textcolor{green}{p(y \\mid \\theta) p(\\theta)}\\), but \\(\\textcolor{red}{\\int p(y \\mid \\theta) p(\\theta) d\\theta}\\) is hard to evaluate\nOur strategy is to use what we can evaluate \\(q(\\theta \\mid y) = p(y \\mid \\theta) p(\\theta)\\) to compute our target expectations\nOne option is to evaluate \\(q(\\theta \\mid y)\\) on a grid of \\(\\theta^{(s)}\\) to get\n\n\n\\[\n\\ExpA{h(\\theta)}{p(\\theta \\mid y)} \\approx \\frac{\\sum_{s=1}^S h(\\theta^{(s)}) q(\\theta^{(s)} \\mid y)}{\\sum_{s=1}^S  q(\\theta^{(s)} \\mid y)}\n\\]\n\n\nAnother is to use \\(q(\\theta \\mid y)\\) to generate draws from the target density \\(p(\\theta \\mid y)\\) and to compute\n\n\n\\[\n\\ExpA{h(\\theta)}{p(\\theta \\mid y)} \\approx \\frac{1}{S} \\sum_{s=1}^S h(\\theta^{(s)})\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#simplest-integration",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#simplest-integration",
+    "title": "Monte Carlo methods",
+    "section": "Simplest integration",
+    "text": "Simplest integration"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#quadrature-integration",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#quadrature-integration",
+    "title": "Monte Carlo methods",
+    "section": "Quadrature integration",
+    "text": "Quadrature integration\n\n\\(\\Exp{\\theta} = \\sum_{s=1}^S \\theta^{(s)} w^{(s)}\\)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMore sophisticated methods are available in R using the integrate function"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#problems-with-grid-methods",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#problems-with-grid-methods",
+    "title": "Monte Carlo methods",
+    "section": "Problems with grid methods",
+    "text": "Problems with grid methods\nEvaluations increase exponentially as the dimension of the space increases \\(c^d\\)\n\n\n\n\nCurse of dimensionality\n\n\n\n\nA significant hurdle in grid methods is that you have to define the grid before you know where the mass of the probability distribution\n\n\nApproximate cost: Suppose we have \\(50\\) points in each dimension and \\(10\\) dimensions, this would require \\(50^{10} \\approx 1e17\\) evaluations\n\n\nEven with a fast computer, this could take years to evaluate"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#benefits-and-challenges-of-monte-carlo-over-quadrature",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#benefits-and-challenges-of-monte-carlo-over-quadrature",
+    "title": "Monte Carlo methods",
+    "section": "Benefits and challenges of Monte Carlo over quadrature",
+    "text": "Benefits and challenges of Monte Carlo over quadrature\n\nWhen variance exists, the variance of our estimate is independent of dimension \\(\\theta\\)\n\\(\\text{Var}(\\bar{\\theta}) = \\sigma_\\theta^2/S\\)\n… but need to be sure that variance exists\nWhen variance doesn’t exist but mean does exist there are other limiting distributions, and may still converge to a normal\nWe have to know how to generate samples from the target distribution\nWe are bound by the variance of the estimand, \\(\\sigma_\\theta^2\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#simple-linear-regression-example-mauna-loa-textco_2-series",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#simple-linear-regression-example-mauna-loa-textco_2-series",
+    "title": "Monte Carlo methods",
+    "section": "Simple linear regression example: Mauna Loa \\(\\text{CO}_2\\) series",
+    "text": "Simple linear regression example: Mauna Loa \\(\\text{CO}_2\\) series"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#posterior-for-slope",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#posterior-for-slope",
+    "title": "Monte Carlo methods",
+    "section": "Posterior for slope",
+    "text": "Posterior for slope\n\n\n\\[\n\\sigma_\\theta \\approx 0.12 \\implies \\text{MCSE}(\\hat{\\mathbb{E}}[\\beta_2 \\mid y]) \\approx 0.12 / 10\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#posterior-for-slope-1",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#posterior-for-slope-1",
+    "title": "Monte Carlo methods",
+    "section": "Posterior for slope",
+    "text": "Posterior for slope\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\sigma_\\theta \\approx 0.12 \\implies \\text{MCSE}(\\hat{\\mathbb{E}}[\\beta_2 \\mid y]) \\approx 0.12 / 10 \\\\\nP(\\Exp{\\beta_2 \\mid y} \\in (0.33, 0.38)) \\approx 0.95\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\sigma_\\theta \\approx 0.12 \\implies \\text{MCSE}(\\hat{\\mathbb{E}}[\\beta_2 \\mid y]) \\approx 0.12 / \\sqrt{1000} \\\\\nP(\\Exp{\\beta_2 \\mid y} \\in (0.35, 0.36)) \\approx 0.95\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#estimating-tail-quantiles-is-harder",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#estimating-tail-quantiles-is-harder",
+    "title": "Monte Carlo methods",
+    "section": "Estimating tail quantiles is harder",
+    "text": "Estimating tail quantiles is harder\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\text{MCSE}(\\hat{F}_{\\beta_2 \\mid y}^{-1}(0.05)) \\approx \\sqrt{0.05 \\times 0.95} / 10 f(q) \\approx 0.03 \\\\\nP(F_{\\beta_2 \\mid y}^{-1}(0.05) \\in (0.11, 0.21)) \\approx 0.95\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\text{MCSE}(\\hat{F}_{\\beta_2 \\mid y}^{-1}(0.05)) \\approx \\sqrt{0.05 \\times 0.95 / 1000 f(q)} \\approx 0.01 \\\\\nP(F_{\\beta_2 \\mid y}^{-1}(0.05) \\in (0.14, 0.18)) \\approx 0.95\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#estimating-tail-quantiles-is-harder-1",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#estimating-tail-quantiles-is-harder-1",
+    "title": "Monte Carlo methods",
+    "section": "Estimating tail quantiles is harder",
+    "text": "Estimating tail quantiles is harder\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\text{MCSE}(\\hat{F}_{\\beta_2 \\mid y}^{-1}(0.05)) \\approx \\sqrt{0.01 \\times 0.99} / 10 f(q) \\approx 0.04\\\\\nP(F_{\\beta_2 \\mid y}^{-1}(0.01) \\in (-0.01, 0.15)) \\approx 0.95\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\text{MCSE}(\\hat{F}_{\\beta_2 \\mid y}^{-1}(0.05)) \\approx \\sqrt{0.01 \\times 0.99 / 1000f(q)} \\approx 0.02 \\\\\nP(F_{\\beta_2 \\mid y}^{-1}(0.01) \\in (0.03, 0.11)) \\approx 0.95\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#mcse-of-a-quantile",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#mcse-of-a-quantile",
+    "title": "Monte Carlo methods",
+    "section": "MCSE of a quantile",
+    "text": "MCSE of a quantile\n\nWe find the \\(p^\\mathrm{th}\\) quantile by inverting the CDF evaluated at \\(p\\), \\(q = F^{-1}(p)\\)\nWe can find the asymptotic standard error of the \\(0.05\\) quantile as follows:\n\nLet \\(X_s = \\ind{\\theta^{(s)} \\leq a}\\)\nLet \\(\\alpha = P(\\theta \\leq a)\\)\nThen we know that for i.i.d. \\(X_i\\) such that \\(\\Exp{X_i} = \\alpha\\), \\(\\bar{X} \\overset{\\text{d}}{\\to} \\text{N}(\\alpha, \\alpha (1 - \\alpha)/S)\\)\nWe want to find \\(a\\) for which \\(P(\\theta \\leq a) = 0.05\\)\nBy Delta method, we know \\(g(\\bar{X}) \\overset{\\text{d}}{\\to} \\text{N}(g(\\alpha), \\alpha (1 - \\alpha) (g'(\\alpha))^2 / S)\\)\nIn our case \\(g(\\alpha) \\equiv F^{-1}(\\alpha) = a\\)\nNote:\n\n\n\n\\[\n\\begin{aligned}\nF(F^{-1}(\\alpha)) & = \\alpha \\\\\n\\frac{d}{d\\alpha} F(F^{-1}(\\alpha)) & = \\frac{d}{d\\alpha}\\alpha \\\\\nf(F^{-1}(\\alpha))\\frac{d}{d\\alpha}F^{-1}(\\alpha) & = 1 \\\\\nf(a)\\frac{d}{d\\alpha}F^{-1}(\\alpha) & = 1 \\\\\n\\frac{d}{d\\alpha}F^{-1}(\\alpha) & = 1/f(a) \\\\\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#what-does-this-mean-for-us",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#what-does-this-mean-for-us",
+    "title": "Monte Carlo methods",
+    "section": "What does this mean for us?",
+    "text": "What does this mean for us?\n\n\\[\\hat{F}^{-1}(\\alpha) \\overset{\\text{d}}{\\to} N(a, \\alpha (1 - \\alpha) / f(a)^2 S)\\]"
   }
 ]
