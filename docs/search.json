@@ -4148,7 +4148,7 @@
     "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#references",
     "title": "Monte Carlo methods",
     "section": "References",
-    "text": "References"
+    "text": "References\n\n\nPickands, James. 1975. “Statistical Inference Using Extreme Order Statistics.” The Annals of Statistics 3 (1): 119–31.\n\n\nVehtari, Aki, Daniel Simpson, Andrew Gelman, Yuling Yao, and Jonah Gabry. 2024. “Pareto Smoothed Importance Sampling.” Journal of Machine Learning Research 25 (72): 1–58."
   },
   {
     "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#attribution",
@@ -4162,7 +4162,7 @@
     "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#dealing-with-denisties-in-computing",
     "title": "Monte Carlo methods",
     "section": "Dealing with denisties in computing",
-    "text": "Dealing with denisties in computing\n\nBecause we have limited accuracy, we can’t always compute things the way we write them mathematically\nFor example, suppose we want to evaluate the likelihood for \\(600\\) data points we assume come from a normal distribution:\n\n\n\\[\n\\begin{aligned}\ny_i \\mid \\mu & \\overset{\\text{iid}}{\\sim} \\text{Normal}(\\mu, 1), i = 1, \\dots, 600 \\\\\np(y \\mid \\mu) & = \\prod_{i=1}^{600} \\frac{1}{\\sqrt{2 \\pi}} e^{-\\frac{1}{2}(y_i - \\mu)^2}\n\\end{aligned}\n\\]\n\n\nWriting this in R code, and evaluating \\(p(y \\mid 0)\\) gives:\n\n\n\ny &lt;- rnorm(600)\nprod(dnorm(y, mean = 0, sd = 1))\n\n[1] 0\n\n\n\n\nThis is called underflow, when the target value exceeds the precision of floating point representation\nIntead, we need to compute things on the log scale:\n\n\n\\[\n\\begin{aligned}\n\\log p(y \\mid \\mu) & = \\sum_{i=1}^{600} -\\frac{1}{2} \\log(2\\pi) -\\frac{1}{2}(y_i - \\mu)^2\n\\end{aligned}\n\\]\n\n\n\nsum(dnorm(y, mean = 0, sd = 1, log = TRUE))\n\n[1] -836.7567\n\n\n\n\nIn order to keep everything as stable as possible, compute \\(\\exp\\) as late as you can in calculations"
+    "text": "Dealing with denisties in computing\n\nBecause we have limited accuracy, we can’t always compute things the way we write them mathematically\nFor example, suppose we want to evaluate the likelihood for \\(600\\) data points we assume come from a normal distribution:\n\n\n\\[\n\\begin{aligned}\ny_i \\mid \\mu & \\overset{\\text{iid}}{\\sim} \\text{Normal}(\\mu, 1), i = 1, \\dots, 600 \\\\\np(y \\mid \\mu) & = \\prod_{i=1}^{600} \\frac{1}{\\sqrt{2 \\pi}} e^{-\\frac{1}{2}(y_i - \\mu)^2}\n\\end{aligned}\n\\]\n\n\nWriting this in R code, and evaluating \\(p(y \\mid 0)\\) gives:\n\n\n\ny &lt;- rnorm(600)\nprod(dnorm(y, mean = 0, sd = 1))\n\n[1] 0\n\n\n\n\nThis is called underflow, when the target value exceeds the precision of floating point representation\nIntead, we need to compute things on the log scale:\n\n\n\\[\n\\begin{aligned}\n\\log p(y \\mid \\mu) & = \\sum_{i=1}^{600} -\\frac{1}{2} \\log(2\\pi) -\\frac{1}{2}(y_i - \\mu)^2\n\\end{aligned}\n\\]\n\n\n\nsum(dnorm(y, mean = 0, sd = 1, log = TRUE))\n\n[1] -884.5807\n\n\n\n\nIn order to keep everything as stable as possible, compute \\(\\exp\\) as late as you can in calculations"
   },
   {
     "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#floating-point-representation",
@@ -4261,5 +4261,61 @@
     "title": "Monte Carlo methods",
     "section": "What does this mean for us?",
     "text": "What does this mean for us?\n\n\\[\\hat{F}^{-1}(\\alpha) \\overset{\\text{d}}{\\to} N(a, \\alpha (1 - \\alpha) / f(a)^2 S)\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#checks-for-how-many-moments-exist",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#checks-for-how-many-moments-exist",
+    "title": "Monte Carlo methods",
+    "section": "Checks for how many moments exist",
+    "text": "Checks for how many moments exist\n\nTo easily apply the CLT, we need to know if first and second moments exist[^1] [^1] We don’t need a mean or variance for the CLT to hold, but if the first two moments exist we can apply the CLT\nIf we have a set samples \\(\\{\\theta^{(s)}, s = 1, \\dots, S\\}\\) from \\(p(\\theta \\mid y)\\), is there a way to determine if \\(\\Exp{\\theta^k \\mid y}\\) exists?\nThe answer lies in characterizing the tails of the distribution of \\(\\theta \\mid y\\)\n\nWe know that \\(\\Exp{X} = \\int x f(x) dx\\)\nLet’s just focus on \\(X &gt; 0\\). We can write, for large, finite \\(K\\)\n\n\n\n\\[\n\\int_0^\\infty x f(x) = \\int_{x &lt; K} x f(x) dx +  \\int_{K}^{\\infty} x f(x) dx\n\\]\n\n\nIf we can find an upper bound on the \\(f(x)\\) for \\(x &gt; K\\) that is \\(O(x^{-(2 + \\delta)})\\) for some \\(\\delta &gt; 0\\), the integral will be finite\n\n\n\\[\n\\int_0^\\infty x f(x) \\leq K P(X &lt; K) + \\int_{K}^{\\infty} x^{-(1 + \\delta)} dx &lt; \\infty\n\\]\n\n\nThus we need to quantify the tail behavior of our samples"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#recap",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#recap",
+    "title": "Monte Carlo methods",
+    "section": "Recap",
+    "text": "Recap\n\nTwo types of uncertainty we (typically) need to deal with when doing inference\n\nStatistical uncertainty: quantified by sampling or posterior variance, credible/confidence intervals\n\nFrequentist interpretation: Uncertainty in our estimates driven by the fact that our data is one of many samples of data we could have observed, quantified via variance of sampling distributions, confidence intervals\nBayesian interpretation: Uncertainty in our estimates driven by the fact that our given data set could have been generated by one of many parameter values, quantified via posterior variance, and credible intervals (aka posterior intervals)\n\nMonte Carlo uncertainty: Uncertainty given by the fact that we have finite number of samples from a distribution to compute a quantity of interest\n\nBoth types of uncertainty exist when we do Bayesian statistics\nMonte Carlo uncertainty enters into how we quantify posterior uncertainty when we have samples from the posterior\nWe quantify Monte Carlo uncertainty with the CLT"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#generalized-pareto-distribution-for-tails",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#generalized-pareto-distribution-for-tails",
+    "title": "Monte Carlo methods",
+    "section": "Generalized Pareto distribution for tails",
+    "text": "Generalized Pareto distribution for tails\n\nPickands (1975) shows that for a large class of random variables \\(X\\) the distribution of \\(X \\mid X &gt; u\\) is well approximated by a Generalized Pareto distribution (GPD), with \\(1/k\\) moments\n\n\n\\[\np(y \\mid u, \\sigma, k) =\n\\begin{cases}\n\\frac{1}{\\sigma}(1 + k \\lp \\frac{y - u}{\\sigma} \\rp)^{-(1 + 1/k)}, & k \\neq 0 \\\\\n\\frac{1}{\\sigma}\\exp\\lp \\frac{y - u}{\\sigma} \\rp), & k = 0\n\\end{cases}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#how-to-fit-a-gpd",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#how-to-fit-a-gpd",
+    "title": "Monte Carlo methods",
+    "section": "How to fit a GPD",
+    "text": "How to fit a GPD\n\nlibrary(posterior)\n\ntheta &lt;- rnorm(1e3)\npareto_khat(theta)\n\n[1] -0.05810098"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#examples",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#examples",
+    "title": "Monte Carlo methods",
+    "section": "Examples",
+    "text": "Examples\n\n\n\\(\\theta \\sim \\text{Normal}(0,1)\\)\n\n\n\n\n\n\n\n\n\n\n\n\\(\\theta \\sim \\text{t}(4, 0,1)\\)\n\n\n\n\n\n\n\n\n\n\n\n\\(\\theta \\sim \\text{t}(2, 0,1)\\)\n\n\n\n\n\n\n\n\n\n\n\n\\(\\theta \\sim \\text{t}(1, 0,1)\\)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#using-pareto-k-in-posterior-parckage",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#using-pareto-k-in-posterior-parckage",
+    "title": "Monte Carlo methods",
+    "section": "Using Pareto-k in posterior parckage",
+    "text": "Using Pareto-k in posterior parckage\n\ndf &lt;- \n  data.frame(\n    norm = rnorm(1e4),\n    rt4 = rt(1e4, df = 4),\n    rt2 = rt(1e4, df = 2),\n    rt1 = rt(1e4, df = 1)\n  )\n\ndf |&gt; \n  posterior::summarise_draws(mean, sd, mcse_mean, pareto_khat,\n                             .num_args = list(sigfig = 2, notation = \"dec\")) \n\n# A tibble: 4 × 5\n  variable     mean    sd mcse_mean pareto_khat\n  &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;\n1 norm      0.014     1.0     0.010      -0.089\n2 rt4       0.0043    1.4     0.014       0.30 \n3 rt2       0.00038   3.0     0.030       0.50 \n4 rt1      -0.37    104.      1.0         0.94"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#using-pareto-k-in-practice",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#using-pareto-k-in-practice",
+    "title": "Monte Carlo methods",
+    "section": "Using pareto-k in practice",
+    "text": "Using pareto-k in practice\n\nIf \\(\\hat{k}\\) is large, use a quantile to summarize the posterior instead of a moment\nThere is, of course, variance in \\(\\hat{k}\\) estimation because of finite sample size\n\nIf \\(\\hat{k}\\) is nearly \\(0.5\\) increase samples to get more precision in \\(\\hat{k}\\) estimate\n\nFor \\(\\hat{k} &lt; 0.7\\) one can use smoothing to increase the efficiency of the mean estimate\n\nEssentially use the order statistics from a fitted pareto distribution in place of draws from the tail to stabilize estiamtes of sample moments\n\nFor more info see Vehtari et al. (2024)"
+  },
+  {
+    "objectID": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#ways-to-generate-draws",
+    "href": "bayes-material/Lecture-06-Monte-Carlo-Intro.html#ways-to-generate-draws",
+    "title": "Monte Carlo methods",
+    "section": "Ways to generate draws",
+    "text": "Ways to generate draws"
   }
 ]
