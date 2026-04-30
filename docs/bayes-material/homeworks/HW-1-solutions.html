@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>HW 1</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\R}{\mathbb{R}}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\comp}{^\mathsf{c}}
+        \newcommand{\widebar}[1]{\overline{\! #1}}
+        \newcommand{\Var}[1]{\mathrm{Var}\lp #1 \rp}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../papers.html"> 
+<span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../courses.html"> 
+<span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"><span class="header-section-number">1</span> </a>
+  <ul class="collapse">
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1"><span class="header-section-number">1.1</span> </a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2"><span class="header-section-number">1.2</span> </a></li>
+  <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3"><span class="header-section-number">1.3</span> </a></li>
+  <li><a href="#section-4" id="toc-section-4" class="nav-link" data-scroll-target="#section-4"><span class="header-section-number">1.4</span> </a></li>
+  <li><a href="#section-5" id="toc-section-5" class="nav-link" data-scroll-target="#section-5"><span class="header-section-number">1.5</span> </a></li>
+  <li><a href="#section-6" id="toc-section-6" class="nav-link" data-scroll-target="#section-6"><span class="header-section-number">1.6</span> </a></li>
+  <li><a href="#section-7" id="toc-section-7" class="nav-link" data-scroll-target="#section-7"><span class="header-section-number">1.7</span> </a></li>
+  </ul></li>
+  <li><a href="#section-8" id="toc-section-8" class="nav-link" data-scroll-target="#section-8"><span class="header-section-number">2</span> </a>
+  <ul class="collapse">
+  <li><a href="#section-9" id="toc-section-9" class="nav-link" data-scroll-target="#section-9"><span class="header-section-number">2.1</span> </a></li>
+  <li><a href="#section-10" id="toc-section-10" class="nav-link" data-scroll-target="#section-10"><span class="header-section-number">2.2</span> </a></li>
+  <li><a href="#section-11" id="toc-section-11" class="nav-link" data-scroll-target="#section-11"><span class="header-section-number">2.3</span> </a></li>
+  <li><a href="#section-12" id="toc-section-12" class="nav-link" data-scroll-target="#section-12"><span class="header-section-number">2.4</span> </a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">HW 1</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="section" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="section"><span class="header-section-number">1</span> </h2>
+<p><span class="citation" data-cites="ohmit2008">Ohmit et al. (<a href="#ref-ohmit2008" role="doc-biblioref">2008</a>)</span> explores the vaccine efficacy of two competing influenza vaccines in a randomized controlled trial. In order to compute vaccine efficacy we need to compute the rate of illness in a placebo group against the rate of illness in the vaccinated group.</p>
+<p>In the placebo group, there were 16 cases of symptomatic influenza confirmed by culture or by serologic analysis out of 338 total patients.</p>
+<section id="section-1" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="section-1"><span class="header-section-number">1.1</span> </h3>
+<p>Model the positive influenza cases, <span class="math inline">\(y = 16\)</span> as binomial with <span class="math inline">\(n = 338\)</span> trials and unknown probability parameter <span class="math inline">\(\theta_p\)</span>. Use a Beta(1,1) prior. What is the posterior for <span class="math inline">\(\theta_p \mid y, n\)</span>?</p>
+<section id="solution" class="level4" data-number="1.1.1">
+<h4 data-number="1.1.1" class="anchored" data-anchor-id="solution"><span class="header-section-number">1.1.1</span> Solution</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">16</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="dv">338</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>alpha_post <span class="ot">&lt;-</span> y <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>beta_post <span class="ot">&lt;-</span> K <span class="sc">-</span> y <span class="sc">+</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><span class="math display">\[
+p(\theta_p \mid y) \equiv \text{Beta}(17, 323)
+\]</span></p>
+</section>
+</section>
+<section id="section-2" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="section-2"><span class="header-section-number">1.2</span> </h3>
+<p>What is the posterior mean and variance of <span class="math inline">\(\theta\)</span>? Report the result to 2 decimal places.</p>
+<section id="solution-1" class="level4" data-number="1.2.1">
+<h4 data-number="1.2.1" class="anchored" data-anchor-id="solution-1"><span class="header-section-number">1.2.1</span> Solution</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>post_mean <span class="ot">&lt;-</span> alpha_post<span class="sc">/</span>(alpha_post <span class="sc">+</span> beta_post)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>post_variance <span class="ot">&lt;-</span> post_mean <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> post_mean) <span class="sc">/</span> (alpha_post <span class="sc">+</span> beta_post <span class="sc">+</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Mean: 0.05, variance: 0</p>
+</section>
+</section>
+<section id="section-3" class="level3" data-number="1.3">
+<h3 data-number="1.3" class="anchored" data-anchor-id="section-3"><span class="header-section-number">1.3</span> </h3>
+<p>Give the 50%, 90%, and 95% equi-tailed posterior intervals, each reported to two decimal places.</p>
+<section id="solution-2" class="level4" data-number="1.3.1">
+<h4 data-number="1.3.1" class="anchored" data-anchor-id="solution-2"><span class="header-section-number">1.3.1</span> Solution</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pct_50_interval <span class="ot">&lt;-</span> <span class="fu">qbeta</span>(<span class="fu">c</span>(<span class="fl">0.25</span>,<span class="fl">0.75</span>), <span class="at">shape1 =</span> alpha_post, <span class="at">shape2 =</span> beta_post)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pct_90_interval <span class="ot">&lt;-</span> <span class="fu">qbeta</span>(<span class="fu">c</span>(<span class="fl">0.05</span>,<span class="fl">0.95</span>), <span class="at">shape1 =</span> alpha_post, <span class="at">shape2 =</span> beta_post)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pct_95_interval <span class="ot">&lt;-</span> <span class="fu">qbeta</span>(<span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.975</span>), <span class="at">shape1 =</span> alpha_post, <span class="at">shape2 =</span> beta_post)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>50% interval: 0.04, 0.06, 90% interval: 0.03, 0.07, 95% interval: 0.03, 0.08,</p>
+</section>
+</section>
+<section id="section-4" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="section-4"><span class="header-section-number">1.4</span> </h3>
+<p>Derive the posterior predictive distribution for a new trial with <span class="math inline">\(n = 400\)</span> individuals. Make a histogram with <span class="math inline">\(1\times 10^4\)</span> samples from the posterior predictive distribution for <span class="math inline">\(\tilde{y}\)</span> in a new trial with <span class="math inline">\(400\)</span> individuals with the following procedure:</p>
+<ol type="1">
+<li>For <span class="math inline">\(s \text{ in } \{1, 2, \dots, 1e4\}\)</span>
+<ol type="a">
+<li>Draw <span class="math inline">\(\theta^{(s)} \mid y \sim \text{Beta}(\alpha_n, \beta_n)\)</span> where <span class="math inline">\(\alpha_n\)</span> and <span class="math inline">\(\beta_n\)</span> will depend on your data</li>
+<li>Draw <span class="math inline">\(\tilde{y} \mid \theta^{(s)}, n\)</span> from a binomial distribution with <span class="math inline">\(400\)</span> trials and a probability of success parameter <span class="math inline">\(\theta^{(s)}\)</span></li>
+</ol></li>
+</ol>
+<section id="solution-3" class="level4" data-number="1.4.1">
+<h4 data-number="1.4.1" class="anchored" data-anchor-id="solution-3"><span class="header-section-number">1.4.1</span> Solution</h4>
+<p>The posterior predictive distribution is a beta binomial distribution, which we can find by integrating the binomial likelihood against the beta distribution:</p>
+<p><span class="math display">\[
+\begin{aligned}
+p(\tilde{y} \mid y) &amp; = \int_0^1 {K \choose \tilde{y}} \theta^{\tilde{y}} (1 - \theta)^{K - \tilde{y}} \frac{\Gamma(\alpha_p + \beta_p)}{\Gamma(\alpha_p)\Gamma(\beta_p)} \theta^{\alpha_p - 1} (1 - \theta)^{\beta_p - 1} d\theta  \\
+&amp; = \frac{\Gamma(\alpha_p + \beta_p)}{\Gamma(\alpha_p)\Gamma(\beta_p)} {K \choose \tilde{y}}\int_0^1 \theta^{\tilde{y} + \alpha_p - 1} (1 - \theta)^{K - \tilde{y} + \beta_p - 1} d\theta  \\
+&amp; = \frac{\Gamma(\tilde{y} + \alpha_p)\Gamma(K - \tilde{y} + \beta_p )}{\Gamma(K + \alpha_p + \beta_p)} \frac{\Gamma(\alpha_p + \beta_p)}{\Gamma(\alpha_p)\Gamma(\beta_p)} {K \choose \tilde{y}}
+\end{aligned}
+\]</span></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>p_post <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="fl">1e4</span>,<span class="at">shape1 =</span> alpha_post, <span class="at">shape2 =</span> beta_post)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>y_tilde <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="fl">1e4</span>, <span class="at">size =</span> <span class="dv">400</span>, <span class="at">prob =</span> p_post)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y_tilde)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-1-solutions_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="section-5" class="level3" data-number="1.5">
+<h3 data-number="1.5" class="anchored" data-anchor-id="section-5"><span class="header-section-number">1.5</span> </h3>
+<p>Simulate 1e5 draws from the posterior you derived in 1.A using the <code>rbeta</code> function in <code>R</code> and plot a histgram of the draws</p>
+<section id="solution-4" class="level4" data-number="1.5.1">
+<h4 data-number="1.5.1" class="anchored" data-anchor-id="solution-4"><span class="header-section-number">1.5.1</span> Solution</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(p_post)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-1-solutions_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="section-6" class="level3" data-number="1.6">
+<h3 data-number="1.6" class="anchored" data-anchor-id="section-6"><span class="header-section-number">1.6</span> </h3>
+<p>In the group that received the trivalent inactiatved vaccine, there were 19 cases of symptomatic influenza confirmed by culture or by serologic analysis out of 867 total patients.</p>
+<p>Model the positive influenza cases, <span class="math inline">\(y = 19\)</span> as binomial with <span class="math inline">\(n = 867\)</span> trials and unknown probability parameter <span class="math inline">\(\theta_t\)</span>. Use a Beta(1,1) prior. What is the posterior for <span class="math inline">\(\theta_t \mid y, n\)</span>?</p>
+<section id="solution-5" class="level4" data-number="1.6.1">
+<h4 data-number="1.6.1" class="anchored" data-anchor-id="solution-5"><span class="header-section-number">1.6.1</span> Solution</h4>
+<p><span class="math display">\[
+p(\theta_t \mid y) \equiv \text{Beta}(20, 849)
+\]</span></p>
+</section>
+</section>
+<section id="section-7" class="level3" data-number="1.7">
+<h3 data-number="1.7" class="anchored" data-anchor-id="section-7"><span class="header-section-number">1.7</span> </h3>
+<ol type="1">
+<li><p>Simulate 1e5 draws from the posterior you derived for <span class="math inline">\(\theta_t \mid y, n\)</span> in 1.F</p></li>
+<li><p>Simulate 1e5 draws from the posterior you derived for <span class="math inline">\(\theta_p \mid y, n\)</span> in 1.E</p></li>
+<li><p>Compute the vaccine efficacy (VE) by computing the following quantity for each draw <span class="math inline">\(\theta_p^{(s)}\)</span> in steps 1 and 2 <span class="math inline">\(\theta_t^{(s)}\)</span>: <span class="math display">\[
+\text{VE}^{(s)} = 1 - \frac{\theta_t^{(s)}}{\theta_p^{(s)}}
+\]</span></p></li>
+<li><p>Report the mean, variance and posterior equi-tailed 50%, 90%, and 95% posterior interval of the VE, each to two decimal places.</p></li>
+</ol>
+<section id="solution-6" class="level4" data-number="1.7.1">
+<h4 data-number="1.7.1" class="anchored" data-anchor-id="solution-6"><span class="header-section-number">1.7.1</span> Solution</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>p_post <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="fl">1e5</span>, alpha_post, beta_post)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>p_post_treat <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="fl">1e5</span>, <span class="dv">19</span> <span class="sc">+</span> <span class="dv">1</span>, <span class="dv">867</span> <span class="sc">-</span> <span class="dv">19</span> <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>ve <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> p_post_treat <span class="sc">/</span> p_post</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>mean_ve <span class="ot">&lt;-</span> <span class="fu">mean</span>(ve)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>var_ve <span class="ot">&lt;-</span> <span class="fu">var</span>(ve)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>ve_quantiles <span class="ot">&lt;-</span> <span class="fu">quantile</span>(ve, <span class="fu">c</span>(<span class="fl">0.025</span>,<span class="fl">0.05</span>,<span class="fl">0.25</span>,<span class="fl">0.75</span>,<span class="fl">0.95</span>,<span class="fl">0.975</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>ve_50pct_interval <span class="ot">&lt;-</span> ve_quantiles[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>ve_90pct_interval <span class="ot">&lt;-</span> ve_quantiles[<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>)]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>ve_95pct_interval <span class="ot">&lt;-</span> ve_quantiles[<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">6</span>)]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>50% interval: 0.43, 0.63, 90% interval: 0.21, 0.73, 95% interval: 0.12, 0.76,</p>
+</section>
+</section>
+</section>
+<section id="section-8" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="section-8"><span class="header-section-number">2</span> </h2>
+<p>Consider the exponential family distributions for a random variable <span class="math inline">\(X \mid \eta\)</span> of the form <span class="math display">\[
+p(x \mid \eta) = h(x) \exp\lp\eta x - A(\eta)\rp, \eta \in H,
+\]</span> with support over <span class="math inline">\(\R\)</span>,</p>
+<p>and a conjugate prior of the form, with support over <span class="math inline">\(H\)</span>:</p>
+<p><span class="math display">\[
+p(\eta \mid k, \mu) = c(k,\mu) \exp\lp k \eta \mu - k a(\eta)\rp
+\]</span></p>
+<section id="section-9" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="section-9"><span class="header-section-number">2.1</span> </h3>
+<p>Derive the posterior distribution, up to a constant of proportionality for <span class="math inline">\(p(\eta \mid x, k, \mu)\)</span></p>
+<section id="solution-7" class="level4" data-number="2.1.1">
+<h4 data-number="2.1.1" class="anchored" data-anchor-id="solution-7"><span class="header-section-number">2.1.1</span> Solution</h4>
+<p><span class="math display">\[
+p(\eta \mid x, k, \mu) \propto \exp\lp \eta(k \mu + n \bar{x}) - (k + n) A(\eta)\rp
+\]</span></p>
+</section>
+</section>
+<section id="section-10" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="section-10"><span class="header-section-number">2.2</span> </h3>
+<p>Show that the conditional mean of <span class="math inline">\(X \mid \eta\)</span> is equal to <span class="math inline">\(A'(\eta)\)</span> and that the conditional variance of <span class="math inline">\(X \mid \eta\)</span> is <span class="math inline">\(A''(\eta)\)</span>.</p>
+<p>Hint: Calculate the log of the moment generating function of <span class="math inline">\(X \mid \eta\)</span>, <span class="math inline">\(\log \ExpA{e^{t X}}{X \mid \eta}\)</span> and show that this is equal to <span class="math inline">\(A(\eta + t) - A(\eta)\)</span>.</p>
+<section id="solution-8" class="level4" data-number="2.2.1">
+<h4 data-number="2.2.1" class="anchored" data-anchor-id="solution-8"><span class="header-section-number">2.2.1</span> Solution</h4>
+<p><span class="math display">\[
+\begin{aligned}
+\int_{-\infty}^\infty h(x) \exp((\eta + t) x - A(\eta)) dx &amp; = \int_{-\infty}^\infty h(x) \exp((\eta + t) x - A(\eta + t) + A(\eta + t) - A(\eta)) dx  \\
+&amp; = e^{A(\eta + t) - A(\eta)}\int_{-\infty}^\infty h(x) \exp((\eta + t) x - A(\eta + t)) dx \\
+&amp; = e^{A(\eta + t) - A(\eta)}
+\end{aligned}
+\]</span></p>
+<p>Taking logs we get <span class="math inline">\(\log \Exp{e^{tX}} = A(\eta + t) - A(\eta)\)</span>. Taking first and second derivatives with respect to <span class="math inline">\(t\)</span> and setting <span class="math inline">\(t = 0\)</span> gives the result.</p>
+</section>
+</section>
+<section id="section-11" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="section-11"><span class="header-section-number">2.3</span> </h3>
+<p>Show that the implied marginal mean of <span class="math inline">\(X\)</span> <span class="math inline">\(\Exp{X \mid k, \mu} = \ExpA{\Exp{X \mid \eta}}{\eta \mid k, \mu} = \mu\)</span>.</p>
+<p>Hint: You may take the following fact about <span class="math inline">\(p(\eta \mid k, \mu)\)</span> for granted:</p>
+<p><span class="math display">\[
+\int_{H} \frac{\partial}{\partial \eta} p(\eta \mid k, \mu) d\eta = \frac{\partial}{\partial \eta}\int_{H}  p(\eta \mid k, \mu) d\eta
+\]</span> #### Solution</p>
+<p>We know that <span class="math inline">\(\Exp{X \mid \eta} = A'(\eta)\)</span>, so we can take the following integral to get the marginal mean of <span class="math inline">\(X\)</span></p>
+<p><span class="math display">\[
+\Exp{X} = \int_H A'(\eta) p(\eta \mid k, \mu) d\eta
+\]</span></p>
+<p>Or</p>
+<p><span class="math display">\[
+\Exp{X} = \int_H c(k,\mu) A'(\eta) \exp(k \eta \mu - k A(\eta)) d\eta
+\]</span></p>
+<p>Using the hint</p>
+<p><span class="math display">\[
+\begin{aligned}
+\int_H \frac{\partial}{\partial \eta} p(\eta \mid k, \mu) d\eta &amp; = \int_H \frac{\partial}{\partial \eta} c(k,\mu)  \exp(k \eta \mu - k A(\eta)) d\eta \\
+&amp; = \int_H c(k,\mu) k \mu \exp(k \eta \mu - k A(\eta))d\eta - \int_H c(k,\mu) k A'(\eta) \exp(k \eta \mu - k A(\eta))d\eta \\
+&amp;  = k \mu \int_H c(k,\mu) \exp(k \eta \mu - k A(\eta))d\eta -  k \int_H c(k,\mu) A'(\eta) \exp(k \eta \mu - k A(\eta))d\eta \\
+&amp; = k \mu - k \Exp{X}
+\end{aligned}
+\]</span></p>
+<p>THe LHS is zero implying that <span class="math inline">\(\mu = \Exp{X}\)</span>.</p>
+</section>
+<section id="section-12" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="section-12"><span class="header-section-number">2.4</span> </h3>
+<p>Show that the posterior mean for <span class="math inline">\(A'(\eta) \mid x, k, \mu\)</span> is</p>
+<p><span class="math display">\[
+\ExpA{A'(\eta) \mid x, k, \mu}{\eta \mid x, k, \mu} = \frac{n \bar{x} + k \mu}{n + k}
+\]</span></p>
+<section id="solution-9" class="level4" data-number="2.4.1">
+<h4 data-number="2.4.1" class="anchored" data-anchor-id="solution-9"><span class="header-section-number">2.4.1</span> Solution</h4>
+<p>Our posterior for <span class="math inline">\(\eta\)</span> is</p>
+<p><span class="math display">\[
+p(\eta \mid x, k, \mu) \propto \exp( \eta(k \mu + n \bar{x}) - (k + n) A(\eta))
+\]</span></p>
+<p>We know from the last problem that <span class="math inline">\(\int_H A'(\eta)c(k,\mu) \exp(k \eta \mu - k A(\eta))d\eta = \mu\)</span></p>
+<p>Rewritng the posterior in the same form, with <span class="math inline">\(\mu_p = \frac{k \mu + n \bar{x}}{k + n}\)</span> and <span class="math inline">\(k_p = k + n\)</span>, allows us to write</p>
+<p><span class="math display">\[
+p(\eta \mid x, k, \mu) \propto \exp( \eta k_p \mu_p - k_p A(\eta))
+\]</span> Then <span class="math display">\[
+\int_H A'(\eta)c(k_p, \mu_p) \exp( \eta k_p \mu_p - k_p A(\eta)) d\eta = \mu_p
+\]</span></p>
+
+
+
+</section>
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-ohmit2008" class="csl-entry" role="listitem">
+Ohmit, Suzanne E., John C. Victor, Esther R. Teich, Rachel K. Truscon, Judy R. Rotthoff, Duane W. Newton, Sarah A. Campbell, Matthew L. Boulton, and Arnold S. Monto. 2008. <span>“Prevention of <span>Symptomatic</span> <span>Seasonal</span> <span>Influenza</span> in 2005–2006 by <span>Inactivated</span> and <span>Live</span> <span>Attenuated</span> <span>Vaccines</span>.”</span> <em>The Journal of Infectious Diseases</em> 198 (3): 312–17. <a href="https://doi.org/10.1086/589885">https://doi.org/10.1086/589885</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

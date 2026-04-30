@@ -359,7 +359,7 @@ L_Y(\beta, \sigma^2 \mid y, X) \propto (\sigma^2)^{-\nu/2} \exp\lp\frac{\nu s^2}
 p(\beta, \sigma^2 \mid y, X) \propto (\sigma^2)^{-(\nu/2+1)} \exp\lp\frac{\nu s^2}{2 \sigma^2}\rp (\sigma^2)^{-(n - \nu) / 2} \exp\lp-\frac{1}{2 \sigma^2} (\beta - \hat{\beta})^T X^T X (\beta - \hat{\beta})\rp
 \]</span> which is a conditional normal posterior for <span class="math inline">\(\beta\)</span> with a scaled inverse chi-squared posterior for <span class="math inline">\(\sigma^2\)</span>.</p>
 <p>This suggests a conjugate prior of the form <span class="math inline">\(p(\beta,\sigma^2) = p(\sigma^2)p(\beta \mid \sigma^2)\)</span>: <span class="math display">\[
-p(\sigma^2) \propto (\sigma^2)^{-(\nu_0/2 + 1)} \exp\lp \frac{\nu_0 s_0}{2 \sigma^2} \rp
+p(\sigma^2) \propto (\sigma^2)^{-(\nu_0/2 + 1)} \exp\lp -\frac{\nu_0 s_0}{2 \sigma^2} \rp
 \]</span></p>
 <p>and a conditional normal prior for <span class="math inline">\(\beta\)</span>:</p>
 <p><span class="math display">\[
