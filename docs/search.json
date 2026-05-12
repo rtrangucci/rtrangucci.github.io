@@ -1943,7 +1943,7 @@
     "href": "st_559_s_26.html",
     "title": "ST 559 - S 26",
     "section": "",
-    "text": "Much of the material for this course was inspired/cribbed from Aki Vehtari’s Bayesian course at Aalto https://avehtari.github.io/BDA_course_Aalto/Aalto2025.html, and Ben Goodrich’s Bayesian course at Columbia https://github.com/bgoodri/GR5065_2024.\n\n\n\n\n\nRole\nName\nOffice hours\nContact\n\n\n\n\nInstructor\nRob Trangucci\nTues 3p-4p WNGR 207\nrob.trangucci@oregonstate.edu\n\n\nGTA\nGauri Phatak\nTBD\nphatakg@oregonstate.edu\n\n\n\n\n\n\n\n\n\nActivity\nDays\nTime\nRoom\n\n\n\n\nLecture\nTR\n10a-11:20a\nKEAR 124\n\n\n\nAll lectures are in class and attendance is mandatory\n\n\n\nST 562 is the recommended prerequisite. This course is going to delve headfirst into comparisons between Bayesian and frequentist inference, so you should be fairly familiar with probability distributions, expectation, variance, Bayes’ rule.\n\n\n\n\nRequired: Bayesian Data Analysis, Third Ediction, Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin\nFreely available here: https://sites.stat.columbia.edu/gelman/book/\n\n\n\n\nTo introduce students to Bayesian statistics through practical examples and computation. To apply these techniques to real data using R code and Stan code. To understand the theory and methodology of Bayesian inference through math, practice and code.\n\n\n\nConcepts to be discussed include: Bayesian vs. frequentist inference, prior and posterior distributions, prior predictive and posterior predictive distributions, exchangeability, hierarchial models, modern Bayesian computation via Markov Chain Monte Carlo, modern probabilistic programming languages.\n\n\n\nDifferentiate between Bayesian inference and frequentist inference via quantification of uncertainty.\nDerive conjugate priors for a given likelihood family.\nCalculate and interpret MCMC and HMC diagnostic checks.\nDefine and perform inference for basic hierarchical models in Stan.\nPerform prior and posterior predictive checks while building models.\n\n\n\n\n\n\n\nDate\nTopic\nReading\nLO\nAssignments\n\n\n\n\n3/31/2026\nIntroduction to Bayesian Inference\nChapter 1\n1\nNA\n\n\n4/2/2026\nSingle parameter models\nChapter 2\n1, 2\nNA\n\n\n4/7/2026\nSingle parameter models\nChapter 2\n1, 2\nHW 1\n\n\n4/9/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/14/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/16/2026\nMultivariate normal models\nChapters 3, 10\n1, 2\nHW 2\n\n\n4/21/2026\nMonte Carlo Integration\nChapter 10\n1, 2\nNA\n\n\n4/23/2026\nMCMC\nChapter 11\n3\nNA\n\n\n4/28/2026\nStan/HMC/PPL\nChapter 11\n3\nNA\n\n\n4/30/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/5/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/7/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/12/2026\nHierarchical Models\nChapter 5\n4\nNA\n\n\n5/14/2026\nHierarchical Models\nChapter 5\n4\nNA\n\n\n5/19/2026\nModel checking\nChapter 6\n5\nNA\n\n\n5/21/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/26/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/28/2026\nDecision analysis\nChapter 9\n4-5\nNA\n\n\n6/2/2026\nPresentations\nNA\n1-5\nNA\n\n\n6/4/2026\nPresentations\nNA\n1-5\nNA\n\n\n\n\n\n\n\n\nProject proposal\n\n\n\n\n\nLecture 1\n\n\n\n\n\nHW 1\n\n\n\n\nThe course will have five homework assignments, a final project proposal, a final project presentation and a project report. The breakdown is\n\n\n\nAssessment\nWeight\n\n\n\n\nHW\n50%\n\n\nProposal\n5%\n\n\nPresentation\n10%\n\n\nReport\n35%\n\n\n\n\n\nThe tentative grading scale is below:\n\n\n\nRange\nLetter Grade\n\n\n\n\n93% - 100%\nA\n\n\n90% - 92.9%\nA-\n\n\n87% - 89.9%\nB+\n\n\n83% - 86.9%\nB\n\n\n80% - 82.9%\nB-\n\n\n77% - 79.9%\nC+\n\n\n73% - 76.9%\nC\n\n\n70% - 72.9%\nC-\n\n\n67% - 69.9%\nD+\n\n\n63% - 66.9%\nD\n\n\n60% - 62.9%\nD-\n\n\n0% - 59.9%\nF\n\n\n\n\n\n\n\n\n\nAll students are subject to the registration and refund deadlines as stated in the Academic Calendar: https://registrar.oregonstate.edu/osu-academic-calendar\n\n\n\nAccommodations for students with disabilities are determined and approved by Disability Access Services (DAS). If you, as a student, believe you are eligible for accommodations but have not obtained approval please contact DAS immediately at 541-737-4098 or at http://ds.oregonstate.edu. DAS notifies students and faculty members of approved academic accommodations and coordinates implementation of those accommodations. While not required, students and faculty members are encouraged to discuss details of the implementation of individual accommodations.”\n\n\n\nLink: https://beav.es/codeofconduct\n\n\n\nOSU has twelve established student rights. They include due process in all university disciplinary processes, an equal opportunity to learn, and grading in accordance with the course syllabus: https://asosu.oregonstate.edu/advocacy/rights\n\n\n\nUniversity students encounter setbacks from time to time. If you encounter difficulties and need assistance, it’s important to reach out. Consider discussing the situation with an instructor or academic advisor. Learn about resources that assist with wellness and academic success at https://oregonstate.edu/reachout. If you are in immediate crisis, please contact the Crisis Text Line by texting OREGON to 741-741 or call the National Suicide Prevention Lifeline at 1-800-273-TALK (8255)\n\n\n\nDuring Fall, Winter, and Spring term the online Student Learning Experience surveys open to students the Wednesday of week 9 and close the Sunday before Finals Week. Students will receive notification, instructions and the link through their ONID email. They may also log into the system via MyOregonState or directly at https://beaves.es/Student-Learning-Survey. Survey results are extremely important and are used to help improve courses and the learning experience of future students. Responses are anonymous (unless a student chooses to “sign” their comments, agreeing to relinquish anonymity of written comments) and are not available to instructors until after grades have been posted. The results of scaled questions and signed comments go to both the instructor and their unit head/supervisor. Anonymous (unsigned) comments go to the instructor only."
+    "text": "Much of the material for this course was inspired/cribbed from Aki Vehtari’s Bayesian course at Aalto https://avehtari.github.io/BDA_course_Aalto/Aalto2025.html, and Ben Goodrich’s Bayesian course at Columbia https://github.com/bgoodri/GR5065_2024.\n\n\n\n\n\nRole\nName\nOffice hours\nContact\n\n\n\n\nInstructor\nRob Trangucci\nTues 3p-4p WNGR 207\nrob.trangucci@oregonstate.edu\n\n\nGTA\nGauri Phatak\nTBD\nphatakg@oregonstate.edu\n\n\n\n\n\n\n\n\n\nActivity\nDays\nTime\nRoom\n\n\n\n\nLecture\nTR\n10a-11:20a\nKEAR 124\n\n\n\nAll lectures are in class and attendance is mandatory\n\n\n\nST 562 is the recommended prerequisite. This course is going to delve headfirst into comparisons between Bayesian and frequentist inference, so you should be fairly familiar with probability distributions, expectation, variance, Bayes’ rule.\n\n\n\n\nRequired: Bayesian Data Analysis, Third Ediction, Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari, and Donald Rubin\nFreely available here: https://sites.stat.columbia.edu/gelman/book/\n\n\n\n\nTo introduce students to Bayesian statistics through practical examples and computation. To apply these techniques to real data using R code and Stan code. To understand the theory and methodology of Bayesian inference through math, practice and code.\n\n\n\nConcepts to be discussed include: Bayesian vs. frequentist inference, prior and posterior distributions, prior predictive and posterior predictive distributions, exchangeability, hierarchial models, modern Bayesian computation via Markov Chain Monte Carlo, modern probabilistic programming languages.\n\n\n\nDifferentiate between Bayesian inference and frequentist inference via quantification of uncertainty.\nDerive conjugate priors for a given likelihood family.\nCalculate and interpret MCMC and HMC diagnostic checks.\nDefine and perform inference for basic hierarchical models in Stan.\nPerform prior and posterior predictive checks while building models.\n\n\n\n\n\n\n\nDate\nTopic\nReading\nLO\nAssignments\n\n\n\n\n3/31/2026\nIntroduction to Bayesian Inference\nChapter 1\n1\nNA\n\n\n4/2/2026\nSingle parameter models\nChapter 2\n1, 2\nNA\n\n\n4/7/2026\nSingle parameter models\nChapter 2\n1, 2\nHW 1\n\n\n4/9/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/14/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/16/2026\nMultivariate normal models\nChapters 3, 10\n1, 2\nHW 2\n\n\n4/21/2026\nMonte Carlo Integration\nChapter 10\n1, 2\nNA\n\n\n4/23/2026\nMCMC\nChapter 11\n3\nNA\n\n\n4/28/2026\nStan/HMC/PPL\nChapter 11\n3\nNA\n\n\n4/30/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/5/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/7/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/12/2026\n[Hierarchical Models]\nChapter 5\n4\nNA\n\n\n5/14/2026\nHierarchical Models\nChapter 5\n4\nNA\n\n\n5/19/2026\nModel checking\nChapter 6\n5\nNA\n\n\n5/21/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/26/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/28/2026\nDecision analysis\nChapter 9\n4-5\nNA\n\n\n6/2/2026\nPresentations\nNA\n1-5\nNA\n\n\n6/4/2026\nPresentations\nNA\n1-5\nNA\n\n\n\n\n\n\n\n\nProject proposal\n\n\n\n\n\nLecture 1\n\n\n\n\n\nHW 1\nHW 2\n\n\n\n\nThe course will have five homework assignments, a final project proposal, a final project presentation and a project report. The breakdown is\n\n\n\nAssessment\nWeight\n\n\n\n\nHW\n50%\n\n\nProposal\n5%\n\n\nPresentation\n10%\n\n\nReport\n35%\n\n\n\n\n\nThe tentative grading scale is below:\n\n\n\nRange\nLetter Grade\n\n\n\n\n93% - 100%\nA\n\n\n90% - 92.9%\nA-\n\n\n87% - 89.9%\nB+\n\n\n83% - 86.9%\nB\n\n\n80% - 82.9%\nB-\n\n\n77% - 79.9%\nC+\n\n\n73% - 76.9%\nC\n\n\n70% - 72.9%\nC-\n\n\n67% - 69.9%\nD+\n\n\n63% - 66.9%\nD\n\n\n60% - 62.9%\nD-\n\n\n0% - 59.9%\nF\n\n\n\n\n\n\n\n\n\nAll students are subject to the registration and refund deadlines as stated in the Academic Calendar: https://registrar.oregonstate.edu/osu-academic-calendar\n\n\n\nAccommodations for students with disabilities are determined and approved by Disability Access Services (DAS). If you, as a student, believe you are eligible for accommodations but have not obtained approval please contact DAS immediately at 541-737-4098 or at http://ds.oregonstate.edu. DAS notifies students and faculty members of approved academic accommodations and coordinates implementation of those accommodations. While not required, students and faculty members are encouraged to discuss details of the implementation of individual accommodations.”\n\n\n\nLink: https://beav.es/codeofconduct\n\n\n\nOSU has twelve established student rights. They include due process in all university disciplinary processes, an equal opportunity to learn, and grading in accordance with the course syllabus: https://asosu.oregonstate.edu/advocacy/rights\n\n\n\nUniversity students encounter setbacks from time to time. If you encounter difficulties and need assistance, it’s important to reach out. Consider discussing the situation with an instructor or academic advisor. Learn about resources that assist with wellness and academic success at https://oregonstate.edu/reachout. If you are in immediate crisis, please contact the Crisis Text Line by texting OREGON to 741-741 or call the National Suicide Prevention Lifeline at 1-800-273-TALK (8255)\n\n\n\nDuring Fall, Winter, and Spring term the online Student Learning Experience surveys open to students the Wednesday of week 9 and close the Sunday before Finals Week. Students will receive notification, instructions and the link through their ONID email. They may also log into the system via MyOregonState or directly at https://beaves.es/Student-Learning-Survey. Survey results are extremely important and are used to help improve courses and the learning experience of future students. Responses are anonymous (unless a student chooses to “sign” their comments, agreeing to relinquish anonymity of written comments) and are not available to instructors until after grades have been posted. The results of scaled questions and signed comments go to both the instructor and their unit head/supervisor. Anonymous (unsigned) comments go to the instructor only."
   },
   {
     "objectID": "st_559_s_26.html#syllabus",
@@ -1999,7 +1999,7 @@
     "href": "st_559_s_26.html#course-content",
     "title": "ST 559 - S 26",
     "section": "",
-    "text": "Concepts to be discussed include: Bayesian vs. frequentist inference, prior and posterior distributions, prior predictive and posterior predictive distributions, exchangeability, hierarchial models, modern Bayesian computation via Markov Chain Monte Carlo, modern probabilistic programming languages.\n\n\n\nDifferentiate between Bayesian inference and frequentist inference via quantification of uncertainty.\nDerive conjugate priors for a given likelihood family.\nCalculate and interpret MCMC and HMC diagnostic checks.\nDefine and perform inference for basic hierarchical models in Stan.\nPerform prior and posterior predictive checks while building models.\n\n\n\n\n\n\n\nDate\nTopic\nReading\nLO\nAssignments\n\n\n\n\n3/31/2026\nIntroduction to Bayesian Inference\nChapter 1\n1\nNA\n\n\n4/2/2026\nSingle parameter models\nChapter 2\n1, 2\nNA\n\n\n4/7/2026\nSingle parameter models\nChapter 2\n1, 2\nHW 1\n\n\n4/9/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/14/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/16/2026\nMultivariate normal models\nChapters 3, 10\n1, 2\nHW 2\n\n\n4/21/2026\nMonte Carlo Integration\nChapter 10\n1, 2\nNA\n\n\n4/23/2026\nMCMC\nChapter 11\n3\nNA\n\n\n4/28/2026\nStan/HMC/PPL\nChapter 11\n3\nNA\n\n\n4/30/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/5/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/7/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/12/2026\nHierarchical Models\nChapter 5\n4\nNA\n\n\n5/14/2026\nHierarchical Models\nChapter 5\n4\nNA\n\n\n5/19/2026\nModel checking\nChapter 6\n5\nNA\n\n\n5/21/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/26/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/28/2026\nDecision analysis\nChapter 9\n4-5\nNA\n\n\n6/2/2026\nPresentations\nNA\n1-5\nNA\n\n\n6/4/2026\nPresentations\nNA\n1-5\nNA"
+    "text": "Concepts to be discussed include: Bayesian vs. frequentist inference, prior and posterior distributions, prior predictive and posterior predictive distributions, exchangeability, hierarchial models, modern Bayesian computation via Markov Chain Monte Carlo, modern probabilistic programming languages.\n\n\n\nDifferentiate between Bayesian inference and frequentist inference via quantification of uncertainty.\nDerive conjugate priors for a given likelihood family.\nCalculate and interpret MCMC and HMC diagnostic checks.\nDefine and perform inference for basic hierarchical models in Stan.\nPerform prior and posterior predictive checks while building models.\n\n\n\n\n\n\n\nDate\nTopic\nReading\nLO\nAssignments\n\n\n\n\n3/31/2026\nIntroduction to Bayesian Inference\nChapter 1\n1\nNA\n\n\n4/2/2026\nSingle parameter models\nChapter 2\n1, 2\nNA\n\n\n4/7/2026\nSingle parameter models\nChapter 2\n1, 2\nHW 1\n\n\n4/9/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/14/2026\nMulti parameter models\nChapter 3\n1, 2\nNA\n\n\n4/16/2026\nMultivariate normal models\nChapters 3, 10\n1, 2\nHW 2\n\n\n4/21/2026\nMonte Carlo Integration\nChapter 10\n1, 2\nNA\n\n\n4/23/2026\nMCMC\nChapter 11\n3\nNA\n\n\n4/28/2026\nStan/HMC/PPL\nChapter 11\n3\nNA\n\n\n4/30/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/5/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/7/2026\nStan/HMC/PPL\nChapter 12\n3-4\nNA\n\n\n5/12/2026\n[Hierarchical Models]\nChapter 5\n4\nNA\n\n\n5/14/2026\nHierarchical Models\nChapter 5\n4\nNA\n\n\n5/19/2026\nModel checking\nChapter 6\n5\nNA\n\n\n5/21/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/26/2026\nBayesian Workflow\nChapter 6\n4-5\nNA\n\n\n5/28/2026\nDecision analysis\nChapter 9\n4-5\nNA\n\n\n6/2/2026\nPresentations\nNA\n1-5\nNA\n\n\n6/4/2026\nPresentations\nNA\n1-5\nNA"
   },
   {
     "objectID": "st_559_s_26.html#project-proposal",
@@ -2020,7 +2020,7 @@
     "href": "st_559_s_26.html#homework",
     "title": "ST 559 - S 26",
     "section": "",
-    "text": "HW 1"
+    "text": "HW 1\nHW 2"
   },
   {
     "objectID": "st_559_s_26.html#assessments",
@@ -4366,5 +4366,285 @@
     "title": "HW 2",
     "section": "2 Binomial with unknown number of trials",
     "text": "2 Binomial with unknown number of trials\nThis is exercise 3.6 from BDA 3.\nThese are counts of waterbuck (a large antelope according to Wikipedia https://en.wikipedia.org/wiki/Waterbuck) deterimined from remote photography over the course of five days in Kruger Park in South Africa:\n\\[\n53, 57, 66, 67, 72\n\\] Assume the following model holds for these data: \\[\n\\begin{aligned}\ny_i \\mid \\theta, N & \\overset{\\text{iid}}{\\sim} \\text{Binomial}(N, \\theta) \\\\\nN \\mid \\mu & \\sim \\text{Poisson}(\\mu)\n\\end{aligned}\n\\]\nDefine the parameter \\(\\lambda = \\mu \\theta\\). We’ll put a joint prior on \\(\\lambda, \\theta\\), \\[\np(\\lambda, \\theta) \\propto \\lambda^{-1}\n\\]\n\n2.1 Implied prior for \\(\\mu\\)\nWhat is the implied joint prior for \\(\\mu, \\theta\\)?\n\n2.1.1 Solution\nUsing the mnemonic for transformation of variables:\n\\[\n\\begin{aligned}\np(\\mu, \\theta) d\\mu d\\theta & = p(\\lambda, \\theta) d\\lambda d\\theta \\\\\np(\\mu, \\theta)  & = p(\\lambda, \\theta) \\abs{\\frac{d\\lambda d\\theta}{d\\mu d\\theta}}\n\\end{aligned}\n\\] we see that we need the Jacobian of the transformation from \\((\\lambda(\\mu, \\theta), \\theta(\\mu,\\theta)) = (\\mu \\theta, \\theta)\\)\n\\[\n\\begin{bmatrix}\n\\frac{\\partial}{\\partial \\mu} \\lambda(\\mu, \\theta) & \\frac{\\partial}{\\partial \\theta} \\lambda(\\mu, \\theta)\\\\\n\\frac{\\partial}{\\partial \\mu} \\theta(\\mu, \\theta) & \\frac{\\partial}{\\partial \\theta} \\theta(\\mu, \\theta)\n\\end{bmatrix} =\n\\begin{bmatrix}\n\\theta & \\mu \\\\\n0 & 1\n\\end{bmatrix}\n\\] Then the implied prior for \\(\\mu, \\theta\\) is \\[\n\\begin{aligned}\np(\\mu, \\theta) & \\propto (\\mu \\theta)^{-1} \\theta  \\\\\n& \\propto \\mu^{-1}\n\\end{aligned}\n\\]\n\n\n\n2.2 Posterior for \\(N, \\mu, \\theta\\)\nUsing the prior obtained in Section 2.1, derive the joint posterior, up to a constant of proportionality \\[\np(N, \\mu, \\theta) \\propto\n\\]\n\n\n2.3 Posterior for \\(N, \\theta\\)\nIntegrate over \\(\\mu\\) to get the expression that is proportional to the posterior for \\(N\\) and \\(\\theta\\), \\(p(N, \\theta \\mid y)\\)\nHint: You’ll need to use the gamma density:\n\\[\np(x \\mid \\alpha, \\beta) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)} x^{\\alpha - 1} e^{-\\beta x},\n\\]\nand \\(\\int_{0}^\\infty p(x \\mid \\beta, \\alpha)dx = 1\\).\nMake sure you give the exact support of the posterior \\([N_{\\text{min}}, N_{\\text{max}}]\\) (i.e. what are the values of \\(N\\) for which \\(p(N, \\theta \\mid y)\\) evaluates to a finite number?)\n\n\n2.4 Marginal posterior for \\(N\\)\nIntegrate over \\(\\theta\\) to obtain the expression proportional to the posterior for \\(N\\), \\(p(N \\mid y)\\)\nHint: You’ll need to use the Beta density result that\n\\[\np(x \\mid \\alpha, \\beta) = \\frac{\\Gamma(\\alpha + \\beta)}{\\Gamma(\\alpha)\\Gamma(\\beta)} x^{\\alpha - 1} (1 - x)^{\\beta - 1}\n\\]\nand \\(\\int_{0}^1 p(x \\mid \\beta, \\alpha)dx = 1\\)\n\n\n2.5 Simulating from \\(N\\)\nCompute the approximate posterior using R for \\(N\\) using the expression you derived in Section 2.4.\n\nWrite a function that evaluates the log of the expression for a given \\(N\\).\nCompute the expression in \\(1\\) on a grid from \\(N \\in [N_{\\text{min}}, 2000]\\) and save this in an object called log_p_n_grid\nCompute the log of the approximate normalizing constant as\n\n\napprox_log_const &lt;- matrixStats::logSumExp(log_p_n_grid)\n\n\nCompute the approximate posterior \\(p(N = n \\mid y)\\) as\n\n\napprox_post &lt;- exp(log_p_n_grid  - approx_log_const)\n\n\nUse sample to draw \\(1{,}000\\) samples from \\(p(N \\mid y)\\)\n\n\n\n2.6 Posterior probabilities\nGive a 95% posterior interval for \\(N\\)\n\n\n2.7 Simulate \\(\\theta \\mid N\\)\nUsing the simulations of \\(N\\) obtained in Section 2.5, simulate \\(\\theta \\mid N, y\\) from the appropriate distribution for \\(\\theta \\mid N, y\\)"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#main-points",
+    "href": "bayes-material/BDA_hmc.html#main-points",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Main Points",
+    "text": "Main Points\n\nHamiltonian Monte Carlo uses gradient information and dynamic simulation to reduce random-walk and increase acceptance rate\n\nThe performance scales well with the number of dimensions\nThis lecture introduces the basic HMC and No-U-Turn-Sampler based dynamic HMC\nOther useful variants have been developed recently\n\nStan is the most popular probabilistic programming framework\n\nMany recent probprog frameworks use dynamic HMC samplers\nThis lecture introduces Stan language and main features\nLater you can also use higher level packages built on top of Stan"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#bda-chapter-12",
+    "href": "bayes-material/BDA_hmc.html#bda-chapter-12",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "BDA Chapter 12",
+    "text": "BDA Chapter 12\n\n12.1 Efficient Gibbs samplers (not part of the course)\n12.2 Efficient Metropolis jump rules (not part of the course)\n12.3 Further extensions to Gibbs and Metropolis (not part of the course)\n12.4 Hamiltonian Monte Carlo (important)\n12.5 Hamiltonian dynamics for a simple hierarchical model (useful example)\n12.6 Stan: developing a computing environment (useful intro)"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#extra-material-for-hmc-nuts",
+    "href": "bayes-material/BDA_hmc.html#extra-material-for-hmc-nuts",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Extra material for HMC / NUTS",
+    "text": "Extra material for HMC / NUTS\n\nAn introduction for applied users with good visualizations:\nMonnahan, Thorson, and Branch (2016) Faster estimation of Bayesian models in ecology using Hamiltonian Monte Carlo. https://dx.doi.org/10.1111/2041-210X.12681\nA technical review of why HMC works:\nNeal (2012). MCMC using Hamiltonian dynamics. https://arxiv.org/abs/1206.1901\nThe No-U-Turn Sampler:\nHoffman and Gelman (2014). The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo. https://jmlr.csail.mit.edu/papers/v15/hoffman14a.html\nMultinomial variant of NUTS:\nBetancourt (2018). A Conceptual Introduction to Hamiltonian Monte Carlo. https://arxiv.org/abs/1701.02434"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#extra-material-for-stan",
+    "href": "bayes-material/BDA_hmc.html#extra-material-for-stan",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Extra material for Stan",
+    "text": "Extra material for Stan\n\nGelman, Lee, and Guo (2015) Stan: A probabilistic programming language for Bayesian inference and optimization. http://www.stat.columbia.edu/~gelman/research/published/stan_jebs_2.pdf\nCarpenter et al (2017). Stan: A probabilistic programming language. Journal of Statistical Software 76(1). https://dox.doi.org/10.18637/jss.v076.i01\nStan User’s Guide, Language Reference Manual, and Language Function Reference (in html and pdf)\nhttps://mc-stan.org/users/documentation/\n\nStart from Example Models in User’s guide\n\nBasics of Bayesian inference and Stan, part 1 (Jonah Gabry & Lauren Kennedy, StanCon 2019 Helsinki tutorial)\n\nhttps://www.youtube.com/watch?v=ZRpo41l02KQ&index=6&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J\nhttps://www.youtube.com/watch?v=6cc4N1vT8pk&index=7&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#chapter-12-demos",
+    "href": "bayes-material/BDA_hmc.html#chapter-12-demos",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Chapter 12 demos",
+    "text": "Chapter 12 demos\n\ndemo12_1: HMC\nhttps://chi-feng.github.io/mcmc-demo/\nhttp://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/\ncmdstanr_demo, rstan_demo\nhttp://sumsar.net/blog/2017/01/bayesian-computation-with-stan-and-farmer-jons/\nhttp://mc-stan.org/documentation/case-studies.html\nhttps://mc-stan.org/cmdstanr/\nhttps://mc-stan.org/rstan/"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo",
+    "href": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Hamiltonian Monte Carlo",
+    "text": "Hamiltonian Monte Carlo\n\nOriginally for quantum-chromo-dynamic simulation (Duane et al., 1987)\nRadford Neal started using for Bayesian neural networks in 1990’s\nThe performance scales well with the number of dimensions\nHoffman and Gelman’s (2014) NUTS variant and step size adaptation made it more robust wrt the algorithm parameters and thus easier to use\nStan was the first probabilistic programming framework using HMC+NUTS"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo-1",
+    "href": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo-1",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Hamiltonian Monte Carlo",
+    "text": "Hamiltonian Monte Carlo\n\nUses log density (negative log density is called energy)\nUses gradient of log density for more efficient sampling"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo-no-u-turn-sampling",
+    "href": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo-no-u-turn-sampling",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Hamiltonian Monte Carlo / No-U-Turn sampling",
+    "text": "Hamiltonian Monte Carlo / No-U-Turn sampling\n\nHMC basics (static HMC)\nHMC + leapfrog discretization + Metropolis (static HMC)\n\nDuane et al. (1987)\n\nNUTS + slice sampling + Metropolis (dynamic HMC)\n\nHoffman & Gelman et al. (2014)\n\nNUTS + multinomial (dynamic HMC)\n\nBetancourt (2018)"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo---related-methods",
+    "href": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo---related-methods",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Hamiltonian Monte Carlo - Related methods",
+    "text": "Hamiltonian Monte Carlo - Related methods\n\nFactorizing densities: \\(p(\\theta_1,\\theta_2)=p(\\theta_1 \\mid \\theta_2)p(\\theta_2)\\)\n\nSample from 1) \\(p(\\theta_2)\\), 2) \\(p(\\theta_1 \\mid \\theta_2)\\)\n\nMetropolis: jointly sample from \\(p(\\theta_1,\\theta_2)\\)\n\nJump distribution is a combination of proposal distribution and point mass at the previous value\n\nHMC\n\nAugment with \\(\\phi\\) (the same dimensionality as \\(\\theta\\))\n\nsample directly from \\(p(\\phi)\\)\n\n\nmake a special joint Metropolis step for \\(p(\\theta,\\phi)=p(\\theta)p(\\phi)\\)"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo---two-sampling-steps",
+    "href": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo---two-sampling-steps",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Hamiltonian Monte Carlo - Two sampling steps",
+    "text": "Hamiltonian Monte Carlo - Two sampling steps\n\nSample from \\(p(\\phi)\\)\n\nDefine \\(p(\\phi) = \\text{Normal}(0,1)\\)\n\nMetropolis update for \\(p(\\theta,\\phi)=p(\\theta)p(\\phi)\\)\n\nProposal from Hamiltonian dynamic simulation"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#hamiltonian-dynamic-simulation",
+    "href": "bayes-material/BDA_hmc.html#hamiltonian-dynamic-simulation",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Hamiltonian dynamic simulation",
+    "text": "Hamiltonian dynamic simulation\n\nJoint distribution in terms of “potential energy” \\(U(\\theta)\\) and “kinetic energy” \\(K(\\phi)\\) \\[\n\\begin{aligned}\np(\\theta,\\phi)& =p(\\theta)p(\\phi) \\\\\n& =\\frac{1}{Z}\\exp(-(U(\\theta)+K(\\phi))) \\\\\n& =\\frac{1}{Z}\\exp(-H(\\theta,\\phi))\n\\end{aligned}\n\\]\n\nwhere:\n\n\\(U\\) is potential energy function\n\\(K\\) is kinetic energy function\n\n\\(H\\) is Hamiltonian energy function\n\\(\\phi\\) is called a momentum variable\n\\[U(\\theta)=-\\log(p(\\theta))+C\\]\n\\[K(\\phi)=-\\log(p(\\phi))+C\\]"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#hamiltonian-dynamic-simulation---equations-of-motion",
+    "href": "bayes-material/BDA_hmc.html#hamiltonian-dynamic-simulation---equations-of-motion",
+    "title": "Bayesian data analysis",
+    "section": "Hamiltonian dynamic simulation - Equations of motion",
+    "text": "Hamiltonian dynamic simulation - Equations of motion\nEquations of motion, use also the gradient:\n\\[\\frac{d\\theta_i}{dt} = \\frac{\\partial H}{\\partial \\phi_i}\\]\n\\[\\frac{d\\phi_i}{dt} = -\\frac{\\partial H}{\\partial \\theta_i}\\]\nVisualization: Phase space trajectory showing how the Hamiltonian equations guide movement (see Monnahan et al., 2017)"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo---complete-algorithm",
+    "href": "bayes-material/BDA_hmc.html#hamiltonian-monte-carlo---complete-algorithm",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Hamiltonian Monte Carlo - Complete algorithm",
+    "text": "Hamiltonian Monte Carlo - Complete algorithm\nTwo sampling steps:\n\nSample from \\(p(\\phi)\\)\n\nDefine \\(p(\\phi) = \\mathcal{N}(0,1)\\)\n\nMetropolis update for \\(p(\\theta,\\phi)=p(\\theta)p(\\phi)\\)\n\nProposal from Hamiltonian dynamic simulation: \\(p(\\theta,\\phi) \\propto \\exp(-H(\\theta,\\phi))\\)"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#leapfrog-discretization",
+    "href": "bayes-material/BDA_hmc.html#leapfrog-discretization",
+    "title": "Bayesian data analysis",
+    "section": "Leapfrog discretization",
+    "text": "Leapfrog discretization\nProperties:\n\nPreserves volume\nReversible\nDiscretization error does not usually grow in time"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#leapfrog-discretization-metropolis",
+    "href": "bayes-material/BDA_hmc.html#leapfrog-discretization-metropolis",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Leapfrog discretization + Metropolis",
+    "text": "Leapfrog discretization + Metropolis\n\nLeapfrog discretization\n\nDue to the discretization error the simulation steps away from the constant contour\n\nMetropolis step (with acceptance probability based on): \\[r=\\exp\\left(-H(\\theta^*,\\phi^*)+H(\\theta^{(t-1)},\\phi^{(t-1)})\\right)\\]\n\nAccept if the Hamiltonian energy in the end is higher\nAccept with some probability if the Hamiltonian energy in the end is lower"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#two-steps-of-hamiltonian-monte-carlo",
+    "href": "bayes-material/BDA_hmc.html#two-steps-of-hamiltonian-monte-carlo",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Two steps of Hamiltonian Monte Carlo",
+    "text": "Two steps of Hamiltonian Monte Carlo\n\nPerfect simulation keeps \\(p(\\theta,\\phi)\\) constant\nDiscretized simulation keeps changes in \\(p(\\theta,\\phi)\\) small\nAlternating sampling from \\(p(\\phi)\\) is crucial for moving to \\((\\theta,\\phi)\\) points with different joint density"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#leapfrog-discretization---step-size",
+    "href": "bayes-material/BDA_hmc.html#leapfrog-discretization---step-size",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Leapfrog discretization - Step size",
+    "text": "Leapfrog discretization - Step size\nTrade-offs:\n\nSmall step size → high acceptance rate, but many log density and gradient evaluations\nBig step size → less log density and gradient evaluations, but lower acceptance rate and the simulation may diverge"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#leapfrog-discretization---number-of-steps",
+    "href": "bayes-material/BDA_hmc.html#leapfrog-discretization---number-of-steps",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Leapfrog discretization - Number of steps",
+    "text": "Leapfrog discretization - Number of steps\n\nMany steps can reduce random walk\nMany steps require many log density and gradient evaluations"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#static-hamiltonian-monte-carlo",
+    "href": "bayes-material/BDA_hmc.html#static-hamiltonian-monte-carlo",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Static Hamiltonian Monte Carlo",
+    "text": "Static Hamiltonian Monte Carlo\n\nFixed number of steps\nDemo: https://chi-feng.github.io/mcmc-demo/"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#no-u-turn-sampler",
+    "href": "bayes-material/BDA_hmc.html#no-u-turn-sampler",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "No-U-Turn sampler",
+    "text": "No-U-Turn sampler\n\nAdaptively selects number of steps\n\nNUTS is a dynamic HMC algorithm, where dynamic refers to the dynamic trajectory length\nSimulate until a U-turn is detected\nThe number of simulation steps doubled if no U-turn yet\n\nTo keep reversibility of Markov chain\n\nNeed to simulate in two directions\nChoose a point along the simulation path with slice sampling\nMetropolis acceptance step for the selected point\n\nFor further efficiency\n\nSimulation path parts further away from the starting point can have higher probability\nMax tree depth to keep computation in control\n\nDemo: https://chi-feng.github.io/mcmc-demo/"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#no-u-turn-sampler-with-multinomial-sampling",
+    "href": "bayes-material/BDA_hmc.html#no-u-turn-sampler-with-multinomial-sampling",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "No-U-Turn sampler with multinomial sampling",
+    "text": "No-U-Turn sampler with multinomial sampling\n\nOriginal NUTS\n\nChoose a point along the simulation path with slice sampling\nPossibly with bigger weighting for further points\nMetropolis acceptance step for the selected point\nIf the proposal is rejected the previous state is also the new state\n\nNUTS with multinomial sampling\n\nCompute the probability of selecting a point and accepting it for all points\nSelect the point with multinomial sampling\nMore likely to accept a point that is not the previous one\n\nDemo: https://chi-feng.github.io/mcmc-demo/"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#mass-matrix-and-the-step-size-adaptation",
+    "href": "bayes-material/BDA_hmc.html#mass-matrix-and-the-step-size-adaptation",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Mass matrix and the step size adaptation",
+    "text": "Mass matrix and the step size adaptation\n\nMass matrix refers to having different scaling for different parameters and optionally also rotation to reduce correlations\n\nMass matrix is estimated during the adaptation phase of the warm-up\nMass matrix is estimated using the draws so far\n\nStep size\n\nAdjusted to be as big as possible while keeping discretization error in control (adapt_delta)\nDual averaging demo: https://chi-feng.github.io/mcmc-demo/\n\nAfter adaptation the algorithm parameters are fixed and some more iterations run to finish the warmup"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#max-tree-depth-diagnostic",
+    "href": "bayes-material/BDA_hmc.html#max-tree-depth-diagnostic",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Max tree depth diagnostic",
+    "text": "Max tree depth diagnostic\n\nNUTS specific diagnostic\n\nThe dynamic simulation is build as a binary tree (from Hoffman & Gelman, 2014)\nMaximum simulation length, i.e. maximum number of steps, is capped to avoid very long waiting times in case of bad behavior\n\nIndicates inefficiency in sampling leading to higher autocorrelations and lower ESS (\\(S_{\\text{eff}}\\))\n\nVery low inefficiency can indicate problems that need to be addressed\nModerate inefficiency doesn’t invalidate the result\n\nDifferent parameterizations matter"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#divergences-example-1",
+    "href": "bayes-material/BDA_hmc.html#divergences-example-1",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Divergences (Example 1)",
+    "text": "Divergences (Example 1)\n\nHMC specific: indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density (compared to the used step size)\n\nIndicates possibility of biased estimates\n\n\nDemo: https://chi-feng.github.io/mcmc-demo/"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#divergences-example-2",
+    "href": "bayes-material/BDA_hmc.html#divergences-example-2",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Divergences (Example 2)",
+    "text": "Divergences (Example 2)\nHMC specific: indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density\nProblematic example output:\nvariable  mean median    sd   mad    q5   q95  rhat ess_bulk ess_tail\nlsigma0   -1.0   -1.0  0.10 0.070  -1.2 -0.93   1.2      7.2      19."
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#divergences-example-3",
+    "href": "bayes-material/BDA_hmc.html#divergences-example-3",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Divergences (Example 3)",
+    "text": "Divergences (Example 3)\nHMC specific: indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density\nWarning: 29 of 4000 (1.0%) transitions ended with a divergence.\nSee https://mc-stan.org/misc/warnings for details."
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#divergences-example-4",
+    "href": "bayes-material/BDA_hmc.html#divergences-example-4",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Divergences (Example 4)",
+    "text": "Divergences (Example 4)\nHMC specific: indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density\nProblematic parameterization:\nvariable  mean median    sd   mad    q5   q95  rhat ess_bulk ess_tail\nlsigma0   -1.9   -2.1  0.41  0.13  -2.3 -0.91   2.0      5.8      14."
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#divergences-example-5",
+    "href": "bayes-material/BDA_hmc.html#divergences-example-5",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Divergences (Example 5)",
+    "text": "Divergences (Example 5)\nHMC specific: indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density\nWith non-centered parameterization (NCP):\nvariable  mean median    sd   mad     q5   q95  rhat ess_bulk ess_tail\nsigma0    0.27   0.24  0.19  0.20  0.023  0.64   1.0    1571.    1737.\nlsigma0  -1.7   -1.4   1.1   0.87 -3.8   -0.45   1.0    1571.    1737."
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#problematic-distributions",
+    "href": "bayes-material/BDA_hmc.html#problematic-distributions",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Problematic distributions",
+    "text": "Problematic distributions\n\nNonlinear dependencies\n\nSimple mass matrix scaling doesn’t help\n\nFunnels\n\nOptimal step size depends on location\n\nMultimodal\n\nDifficult to move from one mode to another\n\nLong-tailed with non-finite variance and mean\n\nEfficiency of exploration is reduced\nCentral limit theorem doesn’t hold for mean and variance"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#some-other-recent-hmc-and-gradient-based-variants",
+    "href": "bayes-material/BDA_hmc.html#some-other-recent-hmc-and-gradient-based-variants",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Some other recent HMC and gradient based variants",
+    "text": "Some other recent HMC and gradient based variants\n\nChEES-HMC (Hoffman et al., 2021)\n\nA GPU friendly adapted but fixed simulation length\nStatic after adaptation\n\nMEADS (Hoffman & Sountsov, 2022)\n\nA GPU friendly multi-chain adaptation for generalized HMC (Horowitz, 1991)\nInstead of simulation length, need to choose the partial update rate\n\nMALT (Riou-Durand and Vogrinc, 2022; Riou-Durand et al., 2022)\n\nA GPU friendly method related to GHMC\nAvoids momentum flips after rejection\n\nWALNUTS (Bou-Rabee et al., 2025)\n\nAdaptive step size within dynamic simulation"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#simple-dynamic-system",
+    "href": "bayes-material/BDA_hmc.html#simple-dynamic-system",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Simple dynamic system",
+    "text": "Simple dynamic system\n\nImagine a hockey puck with mass \\(m\\) on an ice rink connected to the boards by a spring\nIt can move only in one dimension; let’s call it’s position relative to the board \\(\\theta\\)\nIf we push the puck towards the board, compressing the spring, we increase the potential energy of the puck\nLetting go of the puck, the potential energy turns into kinetic energy over time by changing the momentum, \\(\\phi\\) of the puck\nIn this system, the potential energy is \\(\\frac{1}{2c} \\theta^2\\), while the kinetic energy is \\(\\frac{1}{2m}\\phi^2\\)"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#hamiltons-equations",
+    "href": "bayes-material/BDA_hmc.html#hamiltons-equations",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Hamilton’s equations",
+    "text": "Hamilton’s equations\n\nWe want to find the equations of motion for the system, i.e. \\(\\theta(t)\\) and \\(\\phi(t)\\)\nHamilton’s equations gives us a recipe to do so: \\[\n\\begin{aligned}\n\\frac{d\\theta_i}{dt} & = \\frac{\\partial H}{\\partial \\phi_i}\\\\\n\\frac{d\\phi_i}{dt} & = -\\frac{\\partial H}{\\partial \\theta_i}\n\\end{aligned}\n\\]\n\\(U(\\theta) + K(\\phi) = \\frac{1}{2c} \\theta^2 + \\frac{1}{2m} \\phi^2\\) \\[\n\\begin{aligned}\n\\frac{d\\theta}{dt} & = \\phi / m \\\\\n\\frac{d\\phi}{dt} & = -\\theta / c \\\\\n\\end{aligned}\n\\]\nThis is a system of ODEs with the following solution \\[\n\\begin{aligned}\n\\theta(t) & = r \\cos(\\frac{t}{\\sqrt{mc}} + a) \\\\\n\\phi(t) & = - r\\sqrt{m/c} \\sin(\\frac{t}{\\sqrt{mc}} + a)\\\\\n\\end{aligned}\n\\]\nThe total energy, or the Hamiltonian, has the form \\[\n\\begin{aligned}\nU(\\theta) + K(\\phi) & = \\frac{1}{2c} \\theta^2 + \\frac{1}{2m} \\phi^2  \\\\\n& = \\frac{1}{2c} r^2 \\cos^2(\\frac{t}{\\sqrt{mc}} + a) + \\frac{1}{2m}\\frac{m}{c} r^2 \\sin^2(\\frac{t}{\\sqrt{mc}} + a) \\\\\n& = \\frac{r^2}{2c}(\\cos^2(\\frac{t}{\\sqrt{mc}} + a) + \\sin^2(\\frac{t}{\\sqrt{mc}} + a))\\\\\n& = r^2 / 2c\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#visualization-of-trajectories",
+    "href": "bayes-material/BDA_hmc.html#visualization-of-trajectories",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Visualization of trajectories",
+    "text": "Visualization of trajectories"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#potential-energy",
+    "href": "bayes-material/BDA_hmc.html#potential-energy",
+    "title": "Bayesian data analysis",
+    "section": "Potential Energy",
+    "text": "Potential Energy"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#energy-plots",
+    "href": "bayes-material/BDA_hmc.html#energy-plots",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Energy plots",
+    "text": "Energy plots"
+  },
+  {
+    "objectID": "bayes-material/BDA_hmc.html#recap-from-last-week",
+    "href": "bayes-material/BDA_hmc.html#recap-from-last-week",
+    "title": "Hamiltonian Monte Carlo",
+    "section": "Recap from last week",
+    "text": "Recap from last week\n\nHamiltonian dynamics can generate perfect proposal distributions for \\(\\theta_s(t) \\mid \\theta_{s-1}(0)\\)\nGood properties of Hamiltonian proposals require tuning the time horizon \\(t\\) over which Hamilton’s equations will be solved\nAn optimal \\(t\\) will be such that \\(\\text{Cov}(\\theta_s(t), \\theta_{s-k}(0)) \\approx 0\\) for all \\(k = 1, \\dots \\infty\\)\nIntegrating Hamilton’s equations can’t be done analytically for most problems, so we resort to numerical integration\nThe leapfrog integrator is the standard integrator because it has good properties:\n\nPreserves volume\nReversible\nDiscretization error does not usually grow in time\n\nThese properties hold as long as the step-size \\(\\epsilon\\) is chosen appropriately\nUnder numerical integration, choosing a \\(t\\) is equivalent to choosing \\(L = t / \\epsilon\\), or the number of integrator steps needed to get from \\(\\theta_{s-1}(0)\\) to \\(\\theta_s(t)\\)\nWe need to choose \\(t\\) and \\(\\epsilon\\)"
+  },
+  {
+    "objectID": "bayes-material/project-proposal.html",
+    "href": "bayes-material/project-proposal.html",
+    "title": "Project proposal for Bayes",
+    "section": "",
+    "text": "Report\nMax Length\nDue date\nGrade\n\n\n\n(w/o refs)\n\n\n\n\nProject proposal\n1 page\n5/26 11:59pm\n10% of final grade\n\n\nFinal project report\n8 pages\n6/09 6:00pm\n40% of final grade\n\n\n\nThe final report will be due on 6/09 at 6pm PT, and will be worth 40% of your final grade. The project proposal will be due on 5/26 at 11:59pm PT, and will be worth 10% of your final grade.\nSubmission of both will be through Gradescope, where I’ll create new assignments for the proposal and the final project."
+  },
+  {
+    "objectID": "bayes-material/project-proposal.html#data-analysis",
+    "href": "bayes-material/project-proposal.html#data-analysis",
+    "title": "Project proposal for Bayes",
+    "section": "2.1 Data analysis",
+    "text": "2.1 Data analysis\nDefine a research question that can be answered with a dataset that you have access to. Use the dataset and Bayesian modeling techniques from the class to answer your research question. Make sure to run robust posterior predictive checks, and to investigate how sensitive your model is to prior assumptions. Write up your conclusions in a report, and detail the methods you used, and the decisions you made about how to model your data. Argue why or why not Bayesian inference is a good approach for this problem. You can approach this project in two ways: you could find an interesting dataset, and then think of a question that could be answered by analyzing the dataset, or you could think of a question you’re interested in an look for data to answer the question. The first route is easier, but the second route is possible too."
+  },
+  {
+    "objectID": "bayes-material/project-proposal.html#methodology",
+    "href": "bayes-material/project-proposal.html#methodology",
+    "title": "Project proposal for Bayes",
+    "section": "2.2 Methodology",
+    "text": "2.2 Methodology\nWe’ve encountered several different aspects of Bayesian inference in the course: the benefits of shrinkage, the benefits of marginalization, the flexibility of hierarchical Bayesian modeling, the relative ease of Bayesian inference compared to frequentist inference. If you like, you could do a deep dive on a methodology in one of these areas from a theoretical or simulation-study standpoint. If you go with this sort of project and you’re doing a simulation study, make sure that you design your simulation study to have a high-enough power to detect whatever interesting thing you’re investigating. This may require using the computing cluster. If you’re doing a theoretical deep dive on the material, you’ll also want to run a simulation study to ensure that your theoretical results hold in different scenarios."
+  },
+  {
+    "objectID": "bayes-material/project-proposal.html#pedagogical-material",
+    "href": "bayes-material/project-proposal.html#pedagogical-material",
+    "title": "Project proposal for Bayes",
+    "section": "2.3 Pedagogical material",
+    "text": "2.3 Pedagogical material\nIf you’re interested in learning more about a certain topic we covered in class or a topic you wished we had covered in class, you can develop pedagogical material related to this topic. The material should have some coding aspect to it because modern Bayesian inference is inextricable from computation."
   }
 ]
