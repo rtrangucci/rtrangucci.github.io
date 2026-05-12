@@ -241,7 +241,7 @@ p(\theta_1 \mid y) = \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) \int_
 <p>which we can rearrange into:</p>
 <p><span class="math display">\[
 p(\theta_1 \mid y) = \int_{\Omega_{\theta_1}} \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) p(\theta_2 \mid y, \theta_1^\prime) d\theta_2 p(\theta_1^\prime \mid y) d\theta^\prime_1,
-\]</span> Let <span class="math inline">\(P(\theta \mid \theta^prime)\)</span> be the proposal distribution, which conditions on <span class="math inline">\(\theta^\prime\)</span>: <span class="math display">\[
+\]</span> Let <span class="math inline">\(P(\theta \mid \theta^\prime)\)</span> be the proposal distribution, which conditions on <span class="math inline">\(\theta^\prime\)</span>: <span class="math display">\[
 P(\theta \mid \theta^\prime) = \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) p(\theta_2 \mid y, \theta_1^\prime) d\theta_2
 \]</span> Then the equation <span class="math display">\[
 g(\theta_1) = \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  g(\theta_1^\prime) d\theta^\prime_1,
@@ -298,7 +298,7 @@ P(\theta \mid \theta^\prime) \leq M &lt; \infty \,\, \forall (\theta, \theta^\pr
 <p>Given a set of draws <span class="math inline">\(\{\theta_s, s = 1, \dots, S\}\)</span> from a Gibbs sampler, we want a way to assess how well our empirical average: <span class="math display">\[
 \bar{f} = \frac{1}{S} \sum_{s = 1}^S f(\theta_s)
 \]</span> approximates the true expectation: <span class="math display">\[
-\Exp{f(\theta)}{p(\theta \mid y)}
+\ExpA{f(\theta)}{p(\theta \mid y)}
 \]</span> Under fairly general conditions, <span class="math display">\[
 \sqrt{n}(\bar{f} - \Exp{f}) \overset{d}{\to} N(0, \sigma^2)
 \]</span> The wrinkle is that <span class="math inline">\(\sigma^2\)</span> wont equal <span class="math inline">\(\text{Var}_{p(\theta \mid y)}(f(\theta))\)</span> because our draws aren’t independent. In fact, as shown in <span class="citation" data-cites="geyerMCMC">Geyer (<a href="#ref-geyerMCMC" role="doc-biblioref">2005</a>)</span>, we can compute the variance of the left-hand side: <span class="math display">\[
