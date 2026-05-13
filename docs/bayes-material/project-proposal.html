@@ -101,6 +101,35 @@ window.MathJax = {
 };
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -233,6 +262,22 @@ window.MathJax = {
 <section id="data-analysis" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="data-analysis"><span class="header-section-number">2.1</span> Data analysis</h2>
 <p>Define a research question that can be answered with a dataset that you have access to. Use the dataset and Bayesian modeling techniques from the class to answer your research question. Make sure to run robust posterior predictive checks, and to investigate how sensitive your model is to prior assumptions. Write up your conclusions in a report, and detail the methods you used, and the decisions you made about how to model your data. Argue why or why not Bayesian inference is a good approach for this problem. You can approach this project in two ways: you could find an interesting dataset, and then think of a question that could be answered by analyzing the dataset, or you could think of a question you’re interested in an look for data to answer the question. The first route is easier, but the second route is possible too.</p>
+<p>No matter what approach you take, you must write down the <em>generative</em> model for your data analysis. Something like the following is required:</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_{ijk} &amp; \sim \text{Normal}(\alpha_i + \beta^T_j X_{ijk} + \gamma_{k}, e^{\eta_i + \nu_j}) \\
+\beta_j &amp; \sim \text{MultiNormal}(\mu_\beta, \Sigma_\beta) \\
+\alpha_i \sim \text{Normal}(\mu_\alpha, \tau_\alpha^2),\, &amp; \gamma_k \sim \text{Normal}(0, \tau_\sigma^2)\\
+\eta_i \sim \text{Normal}(\mu_\eta, \tau_\eta^2),\, &amp; \nu_j \sim \text{Normal}(0, \tau_\nu^2) \\
+\mu_\alpha \sim \text{Normal}(m_\alpha, s_\alpha^2), \, &amp; \mu_\beta \sim \text{MultiNormal}(0, S_\beta) \\
+\mu_\gamma \sim \text{Normal}(m_\gamma, s_\gamma^2)\, &amp; \mu_\eta \sim \text{Normal}(m_\eta, s_\eta^2), \\
+\tau_\alpha \sim \text{Normal}^+(0, s_{\tau_\alpha}^2), \, &amp; \tau_\gamma \sim \text{Normal}^+(0, s_{\tau_\gamma}^2) \\
+\tau_\eta \sim \text{Normal}^+(0, s_{\tau_\eta}^2), \, &amp; \tau_\nu \sim \text{Normal}^+(0, s_{\tau_\nu}^2)\\
+\Sigma_\beta &amp; = \text{diag}(\sigma_\beta) \Omega_\beta \text{diag}(\sigma_\beta) \\
+\sigma_\beta &amp; \sim \text{MultiNormal}^+(0, S_{\sigma_\beta}) \\
+\Omega_\beta &amp; \sim \text{LKJCorr}(\rho)
+\end{aligned}
+\]</span> where <span class="math inline">\(m_\alpha, s_\alpha, m_\eta, s_\eta, s_{\tau_\alpha},  s_{\tau_\gamma},  s_{\tau_\eta},  s_{\tau_\nu}, S_\beta, S_{\sigma_\beta},\rho\)</span> are user-supplied constants</p>
 </section>
 <section id="methodology" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="methodology"><span class="header-section-number">2.2</span> Methodology</h2>

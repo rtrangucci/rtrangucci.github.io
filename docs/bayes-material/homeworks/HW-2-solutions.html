@@ -320,6 +320,12 @@ p(\mu, \theta) &amp; \propto (\mu \theta)^{-1} \theta  \\
 <p>Using the prior obtained in <a href="#sec-prior" class="quarto-xref">Section&nbsp;2.1</a>, derive the joint posterior, up to a constant of proportionality <span class="math display">\[
 p(N, \mu, \theta) \propto
 \]</span></p>
+<section id="solution-2" class="level4" data-number="2.2.1">
+<h4 data-number="2.2.1" class="anchored" data-anchor-id="solution-2"><span class="header-section-number">2.2.1</span> Solution</h4>
+<p>The posterior is <span class="math display">\[
+\prod_{i=1}^5 \binom{n}{y_i} \theta^{y_i}(1 - \theta)^{n - y_i} \frac{e^{-\mu} \mu^{n-1}}{n!}
+\]</span></p>
+</section>
 </section>
 <section id="posterior-for-n-theta" class="level3" data-number="2.3">
 <h3 data-number="2.3" class="anchored" data-anchor-id="posterior-for-n-theta"><span class="header-section-number">2.3</span> Posterior for <span class="math inline">\(N, \theta\)</span></h3>
@@ -330,6 +336,15 @@ p(x \mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha - 1} e^{
 \]</span></p>
 <p>and <span class="math inline">\(\int_{0}^\infty p(x \mid \beta, \alpha)dx = 1\)</span>.</p>
 <p>Make sure you give the exact support of the posterior <span class="math inline">\([N_{\text{min}}, N_{\text{max}}]\)</span> (i.e.&nbsp;what are the values of <span class="math inline">\(N\)</span> for which <span class="math inline">\(p(N, \theta \mid y)\)</span> evaluates to a finite number?)</p>
+<section id="solution-3" class="level4" data-number="2.3.1">
+<h4 data-number="2.3.1" class="anchored" data-anchor-id="solution-3"><span class="header-section-number">2.3.1</span> Solution</h4>
+<p>Integrating over <span class="math inline">\(\mu\)</span> from <span class="math display">\[
+\int_0^\infty \frac{e^{-\mu} \mu^{n-1}}{n!} d\mu = \frac{\Gamma(n)}{n!} = \frac{1}{n}
+\]</span> leaving</p>
+<p><span class="math display">\[
+\prod_{i=1}^5 \binom{n}{y_i} \theta^{y_i}(1 - \theta)^{n - y_i} \frac{1}{n}
+\]</span></p>
+</section>
 </section>
 <section id="sec-post-n" class="level3" data-number="2.4">
 <h3 data-number="2.4" class="anchored" data-anchor-id="sec-post-n"><span class="header-section-number">2.4</span> Marginal posterior for <span class="math inline">\(N\)</span></h3>
@@ -339,6 +354,13 @@ p(x \mid \alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)} x^{\alpha - 1} e^{
 p(x \mid \alpha, \beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)} x^{\alpha - 1} (1 - x)^{\beta - 1}
 \]</span></p>
 <p>and <span class="math inline">\(\int_{0}^1 p(x \mid \beta, \alpha)dx = 1\)</span></p>
+<section id="solution-4" class="level4" data-number="2.4.1">
+<h4 data-number="2.4.1" class="anchored" data-anchor-id="solution-4"><span class="header-section-number">2.4.1</span> Solution</h4>
+<p>Let <span class="math inline">\(s = \sum_{i=1}^5 y_i\)</span></p>
+<p><span class="math display">\[
+\lp\frac{1}{n} \prod_{i=1}^5 \binom{n}{y_i} \rp\int_0^1 \theta^{s}(1 - \theta)^{5 n - s} d\theta  = \lp \prod_{i=1}^5 \binom{n}{y_i}\rp \frac{1}{n} \frac{\Gamma(s+1)\Gamma(5n - s + 1)}{\Gamma(5n + 2)}
+\]</span></p>
+</section>
 </section>
 <section id="sec-sim-n" class="level3" data-number="2.5">
 <h3 data-number="2.5" class="anchored" data-anchor-id="sec-sim-n"><span class="header-section-number">2.5</span> Simulating from <span class="math inline">\(N\)</span></h3>
@@ -360,16 +382,58 @@ p(x \mid \alpha, \beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\be
 <ol start="5" type="1">
 <li>Use sample to draw <span class="math inline">\(1{,}000\)</span> samples from <span class="math inline">\(p(N \mid y)\)</span></li>
 </ol>
+<section id="solution-5" class="level4" data-number="2.5.1">
+<h4 data-number="2.5.1" class="anchored" data-anchor-id="solution-5"><span class="header-section-number">2.5.1</span> Solution</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">53</span>,<span class="dv">57</span>,<span class="dv">66</span>,<span class="dv">67</span>,<span class="dv">72</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>s_y <span class="ot">&lt;-</span> <span class="fu">sum</span>(y)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>post_l_fun <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">sum</span>(<span class="fu">lchoose</span>(n, y)) <span class="sc">+</span> <span class="fu">lbeta</span>(s_y <span class="sc">+</span> <span class="dv">1</span>, <span class="dv">5</span> <span class="sc">*</span> n <span class="sc">-</span> s_y <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">log</span>(n)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="dv">72</span><span class="sc">:</span><span class="dv">2000</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>log_p_n_grid <span class="ot">&lt;-</span> <span class="fu">sapply</span>(ns, post_l_fun)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>approx_log_const <span class="ot">&lt;-</span> matrixStats<span class="sc">::</span><span class="fu">logSumExp</span>(log_p_n_grid)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">exp</span>(log_p_n_grid<span class="sc">-</span>approx_log_const)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>N_s <span class="ot">&lt;-</span> <span class="fu">sample</span>(ns, <span class="dv">1000</span>, <span class="cn">TRUE</span>, ps)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
 </section>
 <section id="posterior-probabilities" class="level3" data-number="2.6">
 <h3 data-number="2.6" class="anchored" data-anchor-id="posterior-probabilities"><span class="header-section-number">2.6</span> Posterior probabilities</h3>
 <p>Give a 95% posterior interval for <span class="math inline">\(N\)</span></p>
+<section id="solution-6" class="level4" data-number="2.6.1">
+<h4 data-number="2.6.1" class="anchored" data-anchor-id="solution-6"><span class="header-section-number">2.6.1</span> Solution</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(N_s, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   2.5%   97.5% 
+  97.00 1329.55 </code></pre>
+</div>
+</div>
+</section>
 </section>
 <section id="simulate-theta-mid-n" class="level3" data-number="2.7">
 <h3 data-number="2.7" class="anchored" data-anchor-id="simulate-theta-mid-n"><span class="header-section-number">2.7</span> Simulate <span class="math inline">\(\theta \mid N\)</span></h3>
 <p>Using the simulations of <span class="math inline">\(N\)</span> obtained in <a href="#sec-sim-n" class="quarto-xref">Section&nbsp;2.5</a>, simulate <span class="math inline">\(\theta \mid N, y\)</span> from the appropriate distribution for <span class="math inline">\(\theta \mid N, y\)</span></p>
+<section id="solution-7" class="level4" data-number="2.7.1">
+<h4 data-number="2.7.1" class="anchored" data-anchor-id="solution-7"><span class="header-section-number">2.7.1</span> Solution</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>N_s <span class="ot">&lt;-</span> <span class="fu">sample</span>(ns, <span class="dv">1000</span>, <span class="cn">TRUE</span>, ps)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>thetas <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1000</span>, s_y <span class="sc">+</span> <span class="dv">1</span>, <span class="dv">5</span> <span class="sc">*</span> N_s <span class="sc">-</span> s_y)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(thetas)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HW-2-solutions_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
 </section>
 </section>
 
