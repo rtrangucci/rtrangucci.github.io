@@ -4660,5 +4660,313 @@
     "title": "HW 3",
     "section": "",
     "text": "data {\n    // number of data points\n    int&lt;lower=0&gt; N; \n    // covariate / predictor\n    vector[N] x; \n    // observations\n    vector[N] y; \n    // number of covariate values to make predictions at\n    int&lt;lower=0&gt; N_predictions;\n    // covariate values to make predictions at\n    vector[N_predictions] real x_predictions; \n}\nparameters {\n    // intercept\n    real alpha; \n    // slope\n    real beta; \n    // the standard deviation should be constrained to be positive\n    real&lt;upper=0&gt; sigma; \n}\ntransformed parameters {\n    // deterministic transformation of parameters and data\n    vector[N] mu = alpha + beta * x // linear model\n}\nmodel {\n    // observation model\n    y ~ normal(mu, sigma); \n}\ngenerated quantities {\n    // compute the means for the covariate values at which to make predictions\n    vector[N_predictions] mu_pred = alpha + beta * x_predictions;\n    // sample from the posterior predictive distribution normal(mu, sigma).\n    array[N] real y_rep = normal_rng(to_array_1d(mu_pred), sigma);\n}\n\n\n\nIdentify 4 errors in the Stan code above; some are syntax errors that will impede compilation, and some are logic errors that will result in runtime failures.\nIn order to test the syntax errors, you can copy/paste the Stan code into a new file and try to compile the model.\nIn order to test the logic errors, you’ll need to run the model on a dataset that matches the data block description. Note that we’re not interested in the statisical properties of our model; we just want our model to run to completion without crashing prior to returning results.\n\n\n\nAfter you fix your coding errors, fit the following model\n\\[\n\\log \\text{medv}_i \\sim \\text{Normal}(\\alpha + \\beta \\, \\text{rm}_i, \\sigma^2)\n\\]\nwhere these variables come from the following dataset:\n\ndf &lt;- MASS::Boston\n\nYou’ll need to prep a regression data that can be fed into Stan via cmdstanr so that your variable names in the list match those declared in the data block.\nI want you to predict the conditional mean log median value at the following values for \\(\\texttt{rm} = (4, 5, 6, 7, 8)\\).\n\n\n\nPlot the posterior draws for alpha against beta. What do you notice? Can you find a way to change your model or your data to fix things?\nAfter fixing things, compare the ESS for beta before the change and after the change. Explain why the ESS changed.\n\n\n\nGenerate the posterior predictive distribution for the minimum median value and the maximum median value and compare the observed values for these statsitics to the posterior predictive values.\nHow well do the PPCs represent the observed statistics? Quantify your answer.\n\n\n\nQuantify the kurtosis of the posterior residuals. In order to do so, calculate the vector of residuals for every posterior draw of the \\(N\\)-vector posterior predictive values. Then for each posterior draw, compute the kurtosis using the function e1071::kurtosis in R.\nMake a histogram of the posterior kurtosis of your residuals."
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#main-points",
+    "href": "bayes-material/BDA_stein.html#main-points",
+    "title": "James-Stein estimator",
+    "section": "Main Points",
+    "text": "Main Points\n\nHamiltonian Monte Carlo uses gradient information and dynamic simulation to reduce random-walk and increase acceptance rate\n\nThe performance scales well with the number of dimensions\nThis lecture introduces the basic HMC and No-U-Turn-Sampler based dynamic HMC\nOther useful variants have been developed recently\n\nStan is the most popular probabilistic programming framework\n\nMany recent probprog frameworks use dynamic HMC samplers\nThis lecture introduces Stan language and main features\nLater you can also use higher level packages built on top of Stan"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#bda-chapter-12",
+    "href": "bayes-material/BDA_stein.html#bda-chapter-12",
+    "title": "James-Stein estimator",
+    "section": "BDA Chapter 12",
+    "text": "BDA Chapter 12\n\n12.1 Efficient Gibbs samplers (not part of the course)\n12.2 Efficient Metropolis jump rules (not part of the course)\n12.3 Further extensions to Gibbs and Metropolis (not part of the course)\n12.4 Hamiltonian Monte Carlo (important)\n12.5 Hamiltonian dynamics for a simple hierarchical model (useful example)\n12.6 Stan: developing a computing environment (useful intro)"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#extra-material-for-hmc-nuts",
+    "href": "bayes-material/BDA_stein.html#extra-material-for-hmc-nuts",
+    "title": "James-Stein estimator",
+    "section": "Extra material for HMC / NUTS",
+    "text": "Extra material for HMC / NUTS\n\nAn introduction for applied users with good visualizations:\nMonnahan, Thorson, and Branch (2016) Faster estimation of Bayesian models in ecology using Hamiltonian Monte Carlo. https://dx.doi.org/10.1111/2041-210X.12681\nA technical review of why HMC works:\nNeal (2012). MCMC using Hamiltonian dynamics. https://arxiv.org/abs/1206.1901\nThe No-U-Turn Sampler:\nHoffman and Gelman (2014). The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo. https://jmlr.csail.mit.edu/papers/v15/hoffman14a.html\nMultinomial variant of NUTS:\nBetancourt (2018). A Conceptual Introduction to Hamiltonian Monte Carlo. https://arxiv.org/abs/1701.02434"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#extra-material-for-stan",
+    "href": "bayes-material/BDA_stein.html#extra-material-for-stan",
+    "title": "James-Stein estimator",
+    "section": "Extra material for Stan",
+    "text": "Extra material for Stan\n\nGelman, Lee, and Guo (2015) Stan: A probabilistic programming language for Bayesian inference and optimization. http://www.stat.columbia.edu/~gelman/research/published/stan_jebs_2.pdf\nCarpenter et al (2017). Stan: A probabilistic programming language. Journal of Statistical Software 76(1). https://dox.doi.org/10.18637/jss.v076.i01\nStan User’s Guide, Language Reference Manual, and Language Function Reference (in html and pdf)\nhttps://mc-stan.org/users/documentation/\n\nStart from Example Models in User’s guide\n\nBasics of Bayesian inference and Stan, part 1 (Jonah Gabry & Lauren Kennedy, StanCon 2019 Helsinki tutorial)\n\nhttps://www.youtube.com/watch?v=ZRpo41l02KQ&index=6&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J\nhttps://www.youtube.com/watch?v=6cc4N1vT8pk&index=7&list=PLuwyh42iHquU4hUBQs20hkBsKSMrp6H0J"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#chapter-12-demos",
+    "href": "bayes-material/BDA_stein.html#chapter-12-demos",
+    "title": "James-Stein estimator",
+    "section": "Chapter 12 demos",
+    "text": "Chapter 12 demos\n\ndemo12_1: HMC\nhttps://chi-feng.github.io/mcmc-demo/\nhttp://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/\ncmdstanr_demo, rstan_demo\nhttp://sumsar.net/blog/2017/01/bayesian-computation-with-stan-and-farmer-jons/\nhttp://mc-stan.org/documentation/case-studies.html\nhttps://mc-stan.org/cmdstanr/\nhttps://mc-stan.org/rstan/"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo",
+    "href": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo",
+    "title": "James-Stein estimator",
+    "section": "Hamiltonian Monte Carlo",
+    "text": "Hamiltonian Monte Carlo\n\nOriginally for quantum-chromo-dynamic simulation (Duane et al., 1987)\nRadford Neal started using for Bayesian neural networks in 1990’s\nThe performance scales well with the number of dimensions\nHoffman and Gelman’s (2014) NUTS variant and step size adaptation made it more robust wrt the algorithm parameters and thus easier to use\nStan was the first probabilistic programming framework using HMC+NUTS"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo-1",
+    "href": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo-1",
+    "title": "James-Stein estimator",
+    "section": "Hamiltonian Monte Carlo",
+    "text": "Hamiltonian Monte Carlo\n\nUses log density (negative log density is called energy)\nUses gradient of log density for more efficient sampling"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo-no-u-turn-sampling",
+    "href": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo-no-u-turn-sampling",
+    "title": "James-Stein estimator",
+    "section": "Hamiltonian Monte Carlo / No-U-Turn sampling",
+    "text": "Hamiltonian Monte Carlo / No-U-Turn sampling\n\nHMC basics (static HMC)\nHMC + leapfrog discretization + Metropolis (static HMC)\n\nDuane et al. (1987)\n\nNUTS + slice sampling + Metropolis (dynamic HMC)\n\nHoffman & Gelman et al. (2014)\n\nNUTS + multinomial (dynamic HMC)\n\nBetancourt (2018)"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo---related-methods",
+    "href": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo---related-methods",
+    "title": "James-Stein estimator",
+    "section": "Hamiltonian Monte Carlo - Related methods",
+    "text": "Hamiltonian Monte Carlo - Related methods\n\nFactorizing densities: \\(p(\\theta_1,\\theta_2)=p(\\theta_1 \\mid \\theta_2)p(\\theta_2)\\)\n\nSample from 1) \\(p(\\theta_2)\\), 2) \\(p(\\theta_1 \\mid \\theta_2)\\)\n\nMetropolis: jointly sample from \\(p(\\theta_1,\\theta_2)\\)\n\nJump distribution is a combination of proposal distribution and point mass at the previous value\n\nHMC\n\nAugment with \\(\\phi\\) (the same dimensionality as \\(\\theta\\))\n\nsample directly from \\(p(\\phi)\\)\n\n\nmake a special joint Metropolis step for \\(p(\\theta,\\phi)=p(\\theta)p(\\phi)\\)"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo---two-sampling-steps",
+    "href": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo---two-sampling-steps",
+    "title": "James-Stein estimator",
+    "section": "Hamiltonian Monte Carlo - Two sampling steps",
+    "text": "Hamiltonian Monte Carlo - Two sampling steps\n\nSample from \\(p(\\phi)\\)\n\nDefine \\(p(\\phi) = \\text{Normal}(0,1)\\)\n\nMetropolis update for \\(p(\\theta,\\phi)=p(\\theta)p(\\phi)\\)\n\nProposal from Hamiltonian dynamic simulation"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#hamiltonian-dynamic-simulation",
+    "href": "bayes-material/BDA_stein.html#hamiltonian-dynamic-simulation",
+    "title": "James-Stein estimator",
+    "section": "Hamiltonian dynamic simulation",
+    "text": "Hamiltonian dynamic simulation\n\nJoint distribution in terms of “potential energy” \\(U(\\theta)\\) and “kinetic energy” \\(K(\\phi)\\) \\[\n\\begin{aligned}\np(\\theta,\\phi)& =p(\\theta)p(\\phi) \\\\\n& =\\frac{1}{Z}\\exp(-(U(\\theta)+K(\\phi))) \\\\\n& =\\frac{1}{Z}\\exp(-H(\\theta,\\phi))\n\\end{aligned}\n\\]\n\nwhere:\n\n\\(U\\) is potential energy function\n\\(K\\) is kinetic energy function\n\n\\(H\\) is Hamiltonian energy function\n\\(\\phi\\) is called a momentum variable\n\\[U(\\theta)=-\\log(p(\\theta))+C\\]\n\\[K(\\phi)=-\\log(p(\\phi))+C\\]"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#simple-dynamic-system",
+    "href": "bayes-material/BDA_stein.html#simple-dynamic-system",
+    "title": "James-Stein estimator",
+    "section": "Simple dynamic system",
+    "text": "Simple dynamic system\n\nImagine a hockey puck with mass \\(m\\) on an ice rink connected to the boards by a spring\nIt can move only in one dimension; let’s call it’s position relative to the board \\(\\theta\\)\nIf we push the puck towards the board, compressing the spring, we increase the potential energy of the puck\nLetting go of the puck, the potential energy turns into kinetic energy over time by changing the momentum, \\(\\phi\\) of the puck\nIn this system, the potential energy is \\(\\frac{1}{2c} \\theta^2\\), while the kinetic energy is \\(\\frac{1}{2m}\\phi^2\\)"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#hamiltons-equations",
+    "href": "bayes-material/BDA_stein.html#hamiltons-equations",
+    "title": "James-Stein estimator",
+    "section": "Hamilton’s equations",
+    "text": "Hamilton’s equations\n\nWe want to find the equations of motion for the system, i.e. \\(\\theta(t)\\) and \\(\\phi(t)\\)\nHamilton’s equations gives us a recipe to do so: \\[\n\\begin{aligned}\n\\frac{d\\theta_i}{dt} & = \\frac{\\partial H}{\\partial \\phi_i}\\\\\n\\frac{d\\phi_i}{dt} & = -\\frac{\\partial H}{\\partial \\theta_i}\n\\end{aligned}\n\\]\n\\(U(\\theta) + K(\\phi) = \\frac{1}{2c} \\theta^2 + \\frac{1}{2m} \\phi^2\\) \\[\n\\begin{aligned}\n\\frac{d\\theta}{dt} & = \\phi / m \\\\\n\\frac{d\\phi}{dt} & = -\\theta / c \\\\\n\\end{aligned}\n\\]\nThis is a system of ODEs with the following solution \\[\n\\begin{aligned}\n\\theta(t) & = r \\cos(\\frac{t}{\\sqrt{mc}} + a) \\\\\n\\phi(t) & = - r\\sqrt{m/c} \\sin(\\frac{t}{\\sqrt{mc}} + a)\\\\\n\\end{aligned}\n\\]\nThe total energy, or the Hamiltonian, has the form \\[\n\\begin{aligned}\nU(\\theta) + K(\\phi) & = \\frac{1}{2c} \\theta^2 + \\frac{1}{2m} \\phi^2  \\\\\n& = \\frac{1}{2c} r^2 \\cos^2(\\frac{t}{\\sqrt{mc}} + a) + \\frac{1}{2m}\\frac{m}{c} r^2 \\sin^2(\\frac{t}{\\sqrt{mc}} + a) \\\\\n& = \\frac{r^2}{2c}(\\cos^2(\\frac{t}{\\sqrt{mc}} + a) + \\sin^2(\\frac{t}{\\sqrt{mc}} + a))\\\\\n& = r^2 / 2c\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#visualization-of-trajectories",
+    "href": "bayes-material/BDA_stein.html#visualization-of-trajectories",
+    "title": "James-Stein estimator",
+    "section": "Visualization of trajectories",
+    "text": "Visualization of trajectories"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#energy-plots",
+    "href": "bayes-material/BDA_stein.html#energy-plots",
+    "title": "James-Stein estimator",
+    "section": "Energy plots",
+    "text": "Energy plots"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo---complete-algorithm",
+    "href": "bayes-material/BDA_stein.html#hamiltonian-monte-carlo---complete-algorithm",
+    "title": "James-Stein estimator",
+    "section": "Hamiltonian Monte Carlo - Complete algorithm",
+    "text": "Hamiltonian Monte Carlo - Complete algorithm\nTwo sampling steps:\n\nSample from \\(p(\\phi)\\)\n\nDefine \\(p(\\phi) = \\mathcal{N}(0,1)\\)\n\nMetropolis update for \\(p(\\theta,\\phi)=p(\\theta)p(\\phi)\\)\n\nProposal from Hamiltonian dynamic simulation: \\(p(\\theta,\\phi) \\propto \\exp(-H(\\theta,\\phi))\\)"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#recap-from-last-week",
+    "href": "bayes-material/BDA_stein.html#recap-from-last-week",
+    "title": "James-Stein estimator",
+    "section": "Recap from last week",
+    "text": "Recap from last week\n\nHamiltonian dynamics can generate perfect proposal distributions for \\(\\theta_s(t) \\mid \\theta_{s-1}(0)\\)\nGood properties of Hamiltonian proposals require tuning the time horizon \\(t\\) over which Hamilton’s equations will be solved\nAn optimal \\(t\\) will be such that \\(\\text{Cov}(\\theta_s(t), \\theta_{s-k}(0)) \\approx 0\\) for all \\(k = 1, \\dots \\infty\\)\nIntegrating Hamilton’s equations can’t be done analytically for most problems, so we resort to numerical integration\nThe leapfrog integrator is the standard integrator because it has good properties:\n\nPreserves volume\nReversible\nDiscretization error does not usually grow in time\n\nThese properties hold as long as the step-size \\(\\epsilon\\) is chosen appropriately\nUnder numerical integration, choosing a \\(t\\) is equivalent to choosing \\(L = t / \\epsilon\\), or the number of integrator steps needed to get from \\(\\theta_{s-1}(0)\\) to \\(\\theta_s(t)\\)\nWe need to choose \\(t\\) and \\(\\epsilon\\)"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#leapfrog-discretization-metropolis",
+    "href": "bayes-material/BDA_stein.html#leapfrog-discretization-metropolis",
+    "title": "James-Stein estimator",
+    "section": "Leapfrog discretization + Metropolis",
+    "text": "Leapfrog discretization + Metropolis\n\nLeapfrog discretization\n\nDue to the discretization error the simulation steps away from the constant contour\n\nMetropolis step (with acceptance probability based on): \\[r=\\exp\\left(-H(\\theta^*,\\phi^*)+H(\\theta^{(t-1)},\\phi^{(t-1)})\\right)\\]\n\nAccept if the Hamiltonian energy in the end is higher\nAccept with some probability if the Hamiltonian energy in the end is lower"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#two-steps-of-hamiltonian-monte-carlo",
+    "href": "bayes-material/BDA_stein.html#two-steps-of-hamiltonian-monte-carlo",
+    "title": "James-Stein estimator",
+    "section": "Two steps of Hamiltonian Monte Carlo",
+    "text": "Two steps of Hamiltonian Monte Carlo\n\nPerfect simulation keeps \\(p(\\theta,\\phi)\\) constant\nDiscretized simulation keeps changes in \\(p(\\theta,\\phi)\\) small\nAlternating sampling from \\(p(\\phi)\\) is crucial for moving to \\((\\theta,\\phi)\\) points with different joint density"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#leapfrog-discretization---step-size",
+    "href": "bayes-material/BDA_stein.html#leapfrog-discretization---step-size",
+    "title": "James-Stein estimator",
+    "section": "Leapfrog discretization - Step size",
+    "text": "Leapfrog discretization - Step size\nTrade-offs:\n\nSmall step size → high acceptance rate, but many log density and gradient evaluations\nBig step size → less log density and gradient evaluations, but lower acceptance rate and the simulation may diverge"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#leapfrog-discretization---number-of-steps",
+    "href": "bayes-material/BDA_stein.html#leapfrog-discretization---number-of-steps",
+    "title": "James-Stein estimator",
+    "section": "Leapfrog discretization - Number of steps",
+    "text": "Leapfrog discretization - Number of steps\n\nMany steps can reduce random walk\nMany steps require many log density and gradient evaluations"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#static-hamiltonian-monte-carlo",
+    "href": "bayes-material/BDA_stein.html#static-hamiltonian-monte-carlo",
+    "title": "James-Stein estimator",
+    "section": "Static Hamiltonian Monte Carlo",
+    "text": "Static Hamiltonian Monte Carlo\n\nFixed number of steps\nDemo: https://chi-feng.github.io/mcmc-demo/"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#no-u-turn-sampler",
+    "href": "bayes-material/BDA_stein.html#no-u-turn-sampler",
+    "title": "James-Stein estimator",
+    "section": "No-U-Turn sampler",
+    "text": "No-U-Turn sampler\n\nAdaptively selects number of steps\n\nNUTS is a dynamic HMC algorithm, where dynamic refers to the dynamic trajectory length\nSimulate until a U-turn is detected\nThe number of simulation steps doubled if no U-turn yet\n\nTo keep reversibility of Markov chain\n\nNeed to simulate in two directions\nChoose a point along the simulation path with slice sampling\nMetropolis acceptance step for the selected point\n\nFor further efficiency\n\nSimulation path parts further away from the starting point can have higher probability\nMax tree depth to keep computation in control\n\nDemo: https://chi-feng.github.io/mcmc-demo/"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#no-u-turn-sampler-with-multinomial-sampling",
+    "href": "bayes-material/BDA_stein.html#no-u-turn-sampler-with-multinomial-sampling",
+    "title": "James-Stein estimator",
+    "section": "No-U-Turn sampler with multinomial sampling",
+    "text": "No-U-Turn sampler with multinomial sampling\n\nOriginal NUTS\n\nChoose a point along the simulation path with slice sampling\nPossibly with bigger weighting for further points\nMetropolis acceptance step for the selected point\nIf the proposal is rejected the previous state is also the new state\n\nNUTS with multinomial sampling\n\nCompute the probability of selecting a point and accepting it for all points\nSelect the point with multinomial sampling\nMore likely to accept a point that is not the previous one\n\nDemo: https://chi-feng.github.io/mcmc-demo/"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#mass-matrix-and-the-step-size-adaptation",
+    "href": "bayes-material/BDA_stein.html#mass-matrix-and-the-step-size-adaptation",
+    "title": "James-Stein estimator",
+    "section": "Mass matrix and the step size adaptation",
+    "text": "Mass matrix and the step size adaptation\n\nMass matrix refers to having different scaling for different parameters and optionally also rotation to reduce correlations\n\nMass matrix is estimated during the adaptation phase of the warm-up\nMass matrix is estimated using the draws so far\n\nStep size\n\nAdjusted to be as big as possible while keeping discretization error in control (adapt_delta)\nDual averaging demo: https://chi-feng.github.io/mcmc-demo/\n\nAfter adaptation the algorithm parameters are fixed and some more iterations run to finish the warmup"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#max-tree-depth-diagnostic",
+    "href": "bayes-material/BDA_stein.html#max-tree-depth-diagnostic",
+    "title": "James-Stein estimator",
+    "section": "Max tree depth diagnostic",
+    "text": "Max tree depth diagnostic\n\nNUTS specific diagnostic\n\nThe dynamic simulation is build as a binary tree (from Hoffman & Gelman, 2014)\nMaximum simulation length, i.e. maximum number of steps, is capped to avoid very long waiting times in case of bad behavior\n\nIndicates inefficiency in sampling leading to higher autocorrelations and lower ESS (\\(S_{\\text{eff}}\\))\n\nVery low inefficiency can indicate problems that need to be addressed\nModerate inefficiency doesn’t invalidate the result\n\nDifferent parameterizations matter"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#divergences-example-1",
+    "href": "bayes-material/BDA_stein.html#divergences-example-1",
+    "title": "James-Stein estimator",
+    "section": "Divergences (Example 1)",
+    "text": "Divergences (Example 1)\n\nHMC specific: indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density (compared to the used step size)\n\nIndicates possibility of biased estimates\n\n\nDemo: https://chi-feng.github.io/mcmc-demo/"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#divergences-example-2",
+    "href": "bayes-material/BDA_stein.html#divergences-example-2",
+    "title": "James-Stein estimator",
+    "section": "Divergences (Example 2)",
+    "text": "Divergences (Example 2)\nHMC specific: indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density\nProblematic example output:\nvariable  mean median    sd   mad    q5   q95  rhat ess_bulk ess_tail\nlsigma0   -1.0   -1.0  0.10 0.070  -1.2 -0.93   1.2      7.2      19."
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#divergences-example-3",
+    "href": "bayes-material/BDA_stein.html#divergences-example-3",
+    "title": "James-Stein estimator",
+    "section": "Divergences (Example 3)",
+    "text": "Divergences (Example 3)\nHMC specific: indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density\nWarning: 29 of 4000 (1.0%) transitions ended with a divergence.\nSee https://mc-stan.org/misc/warnings for details."
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#divergences-example-4",
+    "href": "bayes-material/BDA_stein.html#divergences-example-4",
+    "title": "James-Stein estimator",
+    "section": "Divergences (Example 4)",
+    "text": "Divergences (Example 4)\nHMC specific: indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density\nProblematic parameterization:\nvariable  mean median    sd   mad    q5   q95  rhat ess_bulk ess_tail\nlsigma0   -1.9   -2.1  0.41  0.13  -2.3 -0.91   2.0      5.8      14."
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#divergences-example-5",
+    "href": "bayes-material/BDA_stein.html#divergences-example-5",
+    "title": "James-Stein estimator",
+    "section": "Divergences (Example 5)",
+    "text": "Divergences (Example 5)\nHMC specific: indicates that Hamiltonian dynamic simulation has problems with unexpected fast changes in log-density\nWith non-centered parameterization (NCP):\nvariable  mean median    sd   mad     q5   q95  rhat ess_bulk ess_tail\nsigma0    0.27   0.24  0.19  0.20  0.023  0.64   1.0    1571.    1737.\nlsigma0  -1.7   -1.4   1.1   0.87 -3.8   -0.45   1.0    1571.    1737."
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#problematic-distributions",
+    "href": "bayes-material/BDA_stein.html#problematic-distributions",
+    "title": "James-Stein estimator",
+    "section": "Problematic distributions",
+    "text": "Problematic distributions\n\nNonlinear dependencies\n\nSimple mass matrix scaling doesn’t help\n\nFunnels\n\nOptimal step size depends on location\n\nMultimodal\n\nDifficult to move from one mode to another\n\nLong-tailed with non-finite variance and mean\n\nEfficiency of exploration is reduced\nCentral limit theorem doesn’t hold for mean and variance"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#some-other-recent-hmc-and-gradient-based-variants",
+    "href": "bayes-material/BDA_stein.html#some-other-recent-hmc-and-gradient-based-variants",
+    "title": "James-Stein estimator",
+    "section": "Some other recent HMC and gradient based variants",
+    "text": "Some other recent HMC and gradient based variants\n\nChEES-HMC (Hoffman et al., 2021)\n\nA GPU friendly adapted but fixed simulation length\nStatic after adaptation\n\nMEADS (Hoffman & Sountsov, 2022)\n\nA GPU friendly multi-chain adaptation for generalized HMC (Horowitz, 1991)\nInstead of simulation length, need to choose the partial update rate\n\nMALT (Riou-Durand and Vogrinc, 2022; Riou-Durand et al., 2022)\n\nA GPU friendly method related to GHMC\nAvoids momentum flips after rejection\n\nWALNUTS (Bou-Rabee et al., 2025)\n\nAdaptive step size within dynamic simulation"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#james-stein-estimator-set-up",
+    "href": "bayes-material/BDA_stein.html#james-stein-estimator-set-up",
+    "title": "James-Stein estimator",
+    "section": "James-Stein estimator set-up",
+    "text": "James-Stein estimator set-up\nSuppose that we’re interested in estimating \\(K\\) independent means collected into a vector \\(\\boldsymbol{\\theta}\\), about which we observe a normally distributed RV \\(\\mathbf{X}\\), with realization \\(\\mathbf{x}\\)\n\n\\[\n\\mathbf{X} \\mid \\boldsymbol{\\theta} \\sim \\text{MultiNormal}(\\boldsymbol{\\theta}, I_K)\n\\]\n\n\nWe’ll measure the quality of an estimator for \\(\\boldsymbol{\\theta}\\), \\(\\boldsymbol{\\delta}(\\mathbf{x})\\) with a function \\(L(\\boldsymbol{\\theta}, \\boldsymbol{\\delta}(\\mathbf{x}))\\) \\[\nL(\\boldsymbol{\\theta}, \\boldsymbol{\\delta}(\\mathbf{x})) = \\sum_{k=1}^K (\\boldsymbol{\\theta}_k - \\boldsymbol{\\delta  }_k(\\mathbf{x}))^2\n\\]\n\n\nWe can compare estimators at a given \\(\\boldsymbol{\\theta}\\) by taking expectations of \\(L(\\boldsymbol{\\theta}, \\boldsymbol{\\delta}(\\mathbf{X}))\\) over \\(\\mathbf{X} \\sim \\text{MultiNormal}(\\boldsymbol{\\theta}, I_K)\\)\n\\[\nR(\\boldsymbol{\\theta}, \\mathbf{\\delta}) = \\Exp{L(\\boldsymbol{\\theta}, \\boldsymbol{\\delta}(\\mathbf{X}))}\n\\]\n\n\nJames and Stein (1961) show that the “usual estimator” \\(\\boldsymbol{\\delta}^\\text{usual}(\\mathbf{x}) = \\mathbf{x}\\) has uniformly (i.e. for all \\(\\boldsymbol{\\theta}\\)) higher risk than \\(\\boldsymbol{\\delta}^{\\text{JS}}(\\mathbf{x})\\)\n\n\\[\n\\delta^{\\text{JS}}(\\mathbf{x}) = \\lp 1 - \\frac{p-2}{\\sum_{k=1}^K \\mathbf{x}_k^2} \\rp \\mathbf{x}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#intuition-behind-stein-estimator",
+    "href": "bayes-material/BDA_stein.html#intuition-behind-stein-estimator",
+    "title": "James-Stein estimator",
+    "section": "Intuition behind Stein estimator",
+    "text": "Intuition behind Stein estimator\n\nBrown and Zhao (2012) works through the geometric intuition behind the estimator.\nIt requires that we change our basis for \\(\\R^K\\) from the standard basis to a basis in which one vector is pointed in the direction of \\(\\boldsymbol{\\theta}\\), and the rest are orthogonal to that direction.\n\n\nThe way we would do that is to do something like:\n\n\nset.seed(123)\ntheta &lt;- rnorm(10)\ntrans_mat &lt;- cbind(theta, diag(10)[,-1])\n\n\n\n\nbasis_mat &lt;- qr.Q(qr(trans_mat))\nmanual_basis &lt;- theta / sqrt(sum(theta^2))\nsum(abs(basis_mat[,1] - manual_basis))\n\n[1] 3.712308e-16\n\ntheta_in_new_basis &lt;- t(basis_mat) %*% theta\nred_theta &lt;- c(theta_in_new_basis[1], sum(tail(theta_in_new_basis^2,-1)))\nred_theta\n\n[1] 2.871067e+00 5.466873e-31\n\n\n\n\n\nX &lt;- theta + rnorm(10)\nX_in_new_basis &lt;- t(basis_mat) %*% X\nred_X &lt;- c(X_in_new_basis[1], sum(tail(X_in_new_basis^2,-1)))\nplot(red_theta[1],0, xlim = c(0,5), ylim = c(0,5),\n     xlab = \"Theta axis\", ylab = \"Residual axis\",\n     col = \"red\", pch = 19)\nXs &lt;- sweep(matrix(rnorm(1e4), 10, 1e3), 1, theta, FUN = \"+\")\ntrans_Xs &lt;- t(basis_mat) %*% Xs\ntrans_Xs_red &lt;- cbind(trans_Xs[1,], sqrt(colSums(trans_Xs[2:10,]^2)))\npoints(trans_Xs_red[,1], trans_Xs_red[,2],pch = 19, col = scales::alpha(\"black\",0.6))\n\n\n\n\n\n\n\n\n\n\nThe point cloud is shifted above the true theta; this shift gets worse as dimension of \\(\\boldsymbol{\\theta}\\) increases\n\n\n\n\n[1] 5.551115e-17"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#james-stein-estimator",
+    "href": "bayes-material/BDA_stein.html#james-stein-estimator",
+    "title": "James-Stein estimator",
+    "section": "James-Stein estimator",
+    "text": "James-Stein estimator\n\nIdeally we would like to shrink our estimators toward \\(\\boldsymbol{\\theta}\\), but in the absence of knowledge of this point, we can shrink toward the origin:"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#why-does-the-cloud-shift-up",
+    "href": "bayes-material/BDA_stein.html#why-does-the-cloud-shift-up",
+    "title": "James-Stein estimator",
+    "section": "Why does the cloud shift up?",
+    "text": "Why does the cloud shift up?\n\nExplaining why the cloud shifts up as \\(K\\) increases requires a bit of normal theory\n\n\nRecall that for a multivariate normal RV \\(\\mathbf{X}\\) with parameters \\(\\boldsymbol{\\theta}\\) and \\(I_K\\), \\(A^T \\mathbf{X}\\) is again multivariate normal with mean \\(A\\boldsymbol{\\theta}\\) and covariate \\(A^T A\\).\nThe transformation we’ve done is \\(Q^T \\mathbf{X}\\) where \\(Q^T Q = I_K\\). Thus \\(Q^T \\mathbf{X} \\sim \\text{MVN}(Q^T \\boldsymbol{\\theta}, I_K)\\)\n\n\nThe way we’ve represented \\(Q^T \\mathbf{X}\\) is by the first coordinate \\(Q_1^T \\mathbf{X}\\) and the 2-norm of the last \\(K-1\\) elements:\n\n\\[\n\\lp Q_1^T \\mathbf{X}, \\sqrt{\\sum_{k=2}^K (Q_k^T \\mathbf{X})^2}\\rp\n\\]\n\n\nThe RVs \\(Q_k^T \\mathbf{X}\\) are independent mean-zero normal RVs, a sum of \\(K-1\\) squared normal RVs is chi-squared \\(K - 1\\)\n\\[\nQ_k (\\boldsymbol{\\theta} + \\mathbf{Z}) = Q_k\\mathbf{Z}, k &gt; 1\n\\]"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#finding-the-optimal-shrinkage",
+    "href": "bayes-material/BDA_stein.html#finding-the-optimal-shrinkage",
+    "title": "James-Stein estimator",
+    "section": "Finding the optimal shrinkage",
+    "text": "Finding the optimal shrinkage\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\begin{aligned}\n\\sin \\rho & = \\frac{\\textcolor{red}{\\nu}}{\\textcolor{blue}{\\sqrt{\\nu^2 + K - 1}}}\n\\end{aligned}\n\\]\n\n\n\\[\n\\begin{aligned}\n\\sin \\rho & = \\frac{\\textcolor{green}{y}}{\\textcolor{purple}{\\sqrt{K - 1}}}\n\\end{aligned}\n\\]\n\n\n\nImplies that \\(y = \\sqrt{K - 1} \\frac{\\nu}{\\sqrt{\\nu^2 + K - 1}}\\)\n\n\nCompare this to \\(\\sqrt{K-1}\\), which is how far away the typical observation is"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#references",
+    "href": "bayes-material/BDA_stein.html#references",
+    "title": "James-Stein estimator",
+    "section": "References",
+    "text": "References\n\n\nBrown, Lawrence D., and Linda H. Zhao. 2012. “A Geometrical Explanation of Stein Shrinkage.” Statistical Science 27 (1). https://doi.org/10.1214/11-STS382.\n\n\nJames, W., and Charles Stein. 1961. “Estimation with Quadratic Loss.” In Proceedings of the Fourth Berkeley Symposium on Mathematical Statistics and Probability, Volume 1: Contributions to the Theory of Statistics, 4.1:361–80. University of California Press."
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#finding-the-optimal-estimator",
+    "href": "bayes-material/BDA_stein.html#finding-the-optimal-estimator",
+    "title": "James-Stein estimator",
+    "section": "Finding the optimal estimator",
+    "text": "Finding the optimal estimator\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\begin{aligned}\n\\cos \\rho & = \\frac{\\textcolor{red}{\\sqrt{K-1}}}{\\textcolor{blue}{\\sqrt{\\nu^2 + K - 1}}}\n\\end{aligned}\n\\]\n\n\n\\[\n\\begin{aligned}\n\\cos \\rho & = \\frac{\\textcolor{green}{y}}{\\textcolor{purple}{\\sqrt{K - 1}}}\n\\end{aligned}\n\\]\n\n\n\nImplies that \\(y = \\frac{K - 1}{\\sqrt{\\nu^2 + K - 1}}\\).\n\n\nThis means that we shrink the point \\((\\nu, \\sqrt{K-1})\\) to the origin by the amount \\(\\lp 1 -  \\frac{K - 1}{\\nu^2 + K - 1}\\rp\\)\n\n\nThen the estimator in this new basis is \\[\n\\lp 1 -  \\frac{K - 1}{\\nu^2 + K - 1}\\rp\\begin{bmatrix} \\nu \\\\ \\sqrt{K - 1} \\end{bmatrix}\n\\]"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#moving-back-to-the-original-basis",
+    "href": "bayes-material/BDA_stein.html#moving-back-to-the-original-basis",
+    "title": "James-Stein estimator",
+    "section": "Moving back to the original basis",
+    "text": "Moving back to the original basis\n\nRecall that \\((\\nu, \\sqrt{K-1})\\) is a “typical” point \\(Q^T \\mathbf{X}\\), or \\((Q_1^T \\mathbf{X}, \\sqrt{\\sum_{k=2}^K (Q_k^T \\mathbf{X}})^2)\\)\n\n\nThe norm of \\((Q_1^T \\mathbf{X}, \\sqrt{\\sum_{k=2}^K (Q_k^T \\mathbf{X}})^2)\\) is \\(\\sqrt{\\sum_{k=1}^K (Q_k^T \\mathbf{X})^2}\\)\n\n\nWe can write this in matrix notation as \\(\\mathbf{X}^T Q Q^T\\mathbf{X}\\)\n\n\nThen\n\\[\n\\begin{aligned}\n\\mathbf{X}^T Q Q^T\\mathbf{X} & = \\mathbf{X}^T \\mathbf{X}\n\\end{aligned}\n\\]\n\n\nThen \\[\n\\lp 1 -  \\frac{K - 1}{\\nu^2 + K - 1 } \\rp = \\lp 1 -  \\frac{K - 1}{\\mathbf{X}^T \\mathbf{X} } \\rp\n\\]\n\n\nThis implies\n\\[\n\\lp 1 -  \\frac{K - 1}{\\mathbf{X}^T \\mathbf{X} } \\rp \\mathbf{X}\n\\] is optimal from a geometric standpoint\n\n\nThe factor of \\(K-1\\) in the numerator is not quite right, and the \\(K-2\\) found in the James-Stein estimator can be motivated by an empirical Bayes argument."
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#key-intuition-from-shrinkage-estimation",
+    "href": "bayes-material/BDA_stein.html#key-intuition-from-shrinkage-estimation",
+    "title": "James-Stein estimator",
+    "section": "Key intuition from shrinkage estimation",
+    "text": "Key intuition from shrinkage estimation\n\nWhen estimating \\(\\boldsymbol{\\theta}\\) from \\(\\mathbf{X} \\sim \\text{MVN}(\\boldsymbol{\\theta}, I_K)\\), \\[\\norm{\\mathbf{X}}^2 = \\norm{\\boldsymbol{\\theta}}^2 + p + O_p(\\sqrt{p})\\]\n\n\nSo \\(\\norm{\\boldsymbol{\\theta}} = \\sqrt{\\norm{\\mathbf{X}}^2 - p - O_p(\\sqrt{p})}\\) or\n\n\n\\[\\norm{\\boldsymbol{\\theta}} \\approx \\norm{\\mathbf{X}} \\lp 1 - \\frac{p + O_p(\\sqrt{p})}{2\\norm{\\mathbf{X}}^2} \\rp\\]\n\n\nThe norm of \\(\\mathbf{X}\\) is likely to be too large by a factor of approximately \\(p\\), so we should shrink \\(\\mathbf{X}\\)"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#empirical-bayes-derivation",
+    "href": "bayes-material/BDA_stein.html#empirical-bayes-derivation",
+    "title": "James-Stein estimator",
+    "section": "“Empirical” Bayes derivation",
+    "text": "“Empirical” Bayes derivation\n\nAn alternative derivation of the James-Stein estimator can be motivated by a quasi-Bayesian argument, which is otherwise known as “empirical Bayes” estimation\n\n\nSuppose \\[\n\\begin{aligned}\n\\boldsymbol{\\theta} & \\sim \\text{Normal}(0, b^2 I_K) \\\\\n\\mathbf{X} \\mid \\boldsymbol{\\theta} & \\sim \\text{Normal}(\\boldsymbol{\\theta}, I_K)\n\\end{aligned}\n\\]\n\n\nThen for fixed \\(b\\), we just have a collection of univariate normal posteriors, where the posterior mean for \\(\\boldsymbol{\\theta}_k\\) is \\[\n\\mathbf{X}_k \\frac{b^2}{b^2 + 1} = \\mathbf{X}_k\\lp 1 -   \\frac{1}{b^2 + 1} \\rp\n\\]\n\n\nWe don’t know \\(b\\), so we need to estimate it from the data. One approach is to come up with an unbiased estimator for \\((b^2 + 1)^{-1}\\)\n\n\nMarginalizing over \\(\\boldsymbol{\\theta}\\), we get that \\[\n\\begin{aligned}\n\\mathbf{X} & \\sim \\text{Normal}(\\mathbf{0}, (b^2 + 1)I_K)\n\\end{aligned}\n\\]\n\n\nWe know the distribution for \\[\\frac{S^2}{b^2 + 1} = \\sum_{k=1}^K \\lp\\frac{\\mathbf{X}_k}{\\sqrt{b^2 + 1}}\\rp^2\\]\n\n\n\\[\n\\frac{S^2}{b^2 + 1} \\sim \\text{Chi-squared}(K)\n\\]\n\n\nImplies that \\((b^2 + 1) / S^2\\) is inverse chi-square and \\(\\Exp{(b^2 + 1) / S^2} = \\frac{1}{K - 2}\\)\n\n\nThen \\[\n\\begin{aligned}\n\\frac{K-2}{b^2 + 1}\\Exp{(b^2 + 1) / S^2} & = \\frac{1}{b^2 + 1}\\\\\n\\Exp{K - 2 / S^2} & =  \\frac{1}{b^2 + 1}\n\\end{aligned}\n\\]\n\n\nPutting it all together \\[\n\\Exp{\\boldsymbol{\\theta}_k \\mid \\mathbf{X}_k} = \\mathbf{X}_k\\lp 1 -   \\frac{K - 2}{\\mathbf{X}^T \\mathbf{X}} \\rp\n\\]"
+  },
+  {
+    "objectID": "bayes-material/BDA_stein.html#problems-with-james-stein",
+    "href": "bayes-material/BDA_stein.html#problems-with-james-stein",
+    "title": "James-Stein estimator",
+    "section": "Problems with James-Stein",
+    "text": "Problems with James-Stein"
   }
 ]
