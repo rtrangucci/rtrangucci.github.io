@@ -416,7 +416,7 @@ Chain 2 Iteration:    1 / 6000 [  0%]  (Warmup) </code></pre>
 Chain 2 Iteration: 2001 / 6000 [ 33%]  (Sampling) 
 Chain 2 Iteration: 4000 / 6000 [ 66%]  (Sampling) 
 Chain 2 Iteration: 6000 / 6000 [100%]  (Sampling) 
-Chain 2 finished in 0.5 seconds.
+Chain 2 finished in 0.6 seconds.
 Chain 3 Iteration:    1 / 6000 [  0%]  (Warmup) </code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
@@ -448,8 +448,8 @@ Chain 4 Iteration: 6000 / 6000 [100%]  (Sampling)
 Chain 4 finished in 0.6 seconds.
 
 All 4 chains finished successfully.
-Mean chain execution time: 0.5 seconds.
-Total execution time: 2.5 seconds.</code></pre>
+Mean chain execution time: 0.6 seconds.
+Total execution time: 2.6 seconds.</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: 3 of 16000 (0.0%) transitions ended with a divergence.
@@ -521,7 +521,7 @@ y_{ij} \mid \theta_j &amp; \sim \text{Bernoulli}(\theta_j)\, \forall i = 1, \dot
 \mu_\eta &amp; = \text{logit}(\mu) \\
 \tau &amp; \sim \text{Normal}(0, 5)
 \end{aligned}
-\]</span></p>
+\]</span> Depending on how you parameterize the hierarchy over <span class="math inline">\(\eta_j\)</span>, you may get divergences. If so, use the same strategy as above to plot a specific <span class="math inline">\(\eta\)</span> parameter vs.&nbsp;<span class="math inline">\(\tau\)</span>. For visualization purposes it can be helpful to plot <span class="math inline">\(\log \tau\)</span> instead of <span class="math inline">\(\tau\)</span>.</p>
 
 
 
