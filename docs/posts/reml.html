@@ -113,6 +113,9 @@ window.MathJax = {
         \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
         \newcommand{\ddtA}[1]{\frac{\partial^2}{\partial #1^2}}
         \newcommand{\ddtB}[2]{\frac{\partial^2}{\partial #1 \partial #2}}
+        \newcommand{\diff}[1]{{\mathrm{d}}\!\lp #1 \rp}
+        \newcommand{\veco}[1]{{\mathrm{vec}}\lp #1 \rp}
+        \newcommand{\tr}[1]{{\mathrm{tr}}\lp #1 \rp}
       `);
     }
   },
@@ -205,6 +208,8 @@ window.Quarto = {
   <li><a href="#reml-by-conditioning-on-t" id="toc-reml-by-conditioning-on-t" class="nav-link" data-scroll-target="#reml-by-conditioning-on-t"><span class="header-section-number">1.3</span> REML by conditioning on <span class="math inline">\(t\)</span></a></li>
   <li><a href="#reml-by-bayes-integrating-out-beta" id="toc-reml-by-bayes-integrating-out-beta" class="nav-link" data-scroll-target="#reml-by-bayes-integrating-out-beta"><span class="header-section-number">1.4</span> REML by Bayes (integrating out <span class="math inline">\(\beta\)</span>)</a></li>
   <li><a href="#evaluation-of-joint-likelihood-at-reml-estimates" id="toc-evaluation-of-joint-likelihood-at-reml-estimates" class="nav-link" data-scroll-target="#evaluation-of-joint-likelihood-at-reml-estimates"><span class="header-section-number">1.5</span> Evaluation of joint likelihood at REML estimates</a></li>
+  <li><a href="#comparison-of-hatbeta-and-hatbetatextmle" id="toc-comparison-of-hatbeta-and-hatbetatextmle" class="nav-link" data-scroll-target="#comparison-of-hatbeta-and-hatbetatextmle"><span class="header-section-number">1.6</span> Comparison of <span class="math inline">\(\hat{\beta}\)</span> and <span class="math inline">\(\hat{\beta}^\text{MLE}\)</span></a></li>
+  <li><a href="#score-equations-are-unbiased-for-reml" id="toc-score-equations-are-unbiased-for-reml" class="nav-link" data-scroll-target="#score-equations-are-unbiased-for-reml"><span class="header-section-number">1.7</span> Score equations are unbiased for REML</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -457,6 +462,65 @@ f_{t,a}(t,a \mid \hat{\beta}, \hat{\gamma}) &amp; = \det(X^T X)^{1/2}(2\pi)^{-n 
 <p><span class="math display">\[
 \ell(\hat{\beta}, \hat{\gamma} \mid t, a) = \ell(\hat{\gamma}; a) -\frac{p}{2}\log(2\pi) +\frac{1}{2}\log\det(X^T \Sigma(\hat{\gamma})^{-1}X)
 \]</span></p>
+</section>
+<section id="comparison-of-hatbeta-and-hatbetatextmle" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="comparison-of-hatbeta-and-hatbetatextmle"><span class="header-section-number">1.6</span> Comparison of <span class="math inline">\(\hat{\beta}\)</span> and <span class="math inline">\(\hat{\beta}^\text{MLE}\)</span></h2>
+<p>Suppose we want to compare the REML estimate of the fixed effects, <span class="math inline">\(\hat{\beta}\)</span>, with the MLE of the fixed effects, <span class="math inline">\(\hat{\beta}^{\text{MLE}}\)</span>. Note that we can write both estimates as evaluations of the function, <span class="math inline">\(\hat{\beta}(\gamma)\)</span>, at the differing estimates for <span class="math inline">\(\gamma\)</span>, <span class="math inline">\(\hat{\gamma}\)</span> and <span class="math inline">\(\hat{\gamma}^{\text{MLE}}\)</span>:</p>
+<p><span class="math display">\[
+\hat{\beta}(\gamma) = (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1} y
+\]</span> Approximate <span class="math inline">\(\hat{\beta}(\hat{\gamma})\)</span> around</p>
+<p><span class="math display">\[
+\hat{\beta}(\hat{\gamma}) = \hat{\beta}(\hat{\gamma}^{\mathrm{MLE}}) + \frac{\partial}{\partial \gamma}\hat{\beta}(\gamma)\Big|_{\gamma = \hat{\gamma}^{\mathrm{MLE}}}(\hat{\gamma} - \hat{\gamma}^{\mathrm{MLE}})
+\]</span></p>
+<p>Now we need the derivative of <span class="math inline">\(\hat{\beta}\)</span> with respect to <span class="math inline">\(\gamma\)</span>: <span class="math display">\[
+\frac{\partial}{\partial \gamma} \hat{\beta}(\gamma) = \frac{\partial}{\partial \gamma} (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1} y
+\]</span> We follow the methods outlined in <a href="../missing-data-material-W-26/notes/lecture-5-notes.html">Matrix differentials</a> to derive the gradient:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\diff{\hat{\beta}(\gamma)} &amp; = \diff{(X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1} y} \\
+&amp; = \diff{(X^T \Sigma(\gamma)^{-1} X)^{-1}} X^T\Sigma(\gamma)^{-1} y  + (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\diff{\Sigma(\gamma)^{-1}} y\\
+&amp; = (X^T \Sigma(\gamma)^{-1} X)^{-1}X^T \Sigma(\gamma)^{-1} \diff{\Sigma(\gamma)} \Sigma(\gamma)^{-1}X  (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1} y \\
+&amp; \quad - (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1}\diff{\Sigma(\gamma)}\Sigma(\gamma)^{-1} y \\
+&amp; = -\Bigg((X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1}\diff{\Sigma(\gamma)}\Sigma(\gamma)^{-1} y \\
+&amp; \quad - (X^T \Sigma(\gamma)^{-1} X)^{-1}X^T \Sigma(\gamma)^{-1} \diff{\Sigma(\gamma)} \Sigma(\gamma)^{-1}X  (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1} y\Bigg) \\
+&amp; = -(X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1}\diff{\Sigma(\gamma)}\lp\Sigma(\gamma)^{-1} -  \Sigma(\gamma)^{-1}X  (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1}\rp y \\
+&amp; = -(X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1}\diff{\Sigma(\gamma)} K(K^T \Sigma K)^{-1}K^T y
+\end{aligned}
+\]</span> We can use the <span class="math inline">\(\text{vec}\)</span> operator to rewrite the last line: <span class="math display">\[
+\begin{aligned}
+&amp; \veco{-(X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1}\diff{\Sigma(\gamma)} K(K^T \Sigma K)^{-1}K^T y} \\
+&amp; \quad = -\lp y^T K(K^T \Sigma K)^{-1}K^T \otimes (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1} \rp \veco{\diff{\Sigma(\gamma)}} \\
+&amp; \quad = -\lp y^T K(K^T \Sigma K)^{-1}K^T \otimes (X^T \Sigma(\gamma)^{-1} X)^{-1} X^T\Sigma(\gamma)^{-1} \rp \diff{\veco{\Sigma(\gamma)}}
+\end{aligned}
+\]</span></p>
+<p>Then the dimension of <span class="math inline">\(\diff{\veco{\Sigma(\gamma)}}\)</span> is <span class="math inline">\(n^2 \times m\)</span> , while the lefthand matrix is <span class="math inline">\(p \times n^2\)</span>, (recall there are <span class="math inline">\(m\)</span> variance parameters and <span class="math inline">\(p\)</span> covariates).</p>
+<p>This leaves the final expression:</p>
+<p><span class="math display">\[
+\hat{\beta}(\hat{\gamma}) = \hat{\beta}(\hat{\gamma}^{\mathrm{MLE}}) - \lp y^T \hat{K}(\hat{K}^T \hat{\Sigma} \hat{K})^{-1}K^T \otimes (X^T \hat{\Sigma}^{-1} X)^{-1} X^T\hat{\Sigma}^{-1} \rp \diff{\veco{\Sigma(\gamma)}}(\hat{\gamma} - \hat{\gamma}^{\mathrm{MLE}})
+\]</span></p>
+</section>
+<section id="score-equations-are-unbiased-for-reml" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="score-equations-are-unbiased-for-reml"><span class="header-section-number">1.7</span> Score equations are unbiased for REML</h2>
+<p>There’s a comment in <span class="citation" data-cites="cressie-lahiri-1993">Cressie and Lahiri (<a href="#ref-cressie-lahiri-1993" role="doc-biblioref">1993</a>)</span> that “[…] it is not difficult to establish that <span class="math inline">\(\Exp{Y^T \diff{\Pi} Y} = -\tr{\Pi\diff{\Sigma}}\)</span>”, where <span class="math inline">\(\Pi = \Sigma^{-1} - \Sigma^{-1} X (X^T \Sigma^{-1} X)^{-1} X^T\Sigma^{-1}\)</span>. In these expressions <span class="math inline">\(\Sigma \equiv \Sigma(\gamma)\)</span> and <span class="math inline">\(\diff{\Sigma}\)</span> is in terms of <span class="math inline">\(\gamma\)</span>.</p>
+<p>It wasn’t immediately apparent to me that this was easy to establish, so I worked it out. For posterity’s sake, here is all the gory detail.</p>
+<p>The first step is to use the linearity and cyclic permutation property of the trace operator: <span class="math display">\[
+\begin{aligned}
+\Exp{Y^T \diff{\Pi} Y} &amp; = \tr{\Exp{Y^T \diff{\Pi} Y}} \\
+&amp; = \Exp{\tr{Y^T \diff{\Pi} Y}} \\
+&amp; = \Exp{\tr{\diff{\Pi} YY^T }} \\
+&amp; = \tr{\diff{\Pi} \Exp{YY^T }} \\
+&amp; = \tr{\diff{\Pi} \lp \Sigma + X\beta \beta^T X^T \rp} \\
+&amp; = \tr{\diff{\Pi} \Sigma} + \tr{\diff{\Pi}X\beta \beta^T X^T } \\
+\end{aligned}
+\]</span> Now we need the expression for <span class="math inline">\(\diff{\Pi}\)</span>, which is quite long: <span class="math display">\[
+\begin{aligned}
+\diff{\Pi} &amp; = \diff{\Sigma^{-1} - \Sigma^{-1} X (X^T \Sigma^{-1} X)^{-1} X^T\Sigma^{-1}} \\
+&amp; = -\Sigma^{-1}\diff{\Sigma}\Sigma^{-1} \\
+&amp; + \Sigma^{-1}\diff{\Sigma}\Sigma^{-1}X (X^T \Sigma^{-1} X)^{-1} X^T\Sigma^{-1} \\
+&amp; + \Sigma^{-1} X (X^T \Sigma^{-1} X)^{-1} X^T\Sigma^{-1}\diff{\Sigma}\Sigma^{-1} \\
+&amp; - \Sigma^{-1} X (X^T \Sigma^{-1} X)^{-1}X^T \Sigma^{-1}\diff{\Sigma}\Sigma^{-1} X (X^T \Sigma^{-1} X)^{-1} X^T\Sigma^{-1}
+\end{aligned}
+\]</span></p>
 
 
 
@@ -464,6 +528,9 @@ f_{t,a}(t,a \mid \hat{\beta}, \hat{\gamma}) &amp; = \det(X^T X)^{1/2}(2\pi)^{-n 
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-cressie-lahiri-1993" class="csl-entry" role="listitem">
+Cressie, N., and S. N. Lahiri. 1993. <span>“The <span>Asymptotic</span> <span>Distribution</span> of <span>REML</span> <span>Estimators</span>.”</span> <em>Journal of Multivariate Analysis</em> 45 (2): 217–33. <a href="https://doi.org/10.1006/jmva.1993.1034">https://doi.org/10.1006/jmva.1993.1034</a>.
+</div>
 <div id="ref-harvilleBayesianInferenceVariance1974" class="csl-entry" role="listitem">
 Harville, David A. 1974. <span>“Bayesian <span>Inference</span> for <span>Variance</span> <span>Components</span> <span>Using</span> <span>Only</span> <span>Error</span> <span>Contrasts</span>.”</span> <em>Biometrika</em> 61 (2). <a href="https://doi.org/10.2307/2334370">https://doi.org/10.2307/2334370</a>.
 </div>
