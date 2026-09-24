@@ -5331,7 +5331,7 @@
     "href": "pcs-content/lectures/intro-and-monte-carlo.html#benefits-and-challenges-of-monte-carlo-over-quadrature",
     "title": "Intro to statistical computing and Monte Carlo",
     "section": "Benefits and challenges of Monte Carlo over quadrature",
-    "text": "Benefits and challenges of Monte Carlo over quadrature\n\nWhen variance exists, the variance of our estimate is independent of dimension \\(\\theta\\)\n\\(\\text{Var}(\\bar{\\theta}) = \\sigma_\\theta^2/S\\)\n… but need to be sure that variance exists\nWhen variance doesn’t exist but mean does exist there are other limiting distributions, and may still converge to a normal\nWe have to know how to generate samples from the target distribution\nWe are bound by the variance of the estimand, \\(\\sigma_\\theta^2\\)"
+    "text": "Benefits and challenges of Monte Carlo over quadrature\n\nWhen variance exists, the precision of our estimate is independent of dimension \\(\\theta\\)\n\nHow does that compare to quadrature?\n\n\\(\\text{Var}(\\bar{\\theta}) = \\sigma_\\theta^2/S\\)\n… but need to be sure that variance exists\nWhen variance doesn’t exist but mean does exist there are other limiting distributions, and may still converge to a normal\nWe have to know how to generate samples from the target distribution\nWe are bound by the variance of the estimand, \\(\\sigma_\\theta^2\\)"
   },
   {
     "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#simple-linear-regression-example-mauna-loa-textco_2-series",
@@ -5352,7 +5352,7 @@
     "href": "pcs-content/lectures/intro-and-monte-carlo.html#posterior-for-slope-1",
     "title": "Intro to statistical computing and Monte Carlo",
     "section": "Posterior for slope",
-    "text": "Posterior for slope\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\sigma_\\theta \\approx 0.12 \\implies \\text{MCSE}(\\hat{\\mathbb{E}}[\\beta_2 \\mid y]) \\approx 0.12 / 10 \\\\\nP(\\Exp{\\beta_2 \\mid y} \\in (0.33, 0.38)) \\approx 0.95\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\sigma_\\theta \\approx 0.12 \\implies \\text{MCSE}(\\hat{\\mathbb{E}}[\\beta_2 \\mid y]) \\approx 0.12 / \\sqrt{1000} \\\\\nP(\\Exp{\\beta_2 \\mid y} \\in (0.35, 0.36)) \\approx 0.95\n\\]"
+    "text": "Posterior for slope\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\sigma_\\theta \\approx 0.10 \\implies \\text{MCSE}(\\hat{\\mathbb{E}}[\\beta_2 \\mid y]) \\approx 0.10 / 10 \\\\\nP(\\Exp{\\beta_2 \\mid y} \\in (0.32, 0.36)) \\approx 0.95\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\sigma_\\theta \\approx 0.12 \\implies \\text{MCSE}(\\hat{\\mathbb{E}}[\\beta_2 \\mid y]) \\approx 0.12 / \\sqrt{1000} \\\\\nP(\\Exp{\\beta_2 \\mid y} \\in (0.35, 0.36)) \\approx 0.95\n\\]"
   },
   {
     "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#mcse-of-a-quantile",

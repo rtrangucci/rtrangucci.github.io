@@ -708,7 +708,10 @@ p(\theta \mid y) = \frac{\textcolor{green}{p(y \mid \theta) p(\theta)}}{\textcol
 <section id="benefits-and-challenges-of-monte-carlo-over-quadrature" class="slide level2">
 <h2>Benefits and challenges of Monte Carlo over quadrature</h2>
 <ul>
-<li class="fragment"><p>When variance exists, the variance of our estimate is independent of dimension <span class="math inline">\(\theta\)</span></p></li>
+<li class="fragment"><p>When variance exists, the precision of our estimate is independent of dimension <span class="math inline">\(\theta\)</span></p>
+<ul>
+<li class="fragment">How does that compare to quadrature?</li>
+</ul></li>
 <li class="fragment"><p><span class="math inline">\(\text{Var}(\bar{\theta}) = \sigma_\theta^2/S\)</span></p></li>
 <li class="fragment"><p>… but need to be sure that variance exists</p></li>
 <li class="fragment"><p>When variance doesn’t exist but mean does exist there are other limiting distributions, and may still converge to a normal</p></li>
@@ -766,8 +769,8 @@ p(\theta \mid y) = \frac{\textcolor{green}{p(y \mid \theta) p(\theta)}}{\textcol
 </div>
 </div>
 <p><span class="math display">\[
-\sigma_\theta \approx 0.12 \implies \text{MCSE}(\hat{\mathbb{E}}[\beta_2 \mid y]) \approx 0.12 / 10 \\
-P(\Exp{\beta_2 \mid y} \in (0.33, 0.38)) \approx 0.95
+\sigma_\theta \approx 0.10 \implies \text{MCSE}(\hat{\mathbb{E}}[\beta_2 \mid y]) \approx 0.10 / 10 \\
+P(\Exp{\beta_2 \mid y} \in (0.32, 0.36)) \approx 0.95
 \]</span></p>
 </div>
 <div class="fragment" data-fragment-index="2">
