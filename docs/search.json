@@ -5262,5 +5262,215 @@
     "title": "ST 441/541 - F 26",
     "section": "",
     "text": "Lecture\nDate\nTopic\nReading\n\n\n\n\n1\n9/24/2026\nIntroduction to Computation in statistics/Simple Monte Carlo\nChapter 2, Owen, Chapter 3, Ross\n\n\n2\n9/29/2026\nSimulation\nChapter 3, Owen, Chapter 4-5 Ross\n\n\n3\n10/1/2026\nSimulation\nChapter 4, Owen, Chapter 4-5 Ross, Chapter 2 R&C\n\n\n4\n10/6/2026\nVariance reduction\nChapter 8, Owen/Ross, Chapter 4 R&C\n\n\n5\n10/8/2026\nImportance sampling\nChapter 9, Owen, Chapter 3, R&C\n\n\n6\n10/13/2026\nMarkov Chains\nChapter 6 R&C\n\n\n7\n10/15/2026\nMetropolis Hastings\nChapter 7 R&C\n\n\n8\n10/20/2026\nMetropolis Hastings\nChapter 7 R& C\n\n\n9\n10/22/2026\nGibbs sampling\nChapter 12 Owen\n\n\n10\n10/27/2026\nMidterm\nNA\n\n\n11\n10/29/2026\nIntro to optimization 1\nCh. 2 G& H\n\n\n12\n11/3/2026\nUnivariate Optimization\nCh. 2 G& H\n\n\n13\n11/5/2026\nMultivariate Optimization\nCh. 2 G& H\n\n\n14\n11/10/2026\nMultivariate optimization\nCh. 2 G& H\n\n\n15\n11/12/2026\nConjugate gradient\nPainless conjugate gradient\n\n\n16\n11/17/2026\nEM More EM\nChapter 4 G& H\n\n\n17\n11/19/2026\nBootstrap I\nCh. 9 G& H\n\n\n18\n11/24/2026\nBootstrap II\nCh. 9 G& H\n\n\n19\n12/1/2026\nPresentations\nNA\n\n\n20\n12/3/2026\nPresentations\nNA"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#attribution",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#attribution",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Attribution",
+    "text": "Attribution\n\nSome of these slides are based on Aki Vehatri’s Bayesian Data Analysis course at Aalto University in Espoo, Finland"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#computation-in-statistics",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#computation-in-statistics",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Computation in statistics",
+    "text": "Computation in statistics\n\nMost models we study in statistical theory courses have closed form expressions for the MLE or the Bayes estimator\nOn the other hand, the vast majority of statistical models aren’t analytically tractable (e.g. Gamma with unknown shape and scale)\nComputation in statistics typically falls into two areas\n\nOptimization (minimization/maximization)\n\nstochastic optimization\ndeterministic optimization\n\nIntegration\n\nstochastic integration (e.g. Monte Carlo)\nDeterministic integration (e.g. quadrature)\n\n\nWe’ll focus on stochastic integration and deterministic optimization"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#floating-point-representation",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#floating-point-representation",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Floating point representation",
+    "text": "Floating point representation\n\nMathematical theorems deal with constructs like \\(\\R\\), but when we’re computing things, we need to contend with limited accuracy\nIn 64-bit computing, we have 1 bit to determine the sign of the number, 11 bits for the exponent and 52 bits for the mantissa (all of these are in binary): \\[\n1.2345 \\times 10^5\n\\]\nThis would be \\(12{,}345\\) in floating point\nBecause of this representation, we can represent numbers near \\(0\\) very accurately, and we lose accuracy as we increase the magnitude\nSmallest number we can represent is about \\(2.2\\times 10^{-308}\\), while closest value to \\(1\\) is around \\(1 \\pm 2.2 \\times 10^{-16}\\)\n\n\n\npbeta(0.5, 241945, 251527)\n\n[1] 1\n\npbeta(0.5, 241945, 251527, lower.tail = FALSE)\n\n[1] 1.145624e-42"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#dealing-with-denisties-in-computing",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#dealing-with-denisties-in-computing",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Dealing with denisties in computing",
+    "text": "Dealing with denisties in computing\n\nBecause we have limited accuracy, we can’t always compute things the way we write them mathematically\nFor example, suppose we want to evaluate the likelihood for \\(600\\) data points we assume come from a normal distribution:\n\n\n\\[\n\\begin{aligned}\ny_i \\mid \\mu & \\overset{\\text{iid}}{\\sim} \\text{Normal}(\\mu, 1), i = 1, \\dots, 600 \\\\\np(y \\mid \\mu) & = \\prod_{i=1}^{600} \\frac{1}{\\sqrt{2 \\pi}} e^{-\\frac{1}{2}(y_i - \\mu)^2}\n\\end{aligned}\n\\]\n\n\nWriting this in R code, and evaluating \\(p(y \\mid 0)\\) gives:\n\n\n\ny &lt;- rnorm(600)\nprod(dnorm(y, mean = 0, sd = 1))\n\n[1] 0\n\n\n\n\nThis is called underflow, when the target value exceeds the precision of floating point representation\nIntead, we need to compute things on the log scale:\n\n\n\\[\n\\begin{aligned}\n\\log p(y \\mid \\mu) & = \\sum_{i=1}^{600} -\\frac{1}{2} \\log(2\\pi) -\\frac{1}{2}(y_i - \\mu)^2\n\\end{aligned}\n\\]\n\n\n\nsum(dnorm(y, mean = 0, sd = 1, log = TRUE))\n\n[1] -866.6157\n\n\n\n\nIn order to keep everything as stable as possible, compute \\(\\exp\\) as late as you can in calculations"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#log-sum-exp-trick",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#log-sum-exp-trick",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "…Log-sum-exp trick",
+    "text": "…Log-sum-exp trick\n\nSuppose you want to compute the log-likelihood in for a mixture model with two components\nThe likelihood looks like \\[\np(y_i \\mid \\theta) = \\phi p(y_i \\mid \\eta_1) + (1 - \\phi) p(y_i \\mid \\eta_2)\n\\]\nWe just talked about the importance of keeping things on the log scale so we write: \\[\n\\ell(y_i \\mid \\eta_1) = \\log p(y_i \\mid \\eta_1)\n\\]\nThen our log-likelihood would be\n\n\n\\[\n\\begin{aligned}\n\\log p(y_i \\mid \\theta) & = \\log( \\exp \\lp \\log(\\phi) + \\ell(y_i \\mid \\eta_1) \\rp \\\\\n\\quad\\quad & \\exp \\lp \\log(1 - \\phi) + \\ell(y_i \\mid \\eta_2) \\rp )\n\\end{aligned}\n\\]\n\n\nFor arguments sake, suppose this evaluates to something like \\(\\log(\\exp(800) + \\exp(801))\\)\n\n\n\nlog(exp(800) + exp(801))\n\n[1] Inf\n\n\n\n\nInstead we can write this as \\(\\log(\\exp(800)(1 + \\exp(801 - 800))\\), or \\(800 + \\log(1 + \\exp(1))\\)\n\n\n\n800 + log(1 + exp(1))\n\n[1] 801.3133"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#expectations",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#expectations",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Expectations",
+    "text": "Expectations\n\nIn Frequentist inference, we (often) need to maximize the likelihood\nIn Bayesian inference, everything is a posterior expectation:\n\n\n\\[\n\\ExpA{h(\\theta)}{p(\\theta \\mid y)} = \\int h(\\theta)p(\\theta \\mid y)d\\theta\n\\]\n\n\n\\[\np(\\theta \\mid y) = \\frac{\\textcolor{green}{p(y \\mid \\theta) p(\\theta)}}{\\textcolor{red}{\\int p(y \\mid \\theta) p(\\theta) d\\theta}}\n\\]\n\n\nWe can typically evaluate \\(\\textcolor{green}{p(y \\mid \\theta) p(\\theta)}\\), but \\(\\textcolor{red}{\\int p(y \\mid \\theta) p(\\theta) d\\theta}\\) is hard to evaluate\nOur strategy is to use what we can evaluate \\(q(\\theta \\mid y) = p(y \\mid \\theta) p(\\theta)\\) to compute our target expectations\nOne option is to evaluate \\(q(\\theta \\mid y)\\) on a grid of \\(\\theta^{(s)}\\) to get\n\n\n\\[\n\\ExpA{h(\\theta)}{p(\\theta \\mid y)} \\approx \\frac{\\sum_{s=1}^S h(\\theta^{(s)}) q(\\theta^{(s)} \\mid y)}{\\sum_{s=1}^S  q(\\theta^{(s)} \\mid y)}\n\\]\n\n\nThis is called quadrature"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#quadrature-integration",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#quadrature-integration",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Quadrature integration",
+    "text": "Quadrature integration\n\n\\(\\Exp{\\theta} = \\sum_{s=1}^S \\theta^{(s)} w^{(s)}\\)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMore sophisticated methods are available in R using the integrate function"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#problems-with-grid-methods",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#problems-with-grid-methods",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Problems with grid methods",
+    "text": "Problems with grid methods\nEvaluations increase exponentially as the dimension of the space increases \\(c^d\\)\n\n\n\n\nCurse of dimensionality\n\n\n\n\nA significant hurdle in grid methods is that you have to define the grid before you know where the mass of the probability distribution\n\n\nApproximate cost: Suppose we have \\(50\\) points in each dimension and \\(10\\) dimensions, this would require \\(50^{10} \\approx 1e17\\) evaluations\n\n\nEven with a fast computer, this could take years to evaluate"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#how-many-draws-do-we-need",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#how-many-draws-do-we-need",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "How many draws do we need?",
+    "text": "How many draws do we need?\n\n\nWant to find \\(\\Exp{\\theta}\\)\n\n\n\n\nWe have \\(\\theta^{(s)} \\overset{\\text{iid}}{\\sim} p(\\theta)\\)\n\n\n\n\nLet \\(\\bar{\\theta} = \\sum_{s=1}^S \\theta^{(s)}\\), \\(\\sigma_\\theta^2 = \\text{Var}(\\theta)\\)\n\n\n\n\nWe know that \\(\\sqrt{S}(\\bar{\\theta} - \\Exp{\\theta}) \\overset{\\text{d}}{\\to} N(0, \\sigma_\\theta^2)\\)"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#benefits-and-challenges-of-monte-carlo-over-quadrature",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#benefits-and-challenges-of-monte-carlo-over-quadrature",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Benefits and challenges of Monte Carlo over quadrature",
+    "text": "Benefits and challenges of Monte Carlo over quadrature\n\nWhen variance exists, the variance of our estimate is independent of dimension \\(\\theta\\)\n\\(\\text{Var}(\\bar{\\theta}) = \\sigma_\\theta^2/S\\)\n… but need to be sure that variance exists\nWhen variance doesn’t exist but mean does exist there are other limiting distributions, and may still converge to a normal\nWe have to know how to generate samples from the target distribution\nWe are bound by the variance of the estimand, \\(\\sigma_\\theta^2\\)"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#simple-linear-regression-example-mauna-loa-textco_2-series",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#simple-linear-regression-example-mauna-loa-textco_2-series",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Simple linear regression example: Mauna Loa \\(\\text{CO}_2\\) series",
+    "text": "Simple linear regression example: Mauna Loa \\(\\text{CO}_2\\) series"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#posterior-for-slope",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#posterior-for-slope",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Posterior for slope",
+    "text": "Posterior for slope\n\n\n\\[\n\\sigma_\\theta \\approx 0.12 \\implies \\text{MCSE}(\\hat{\\mathbb{E}}[\\beta_2 \\mid y]) \\approx 0.12 / 10\n\\]"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#posterior-for-slope-1",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#posterior-for-slope-1",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Posterior for slope",
+    "text": "Posterior for slope\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\sigma_\\theta \\approx 0.12 \\implies \\text{MCSE}(\\hat{\\mathbb{E}}[\\beta_2 \\mid y]) \\approx 0.12 / 10 \\\\\nP(\\Exp{\\beta_2 \\mid y} \\in (0.33, 0.38)) \\approx 0.95\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\sigma_\\theta \\approx 0.12 \\implies \\text{MCSE}(\\hat{\\mathbb{E}}[\\beta_2 \\mid y]) \\approx 0.12 / \\sqrt{1000} \\\\\nP(\\Exp{\\beta_2 \\mid y} \\in (0.35, 0.36)) \\approx 0.95\n\\]"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#mcse-of-a-quantile",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#mcse-of-a-quantile",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "MCSE of a quantile",
+    "text": "MCSE of a quantile\n\nWe find the \\(p^\\mathrm{th}\\) quantile by inverting the CDF evaluated at \\(p\\), \\(q = F^{-1}(p)\\)\nWe can find the asymptotic standard error of the \\(0.05\\) quantile as follows:\n\nLet \\(X_s = \\ind{\\theta^{(s)} \\leq a}\\)\nLet \\(\\alpha = P(\\theta \\leq a)\\)\nThen we know that for i.i.d. \\(X_i\\) such that \\(\\Exp{X_i} = \\alpha\\), \\(\\bar{X} \\overset{\\text{d}}{\\to} \\text{N}(\\alpha, \\alpha (1 - \\alpha)/S)\\)\nWe want to find \\(a\\) for which \\(P(\\theta \\leq a) = 0.05\\)\nBy Delta method, we know \\(g(\\bar{X}) \\overset{\\text{d}}{\\to} \\text{N}(g(\\alpha), \\alpha (1 - \\alpha) (g'(\\alpha))^2 / S)\\)\nIn our case \\(g(\\alpha) \\equiv F^{-1}(\\alpha) = a\\)\nNote:\n\n\n\n\\[\n\\begin{aligned}\nF(F^{-1}(\\alpha)) & = \\alpha \\\\\n\\frac{d}{d\\alpha} F(F^{-1}(\\alpha)) & = \\frac{d}{d\\alpha}\\alpha \\\\\nf(F^{-1}(\\alpha))\\frac{d}{d\\alpha}F^{-1}(\\alpha) & = 1 \\\\\nf(a)\\frac{d}{d\\alpha}F^{-1}(\\alpha) & = 1 \\\\\n\\frac{d}{d\\alpha}F^{-1}(\\alpha) & = 1/f(a) \\\\\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#what-does-this-mean-for-us",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#what-does-this-mean-for-us",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "What does this mean for us?",
+    "text": "What does this mean for us?\n\n\\[\\hat{F}^{-1}(\\alpha) \\overset{\\text{d}}{\\to} N(a, \\alpha (1 - \\alpha) / f(a)^2 S)\\]"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#estimating-tail-quantiles-is-harder",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#estimating-tail-quantiles-is-harder",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Estimating tail quantiles is harder",
+    "text": "Estimating tail quantiles is harder\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\text{MCSE}(\\hat{F}_{\\beta_2 \\mid y}^{-1}(0.05)) \\approx \\sqrt{0.05 \\times 0.95} / 10 f(q) \\approx 0.03 \\\\\nP(F_{\\beta_2 \\mid y}^{-1}(0.05) \\in (0.11, 0.21)) \\approx 0.95\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\text{MCSE}(\\hat{F}_{\\beta_2 \\mid y}^{-1}(0.05)) \\approx \\sqrt{0.05 \\times 0.95 / 1000 f(q)} \\approx 0.01 \\\\\nP(F_{\\beta_2 \\mid y}^{-1}(0.05) \\in (0.14, 0.18)) \\approx 0.95\n\\]"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#estimating-tail-quantiles-is-harder-1",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#estimating-tail-quantiles-is-harder-1",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Estimating tail quantiles is harder",
+    "text": "Estimating tail quantiles is harder\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\text{MCSE}(\\hat{F}_{\\beta_2 \\mid y}^{-1}(0.05)) \\approx \\sqrt{0.01 \\times 0.99} / 10 f(q) \\approx 0.04\\\\\nP(F_{\\beta_2 \\mid y}^{-1}(0.01) \\in (-0.01, 0.15)) \\approx 0.95\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\\[\n\\text{MCSE}(\\hat{F}_{\\beta_2 \\mid y}^{-1}(0.05)) \\approx \\sqrt{0.01 \\times 0.99 / 1000f(q)} \\approx 0.02 \\\\\nP(F_{\\beta_2 \\mid y}^{-1}(0.01) \\in (0.03, 0.11)) \\approx 0.95\n\\]"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#recap",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#recap",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Recap",
+    "text": "Recap\n\nTwo types of uncertainty we (typically) need to deal with when doing inference\n\nStatistical uncertainty: quantified by sampling or posterior variance, credible/confidence intervals\n\nFrequentist interpretation: Uncertainty in our estimates driven by the fact that our data is one of many samples of data we could have observed, quantified via variance of sampling distributions, confidence intervals\nBayesian interpretation: Uncertainty in our estimates driven by the fact that our given data set could have been generated by one of many parameter values, quantified via posterior variance, and credible intervals (aka posterior intervals)\n\nMonte Carlo uncertainty: Uncertainty given by the fact that we have finite number of samples from a distribution to compute a quantity of interest\n\nBoth types of uncertainty exist when we do Bayesian statistics\nMonte Carlo uncertainty enters into how we quantify posterior uncertainty when we have samples from the posterior\nWe quantify Monte Carlo uncertainty with the CLT"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#checks-for-how-many-moments-exist",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#checks-for-how-many-moments-exist",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Checks for how many moments exist",
+    "text": "Checks for how many moments exist\n\nTo easily apply the CLT, we need to know if first and second moments exist[^1] [^1] We don’t need a mean or variance for the CLT to hold, but if the first two moments exist we can apply the CLT\nIf we have a set samples \\(\\{\\theta^{(s)}, s = 1, \\dots, S\\}\\) from \\(p(\\theta \\mid y)\\), is there a way to determine if \\(\\Exp{\\theta^k \\mid y}\\) exists?\nThe answer lies in characterizing the tails of the distribution of \\(\\theta \\mid y\\)\n\nWe know that \\(\\Exp{X} = \\int x f(x) dx\\)\nLet’s just focus on \\(X &gt; 0\\). We can write, for large, finite \\(K\\)\n\n\n\n\\[\n\\int_0^\\infty x f(x) = \\int_{x &lt; K} x f(x) dx +  \\int_{K}^{\\infty} x f(x) dx\n\\]\n\n\nIf we can find an upper bound on the \\(f(x)\\) for \\(x &gt; K\\) that is \\(O(x^{-(2 + \\delta)})\\) for some \\(\\delta &gt; 0\\), the integral will be finite\n\n\n\\[\n\\int_0^\\infty x f(x) \\leq K P(X &lt; K) + \\int_{K}^{\\infty} x^{-(1 + \\delta)} dx &lt; \\infty\n\\]\n\n\nThus we need to quantify the tail behavior of our samples"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#generalized-pareto-distribution-for-tails",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#generalized-pareto-distribution-for-tails",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Generalized Pareto distribution for tails",
+    "text": "Generalized Pareto distribution for tails\n\nPickands (1975) shows that for a large class of random variables \\(X\\) the distribution of \\(X \\mid X &gt; u\\) is well approximated by a Generalized Pareto distribution (GPD), with \\(1/k\\) moments\n\n\n\\[\np(y \\mid u, \\sigma, k) =\n\\begin{cases}\n\\frac{1}{\\sigma}(1 + k \\lp \\frac{y - u}{\\sigma} \\rp)^{-(1 + 1/k)}, & k \\neq 0 \\\\\n\\frac{1}{\\sigma}\\exp\\lp \\frac{y - u}{\\sigma} \\rp), & k = 0\n\\end{cases}\n\\]"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#how-to-fit-a-gpd",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#how-to-fit-a-gpd",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "How to fit a GPD",
+    "text": "How to fit a GPD\n\nlibrary(posterior)\n\ntheta &lt;- rnorm(1e3)\npareto_khat(theta)\n\n[1] -0.05810098"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#examples",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#examples",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Examples",
+    "text": "Examples\n\n\n\\(\\theta \\sim \\text{Normal}(0,1)\\)\n\n\n\n\n\n\n\n\n\n\n\n\\(\\theta \\sim \\text{t}(4, 0,1)\\)\n\n\n\n\n\n\n\n\n\n\n\n\\(\\theta \\sim \\text{t}(2, 0,1)\\)\n\n\n\n\n\n\n\n\n\n\n\n\\(\\theta \\sim \\text{t}(1, 0,1)\\)"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#using-pareto-k-in-posterior-parckage",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#using-pareto-k-in-posterior-parckage",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Using Pareto-k in posterior parckage",
+    "text": "Using Pareto-k in posterior parckage\n\ndf &lt;- \n  data.frame(\n    norm = rnorm(1e4),\n    rt4 = rt(1e4, df = 4),\n    rt2 = rt(1e4, df = 2),\n    rt1 = rt(1e4, df = 1)\n  )\n\ndf |&gt; \n  posterior::summarise_draws(mean, sd, mcse_mean, pareto_khat,\n                             .num_args = list(sigfig = 2, notation = \"dec\")) \n\n# A tibble: 4 × 5\n  variable     mean    sd mcse_mean pareto_khat\n  &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;\n1 norm      0.014     1.0     0.010      -0.089\n2 rt4       0.0043    1.4     0.014       0.30 \n3 rt2       0.00038   3.0     0.030       0.50 \n4 rt1      -0.37    104.      1.0         0.94"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#using-pareto-k-in-practice",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#using-pareto-k-in-practice",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Using pareto-k in practice",
+    "text": "Using pareto-k in practice\n\nIf \\(\\hat{k}\\) is large, use a quantile to summarize the posterior instead of a moment\nThere is, of course, variance in \\(\\hat{k}\\) estimation because of finite sample size\n\nIf \\(\\hat{k}\\) is nearly \\(0.5\\) increase samples to get more precision in \\(\\hat{k}\\) estimate\n\nFor \\(\\hat{k} &lt; 0.7\\) one can use smoothing to increase the efficiency of the mean estimate\n\nEssentially use the order statistics from a fitted pareto distribution in place of draws from the tail to stabilize estiamtes of sample moments\n\nFor more info see Vehtari et al. (2024)"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#integrals",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#integrals",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Integrals",
+    "text": "Integrals\n\\[\n\\begin{aligned}\n\\frac{p(\\theta^* \\mid y)}{p(\\theta^{(t-1)} \\mid y)} & = \\frac{p(\\theta^*)p(y \\mid \\theta^*) / p(y)}{p(\\theta^{(t-1)})p(y \\mid \\theta^{(t-1)}) / p(y)}\n\\end{aligned}\n\\]"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#ways-to-generate-draws",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#ways-to-generate-draws",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Ways to generate draws",
+    "text": "Ways to generate draws"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#references",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#references",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "References",
+    "text": "References\n\n\nPickands, James. 1975. “Statistical Inference Using Extreme Order Statistics.” The Annals of Statistics 3 (1): 119–31.\n\n\nVehtari, Aki, Daniel Simpson, Andrew Gelman, Yuling Yao, and Jonah Gabry. 2024. “Pareto Smoothed Importance Sampling.” Journal of Machine Learning Research 25 (72): 1–58."
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#intractable-mle-example",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#intractable-mle-example",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Intractable MLE example",
+    "text": "Intractable MLE example\n\n\\(X_i \\sim \\text{Gamma}(\\alpha, \\beta)\\)\nFind \\(\\hat{\\alpha}_{\\text{MLE}}, \\hat{\\theta}_{\\text{MLE}}\\)\n\n\n\\[\n\\begin{aligned}\nL(\\alpha, \\theta \\mid x) & \\propto \\prod_{i=1}^n \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)} x_i^{\\alpha - 1} e^{-\\beta x_i }\n\\end{aligned}\n\\]\n\n\nTake logs of both sides\n\n\n\\[\n\\begin{aligned}\n\\ell(\\alpha, \\theta \\mid x) & = \\alpha n \\log \\beta - n \\log \\Gamma(\\alpha) + (\\alpha - 1)\\sum_{i=1}^n \\log x_i -\\beta \\sum_{i=1}^n x_i\n\\end{aligned}\n\\]\n\n\nTaking gradients and setting equal to zero\n\n\n\\[\n\\begin{aligned}\n\\frac{\\alpha}{\\beta} - \\bar{x} & = 0 \\\\\n\\log \\beta - \\psi(\\alpha) + \\overline{\\log x} & = 0\n\\end{aligned}\n\\]\n\n\nWithout proceeding we can see we’re in trouble because we need to solve the second equation which involves the digamma function, or \\[\\frac{\\Gamma'(\\alpha)}{\\Gamma(\\alpha)}\\]"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#monte-carlo-integration",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#monte-carlo-integration",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Monte Carlo integration",
+    "text": "Monte Carlo integration\n\nWe can take another approach using the laws of large numbers\nSay we generate iid draws \\(X_i, i = 1, \\dots, S\\) from some distribution \\(F\\) and we want to compute \\(\\Exp{h(X)}\\)\nIf we compute the sample mean\n\n\n\\[\n\\hat{\\mu}_S = \\frac{1}{S} \\sum_{i=1}^S h(X_i)\n\\]\n\n\nThe weak law of large numbers tells us that, for all \\(\\epsilon &gt; 0\\)\n\n\n\\[\n\\lim_{S\\to\\infty} P(\\abs{\\hat{\\mu}_S - \\Exp{h(X)}} &lt; \\epsilon) = 1\n\\]\n\n\nThis says that the probability of the there being a deviation of greater than or equal to \\(\\epsilon\\) is zero in the limit\nIf \\(\\Exp{\\abs{h(X)}} &lt; \\infty\\) then we can show that the weak law of large numbers holds"
+  },
+  {
+    "objectID": "pcs-content/lectures/intro-and-monte-carlo.html#precision-of-monte-carlo-estimates",
+    "href": "pcs-content/lectures/intro-and-monte-carlo.html#precision-of-monte-carlo-estimates",
+    "title": "Intro to statistical computing and Monte Carlo",
+    "section": "Precision of Monte Carlo estimates",
+    "text": "Precision of Monte Carlo estimates"
   }
 ]
