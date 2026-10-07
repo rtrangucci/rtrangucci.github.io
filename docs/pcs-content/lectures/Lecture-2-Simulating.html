@@ -204,6 +204,8 @@ window.Quarto = {
   <li><a href="#motivation-for-todays-lecture" id="toc-motivation-for-todays-lecture" class="nav-link" data-scroll-target="#motivation-for-todays-lecture">Motivation for today’s lecture</a></li>
   <li><a href="#pseudo-random-number-generators" id="toc-pseudo-random-number-generators" class="nav-link" data-scroll-target="#pseudo-random-number-generators">Pseudo-random number generators</a></li>
   <li><a href="#transformations" id="toc-transformations" class="nav-link" data-scroll-target="#transformations">Transformations</a></li>
+  <li><a href="#multivariate-normal-random-vectors" id="toc-multivariate-normal-random-vectors" class="nav-link" data-scroll-target="#multivariate-normal-random-vectors">Multivariate normal random vectors</a></li>
+  <li><a href="#generating-draws-from-mixtures" id="toc-generating-draws-from-mixtures" class="nav-link" data-scroll-target="#generating-draws-from-mixtures">Generating draws from mixtures</a></li>
   </ul>
 </nav>
     </div>
@@ -346,15 +348,96 @@ W = \beta\textstyle\sum_{i=1}^d X_i
 \]</span></p>
 </div>
 <p>Other transformations are useful when dealing with univariate normal random variables.</p>
+</section>
+<section id="multivariate-normal-random-vectors" class="level2">
+<h2 class="anchored" data-anchor-id="multivariate-normal-random-vectors">Multivariate normal random vectors</h2>
 <p>Let’s say we have <span class="math display">\[X_i \sim \text{Normal}(0, 1), i = 1, \dots, d\]</span> and we have a matrix <span class="math inline">\(A \in \R^{k \times d}\)</span> with <span class="math inline">\(k \leq d\)</span>. If we arrange each <span class="math inline">\(X_i\)</span> into a vector <span class="math inline">\(\mathbf{x}\)</span> with the <span class="math inline">\(i^\mathrm{th}\)</span> element <span class="math inline">\(X_i\)</span> <span class="math display">\[A X \sim \text{MultiNormal}(0, AA^T)\]</span>.</p>
 <p>We can show this with the MGF. The MGF of a univariate standard normal is <span class="math inline">\(e^{t^2/2}\)</span>, and the MGF of a multivariate normal vector <span class="math inline">\(\mathbf{y}\)</span> with variance covariance matrix <span class="math inline">\(\Sigma\)</span> is <span class="math display">\[
 \Exp{e^{\mathbf{t}^T \mathbf{y}}} = e^{\frac{1}{2} \mathbf{t}^T\Sigma\mathbf{t} }
 \]</span> Now we want to calculate the MGF of the vector <span class="math inline">\(\mathbf{y} = \mathbf{A} \mathbf{x}\)</span></p>
-$$
-<span class="math display">\[\begin{aligned}
-
-\end{aligned}\]</span>
-<p>$$</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Exp{e^{\mathbf{t}^T \mathbf{A} \mathbf{x}}} &amp; = \Exp{e^{\sum_{i=1}^k t_i \sum_{j=1}^d A_{ij} x_j}}
+\\
+&amp; = \Exp{e^{\sum_{j=1}^d \sum_{i=1}^k t_i A_{ij} x_j}} \\
+&amp; = \prod_{j=1}^d \Exp{e^{\sum_{i=1}^k t_i A_{ij} x_j}} \\
+&amp; = \prod_{j=1}^d e^{(\sum_{i=1}^k t_i A_{ij})^2 / 2 } \\
+&amp; = e^{\sum_{j=1}^d (\sum_{i=1}^k t_i A_{ij})^2 / 2 } \\
+&amp; = e^{\sum_{j=1}^d \mathbf{t}^T A_{[:,j]}A^T_{[:,j]}\mathbf{t}  / 2 } \\
+&amp; = e^{\mathbf{t}^T\lp \sum_{j=1}^d  A_{[:,j]}A^T_{[:,j]}\rp\mathbf{t}  / 2 } \\
+&amp; = e^{\mathbf{t}^T\mathbf{A}\mathbf{A}^T  / 2 } \\
+\end{aligned}
+\]</span></p>
+<p>We can use this result to generate <span class="math inline">\(Y \sim \text{MultiNormal}(0, \Sigma)\)</span> if we can decompose <span class="math inline">\(\Sigma\)</span> into <span class="math inline">\(A A^T\)</span>.</p>
+<p>One such decomposition is the matrix square root:</p>
+<div id="def-mat-sqrt" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1 (Matrix square root)</strong></span> For an <span class="math inline">\(n\times n\)</span> symmetric positive semidefinite matrix <span class="math inline">\(\Sigma\)</span>, we define the matrix square root as: <span class="math display">\[
+\Sigma = AA
+\]</span></p>
+<p>In particular, we may set <span class="math inline">\(A = U \Lambda^{1/2} U^T\)</span> where <span class="math inline">\(U\)</span> are the eigenvectors of <span class="math inline">\(A\)</span> with associated eigenvalues.</p>
+</div>
+<p>It is clear that <span class="math inline">\(\Sigma = A A\)</span> from the fact that <span class="math inline">\(U\)</span> has orthonormal columns (i.e.&nbsp;<span class="math inline">\(U^T U = I\)</span>).</p>
+<p>The procedure to generate multivariate normal random vectors from univariate normal draws is as follows:</p>
+<ul>
+<li>Store the eigendecomposition of <span class="math inline">\(\Sigma = U \Lambda U^T\)</span></li>
+<li>Draw <span class="math inline">\(X_i \sim \text{Normal}(0,1), i = 1,\dots, d\)</span></li>
+<li>Set <span class="math inline">\(Y= U \Lambda^{1/2} U^T X\)</span></li>
+</ul>
+<p>The matrix square root is not the only decomposition that we can use. Any decomposition such that <span class="math inline">\(\Sigma = A A^T\)</span> is acceptable. The most common and performant decomposition is called the Cholesky decomposition.</p>
+<div id="def-chol" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2 (Cholesky decomposition)</strong></span> For an <span class="math inline">\(n\times n\)</span> symmetric positive definite matrix <span class="math inline">\(\Sigma\)</span>, we define the Cholesky decomposition as: <span class="math display">\[
+\Sigma = LL^T
+\]</span> where <span class="math inline">\(L\)</span> is the <strong>Cholesky factor</strong> and is a lower triangular matrix with a strictly positive diagonal.</p>
+</div>
+<p>Then, in order to generate <span class="math inline">\(Y \sim \text{MultiNormal}(0, \Sigma)\)</span>, we can replace the left multiplication by the matrix square root above by the Cholesky factor.</p>
+<p>Any algorithm to decompose a matrix will be on the order of <span class="math inline">\(n^3\)</span>, but the Cholesky decomposition has a small constant multiplied by <span class="math inline">\(n^3\)</span> while something like an <span class="math inline">\(LU\)</span> decomposition, or an eigendecomposition have larger constants.</p>
+<p>Furthermore, once you have the Cholesky factor computed, computing the inverse can be done in <span class="math inline">\(n^2\)</span> operations. To see why consider the triangular system of equations <span class="math inline">\(L x = b\)</span>, with solution <span class="math inline">\(x = L^{-1}b\)</span>: <span class="math display">\[
+\begin{array}{rcrcrcrcrcl}
+L_{1,1}x_1 &amp;   &amp;               &amp;   &amp;        &amp;   &amp;                 &amp; = &amp; b_1 \\
+L_{2,1}x_1 &amp; + &amp; L_{2,2}x_2 &amp;   &amp;        &amp;   &amp;                 &amp; = &amp; b_2 \\
+\vdots        &amp;   &amp; \vdots        &amp;   &amp; \ddots &amp;   &amp;                 &amp;   &amp; \vdots \\
+L_{m,1}x_1 &amp; + &amp; L_{m,2}x_2 &amp; + &amp; \cdots &amp; + &amp; L_{m,m}x_m   &amp; = &amp; b_m
+\end{array}
+\]</span> The first equation has solution <span class="math inline">\(x_1 = b_1 / L_{1,1}\)</span>, while the second equation can be solved for <span class="math inline">\(x_2\)</span> using the prior solution for <span class="math inline">\(x_1\)</span>, and so on. This code was produced by Claude after I fed in an image from <a href="https://en.wikipedia.org/wiki/Triangular_matrix#Forward_substitution">Wikipedia</a></p>
+<p>This is called forward substitution, or a forward solve. The R function for this is <code>forwardsolve</code>.</p>
+<p>If we instead had an upper triangular system of equations, we could use the same idea, but starting from the <span class="math inline">\(n^\mathrm{th}\)</span> row instead of the first row. This is called <strong>backward substitution</strong> or, in R-code, <code>backsolve</code>.</p>
+<p>Consider evaluating quadratic piece of the multivariate normal density: <span class="math display">\[
+(y - \mu)^T \Sigma^{-1}(y - \mu)
+\]</span> Using the Cholesky decomposition <span class="math inline">\(\Sigma = L L^T\)</span>, we can evaluate the quadratic form quickly:</p>
+<p><span class="math display">\[
+\begin{aligned}
+(y - \mu)^T (L L^T)^{-1}(y - \mu) &amp; = (y - \mu)^T L^{-T} L^{-1}(y - \mu) \\
+&amp; = (L^{-1} (y - \mu))^T L^{-1} (y - \mu))
+\end{aligned}
+\]</span> Thus we need to calculate <span class="math inline">\(x = L^{-1}(y - \mu)\)</span>, which we can do efficiently by solving the triangular system of equations.</p>
+</section>
+<section id="generating-draws-from-mixtures" class="level2">
+<h2 class="anchored" data-anchor-id="generating-draws-from-mixtures">Generating draws from mixtures</h2>
+<p>Often we can write a random variable as the marginal distribution of a mixture distribution. For example, we can write negative binomial random variable as an appropriate mixture of Poisson RVs with Gamma distributed rates.</p>
+<p>More generally, we can use a somewhat trivial fact about densities to motivate our procedure. Suppose we want <span class="math inline">\(X \sim F\)</span> where <span class="math inline">\(f(x)\)</span> is the density corresponding to <span class="math inline">\(F\)</span>. We must find a bivariate density <span class="math inline">\(g(x,y)\)</span> such that: <span class="math display">\[
+f(x) = \int_{\mathcal{Y}} g(x,y) dy
+\]</span> and, <strong>crucially</strong>, <span class="math inline">\(g\)</span> is easier to simulate from than directly simulating from <span class="math inline">\(f\)</span>. Often, our mixture distributions will take a more explicit form:</p>
+<p><span class="math display">\[
+f(x) = \int_{\mathcal{Y}} h_1(x \mid y) h_2(y) dy
+\]</span> where <span class="math inline">\(h_1(x \mid y)\)</span> is a conditional density that is easy to sample from.</p>
+<div id="exm-t-dist-mix" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3 (Student’s t distribution)</strong></span> We can show that <span class="math display">\[
+\begin{aligned}
+Y \sim \chi^2_{\nu} \quad X \mid Y \sim \text{Normal}(0, \frac{\nu}{Y}) \\
+\end{aligned}
+\]</span> Then <span class="math display">\[
+X \sim t_\nu
+\]</span></p>
+</div>
+<div id="exm-neg-bi-dist-mix" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4 (Negative binomial)</strong></span> We can show that <span class="math display">\[
+\begin{aligned}
+Y \sim \text{Gamma}(n, (1-p)/p) \quad X \mid Y \sim \text{Pois}(Y) \\
+\end{aligned}
+\]</span> Then <span class="math display">\[
+X \sim \text{NegBinom}(n, p)
+\]</span></p>
+</div>
 
 
 
