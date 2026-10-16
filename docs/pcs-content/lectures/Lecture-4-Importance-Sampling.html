@@ -201,6 +201,7 @@ window.Quarto = {
   <li><a href="#self-normalized-importance-sampling" id="toc-self-normalized-importance-sampling" class="nav-link" data-scroll-target="#self-normalized-importance-sampling">Self-normalized importance sampling</a>
   <ul class="collapse">
   <li><a href="#variance-of-the-self-normalized-is" id="toc-variance-of-the-self-normalized-is" class="nav-link" data-scroll-target="#variance-of-the-self-normalized-is">Variance of the self-normalized IS</a></li>
+  <li><a href="#delta-method-for-self-normalized-importance-sampling" id="toc-delta-method-for-self-normalized-importance-sampling" class="nav-link" data-scroll-target="#delta-method-for-self-normalized-importance-sampling">Delta method for self-normalized importance sampling</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -346,7 +347,11 @@ p(y_i \mid y_{-i}) = \int_{\Theta} p(y_i \mid \theta) \pi(\theta \mid y_{-i}) d\
 \frac{1}{\mu_x^2} \lp q^2(\mu)(m_x^2 - \mu_x^2)  + m_y^2 - \mu_y^2 - 2 (m_{xy} - \mu_x \mu_y)q(\mu)\rp = \frac{q^2(\mu)m_x^2  + m_y^2 - 2 m_{xy}q(\mu)}{\mu_x^2}
 \]</span> where we can write the numerator as a quadratic form: <span class="math display">\[
 \Var{\frac{\bar{y}}{\bar{x}}} \approx \frac{\Exp{(Y - \frac{\mu_y}{\mu_x} X)^2}}{\mu_x^2}
-\]</span> ### Delta method for self-normalized importance sampling</p>
+\]</span></p>
+</section>
+</section>
+<section id="delta-method-for-self-normalized-importance-sampling" class="level3">
+<h3 class="anchored" data-anchor-id="delta-method-for-self-normalized-importance-sampling">Delta method for self-normalized importance sampling</h3>
 <p>The delta method leads to a tidy expression for the variance, which then yields a computable variance estimator:</p>
 <p><span class="math display">\[
 \Var{\sqrt{S} (\frac{\bar{\frac{h f}{g}}}{\bar{\frac{f}{g}}} - \mu)} \approx \frac{\ExpA{(h(X) f(X) / g(X) - \mu f(X)/g(X))^2}{g}}{\ExpA{\frac{f(X)}{g(X)}}{g}^2}
@@ -355,15 +360,28 @@ p(y_i \mid y_{-i}) = \int_{\Theta} p(y_i \mid \theta) \pi(\theta \mid y_{-i}) d\
 \Var{\sqrt{S} \lp \frac{\bar{\frac{h f}{g}}}{\bar{\frac{f}{g}}} - \mu\rp} \approx \ExpA{\frac{f^2(X)}{g^2(X)} (h(X) - \mu)^2}{g}
 \]</span></p>
 <p>Given that we don’t know <span class="math inline">\(f(X_i) / g(X_i)\)</span> we have to use the SLLN again to get a computable variance estimate, which we apply to the first estimator.</p>
-<p>We need a slightly less ungainly expression, so we’ll let <span class="math inline">\(w(X_i) = f(X_i) / g(X_i)\)</span>:</p>
+<p>We need a slightly less ungainly expression, so we’ll let <span class="math inline">\(w_u(X_i) = f_u(X_i) / g_u(X_i)\)</span>. We’ll also multiply our variance estimate by <span class="math inline">\(1/S\)</span>, which will give us the variance of the IS estimator, whereas we have derived the variance of the scaled, centered estimator. This is the proper quantity to apply a central limit theorem to, but for a given sample size <span class="math inline">\(S\)</span>, we’ll want to use <span class="math inline">\(\ExpA{\frac{f^2(X)}{g^2(X)} (h(X) - \mu)^2}{g} / S\)</span> in our confidence set construction:</p>
 <p><span class="math display">\[
-\frac{\ExpA{w^2(X)(h(X)  - \mu)^2}{g}}{\ExpA{w(X)}{g}^2} \approx
-\frac{\frac{1}{S}\sum_{i=1}^S w^2(X_i)(h(X_i)  - \tilde{\mu}_{\text{IS}})^2}{\lp \frac{1}{S} \sum_{i=1}^S w(X_i) \rp^2}
+\frac{\ExpA{w_u^2(X)(h(X)  - \mu)^2}{g}}{S\ExpA{w_u(X)}{g}^2} \approx
+\frac{\frac{1}{S^2}\sum_{i=1}^S w_u^2(X_i)(h(X_i)  - \tilde{\mu}_{\text{IS}})^2}{\lp \frac{1}{S} \sum_{i=1}^S w_u(X_i) \rp^2}
+\]</span> Letting <span class="math display">\[
+w_n(X_i) = \frac{w_u(X_i)}{\sum_{i=1}^S w_u(X_i)}
 \]</span></p>
+<p>we can write the final estimator for the variance as: <span class="math display">\[
+\widehat{\Var{\tilde{\mu}_{\text{IS}}}} = \sum_{i=1}^S w^2_n(X_i) (h(X_i) - \tilde{\mu}_{\text{IS}})^2
+\]</span></p>
+<div id="exm-loo-cont" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2 (LOO-CV-IS estimator)</strong></span> Our unnormalized importance weights are <span class="math display">\[
+w_u(\theta_j) = 1/p(y_i \mid \theta_j)
+\]</span> This gives us <span class="math display">\[
+w_n(\theta_j) = \frac{1}{p(y_i \mid \theta_j)\sum_{k=1}^S 1/p(y_i \mid \theta_k)} = \frac{1}{\sum_{k\neq j}^S 1/p(y_i \mid \theta_k)}
+\]</span> In this case <span class="math inline">\(h(X_i) = p(y_i \mid \theta_j)\)</span>, so we’re left with <span class="math display">\[
+\widehat{\Var{\tilde{\mu}_{\text{IS}}}} = \sum_{k=1}^S \lp\sum_{j\neq k}^S \frac{1}{p(y_i \mid \theta_j)}\rp^{-2}(p(y_i \mid \theta_k) - \tilde{\mu}_{\text{IS}})^2
+\]</span></p>
+</div>
 
 
 
-</section>
 </section>
 </section>
 
