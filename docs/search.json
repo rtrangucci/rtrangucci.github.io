@@ -5149,7 +5149,7 @@
     "href": "st_541_f_26.html",
     "title": "ST 441/541 - F 26",
     "section": "",
-    "text": "Much of the material for this course was created by Yuan Jiang. I’ve just transcribed typed up much of the material. Where I’ve added my own, I’ve noted it.\n\n\n\n\n\nRole\nName\nOffice hours\nContact\n\n\n\n\nInstructor\nRob Trangucci\nTues/Thurs 11:30a-12:30p WNGR 207\nrob.trangucci@oregonstate.edu\n\n\nGTA\nEvan Flint\nTBD\nflinte@oregonstate.edu\n\n\n\n\n\n\n\n\n\nActivity\nDays\nTime\nRoom\n\n\n\n\nLecture\nTR\n10a-11:20a\nLINC 303\n\n\nLab\nF\n2p-2:50p\nWNGR 287\n\n\n\n\n\n\nThis course combines approximately 120 hours of instruction, laboratory, outside of class work, and assignments for 4 credits.\n\n\n\nA minimum grade of D- is required in ST 422 or ST 522.\n\n\n\nTextbooks:\n\nRoss, S. M. (2013). Simulation. Elsevier Science. (E-book available through OSU library, Chapters 3–5, 8, and 9).\nOwens, Art (2018). Monte Carlo theory, methods and examples. Free online textbook, Chapters 1, 2, 8, 9, 11, 12).\nRobert, C and Casella, G (2004). Monte Carlo Statistical Methods. Springer. (E-book available through OSU library, Chapters 1–6).\nGivens, G. H. & Hoeting, J. A. (2012). Computational Statistics. John Wiley & Sons. (E-book available through OSU library, Chapters 2, 4, 7, and 9).\n\nCanvas:\nAll other learning materials are available on the course Canvas website.\n\n\n\n\nOSU Academic Catalog: Review of probability, including univariate distributions and limit theorems. Random-number generation and simulation of statistical distributions. Bootstrap estimates of standard error. Variance reduction techniques. Emphasis on the use of computation in statistics using the S-Plus or MATLAB programming language.\nWe will use R instead of S-Plus or MATLAB as the major programming language.\n\n\n\n\nMonte Carlo methods, variance reduction techniques, optimization algorithms, bootstrapping\n\n\n\n\n\n\nLecture\nDate\nTopic\nReading\nAssignments\n\n\n\n\n1\n9/24/2026\nIntroduction to Computation in statistics/Simple Monte Carlo\nChapter 2, Owen, Chapter 3, Ross\nNA\n\n\n2\n9/29/2026\nSimulation\nChapter 3, Owen, Chapter 4-5 Ross\nNA\n\n\n3\n10/1/2026\nSimulation\nChapter 4, Owen, Chapter 4-5 Ross, Chapter 3 R&C\nNA\n\n\n4\n10/6/2026\nSimulation\nChapter 4, Owen, Chapter 4-5 Ross, Chapter 2 R&C\nHW 1\n\n\n5\n10/8/2026\nImportance sampling\nChapter 9, Owen, Chapter 3-4, R&C\nNA\n\n\n6\n10/13/2026\nImportance sampling\nChapter 9, Owen/Ross, Chapters 3 R&C\nNA\n\n\n7\n10/15/2026\nVariance reduction\nChapter 8, Owen/Ross, Chapters 4 R&C\nHW 2\n\n\n8\n10/20/2026\nMarkov Chains\nChapter 6 R&C\nNA\n\n\n9\n10/22/2026\nMetropolis Hastings\nChapter 7 R&C\nNA\n\n\n10\n10/27/2026\nMetropolis Hastings\nChapter 7 R& C\nNA\n\n\n11\n10/29/2026\nGibbs sampling\nChapter 12 Owen\nNA\n\n\n12\n11/3/2026\nIntro to optimization 1\nCh. 2 G& H\nNA\n\n\n14\n11/5/2026\nMidterm\nNA\nNA\n\n\n13\n11/10/2026\nUnivariate Optimization\nCh. 2 G& H\nNA\n\n\n15\n11/12/2026\nMultivariate Optimization\nCh. 2 G& H\nNA\n\n\n16\n11/17/2026\nMultivariate optimization\nCh. 2 G& H\nNA\n\n\n17\n11/19/2026\nConjugate gradient\nPainless conjugate gradient\nNA\n\n\n18\n11/24/2026\nEM More EM\nChapter 4 G& H\nNA\n\n\n19\n11/26/2026\nBootstrap I\nCh. 9 G& H\nNA\n\n\n20\n12/1/2026\nPresentations\nNA\nNA\n\n\n21\n12/3/2026\nPresentations\nNA\nNA\n\n\n\n\n\n\n\n\n\nLab\nDate\nContent\n\n\n\n\n1\n10/2/2026\nSimple Monte Carlo and Gaussian processes\n\n\n\n\n\n\n\nStudents will be able to recognize the statistical theory behind statistical simulation and computation.\nStudents will be able to apply the methods and software to perform statistical simulation and computation.\n\n\n\n\n\nHomework will be assigned on a regular basis. Unless otherwise noted, these are to be handed in and will be graded.\nThe due dates for the homework assignments can be found under the Assignments section on Canvas.\nLate homework will not be accepted except in very rare situations where a student has a legitimate reason and has informed the instructor early enough for a special arrangement.\nST 541 students will have an extra problem in each homework assignment.\n\n\n\n\n\nThere will be one midterm exam and one final take-home project.\nNo makeup exam or project is allowed except in very rare situations where a student has a legitimate reason and has informed the instructor early enough for a special arrangement.\n\n\n\n\n\n40% on the homework, 30% on the midterm exam, and 30% on the final project.\nLetter grade assignment: A (93-100), A- (90-92), B+ (86-89), B (80-85), B- (73-79), C+ (66-72), C (60-65), C- or lower (0-59).\nAppropriate curved grading might be used to assign letter grades depending on the performance of the whole class.\nA student may request that an incomplete (for a course that has not been completed) be granted by an instructor, if the reasons for the incomplete are acceptable to the instructor, and the student is passing the course at the time of the request. Please refer to https://registrar.oregonstate.edu/incomplete-grade-policy for more information.\n\n\n\n\n\n\nFor this course, you must be the sole author of all work. You may use GenAI in some minor ways. For example, unless otherwise specified in the assignment, you may use GenAI to\n\nbrainstorm and refine your ideas,\nfind information on your topic,\ndraft an outline to organize your thoughts,\ncheck grammar and refine your writing.\n\nYou may NOT use GenAI to\n\nwrite a draft of a homework solution,\nwrite a draft of R programs,\ngenerate entire sentences, paragraphs, or reports,\ngenerate entire presentation slides.\n\nPlease contact the instructor if you have questions about specific GenAI tools and the allowable usage of GenAI tools in this course so that, together, we can ensure that we are using these tools in productive and ethical ways.\n\n\n\nAcademic Calendar\nAll students are subject to the registration and refund deadlines as stated in the Academic Calendar: https://registrar.oregonstate.edu/osu-academic-calendar.\nStatement Regarding Students with Disabilities\nAccommodations for students with disabilities are determined and approved by Disability Access Services (DAS). If you, as a student, believe you are eligible for accommodations but have not obtained approval please contact DAS immediately at 541-737-4098 or at http://ds.oregonstate.edu. DAS notifies students and faculty members of approved academic accommodations and coordinates implementation of those accommodations. While not required, students and faculty members are encouraged to discuss details of the implementation of individual accommodations.\nStudent Conduct Expectations\nSee https://beav.es/codeofconduct for details about student conduct expectations. In particular, the sections on academic misconduct and academic sanction are summarized as follows.\nSection 4.2. Academic Misconduct. Any action that misrepresents a student or group’s work, knowledge, or achievement, provides a potential or actual inequitable advantage, or compromises the integrity of the educational process. Prohibited behaviors include, but are not limited to doing or attempting the following actions: a. Cheating, b. Plagiarism, c. Falsification, d. Assisting, e. Tampering, f. Multiple submissions of work, g. Unauthorized recording and use.\nSection 6.1.8. Students whose behavior is found to constitute academic misconduct as defined in Section 4.2 are subject to additional academic sanctions, which may include, but are not limited to, failing the course, restriction from course withdrawal, grade replacement provisions, or removal from an academic department, college or program. Students may also be sanctioned to complete the online Academic Integrity Course.\nStudent Bill of Rights\nOSU has twelve established student rights. They include due process in all university disciplinary processes, an equal opportunity to learn, and grading in accordance with the course syllabus: https://asosu.oregonstate.edu/advocacy/rights.\nReach Out for Success\nUniversity students encounter setbacks from time to time. If you encounter difficulties and need assistance, it’s important to reach out. Consider discussing the situation with an instructor or academic advisor. Learn about resources that assist with wellness and academic success at https://oregonstate.edu/ReachOut. If you are in immediate crisis, please contact the Crisis Text Line by texting OREGON to 741-741 or call the National Suicide Prevention Lifeline at 1-800-273-TALK (8255).\n\n\n\nWe strive to create an equitable and inclusive community in which all members are welcome, heard, and treated with respect. We uphold these values and take the opportunity to learn from each other. Our greatest strengths and most innovative ideas come from disagreements and collaborations among people with diverse perspectives, lived experiences, and expertise."
+    "text": "Much of the material for this course was created by Yuan Jiang. I’ve just transcribed typed up much of the material. Where I’ve added my own, I’ve noted it.\n\n\n\n\n\nRole\nName\nOffice hours\nContact\n\n\n\n\nInstructor\nRob Trangucci\nTues/Thurs 11:30a-12:30p WNGR 207\nrob.trangucci@oregonstate.edu\n\n\nGTA\nEvan Flint\nTBD\nflinte@oregonstate.edu\n\n\n\n\n\n\n\n\n\nActivity\nDays\nTime\nRoom\n\n\n\n\nLecture\nTR\n10a-11:20a\nLINC 303\n\n\nLab\nF\n2p-2:50p\nWNGR 287\n\n\n\n\n\n\nThis course combines approximately 120 hours of instruction, laboratory, outside of class work, and assignments for 4 credits.\n\n\n\nA minimum grade of D- is required in ST 422 or ST 522.\n\n\n\nTextbooks:\n\nRoss, S. M. (2013). Simulation. Elsevier Science. (E-book available through OSU library, Chapters 3–5, 8, and 9).\nOwens, Art (2018). Monte Carlo theory, methods and examples. Free online textbook, Chapters 1, 2, 8, 9, 11, 12).\nRobert, C and Casella, G (2004). Monte Carlo Statistical Methods. Springer. (E-book available through OSU library, Chapters 1–6).\nGivens, G. H. & Hoeting, J. A. (2012). Computational Statistics. John Wiley & Sons. (E-book available through OSU library, Chapters 2, 4, 7, and 9).\n\nCanvas:\nAll other learning materials are available on the course Canvas website.\n\n\n\n\nOSU Academic Catalog: Review of probability, including univariate distributions and limit theorems. Random-number generation and simulation of statistical distributions. Bootstrap estimates of standard error. Variance reduction techniques. Emphasis on the use of computation in statistics using the S-Plus or MATLAB programming language.\nWe will use R instead of S-Plus or MATLAB as the major programming language.\n\n\n\n\nMonte Carlo methods, variance reduction techniques, optimization algorithms, bootstrapping\n\n\n\n\n\n\nLecture\nDate\nTopic\nReading\nAssignments\n\n\n\n\n1\n9/24/2026\nIntroduction to Computation in statistics/Simple Monte Carlo\nChapter 2, Owen, Chapter 3, Ross\nNA\n\n\n2\n9/29/2026\nSimulation\nChapter 3, Owen, Chapter 4-5 Ross\nNA\n\n\n3\n10/1/2026\nSimulation\nChapter 4, Owen, Chapter 4-5 Ross, Chapter 3 R&C\nNA\n\n\n4\n10/6/2026\nSimulation\nChapter 4, Owen, Chapter 4-5 Ross, Chapter 2 R&C\nHW 1\n\n\n5\n10/8/2026\nImportance sampling\nChapter 9, Owen, Chapter 3-4, R&C\nNA\n\n\n6\n10/13/2026\nImportance sampling\nChapter 9, Owen/Ross, Chapters 3 R&C\nNA\n\n\n7\n10/15/2026\nVariance reduction\nChapter 8, Owen/Ross, Chapters 4 R&C\nHW 2\n\n\n8\n10/20/2026\nMarkov Chains\nChapter 6 R&C\nNA\n\n\n9\n10/22/2026\nMetropolis Hastings\nChapter 7 R&C\nNA\n\n\n10\n10/27/2026\nMetropolis Hastings\nChapter 7 R& C\nNA\n\n\n11\n10/29/2026\nGibbs sampling\nChapter 12 Owen\nNA\n\n\n12\n11/3/2026\nIntro to optimization 1\nCh. 2 G& H\nNA\n\n\n14\n11/5/2026\nMidterm\nNA\nNA\n\n\n13\n11/10/2026\nUnivariate Optimization\nCh. 2 G& H\nNA\n\n\n15\n11/12/2026\nMultivariate Optimization\nCh. 2 G& H\nNA\n\n\n16\n11/17/2026\nMultivariate optimization\nCh. 2 G& H\nNA\n\n\n17\n11/19/2026\nConjugate gradient\nPainless conjugate gradient\nNA\n\n\n18\n11/24/2026\nEM More EM\nChapter 4 G& H\nNA\n\n\n19\n11/26/2026\nBootstrap I\nCh. 9 G& H\nNA\n\n\n20\n12/1/2026\nPresentations\nNA\nNA\n\n\n21\n12/3/2026\nPresentations\nNA\nNA\n\n\n\n\n\n\n\n\n\nLab\nDate\nContent\n\n\n\n\n1\n10/2/2026\nSimple Monte Carlo and Gaussian processes\n\n\n2\n10/16/2026\nMCSE and Importance Sampling\n\n\n\n\n\n\n\nStudents will be able to recognize the statistical theory behind statistical simulation and computation.\nStudents will be able to apply the methods and software to perform statistical simulation and computation.\n\n\n\n\n\nHomework will be assigned on a regular basis. Unless otherwise noted, these are to be handed in and will be graded.\nThe due dates for the homework assignments can be found under the Assignments section on Canvas.\nLate homework will not be accepted except in very rare situations where a student has a legitimate reason and has informed the instructor early enough for a special arrangement.\nST 541 students will have an extra problem in each homework assignment.\n\n\n\n\n\nThere will be one midterm exam and one final take-home project.\nNo makeup exam or project is allowed except in very rare situations where a student has a legitimate reason and has informed the instructor early enough for a special arrangement.\n\n\n\n\n\n40% on the homework, 30% on the midterm exam, and 30% on the final project.\nLetter grade assignment: A (93-100), A- (90-92), B+ (86-89), B (80-85), B- (73-79), C+ (66-72), C (60-65), C- or lower (0-59).\nAppropriate curved grading might be used to assign letter grades depending on the performance of the whole class.\nA student may request that an incomplete (for a course that has not been completed) be granted by an instructor, if the reasons for the incomplete are acceptable to the instructor, and the student is passing the course at the time of the request. Please refer to https://registrar.oregonstate.edu/incomplete-grade-policy for more information.\n\n\n\n\n\n\nFor this course, you must be the sole author of all work. You may use GenAI in some minor ways. For example, unless otherwise specified in the assignment, you may use GenAI to\n\nbrainstorm and refine your ideas,\nfind information on your topic,\ndraft an outline to organize your thoughts,\ncheck grammar and refine your writing.\n\nYou may NOT use GenAI to\n\nwrite a draft of a homework solution,\nwrite a draft of R programs,\ngenerate entire sentences, paragraphs, or reports,\ngenerate entire presentation slides.\n\nPlease contact the instructor if you have questions about specific GenAI tools and the allowable usage of GenAI tools in this course so that, together, we can ensure that we are using these tools in productive and ethical ways.\n\n\n\nAcademic Calendar\nAll students are subject to the registration and refund deadlines as stated in the Academic Calendar: https://registrar.oregonstate.edu/osu-academic-calendar.\nStatement Regarding Students with Disabilities\nAccommodations for students with disabilities are determined and approved by Disability Access Services (DAS). If you, as a student, believe you are eligible for accommodations but have not obtained approval please contact DAS immediately at 541-737-4098 or at http://ds.oregonstate.edu. DAS notifies students and faculty members of approved academic accommodations and coordinates implementation of those accommodations. While not required, students and faculty members are encouraged to discuss details of the implementation of individual accommodations.\nStudent Conduct Expectations\nSee https://beav.es/codeofconduct for details about student conduct expectations. In particular, the sections on academic misconduct and academic sanction are summarized as follows.\nSection 4.2. Academic Misconduct. Any action that misrepresents a student or group’s work, knowledge, or achievement, provides a potential or actual inequitable advantage, or compromises the integrity of the educational process. Prohibited behaviors include, but are not limited to doing or attempting the following actions: a. Cheating, b. Plagiarism, c. Falsification, d. Assisting, e. Tampering, f. Multiple submissions of work, g. Unauthorized recording and use.\nSection 6.1.8. Students whose behavior is found to constitute academic misconduct as defined in Section 4.2 are subject to additional academic sanctions, which may include, but are not limited to, failing the course, restriction from course withdrawal, grade replacement provisions, or removal from an academic department, college or program. Students may also be sanctioned to complete the online Academic Integrity Course.\nStudent Bill of Rights\nOSU has twelve established student rights. They include due process in all university disciplinary processes, an equal opportunity to learn, and grading in accordance with the course syllabus: https://asosu.oregonstate.edu/advocacy/rights.\nReach Out for Success\nUniversity students encounter setbacks from time to time. If you encounter difficulties and need assistance, it’s important to reach out. Consider discussing the situation with an instructor or academic advisor. Learn about resources that assist with wellness and academic success at https://oregonstate.edu/ReachOut. If you are in immediate crisis, please contact the Crisis Text Line by texting OREGON to 741-741 or call the National Suicide Prevention Lifeline at 1-800-273-TALK (8255).\n\n\n\nWe strive to create an equitable and inclusive community in which all members are welcome, heard, and treated with respect. We uphold these values and take the opportunity to learn from each other. Our greatest strengths and most innovative ideas come from disagreements and collaborations among people with diverse perspectives, lived experiences, and expertise."
   },
   {
     "objectID": "st_541_f_26.html#instructor-info",
@@ -5758,7 +5758,7 @@
     "href": "st_541_f_26.html#labs",
     "title": "ST 441/541 - F 26",
     "section": "",
-    "text": "Lab\nDate\nContent\n\n\n\n\n1\n10/2/2026\nSimple Monte Carlo and Gaussian processes"
+    "text": "Lab\nDate\nContent\n\n\n\n\n1\n10/2/2026\nSimple Monte Carlo and Gaussian processes\n\n\n2\n10/16/2026\nMCSE and Importance Sampling"
   },
   {
     "objectID": "pcs-content/HW/HW-1.html",
@@ -5955,5 +5955,215 @@
     "title": "HW 2",
     "section": "Question 5",
     "text": "Question 5\nGrad students only\nOwen Chapter 9, problem 9.7"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html",
+    "href": "pcs-content/labs/Lab-2.html",
+    "title": "Lab 2",
+    "section": "",
+    "text": "The first exercise is from assignment 4 from Aki Vehtari’s Bayesian Data Analysis course at Aalto university. The course is here: Aalto BDA3 course The second exercise is adapted from a question in Robert & Casella."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#learning-objectives",
+    "href": "pcs-content/labs/Lab-2.html#learning-objectives",
+    "title": "Lab 1",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\nIn class we saw one method for decreasing the variance of a Monte Carlo estimate - antithetic variables. In lab today you’ll see another - importance sampling.\nImportance sampling is very closely related to the idea of rejection sampling you saw in lab last week. Rather than throw away samples, in importance sampling we include them, but weight them in an appropriate manner so our final estimate reflects the desired density.\nBy the end of this lab you should be able to:\n\nDescribe the steps in Importance sampling\nHighlight the differences between Rejection Sampling and Importance Sampling\nProvide some intuition for when Importance Sampling might provide variance reduction\nEstimate the variance of a simulation based estimator\n\nIf you want more details see Section 9.6 in Simulation by Ross."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#setting",
+    "href": "pcs-content/labs/Lab-2.html#setting",
+    "title": "Lab 1",
+    "section": "Setting",
+    "text": "Setting\nAs in class this week, we’ll imagine we are in a setting where we want to estimate: \\[\n\\theta = \\text{E}\\left( h(X)\\right)\n\\] where \\(X\\) is a random variable with density \\(f(x)\\) (or equivalently c.d.f \\(F(x)\\)).\nTo mirror last week’s lab, you’ll work through an example using the same desired distribution, i.e. let \\(X\\) be a random variable with p.d.f: \\[\nf(x) = 20 x (1 - x)^3, \\quad 0 &lt; x &lt; 1\n\\] (It turns out this is a Beta(2, 4), a fact we will use soon).\nAnd let’s say you are interested in estimating \\[\np = P(X^2 &gt; 0.8) = \\text{E}(h(X))\n\\] where \\[\nh(X) = \\begin{cases}\n1, \\quad \\text{when } X^2 &gt; 0.8 \\\\\n0, \\quad \\text{otherwise}\n\\end{cases}\n\\]"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#motivation",
+    "href": "pcs-content/labs/Lab-2.html#motivation",
+    "title": "Lab 1",
+    "section": "Motivation",
+    "text": "Motivation\nThe naive approach would be to sample many \\(X\\) from their distribution,\n\nnum_sims &lt;- 1000\nx &lt;- rbeta(num_sims, shape1 = 2, shape2 = 4)\n\nThen transform each sample using \\(h()\\), and take the sample mean:\n\nmean(x^2 &gt; 0.8)\n\n[1] 0\n\n\nIn this case, none of our samples satisfy \\(X^2 &gt; 0.8\\), and our estimate for \\(p\\) is exactly 0. Because the event of interest is very rare, we happened to get no instances of the event. This is a situation where importance sampling excels. We’ll sample from another distribution where this event is more likely, then rescale in an appropriate way."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#intuition",
+    "href": "pcs-content/labs/Lab-2.html#intuition",
+    "title": "Lab 1",
+    "section": "Intuition",
+    "text": "Intuition\nImportance sampling proceeds much like rejection sampling, in that we have a proposal and target distribution. Our target distribution is the distribution of our random variable \\(X\\), here \\(f(x)\\). The proposal distribution, \\(g(x)\\), could be chosen because it is much easier to sample from than \\(f(x)\\), or more importantly here, chosen to reduce the variance in our estimate.\nSamples are taken from the proposal density, \\(g(x)\\), and transformed by \\(h()\\), our function of interest, then when it comes time to take the sample average to estimate the expectation, a weighted average is used, to downweight the samples that more likely under \\(g(x)\\) than \\(f(x)\\), and upweight the samples that are more likely under \\(f(x)\\) than \\(g(x)\\).\nThis will often lead to variance reduction when \\(g(x)\\) results in more samples in the area of interest than a sample from \\(f(x)\\)."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#algorithm",
+    "href": "pcs-content/labs/Lab-2.html#algorithm",
+    "title": "Lab 1",
+    "section": "Algorithm",
+    "text": "Algorithm\nTo estimate \\(\\theta = \\text{E}(h(X))\\) where \\(X\\) has p.d.f \\(f(X)\\)\n\nSample \\(Y_1, \\ldots, Y_n\\) with p.d.f \\(g(x)\\)\nCalculate weights \\(w_i = \\frac{f(Y_i)}{g(Y_i)}, \\, i= 1, \\ldots, n\\).\nEstimate \\(\\theta\\):\n\\[\n\\hat{\\theta} = \\frac{\\sum_{i = 1}^{n}h(Y_i)w_i}{\\sum_{i = 1}^{n}w_i}\n\\]"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#sampling-from-the-proposal",
+    "href": "pcs-content/labs/Lab-2.html#sampling-from-the-proposal",
+    "title": "Lab 1",
+    "section": "Sampling from the proposal",
+    "text": "Sampling from the proposal\nLet’s use a Uniform(0, 1) as our proposal density, and simulate many draws:\n\nY &lt;- runif(num_sims)\n\nThis should work well for variance reduction because samples from this distribution are more likely to satisfy our event. In fact, 11% of samples in this particular \\(Y\\), satisfy \\(Y^2 &gt; 0.8\\).\nCan you derive what percentage of Uniform(0, 1) samples you would expect to satisfy the event?"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#deriving-weights",
+    "href": "pcs-content/labs/Lab-2.html#deriving-weights",
+    "title": "Lab 1",
+    "section": "Deriving weights",
+    "text": "Deriving weights\nThe weights required are a ratio of the target to proposal densities evaluated at the samples:\n\nweights &lt;- dbeta(Y, shape1 = 2, shape2 = 4)/dunif(Y)"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#estimate",
+    "href": "pcs-content/labs/Lab-2.html#estimate",
+    "title": "Lab 1",
+    "section": "Estimate",
+    "text": "Estimate\nFinally we estimate the desired expectation as a weighted average of \\(h(Y)\\), using the built in weighted.mean() function:\n\nweighted.mean(Y^2 &gt; 0.8, w = weights)\n\n[1] 0.0006193977\n\n\nNot exactly zero, which is already an improvement."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#how-much-less-variable-is-the-importance-sampling-estimate",
+    "href": "pcs-content/labs/Lab-2.html#how-much-less-variable-is-the-importance-sampling-estimate",
+    "title": "Lab 1",
+    "section": "How much less variable is the importance sampling estimate?",
+    "text": "How much less variable is the importance sampling estimate?\nBrainstorm how we might compare the variability of the two estimates: the naive MC estimate, and the importance sampling estimate.\nTo empirically compare the standard deviation of the two approaches, we could simulate getting the estimates many times, and find a sample standard deviation of the many estimates.\nTo do so, we’ll use the same structure we’ve been using in class. Let’s first wrap up our naive estimate into a function.\nYou might try writing naive_mc_estimate() yourself before looking at the code below\n\nnaive_mc_estimate &lt;- function(num_sims){\n  X &lt;- rbeta(num_sims, shape1 = 2, shape2 = 4)\n  mean(X^2 &gt; 0.8)\n}\n\nWe can do the same thing for the importance sampling estimate:\n\nimportance_sampling_estimate &lt;- function(num_sims){\n  Y &lt;- runif(num_sims)\n  weights &lt;- dbeta(Y, shape1 = 2, shape2 = 4)/dunif(Y)\n  weighted.mean(Y^2 &gt; 0.8, weights)\n}\n\nThen estimating the standard deviation for each is just a matter of combining rerun(), flatten_dbl() and sd()\n\nnaive_estimates &lt;- rerun(1000, \n    naive_mc_estimate(1000))%&gt;% \n  flatten_dbl() \n\nWarning: `rerun()` was deprecated in purrr 1.0.0.\nℹ Please use `map()` instead.\n  # Previously\n  rerun(1000, naive_mc_estimate(1000))\n\n  # Now\n  map(1:1000, ~ naive_mc_estimate(1000))\n\nsd(naive_estimates)\n\n[1] 0.0007384418\n\n\n\nimportance_estimates &lt;- rerun(1000, \n    importance_sampling_estimate(1000)) %&gt;% \n  flatten_dbl() \n\nWarning: `rerun()` was deprecated in purrr 1.0.0.\nℹ Please use `map()` instead.\n  # Previously\n  rerun(1000, importance_sampling_estimate(1000))\n\n  # Now\n  map(1:1000, ~ importance_sampling_estimate(1000))\n\nsd(importance_estimates)\n\n[1] 8.357217e-05\n\n\nYour turn\n\nAre the two methods both estimating the same probability? What can you look at to give evidence of this?\nHow much smaller is the variance using importance sampling? How many samples using the naive method would you need to get a similar variance?\nWhat if \\(X \\sim\\) Beta(8, 2)? Do you think importance sampling with a Uniform proposal would still decrease the variance?\nChallenge How could the two estimation functions be written to accept other proposal densities \\(g(x)\\), target densities \\(g(x)\\), or functions of interest \\(h(x)\\)?"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#question-1.2",
+    "href": "pcs-content/labs/Lab-2.html#question-1.2",
+    "title": "Lab 2",
+    "section": "Question 1.2",
+    "text": "Question 1.2\nThe density function for a gamma distributed random variable (RV) with shape \\(\\alpha\\) and rate \\(\\beta\\) is defined as: \\[\nf_X(x) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha - 1} e^{\\beta x}\n\\] The mean of this distribution is \\(\\alpha / \\beta\\).\nUse the appropriate R function to draw a sample of size 1000 from a gamma(\\(\\alpha = 3\\), \\(\\beta = 3\\)) distribution. We know the mean of this distribution is exactly \\(1\\)."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#question-1.3",
+    "href": "pcs-content/labs/Lab-2.html#question-1.3",
+    "title": "Lab 2",
+    "section": "Question 1.3",
+    "text": "Question 1.3\nThe brute-force way to calculate the Monte Carlo standard error of the mean is to repeatedly take samples of draws from the distribution, calculate the mean of each sample and then take the standard deviation of the means. Let’s use this method to calculate the sampling distribution of the mean of \\(400\\) draws from the gamma(\\(\\alpha=3, \\beta=3\\)) distribution.\nSimulate 2000 samples, each of 400 draws from the gamma(\\(\\alpha = 3\\), \\(\\beta = 3\\)), calculate and save the mean of each sample. Then calculate the standard deviation of the sample of means.\nAdjust the following R code to do this:\n\nset.seed(4711)\n\nNUMBER_OF_SAMPLES &lt;- 1\nNUMBER_OF_DRAWS &lt;- 1\n\n# create a vector to store the sample means\nsample_means &lt;- rep(NA, times = NUMBER_OF_SAMPLES)\n\n# loop over the number of samples\nfor (i in 1:NUMBER_OF_SAMPLES) {\n  # generate a sample from the gamma distribution of size 400\n    #sample &lt;- \n  # calculate the sample mean and save it to the vector\n    #sample_means[i] &lt;- mean(sample)\n}\n\n# calculate the standard deviation of the sample means\n sd(sample_means)\n\n[1] NA"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#question-1.5",
+    "href": "pcs-content/labs/Lab-2.html#question-1.5",
+    "title": "Lab 2",
+    "section": "Question 1.5",
+    "text": "Question 1.5\nEnter the MCSE that is calculated from the code and report your answer with 2 decimal digits."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#question-1.6",
+    "href": "pcs-content/labs/Lab-2.html#question-1.6",
+    "title": "Lab 2",
+    "section": "Question 1.6",
+    "text": "Question 1.6\nNow, let’s explore the Cauchy(location = 0, scale = 1) distribution.\nWhat is the mean of the Cauchy(0, 1) distribution?\nChange the simulation code you wrote above to take samples of the Cauchy(0, 1) distribution and calculate the MCSE of the mean. Try this a few times."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#question-1.7",
+    "href": "pcs-content/labs/Lab-2.html#question-1.7",
+    "title": "Lab 2",
+    "section": "Question 1.7",
+    "text": "Question 1.7\nWhat do you notice about the MCSE for the mean of the Cauchy and gamma distributions?\nThe Central Limit Theorem (CLT) gives us the conditions under which it is also possible to estimate the MCSE from a single sample for means."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#question-1.8",
+    "href": "pcs-content/labs/Lab-2.html#question-1.8",
+    "title": "Lab 2",
+    "section": "Question 1.8",
+    "text": "Question 1.8\nLet’s put the claims of the CLT to test. Assume you’ve taken \\(n\\) independent draws of a random variable and stored them in a vector \\(x\\). Assume also that the random variable follows a distribution with finite mean and variance. What is the correct formula for the MCSE of the mean? \\(\\text{sd}\\) denotes the standard deviation and \\(\\text{var}\\) the variance of \\(x\\)."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#question-1.10",
+    "href": "pcs-content/labs/Lab-2.html#question-1.10",
+    "title": "Lab 2",
+    "section": "Question 1.10",
+    "text": "Question 1.10\nMCSE can be calculated for any estimate, including quantiles and probabilities, and can be used to guide how many digits to report for a given estimate. Suppose you calculate the following summary of a parameter:\n\nmean = 0.483834 (MCSE = 0.003)\n\nUsing a 99% confidence level, what is a reasonable number of digits to report the mean? How would you report the confidence interval for the mean?"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#your-turn",
+    "href": "pcs-content/labs/Lab-2.html#your-turn",
+    "title": "Lab 2",
+    "section": "Your turn",
+    "text": "Your turn\nWrite a function that calculates \\(\\log f_u(x)\\), and apply it to the draws X. We’re going to use the same Sigma we defined above, but in order to make our code efficient, we should only pass in \\(\\Sigma^{-1}\\) so we don’t invert the matrix repeatedly.\n\nlog_f_u &lt;- function(x, inv_sigma) {\n ## write your code \n}\n\nlog_f_u_draws &lt;- rep(NA_real_,n_draws)\n\nNow we need to calculate the importance ratios with the log densities we have.\nThe formula is:\n\\[\n\\log w(X_i) = \\log f_u(X_i) - \\log g(X_i) - \\log\\lp \\sum_{j=1}^S f_u(X_j)/g(X_j) \\rp\n\\]\nThe first two terms are straightforward, but we need to calculate the log of a sum of the exponentiated log densities. We can use a function called log_sum_exp to do so:\n\n## Code from Gemini\nlog_sum_exp &lt;- function(x) {\n  max_x &lt;- max(x)\n  return(max_x + log(sum(exp(x - max_x))))\n}\n\nTo use this we pass in the vector log_f_u_draws - log_g_draws and we’ll get out the log of the weights denominator."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#your-turn-1",
+    "href": "pcs-content/labs/Lab-2.html#your-turn-1",
+    "title": "Lab 2",
+    "section": "Your turn",
+    "text": "Your turn\nCalculate the log-weights using log_f_u_draws and log_g_draws.\n\nlog_weights &lt;- rep(NA_real_,n_draws)\n\nMake a histogram of the weights. What do you notice?\n\nhist(log_weights)\n\nRemember that in order to have well-behaved weights, we want our importance density to have heavier tails than our target distribution.\nTry changing nu above to 2 from 10 and see how the distribution of the log weights changes.\nNow with these new log-weights we can approximate \\(\\Exp{h(X)}{f}\\) using \\(\\tilde{\\mu}_{\\text{IS}}\\).\nIn order to do so, we need to define a function \\(h(x)\\). Remember, we’re trying to estimate \\(X_1^2\\) and \\(X_1 X_2\\). What is the dimension of the range of \\(h\\)?\n\nh &lt;- function(x) {\n ## Your code  \n}\n\nReport the estimates for \\(\\ExpA{X_1^2}{X \\sim g}\\) and \\(\\ExpA{X_1 X_2}{X \\sim g}\\)."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2-worked.html",
+    "href": "pcs-content/labs/Lab-2-worked.html",
+    "title": "Lab 2",
+    "section": "",
+    "text": "This is assignment 4 from Aki Vehtari’s Bayesian Data Analysis course at Aalto university. The course is here: Aalto BDA3 course"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2-worked.html#question-1.2",
+    "href": "pcs-content/labs/Lab-2-worked.html#question-1.2",
+    "title": "Lab 2",
+    "section": "Question 1.2",
+    "text": "Question 1.2\nThe density function for a gamma distributed random variable (RV) with shape \\(\\alpha\\) and rate \\(\\beta\\) is defined as: \\[\nf_X(x) = \\frac{\\beta^\\alpha}{\\Gamma(\\alpha)}x^{\\alpha - 1} e^{\\beta x}\n\\] The mean of this distribution is \\(\\alpha / \\beta\\).\nUse the appropriate R function to draw a sample of size 1000 from a gamma(\\(\\alpha = 3\\), \\(\\beta = 3\\)) distribution. We know the mean of this distribution is exactly \\(1\\)."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2-worked.html#question-1.3",
+    "href": "pcs-content/labs/Lab-2-worked.html#question-1.3",
+    "title": "Lab 2",
+    "section": "Question 1.3",
+    "text": "Question 1.3\nThe brute-force way to calculate the Monte Carlo standard error of the mean is to repeatedly take samples of draws from the distribution, calculate the mean of each sample and then take the standard deviation of the means. Let’s use this method to calculate the sampling distribution of the mean of \\(400\\) draws from the gamma(\\(\\alpha=3, \\beta=3\\)) distribution.\nSimulate 2000 samples, each of 400 draws from the gamma(\\(\\alpha = 3\\), \\(\\beta = 3\\)), calculate and save the mean of each sample. Then calculate the standard deviation of the sample of means.\nAdjust the following R code to do this:\n\nset.seed(4711)\n\nNUMBER_OF_SAMPLES &lt;- 1\nNUMBER_OF_DRAWS &lt;- 1\n\n# create a vector to store the sample means\nsample_means &lt;- rep(NA, times = NUMBER_OF_SAMPLES)\n\n# loop over the number of samples\nfor (i in 1:NUMBER_OF_SAMPLES) {\n  # generate a sample from the gamma distribution of size 400\n    #sample &lt;- \n  # calculate the sample mean and save it to the vector\n    #sample_means[i] &lt;- mean(sample)\n}\n\n# calculate the standard deviation of the sample means\n sd(sample_means)\n\n[1] NA"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2-worked.html#question-1.5",
+    "href": "pcs-content/labs/Lab-2-worked.html#question-1.5",
+    "title": "Lab 2",
+    "section": "Question 1.5",
+    "text": "Question 1.5\nEnter the MCSE that is calculated from the code and report your answer with 2 decimal digits."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2-worked.html#question-1.6",
+    "href": "pcs-content/labs/Lab-2-worked.html#question-1.6",
+    "title": "Lab 2",
+    "section": "Question 1.6",
+    "text": "Question 1.6\nNow, let’s explore the Cauchy(location = 0, scale = 1) distribution.\nWhat is the mean of the Cauchy(0, 1) distribution?\nChange the simulation code you wrote above to take samples of the Cauchy(0, 1) distribution and calculate the MCSE of the mean. Try this a few times."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2-worked.html#question-1.7",
+    "href": "pcs-content/labs/Lab-2-worked.html#question-1.7",
+    "title": "Lab 2",
+    "section": "Question 1.7",
+    "text": "Question 1.7\nWhat do you notice about the MCSE for the mean of the Cauchy and gamma distributions?\nThe Central Limit Theorem (CLT) gives us the conditions under which it is also possible to estimate the MCSE from a single sample for means."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2-worked.html#question-1.8",
+    "href": "pcs-content/labs/Lab-2-worked.html#question-1.8",
+    "title": "Lab 2",
+    "section": "Question 1.8",
+    "text": "Question 1.8\nLet’s put the claims of the CLT to test. Assume you’ve taken \\(n\\) independent draws of a random variable and stored them in a vector \\(x\\). Assume also that the random variable follows a distribution with finite mean and variance. What is the correct formula for the MCSE of the mean? \\(\\text{sd}\\) denotes the standard deviation and \\(\\text{var}\\) the variance of \\(x\\)."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2-worked.html#question-1.10",
+    "href": "pcs-content/labs/Lab-2-worked.html#question-1.10",
+    "title": "Lab 2",
+    "section": "Question 1.10",
+    "text": "Question 1.10\nMCSE can be calculated for any estimate, including quantiles and probabilities, and can be used to guide how many digits to report for a given estimate. Suppose you calculate the following summary of a parameter:\n\nmean = 0.483834 (MCSE = 0.003)\n5% quantile = 0.234536 (MCSE = 0.01)\n95% quantile = 1.34823 (MCSE = 0.2)\n\nThe number of digits you should report as a point estimate\nUsing a 99% confidence level, what is a reasonable number of digits to report the mean?\nBased on recommendations from the lecture, how should you report the 5% quantile?\nBased on recommendations from the lecture, how should you report the 95% quantile?"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2-worked.html#your-turn",
+    "href": "pcs-content/labs/Lab-2-worked.html#your-turn",
+    "title": "Lab 2",
+    "section": "Your turn",
+    "text": "Your turn\nWrite a function that calculates \\(\\log f_u(x)\\), and apply it to the draws X. We’re going to use the same Sigma we defined above.\n\nlog_f_u &lt;- function(x, sigma) {\n ## write your code \n}\n\n## log_f_u_draws &lt;- \n\nNow we need to calculate the importance ratios with the log densities we have.\nThe formula is: \\[\n\\log w(X_i) = \\log f_u(X_i) - \\log g(X_i) - \\log\\lp \\sum_{j=1}^S f_u(X_j)/g(X_j) \\rp\n\\]\nThe first two terms are straightforward, but we need to calculate the log of a sum of the exponentiated log densities. We can use a function called log_sum_exp to do so:\n\n## Code from Gemini\nlog_sum_exp &lt;- function(x) {\n  max_x &lt;- max(x)\n  return(max_x + log(sum(exp(x - max_x))))\n}\n\nTo use this we pass in the vector log_f_u_draws - log_g_draws and we’ll get out the log of the weights denominator."
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2-worked.html#your-turn-1",
+    "href": "pcs-content/labs/Lab-2-worked.html#your-turn-1",
+    "title": "Lab 2",
+    "section": "Your turn",
+    "text": "Your turn\nCalculate the log-weights using log_f_u_draws and log_g_draws.\nMake a histogram of the weights. What do you notice?\nRemember that\nNow with these log-weights we can approximate \\(\\Exp{h(X)}{f}\\) using \\(\\tilde{\\mu}_{\\text{IS}}\\).\nIn order to do so, we need to define a function \\(h(x)\\). Remember, we’re trying to estimate \\(X_1^2\\) and \\(X_1 X_2\\). What is the dimension of the range of \\(h\\)?"
+  },
+  {
+    "objectID": "pcs-content/labs/Lab-2.html#challenge-question",
+    "href": "pcs-content/labs/Lab-2.html#challenge-question",
+    "title": "Lab 2",
+    "section": "Challenge question",
+    "text": "Challenge question\nHow would you quantify the MCSE of this estimate?"
   }
 ]
