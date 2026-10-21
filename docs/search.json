@@ -5926,42 +5926,42 @@
     "href": "pcs-content/HW/HW-2.html#question-1",
     "title": "HW 2",
     "section": "Question 1",
-    "text": "Question 1\n\nSuppose we want an estimate of \\(P(X &gt; 2.5)\\) when \\(X\\) is normally distributed with mean \\(0\\) and variance \\(1\\) and we use a simple Monte Carlo estimator to estimate this probability. How many samples would we need to get the Monte Carlo standard error down to \\(O(10^{-4})\\)? What does this imply about how many digits we can report for our estimate if we use a 99% confidence interval? Put another way, how many digits of accuracy do we have for our estimate at 99% confidence?\nFor \\(X \\sim \\text{Gamma}(1, 1)\\), show that \\(P(X &gt; 5.3) \\approx 0.005\\) using simulations and the logic in part \\(a\\) regarding the number of samples needed to safely conclude this statement is correct.\nUsing the following fact about the asymptotic sampling distribution for the \\(\\alpha^{\\mathrm{th}}\\) quantile: \\[\n\\hat{F}^{-1}(\\alpha) \\overset{\\text{asymp}}{\\sim} N\\lp a, \\frac{\\alpha (1 - \\alpha)}{S f(a)}\\rp\n\\] Determine the \\(0.995^{\\mathrm{th}}\\) quantile of the \\(\\text{Gamma}(1,1)\\) to three digits of accuracy with \\(99\\%\\) probability (i.e. to report \\(5.xx \\pm z_{0.995}\\text{MCSE}\\) where \\(z_{0.995}\\) is the upper 0.995 quantile of a standard normal RV."
+    "text": "Question 1\nSuppose we want an estimate of \\(P(X &gt; 2.5)\\) when \\(X\\) is normally distributed with mean \\(0\\) and variance \\(1\\) and we use a simple Monte Carlo estimator to estimate this probability. This estimator will use \\(h(x) = \\ind{x &gt; 2.5}\\): \\[\n\\begin{aligned}\n\\hat{\\mu} & = \\frac{1}{S} \\sum_{i=1}^S h(X_i) \\\\\nX_i & \\overset{\\text{iid}}{\\sim} \\text{N}(0, 1),\\, i = 1, \\dots, S\n\\end{aligned}\n\\] Our Monte Carlo standard error is then: \\[\n\\text{Var}(\\hat{\\mu}) = \\frac{\\Var{h(X_1)}}{S}\n\\]\n\nHow many samples would we need to get the Monte Carlo standard error down to \\(O(10^{-4})\\)?\nShow this using simulation in R.\nHow many digits should we report for our point estimate for \\(\\hat{\\mu}\\) if we want a 0.95 probability that our reported point estimate wouldn’t change with another sample? Put another way, when we create a 95% confidence interval for \\(\\mu\\) using our estimate \\(\\hat{\\mu}\\) and \\(\\Var{\\hat{\\mu}}\\), how many digits are common between our lower bound and our upper bound?"
   },
   {
     "objectID": "pcs-content/HW/HW-2.html#question-2",
     "href": "pcs-content/HW/HW-2.html#question-2",
     "title": "HW 2",
     "section": "Question 2",
-    "text": "Question 2\n\nThe density function for the truncated exponential distribution (denoted as \\(X \\sim \\text{TE}(\\lambda, a)\\)) is \\[\ng(x;\\lambda, a) = \\ind{x &gt; a}\\lambda e^{-(x - a)}\n\\] Show that \\(X \\sim \\text{TE}(\\lambda,a)\\) is equivalent to \\(Y \\sim \\text{Exp}(\\lambda)\\) and \\(X = Y + a\\)\nUsing \\(g\\) from part a. with \\(\\lambda = 1\\) as an importance density, construct an importance sampling estimator \\(\\hat{\\mu}_{\\text{IS}}\\) and determine the number of samples required to estimate \\(P(X &gt; 2.5)\\) from a normal distribution to the same accuracy as you did in question 1a. This will require that you use the variance formula for an importance sampling estimator that we derived in class and to do some calculus. When computing your variance estimate, you may use the pnorm function.\nUsing the fact that \\(P(Z &gt; x) \\approx \\frac{1}{x\\sqrt{2 \\pi}} e^{-x^2/2}\\) find \\(\\lambda\\) that minimizes the variance of the importance sampling estimator."
+    "text": "Question 2\nLet \\(X \\sim \\text{Gamma}(1, 1)\\)\n\nShow that \\(P(X &gt; 5.3) \\approx 0.005\\) using simulations.\nUsing the following fact about the asymptotic sampling distribution for the \\(\\alpha^{\\mathrm{th}}\\) quantile out of \\(S\\) samples, denoted as \\(a\\) below: \\[\n\\hat{F}^{-1}(\\alpha) \\overset{\\text{asymp}}{\\sim} N\\lp a, \\frac{\\alpha (1 - \\alpha)}{S f(a)}\\rp\n\\] Determine the \\(0.995^{\\mathrm{th}}\\) quantile of the \\(\\text{Gamma}(1,1)\\) to three digits of accuracy with \\(99\\%\\) probability (i.e. to report \\(5.xx \\pm z_{0.995}\\text{MCSE}\\) where \\(z_{0.995}\\) is the upper 0.995 quantile of a standard normal RV."
   },
   {
     "objectID": "pcs-content/HW/HW-2.html#question-3",
     "href": "pcs-content/HW/HW-2.html#question-3",
     "title": "HW 2",
     "section": "Question 3",
-    "text": "Question 3\nOwen Chapter 9, problem 9.1"
+    "text": "Question 3\n\nThe density function for the truncated exponential distribution (denoted as \\(X \\sim \\text{TE}(\\lambda, a)\\)) is \\[\ng(x;\\lambda, a) = \\ind{x &gt; a}\\lambda e^{-(x - a)}\n\\] Show that \\(X \\sim \\text{TE}(\\lambda,a)\\) is equivalent to \\(Y \\sim \\text{Exp}(\\lambda)\\) and \\(X = Y + a\\)\nUsing \\(g\\) from part a. with \\(\\lambda = 1\\) as an importance density, construct an importance sampling estimator \\(\\hat{\\mu}_{\\text{IS}}\\) and determine the number of samples required to estimate \\(P(X &gt; 2.5)\\) from a normal distribution to the same accuracy as you did in question 1a. This will require that you use the variance formula for an importance sampling estimator that we derived in class and to do some calculus. When computing your variance estimate, you may use the pnorm function.\nUsing the fact that \\(P(Z &gt; x) \\approx \\frac{1}{x\\sqrt{2 \\pi}} e^{-x^2/2}\\) find \\(\\lambda\\) that minimizes the variance of the importance sampling estimator."
   },
   {
     "objectID": "pcs-content/HW/HW-2.html#question-4",
     "href": "pcs-content/HW/HW-2.html#question-4",
     "title": "HW 2",
     "section": "Question 4",
-    "text": "Question 4\nThis is adapted from Gelman et al. (2014).\nThe target density is a standard normal density, while the importance density is a t distribution with 3 degrees of freedom, with a mean of zero and a scale parameter such that the second derivative of the log-density evaluated at the mode is equal to -1 (note that this matches the normal distribution’s curvature at 0).\n\nWhat is the scale parameter for the t distribution?\nDraw 100 samples from the importance distribution and make a histogram of the log of the importance weights\nEstimate \\(\\Exp{X}\\) and \\(\\Var{X}\\) using the importance sampling estimator and compare to the true values\nRepeat b and c for \\(10{,}000\\) samples\nRepeat b, c, and d where we use the normal distribution as the importance density and the target distribution is the same t distribution you used above.\nComment on why the estimates of the variance in part e. are too small."
+    "text": "Question 4\nOwen Chapter 9, problem 9.1"
   },
   {
     "objectID": "pcs-content/HW/HW-2.html#question-5",
     "href": "pcs-content/HW/HW-2.html#question-5",
     "title": "HW 2",
     "section": "Question 5",
-    "text": "Question 5\nGrad students only\nOwen Chapter 9, problem 9.7"
+    "text": "Question 5\nThis is adapted from Gelman et al. (2014).\nThe target density is a standard normal density, while the importance density is a t distribution with 3 degrees of freedom, with a mean of zero and a scale parameter such that the second derivative of the log-density evaluated at the mode is equal to -1 (note that this matches the normal distribution’s curvature at 0).\n\nWhat is the scale parameter for the t distribution?\nDraw 100 samples from the importance distribution and make a histogram of the log of the importance weights\nEstimate \\(\\Exp{X}\\) and \\(\\Var{X}\\) using the importance sampling estimator and compare to the true values\nRepeat b and c for \\(10{,}000\\) samples\nRepeat b, c, and d where we use the normal distribution as the importance density and the target distribution is the same t distribution you used above.\nComment on why the estimates of the variance in part e. are too small."
   },
   {
     "objectID": "pcs-content/labs/Lab-2.html",
     "href": "pcs-content/labs/Lab-2.html",
     "title": "Lab 2",
     "section": "",
-    "text": "The first exercise is from assignment 4 from Aki Vehtari’s Bayesian Data Analysis course at Aalto university. The course is here: Aalto BDA3 course The second exercise is adapted from a question in Robert & Casella."
+    "text": "This is assignment 4 from Aki Vehtari’s Bayesian Data Analysis course at Aalto university. The course is here: Aalto BDA3 course"
   },
   {
     "objectID": "pcs-content/labs/Lab-2.html#learning-objectives",
@@ -6073,21 +6073,21 @@
     "href": "pcs-content/labs/Lab-2.html#question-1.10",
     "title": "Lab 2",
     "section": "Question 1.10",
-    "text": "Question 1.10\nMCSE can be calculated for any estimate, including quantiles and probabilities, and can be used to guide how many digits to report for a given estimate. Suppose you calculate the following summary of a parameter:\n\nmean = 0.483834 (MCSE = 0.003)\n\nUsing a 99% confidence level, what is a reasonable number of digits to report the mean? How would you report the confidence interval for the mean?"
+    "text": "Question 1.10\nMCSE can be calculated for any estimate, including quantiles and probabilities, and can be used to guide how many digits to report for a given estimate. Suppose you calculate the following summary of a parameter:\n\nmean = 0.483834 (MCSE = 0.003)\n5% quantile = 0.234536 (MCSE = 0.01)\n95% quantile = 1.34823 (MCSE = 0.2)\n\nThe number of digits you should report as a point estimate\nUsing a 99% confidence level, what is a reasonable number of digits to report the mean?\nBased on recommendations from the lecture, how should you report the 5% quantile?\nBased on recommendations from the lecture, how should you report the 95% quantile?"
   },
   {
     "objectID": "pcs-content/labs/Lab-2.html#your-turn",
     "href": "pcs-content/labs/Lab-2.html#your-turn",
     "title": "Lab 2",
     "section": "Your turn",
-    "text": "Your turn\nWrite a function that calculates \\(\\log f_u(x)\\), and apply it to the draws X. We’re going to use the same Sigma we defined above, but in order to make our code efficient, we should only pass in \\(\\Sigma^{-1}\\) so we don’t invert the matrix repeatedly.\n\nlog_f_u &lt;- function(x, inv_sigma) {\n ## write your code \n}\n\nlog_f_u_draws &lt;- rep(NA_real_,n_draws)\n\nNow we need to calculate the importance ratios with the log densities we have.\nThe formula is:\n\\[\n\\log w(X_i) = \\log f_u(X_i) - \\log g(X_i) - \\log\\lp \\sum_{j=1}^S f_u(X_j)/g(X_j) \\rp\n\\]\nThe first two terms are straightforward, but we need to calculate the log of a sum of the exponentiated log densities. We can use a function called log_sum_exp to do so:\n\n## Code from Gemini\nlog_sum_exp &lt;- function(x) {\n  max_x &lt;- max(x)\n  return(max_x + log(sum(exp(x - max_x))))\n}\n\nTo use this we pass in the vector log_f_u_draws - log_g_draws and we’ll get out the log of the weights denominator."
+    "text": "Your turn\nWrite a function that calculates \\(\\log f_u(x)\\), and apply it to the draws X. We’re going to use the same Sigma we defined above.\n\nlog_f_u &lt;- function(x, sigma) {\n ## write your code \n}\n\n## log_f_u_draws &lt;- \n\nNow we need to calculate the importance ratios with the log densities we have.\nThe formula is: \\[\n\\log w(X_i) = \\log f_u(X_i) - \\log g(X_i) - \\log\\lp \\sum_{j=1}^S f_u(X_j)/g(X_j) \\rp\n\\]\nThe first two terms are straightforward, but we need to calculate the log of a sum of the exponentiated log densities. We can use a function called log_sum_exp to do so:\n\n## Code from Gemini\nlog_sum_exp &lt;- function(x) {\n  max_x &lt;- max(x)\n  return(max_x + log(sum(exp(x - max_x))))\n}\n\nTo use this we pass in the vector log_f_u_draws - log_g_draws and we’ll get out the log of the weights denominator."
   },
   {
     "objectID": "pcs-content/labs/Lab-2.html#your-turn-1",
     "href": "pcs-content/labs/Lab-2.html#your-turn-1",
     "title": "Lab 2",
     "section": "Your turn",
-    "text": "Your turn\nCalculate the log-weights using log_f_u_draws and log_g_draws.\n\nlog_weights &lt;- rep(NA_real_,n_draws)\n\nMake a histogram of the weights. What do you notice?\n\nhist(log_weights)\n\nRemember that in order to have well-behaved weights, we want our importance density to have heavier tails than our target distribution.\nTry changing nu above to 2 from 10 and see how the distribution of the log weights changes.\nNow with these new log-weights we can approximate \\(\\Exp{h(X)}{f}\\) using \\(\\tilde{\\mu}_{\\text{IS}}\\).\nIn order to do so, we need to define a function \\(h(x)\\). Remember, we’re trying to estimate \\(X_1^2\\) and \\(X_1 X_2\\). What is the dimension of the range of \\(h\\)?\n\nh &lt;- function(x) {\n ## Your code  \n}\n\nReport the estimates for \\(\\ExpA{X_1^2}{X \\sim g}\\) and \\(\\ExpA{X_1 X_2}{X \\sim g}\\)."
+    "text": "Your turn\nCalculate the log-weights using log_f_u_draws and log_g_draws.\nMake a histogram of the weights. What do you notice?\nRemember that\nNow with these log-weights we can approximate \\(\\Exp{h(X)}{f}\\) using \\(\\tilde{\\mu}_{\\text{IS}}\\).\nIn order to do so, we need to define a function \\(h(x)\\). Remember, we’re trying to estimate \\(X_1^2\\) and \\(X_1 X_2\\). What is the dimension of the range of \\(h\\)?"
   },
   {
     "objectID": "pcs-content/labs/Lab-2-worked.html",
@@ -6165,5 +6165,12 @@
     "title": "Lab 2",
     "section": "Challenge question",
     "text": "Challenge question\nHow would you quantify the MCSE of this estimate?"
+  },
+  {
+    "objectID": "pcs-content/HW/HW-2.html#question-6",
+    "href": "pcs-content/HW/HW-2.html#question-6",
+    "title": "HW 2",
+    "section": "Question 6",
+    "text": "Question 6\nGrad students only\nOwen Chapter 9, problem 9.7\nFor the second part of the question, give the ratio of the variances."
   }
 ]
