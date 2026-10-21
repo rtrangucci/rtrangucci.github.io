@@ -298,7 +298,7 @@ X_i &amp; \overset{\text{iid}}{\sim} \text{N}(0, 1),\, i = 1, \dots, S
 <h2 class="anchored" data-anchor-id="question-3">Question 3</h2>
 <ol type="a">
 <li><p>The density function for the truncated exponential distribution (denoted as <span class="math inline">\(X \sim \text{TE}(\lambda, a)\)</span>) is <span class="math display">\[
-g(x;\lambda, a) = \ind{x &gt; a}\lambda e^{-(x - a)}
+g(x;\lambda, a) = \ind{x &gt; a}\lambda e^{-\lambda(x - a)}
 \]</span> Show that <span class="math inline">\(X \sim \text{TE}(\lambda,a)\)</span> is equivalent to <span class="math inline">\(Y \sim \text{Exp}(\lambda)\)</span> and <span class="math inline">\(X = Y + a\)</span></p></li>
 <li><p>Using <span class="math inline">\(g\)</span> from part a. with <span class="math inline">\(\lambda = 1\)</span> as an importance density, construct an importance sampling estimator <span class="math inline">\(\hat{\mu}_{\text{IS}}\)</span> and determine the number of samples required to estimate <span class="math inline">\(P(X &gt; 2.5)\)</span> from a normal distribution to the same accuracy as you did in question 1a. This will require that you use the variance formula for an importance sampling estimator that we derived in class and to do some calculus. When computing your variance estimate, you may use the <code>pnorm</code> function.</p></li>
 <li><p>Using the fact that <span class="math inline">\(P(Z &gt; x) \approx \frac{1}{x\sqrt{2 \pi}} e^{-x^2/2}\)</span> find <span class="math inline">\(\lambda\)</span> that minimizes the variance of the importance sampling estimator.</p></li>
@@ -883,7 +883,7 @@ Robert, Christian P, George Casella, and George Casella. 1999. <em>Monte Carlo S
 <span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>a. The density function for the truncated exponential distribution (denoted as $X \sim \text{TE}(\lambda, a)$) is</span>
 <span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>g(x;\lambda, a) = \ind{x &gt; a}\lambda e^{-(x - a)}</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>g(x;\lambda, a) = \ind{x &gt; a}\lambda e^{-\lambda(x - a)}</span>
 <span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>Show that $X \sim \text{TE}(\lambda,a)$ is equivalent to $Y \sim \text{Exp}(\lambda)$ and $X = Y + a$</span>
 <span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
