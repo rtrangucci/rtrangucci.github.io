@@ -5933,7 +5933,7 @@
     "href": "pcs-content/HW/HW-2.html#question-2",
     "title": "HW 2",
     "section": "Question 2",
-    "text": "Question 2\nLet \\(X \\sim \\text{Gamma}(1, 1)\\)\n\nShow that \\(P(X &gt; 5.3) \\approx 0.005\\) using simulations.\nUsing the following fact about the asymptotic sampling distribution for the \\(\\alpha^{\\mathrm{th}}\\) quantile out of \\(S\\) samples, denoted as \\(a\\) below: \\[\n\\hat{F}^{-1}(\\alpha) \\overset{\\text{asymp}}{\\sim} N\\lp a, \\frac{\\alpha (1 - \\alpha)}{S f(a)}\\rp\n\\] Determine the \\(0.995^{\\mathrm{th}}\\) quantile of the \\(\\text{Gamma}(1,1)\\) to three digits of accuracy with \\(99\\%\\) probability (i.e. to report \\(5.xx \\pm z_{0.995}\\text{MCSE}\\) where \\(z_{0.995}\\) is the upper 0.995 quantile of a standard normal RV."
+    "text": "Question 2\nLet \\(X \\sim \\text{Gamma}(1, 1)\\)\n\nShow that \\(P(X &gt; 5.3) \\approx 0.005\\) using simulations.\nUsing the following fact about the asymptotic sampling distribution for the \\(\\alpha^{\\mathrm{th}}\\) quantile out of \\(S\\) samples, denoted as \\(a\\) below: \\[\n\\hat{F}^{-1}(\\alpha) \\overset{\\text{asymp}}{\\sim} N\\lp a, \\frac{\\alpha (1 - \\alpha)}{S f^2(a)}\\rp\n\\] Determine the \\(0.995^{\\mathrm{th}}\\) quantile of the \\(\\text{Gamma}(1,1)\\) to three digits of accuracy with \\(99\\%\\) probability (i.e. to report \\(5.xx \\pm z_{0.995}\\text{MCSE}\\) where \\(z_{0.995}\\) is the upper 0.995 quantile of a standard normal RV."
   },
   {
     "objectID": "pcs-content/HW/HW-2.html#question-3",
@@ -6150,7 +6150,7 @@
     "href": "pcs-content/labs/Lab-2-worked.html#your-turn",
     "title": "Lab 2",
     "section": "Your turn",
-    "text": "Your turn\nWrite a function that calculates \\(\\log f_u(x)\\), and apply it to the draws X. We’re going to use the same Sigma we defined above.\n\nlog_f_u &lt;- function(x, sigma) {\n ## write your code \n}\n\n## log_f_u_draws &lt;- \n\nNow we need to calculate the importance ratios with the log densities we have.\nThe formula is: \\[\n\\log w(X_i) = \\log f_u(X_i) - \\log g(X_i) - \\log\\lp \\sum_{j=1}^S f_u(X_j)/g(X_j) \\rp\n\\]\nThe first two terms are straightforward, but we need to calculate the log of a sum of the exponentiated log densities. We can use a function called log_sum_exp to do so:\n\n## Code from Gemini\nlog_sum_exp &lt;- function(x) {\n  max_x &lt;- max(x)\n  return(max_x + log(sum(exp(x - max_x))))\n}\n\nTo use this we pass in the vector log_f_u_draws - log_g_draws and we’ll get out the log of the weights denominator."
+    "text": "Your turn\nWrite a function that calculates \\(\\log f_u(x)\\), and apply it to the draws X. We’re going to use the same Sigma we defined above.\nNow we need to calculate the importance ratios with the log densities we have.\nThe formula is: \\[\n\\log w(X_i) = \\log f_u(X_i) - \\log g(X_i) - \\log\\lp \\sum_{j=1}^S f_u(X_j)/g(X_j) \\rp\n\\]\nThe first two terms are straightforward, but we need to calculate the log of a sum of the exponentiated log densities. We can use a function called log_sum_exp to do so:\n\n## Code from Gemini\nlog_sum_exp &lt;- function(x) {\n  max_x &lt;- max(x)\n  return(max_x + log(sum(exp(x - max_x))))\n}\n\nTo use this we pass in the vector log_f_u_draws - log_g_draws and we’ll get out the log of the weights denominator."
   },
   {
     "objectID": "pcs-content/labs/Lab-2-worked.html#your-turn-1",
@@ -6172,5 +6172,47 @@
     "title": "HW 2",
     "section": "Question 6",
     "text": "Question 6\nGrad students only\nOwen Chapter 9, problem 9.7\nFor the second part of the question, give the ratio of the variances."
+  },
+  {
+    "objectID": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html",
+    "href": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html",
+    "title": "Variance reduction",
+    "section": "",
+    "text": "Much of this material is from Chapter 9 of Owen (2013)"
+  },
+  {
+    "objectID": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html#attribution",
+    "href": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html#attribution",
+    "title": "Variance reduction",
+    "section": "",
+    "text": "Much of this material is from Chapter 9 of Owen (2013)"
+  },
+  {
+    "objectID": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html#variance",
+    "href": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html#variance",
+    "title": "Variance reduction",
+    "section": "Variance",
+    "text": "Variance\nOur focus in this lecture is in how we can increase the statistical efficiency (i.e. reduce the variance) of our Monte Carlo schemes compared to the simple \\(\\sigma^2 / S\\) for i.i.d. samples. We’ve seen some methods to reduce variance in other contexts like estimating the tail probability of a Cauchy or a normally distributed RV. There are more systematic ways of doing so, and that is what we’ll explore now."
+  },
+  {
+    "objectID": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html#antithetic-sampling",
+    "href": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html#antithetic-sampling",
+    "title": "Variance reduction",
+    "section": "Antithetic sampling",
+    "text": "Antithetic sampling\nSuppose we have a sample \\(X_i, i = 1, \\dots, n\\) marginally distributed according to some symmetric density \\(f\\) about a point \\(c\\). We can create a second set of RVs \\(Y_i, i = 1, \\dots, n\\) defined as \\[\nY_i - c = -(X_i - c) \\implies Y_i = 2c - X_i\n\\] For every sample \\(X_i\\) we get a second sample \\(Y_i\\) reflected about the line \\(x = c\\). The RV \\(Y_i\\) is equal in distribution to \\(X_i\\), but with correlation \\(-1\\).\nLet the target estimand be \\(\\ExpA{h(X)}{g}\\). A consistent estimator is: \\[\n\\hat{\\mu} = \\frac{1}{2n} \\sum_{i=1}^n h(X_i) + h(Y_i)\n\\]\nThe variance of this estimator is \\[\n\\begin{aligned}\n\\Var{\\hat{\\mu}} & = \\frac{1}{4n^2} \\sum_{i=1}^n 2 (\\sigma^2 + 2 \\Cov{h(X_i)}{h(Y)}) \\\\\n& = \\frac{\\sigma^2}{2n}(1 + \\rho_{h(X),h(Y)})\n\\end{aligned}\n\\]\nWe know that \\(-1 \\leq \\rho \\leq 1\\), so the variance of this estimator can be anywhere from \\(0\\) to \\(\\frac{\\sigma}{n}\\).\nIf \\(h\\) is monotone, then \\(\\rho &lt; 0\\), though its magnitude depends on the specifics of \\(h\\).\n\nExample 1 (Uniforms) Let’s estimate \\(\\Exp{e^U}\\) where \\(U \\sim \\text{Unif}(0,1)\\). We’ll compare two options:\n\nGenerate \\(U_1, U_2 \\overset{\\text{iid}}{\\sim} \\text{Unif}(0,1)\\)\n\n\\(\\hat{\\mu} = e^{U_1} / 2 + e^{U_2}/2\\)\n\nGenerate \\(U_1 \\sim \\text{Unif}(0,1)\\)\n\n\\(\\hat{\\mu} = e^{U_1} / 2 + e^{1 - U_1}/2\\)\n\n\nWe’ll need the variance of \\(e^{U_1}\\) and the covariance of \\(e^{U_1}\\) and \\(e^{1 - U_1}\\)."
+  },
+  {
+    "objectID": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html#summary",
+    "href": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html#summary",
+    "title": "Variance reduction",
+    "section": "Summary",
+    "text": "Summary\nWe’ve had two lectures on variance reduction. Now we’ll look at how we combine variance reduction and importance sampling."
+  },
+  {
+    "objectID": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html#multiple-control-variates",
+    "href": "pcs-content/lectures/Lecture-8-Importance-Sampling-Variance-Reduction.html#multiple-control-variates",
+    "title": "Variance reduction",
+    "section": "Multiple control variates",
+    "text": "Multiple control variates\nWe’ve spoken about using a single control variate to reduce our variance. The idea is that when computing a Monte Carlo estimate of an unknown expected value, say of \\(h_1(X)\\) for \\(h_1: \\R^d \\to \\R^{1}\\), if we have a second function \\(h_2(X)\\) for which we know \\(\\theta = \\ExpA{h_2(X)}{X \\sim f}\\), we can design a modified Monte Carol estimator as: \\[\n\\hat{\\mu}_{\\text{CV}} = \\frac{1}{S} \\sum_{i=1}^S (h_1(X_i) + \\beta (h_2(X_i) - \\theta))\n\\] such that \\(\\beta = \\frac{\\Cov{h_1(X_i)}{h_2(X_i)}}{\\Var{h_2(X_i)}}\\).\nIt is natural to expand this with multiple control variates. Now let \\(h_2(x) = h_{12}(x), h_{22}(x), \\dots, h_{k2}(x)\\) be a \\(\\R^d \\to \\R^k\\) such that \\(\\theta = \\ExpA{h_2(X)}{X \\sim f}\\) and define our \\[\n\\hat{\\mu}_{\\text{CV}} = \\frac{1}{S} \\sum_{i=1}^S (h_1(X_i) + \\beta^T (h_2(X_i) - \\theta))\n\\]"
   }
 ]
