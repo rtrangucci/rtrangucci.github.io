@@ -261,9 +261,9 @@ window.Quarto = {
 <p>By the SLLN, <span class="math display">\[
 \hat{\mu}_{\text{IS}} \overset{\text{a.s.}}{\to} \ExpA{\frac{f(X)}{g(X)}h(X)}{g} = \ExpA{h(X)}{f}
 \]</span> This relationship and estimator will hold for many choices of <span class="math inline">\(g\)</span>. A good choice for <span class="math inline">\(g\)</span> is one that has low variance.</p>
-<p>An investigation of <span class="math inline">\(\Var{\hat{\mu}_{\text{IS}}}\)</span> shows that the only term that depends on <span class="math inline">\(g\)</span> is the first term. <span class="math display">\[
+<p>An investigation of <span class="math inline">\(\Var{\hat{\mu}_{\text{IS}}}\)</span> shows that the only term that depends on <span class="math inline">\(g\)</span> is the first term. <span id="eq-var-is"><span class="math display">\[
 \Var{\hat{\mu}_{\text{IS}}} = \ExpA{\frac{f^2(X)}{g^2(X)}h^2(X)}{g} - \ExpA{\frac{f(X)}{g(X)}h(X)}{g}^2
-\]</span> When we write out the integral we get: <span class="math display">\[
+\tag{1}\]</span></span> When we write out the integral we get: <span class="math display">\[
 \int_{\mathcal{Q}} \frac{f^2(x)}{g^2(x)}h^2(x)g(x) dx = \int_{\mathcal{Q}} \frac{f^2(x)}{g(x)}h^2(x)dx
 \]</span></p>
 <p>Now we write the variance: <span class="math display">\[
@@ -276,7 +276,9 @@ window.Quarto = {
 &amp; = \int_{\mathcal{Q}} \frac{(f(x)h(x) - \mu g(x))^2}{g(x)}dx
 \end{aligned}
 \]</span> This expression shows that when <span class="math inline">\(h(x) \geq 0\)</span>, and suppose <span class="math inline">\(\mu &gt; 0\)</span> we get that <span class="math inline">\(g^*(x) = f(x) h(x) / \mu\)</span>, which yields a variance of zero. One can show that the optimal <span class="math inline">\(g(x)\)</span> is proportional to <span class="math inline">\(f(x)h(x)\)</span> when <span class="math inline">\(h(x)\)</span> takes positive and negative values.</p>
-<p>In order for the variance of <span class="math inline">\(\hat{\mu}_{\text{IS}}\)</span> to be finite, the term <span class="math inline">\(\int_{\mathcal{Q}} \frac{f^2(x)}{g(x)}h^2(x)dx\)</span> must not diverge. Let’s look at using a normal importance density with variance <span class="math inline">\(\sigma^2\)</span> for a standard normal target and <span class="math inline">\(h(x) = x\)</span>. Let’s look at the first term in the variance. Note that in this case <span class="math inline">\(\mathcal{D} \equiv \mathcal{Q}\)</span>:</p>
+<p>In order for the variance of <span class="math inline">\(\hat{\mu}_{\text{IS}}\)</span> to be finite, the term <span class="math inline">\(\int_{\mathcal{Q}} \frac{f^2(x)}{g(x)}h^2(x)dx\)</span> must not diverge.</p>
+<div id="exm-normal-is" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1 (Normal importance sampling)</strong></span> Let’s look at using a normal importance density with variance <span class="math inline">\(\sigma^2\)</span> for a standard normal target and <span class="math inline">\(h(x) = x\)</span>. Let’s look at the first term in the variance. Note that in this case <span class="math inline">\(\mathcal{D} \equiv \mathcal{Q}\)</span>:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \int_{\mathcal{Q}} \frac{f^2(x)}{g(x)}h^2(x)dx &amp; = \frac{\sigma}{\sqrt{2\pi}} \int_{\R} x^2 \exp \lp -\frac{x^2}{2}(2 - \sigma^{-2}) \rp \\
@@ -285,6 +287,7 @@ window.Quarto = {
 &amp; = \sigma\lp 2-\sigma^{-2}\rp^{-3/2} \\
 \end{aligned}
 \]</span> if <span class="math inline">\(\sigma^2 &gt; \frac{1}{2}\)</span>.</p>
+</div>
 </section>
 <section id="self-normalized-importance-sampling" class="level2">
 <h2 class="anchored" data-anchor-id="self-normalized-importance-sampling">Self-normalized importance sampling</h2>
@@ -303,7 +306,7 @@ window.Quarto = {
 <p>provided that <span class="math inline">\(\mathcal{D} \equiv \mathcal{Q}\)</span>. This is a downside of the self-normalized importance sampler, namely that we can’t take advantage of the domain of <span class="math inline">\(h\)</span> when picking <span class="math inline">\(g\)</span>.</p>
 <p>This estimator might not seem as useful, but it is widely used in Bayesian statistics.</p>
 <div id="exm-loo" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1 (Leave-one-out cross-validation)</strong></span> A common question we modelers ask is how well a model can be expected to generalize to new data. While this is hard to answer as we typically have only one dataset at the time we need to make a decision about which model to use, we can approximate the answer by iteratively leaving one observation out and seeing how well our model predicts that left out observation. This is called leave-one-out cross-validation, or LOO-CV for short.</p>
+<p><span class="theorem-title"><strong>Example 2 (Leave-one-out cross-validation)</strong></span> A common question we modelers ask is how well a model can be expected to generalize to new data. While this is hard to answer as we typically have only one dataset at the time we need to make a decision about which model to use, we can approximate the answer by iteratively leaving one observation out and seeing how well our model predicts that left out observation. This is called leave-one-out cross-validation, or LOO-CV for short.</p>
 <p>In Bayesian statistics, we often rely on approximate computation of the posterior distribution <span class="math inline">\(\pi(\theta \mid y)\)</span>. For large datsets, that would mean that we need to approximate <span class="math inline">\(\pi(\theta \mid y_{-i}), i = 1, \dots, n\)</span>. Computing this can be prohibitively expensive, but we can approximate it with importance sampling.</p>
 <p>The importance density, <span class="math inline">\(g\)</span>, will be the posterior with all the data, <span class="math inline">\(\pi(\theta \mid y)\)</span>. We will typically know that only up to a constant, so <span class="math display">\[
 g_u(\theta) = \pi(\theta \mid y) \propto \pi(\theta) \prod_{i=1}^n p(y_i \mid \theta)
@@ -371,7 +374,7 @@ w_n(X_i) = \frac{w_u(X_i)}{\sum_{i=1}^S w_u(X_i)}
 \widehat{\Var{\tilde{\mu}_{\text{IS}}}} = \sum_{i=1}^S w^2_n(X_i) (h(X_i) - \tilde{\mu}_{\text{IS}})^2
 \]</span></p>
 <div id="exm-loo-cont" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2 (LOO-CV-IS estimator)</strong></span> Our unnormalized importance weights are <span class="math display">\[
+<p><span class="theorem-title"><strong>Example 3 (LOO-CV-IS estimator)</strong></span> Our unnormalized importance weights are <span class="math display">\[
 w_u(\theta_j) = 1/p(y_i \mid \theta_j)
 \]</span> This gives us <span class="math display">\[
 w_n(\theta_j) = \frac{1}{p(y_i \mid \theta_j)\sum_{k=1}^S 1/p(y_i \mid \theta_k)} = \frac{1}{\sum_{k\neq j}^S 1/p(y_i \mid \theta_k)}

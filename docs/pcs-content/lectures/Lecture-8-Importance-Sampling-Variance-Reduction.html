@@ -235,10 +235,51 @@ window.Quarto = {
 <section id="multiple-control-variates" class="level2">
 <h2 class="anchored" data-anchor-id="multiple-control-variates">Multiple control variates</h2>
 <p>We’ve spoken about using a single control variate to reduce our variance. The idea is that when computing a Monte Carlo estimate of an unknown expected value, say of <span class="math inline">\(h_1(X)\)</span> for <span class="math inline">\(h_1: \R^d \to \R^{1}\)</span>, if we have a second function <span class="math inline">\(h_2(X)\)</span> for which we know <span class="math inline">\(\theta = \ExpA{h_2(X)}{X \sim f}\)</span>, we can design a modified Monte Carol estimator as: <span class="math display">\[
-\hat{\mu}_{\text{CV}} = \frac{1}{S} \sum_{i=1}^S (h_1(X_i) + \beta (h_2(X_i) - \theta))
+\hat{\mu}_{\text{CV}} = \frac{1}{S} \sum_{i=1}^S (h_1(X_i) - \beta (h_2(X_i) - \theta))
 \]</span> such that <span class="math inline">\(\beta = \frac{\Cov{h_1(X_i)}{h_2(X_i)}}{\Var{h_2(X_i)}}\)</span>.</p>
 <p>It is natural to expand this with multiple control variates. Now let <span class="math inline">\(h_2(x) = h_{12}(x), h_{22}(x), \dots, h_{k2}(x)\)</span> be a <span class="math inline">\(\R^d \to \R^k\)</span> such that <span class="math inline">\(\theta = \ExpA{h_2(X)}{X \sim f}\)</span> and define our <span class="math display">\[
-\hat{\mu}_{\text{CV}} = \frac{1}{S} \sum_{i=1}^S (h_1(X_i) + \beta^T (h_2(X_i) - \theta))
+\hat{\mu}_{\text{CV}} = \frac{1}{S} \sum_{i=1}^S (h_1(X_i) - \beta^T (h_2(X_i) - \theta))
+\]</span> We can rewrite this as: <span class="math display">\[
+\begin{aligned}
+\hat{\mu}_{\text{CV}} &amp; = \frac{1}{S} \sum_{i=1}^S h_1(X_i) + \beta^T \lp \frac{1}{S} \sum_{i=1}^Sh_2(X_i) - \theta)\rp \\
+&amp; = \hat{\mu}_{\text{IS}} - \beta^T(\bar{h}_2 - \theta)
+\end{aligned}
+\]</span> We can see this as a correction to the standard importance sampling estimator by adjusting our estimate by how far away <span class="math inline">\(\bar{h}_2\)</span> is from its known mean.</p>
+<p>The direction we move the our estimator is dependent on <span class="math inline">\(\beta\)</span>, and we can again minimize the variance of this estimator to determine the optimal <span class="math inline">\(\beta\)</span>. Let’s examine the variance of one of the terms: <span class="math display">\[
+\begin{aligned}
+\Var{h_1(X) - \beta^T(h_2(X) - \theta)} &amp; =   \Var{h_1(X)} + \beta^T\Var{h_2(X) - \theta}\beta - 2 \Cov{h_1(X)}{h_2(X) - \theta} \beta
+\end{aligned}
+\]</span> Taking the derivative of this with respect to <span class="math inline">\(\beta\)</span> gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\nabla_\beta \Var{h_1(X) + \beta^T(h_2(X) - \theta)} &amp; = 2\Var{h_2(X) - \theta}\beta - 2 \Cov{h_1(X)}{h_2(X) - \theta}
+\end{aligned}
+\]</span></p>
+<p>Setting this equal to zero and assuming that <span class="math display">\[
+\Exp{(h_2(X) - \theta)(h_2(X) - \theta)^T}
+\]</span></p>
+<p>is p.d. we get <span class="math display">\[
+\beta_\text{opt} = \Exp{(h_2(X) - \theta)(h_2(X) - \theta)^T}^{-1}\Exp{(h_2(X) - \theta) h_1(X)}
+\]</span> In practice we can’t compute the right-most expectation, so we estimate it with empirical averages: <span class="math display">\[
+\begin{aligned}
+\hat{\beta} &amp; = \lp \frac{1}{S}\sum_{i=1}^S (h_2(X_i) - \bar{h}_2)(h_2(X_i) - \bar{h}_2)^T \rp^{-1} \frac{1}{S}\sum_{i=1}^S (h_2(X_i) - \bar{h}_2) h_1(X_i) \\
+&amp; = \lp \sum_{i=1}^S (h_2(X_i) - \bar{h}_2)(h_2(X_i) - \bar{h}_2)^T \rp^{-1} \sum_{i=1}^S (h_2(X_i) - \bar{h}_2) h_1(X_i)
+\end{aligned}
+\]</span> This is the least-squared estimator of <span class="math inline">\(\beta\)</span> from a regression of <span class="math inline">\(h_1(X_i)\)</span> on the covariates <span class="math inline">\(h_2(X_i) - \theta\)</span>. In fact, <span class="citation" data-cites="mcbook">Owen (<a href="#ref-mcbook" role="doc-biblioref">2013</a>)</span> points out that we can just do a linear regression of <span class="math inline">\(f(X_i)\)</span> on the covariates, and the fitted intercept in the regression is the control variate estimator.</p>
+<p>Why is this the case? <span class="math display">\[
+\hat{\mu}_{\text{CV}} = \frac{1}{S} \sum_{i=1}^S h_1(X_i) - \beta^T \lp \frac{1}{S} \sum_{i=1}^Sh_2(X_i) - \theta)\rp
+\]</span></p>
+<p>Plugging in <span class="math inline">\(\hat{\beta}\)</span> gives: <span class="math display">\[
+\hat{\mu}_{\text{CV}} = \frac{1}{S} \sum_{i=1}^S h_1(X_i) - \hat{\beta}^T \lp \frac{1}{S} \sum_{i=1}^Sh_2(X_i) - \theta)\rp
+\]</span></p>
+<p>Recall that this is the same formula for the fitted intercept of a regression.</p>
+<p>This has the benefit that we can use <code>lm</code> to return the point estimate and the standard error of the point estimate.</p>
+<p>If we look at the error we incur by estimating <span class="math inline">\(\beta\)</span> from the data, we get the following: <span class="math display">\[
+\begin{aligned}
+\hat{\mu}_{\hat{\beta}} - \mu &amp; = \hat{\mu}_{\hat{\beta}} - \hat{\mu}_{\beta_\text{opt}} +  \hat{\mu}_{\beta_\text{opt}} - \mu \\
+&amp; = \hat{\mu}_\text{IS} - \hat{\beta}(\bar{h}_2 - \theta) - \hat{\mu}_\text{IS} - \beta_\text{opt}(\bar{h}_2 - \theta) - \hat{\mu}_{\beta_\text{opt}} - \mu \\
+&amp; = (\hat{\beta} - \beta_\text{opt})(\theta - \bar{h}_2) + \hat{\mu}_{\beta_\text{opt}} - \mu
+\end{aligned}
 \]</span></p>
 
 
