@@ -300,7 +300,9 @@ X_i &amp; \overset{\text{iid}}{\sim} \text{N}(0, 1),\, i = 1, \dots, S
 <li><p>The density function for the truncated exponential distribution (denoted as <span class="math inline">\(X \sim \text{TE}(\lambda, a)\)</span>) is <span class="math display">\[
 g(x;\lambda, a) = \ind{x &gt; a}\lambda e^{-\lambda(x - a)}
 \]</span> Show that <span class="math inline">\(X \sim \text{TE}(\lambda,a)\)</span> is equal in distribution to <span class="math inline">\(Y \sim \text{Exp}(\lambda)\)</span> and <span class="math inline">\(X = Y + a\)</span></p></li>
-<li><p>Using <span class="math inline">\(g\)</span> from part a. with <span class="math inline">\(\lambda = 1\)</span> as an importance density, construct an importance sampling estimator <span class="math inline">\(\hat{\mu}_{\text{IS}}\)</span> and determine the number of samples required to estimate <span class="math inline">\(P(Z &gt; 2.5)\)</span> where <span class="math inline">\(Z \sim \text{N}(0,1)\)</span> to the same accuracy as you did in question 1a. This will require that you use the variance formula for an importance sampling estimator that we derived in class (see here: <a href="../../pcs-content/lectures/Lecture-4-Importance-Sampling.html#eq-var-is">Variance formula</a> and to do some calculus. When computing your variance estimate, you may use the <code>pnorm</code> function.</p></li>
+<li><p>Using <span class="math inline">\(g\)</span> from part a. as <span class="math display">\[
+g(x) = \ind{x &gt; 2.5}e^{-(x - 2.5)}
+\]</span> as an importance density, construct an importance sampling estimator <span class="math inline">\(\hat{\mu}_{\text{IS}}\)</span> and determine the number of samples required to estimate <span class="math inline">\(P(Z &gt; 2.5)\)</span> where <span class="math inline">\(Z \sim \text{N}(0,1)\)</span> to the same accuracy as you did in question 1a. This will require that you use the variance formula for an importance sampling estimator that we derived in class (see here: <a href="../../pcs-content/lectures/Lecture-4-Importance-Sampling.html#eq-var-is">Variance formula</a> and to do some calculus. When computing your variance estimate, you may use the <code>pnorm</code> function.</p></li>
 <li><p>Again, using <a href="../../pcs-content/lectures/Lecture-4-Importance-Sampling.html#eq-var-is">Variance formula</a> and the logic we followed in class to minimize variance of importance sampling estimators, and the fact that <span class="math inline">\(P(Z &gt; x) \approx \frac{1}{x\sqrt{2 \pi}} e^{-x^2/2}\)</span> when <span class="math inline">\(Z \sim \text{N}(0,1)\)</span> find <span class="math inline">\(\lambda\)</span> that minimizes the variance of the importance sampling estimator.</p></li>
 </ol>
 </section>
@@ -876,38 +878,43 @@ Robert, Christian P, George Casella, and George Casella. 1999. <em>Monte Carlo S
 <span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## Question 3</span></span>
 <span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>a.  The density function for the truncated exponential distribution (denoted as $X \sim \text{TE}(\lambda, a)$) is $$</span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>    g(x;\lambda, a) = \ind{x &gt; a}\lambda e^{-\lambda(x - a)}</span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    $$ Show that $X \sim \text{TE}(\lambda,a)$ is equal in distribution to $Y \sim \text{Exp}(\lambda)$ and $X = Y + a$</span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>b.  Using $g$ from part a. with $\lambda = 1$ as an importance density, construct an importance sampling estimator $\hat{\mu}_{\text{IS}}$ and determine the number of samples required to estimate $P(Z &gt; 2.5)$ where $Z \sim \text{N}(0,1)$ to the same accuracy as you did in question 1a. This will require that you use the variance formula for an importance sampling estimator that we derived in class (see here: <span class="co">[</span><span class="ot">Variance formula</span><span class="co">](../lectures/Lecture-4-Importance-Sampling.qmd#eq-var-is)</span> and to do some calculus. When computing your variance estimate, you may use the <span class="in">`pnorm`</span> function.</span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>c.  Again, using <span class="co">[</span><span class="ot">Variance formula</span><span class="co">](../lectures/Lecture-4-Importance-Sampling.qmd#eq-var-is)</span> and the logic we followed in class to minimize variance of importance sampling estimators, and the fact that $P(Z &gt; x) \approx \frac{1}{x\sqrt{2 \pi}} e^{-x^2/2}$ when $Z \sim \text{N}(0,1)$ find $\lambda$ that minimizes the variance of the importance sampling estimator.</span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="fu">## Question 4</span></span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>Owen Chapter 9, problem 9.1</span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="fu">## Question 5</span></span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>This is adapted from @gelmanbayesian.</span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>The target density is a standard normal density, while the importance density is a t distribution with 3 degrees of freedom, with a mean of zero and a scale parameter such that the second derivative of the log-density evaluated at the mode is equal to -1 (note that this matches the normal distribution's curvature at 0).</span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>a.  What is the scale parameter for the t distribution?</span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>b.  Draw 100 samples from the importance distribution and make a histogram of the log of the importance weights</span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>c.  Estimate $\Exp{X}$ and $\Var{X}$ using the importance sampling estimator and compare to the true values</span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>d.  Repeat b and c for $10{,}000$ samples</span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>e.  Repeat b, c, and d where we use the normal distribution as the importance density and the target distribution is the same t distribution you used above.</span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>f.  Comment on why the estimates of the variance in part e. are too small.</span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="fu">## Question 6</span></span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>Grad students only</span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>Owen Chapter 9, problem 9.7. We worked through part of this in class, see <span class="co">[</span><span class="ot">normal example</span><span class="co">](../lectures/Lecture-4-Importance-Sampling.qmd#exm-normal-is)</span></span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>For the second part of the question, give the ratio of the variances.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>a.  The density function for the truncated exponential distribution (denoted as $X \sim \text{TE}(\lambda, a)$) is </span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    g(x;\lambda, a) = \ind{x &gt; a}\lambda e^{-\lambda(x - a)}</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>    $$ Show that $X \sim \text{TE}(\lambda,a)$ is equal in distribution to $Y \sim \text{Exp}(\lambda)$ and $X = Y + a$</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>b.  Using $g$ from part a. as </span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>g(x) = \ind{x &gt; 2.5}e^{-(x - 2.5)}</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>as an importance density, construct an importance sampling estimator $\hat{\mu}_{\text{IS}}$ and determine the number of samples required to estimate $P(Z &gt; 2.5)$ where $Z \sim \text{N}(0,1)$ to the same accuracy as you did in question 1a. This will require that you use the variance formula for an importance sampling estimator that we derived in class (see here: <span class="co">[</span><span class="ot">Variance formula</span><span class="co">](../lectures/Lecture-4-Importance-Sampling.qmd#eq-var-is)</span> and to do some calculus. When computing your variance estimate, you may use the <span class="in">`pnorm`</span> function.</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>c.  Again, using <span class="co">[</span><span class="ot">Variance formula</span><span class="co">](../lectures/Lecture-4-Importance-Sampling.qmd#eq-var-is)</span> and the logic we followed in class to minimize variance of importance sampling estimators, and the fact that $P(Z &gt; x) \approx \frac{1}{x\sqrt{2 \pi}} e^{-x^2/2}$ when $Z \sim \text{N}(0,1)$ find $\lambda$ that minimizes the variance of the importance sampling estimator.</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## Question 4</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>Owen Chapter 9, problem 9.1</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="fu">## Question 5</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>This is adapted from @gelmanbayesian.</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>The target density is a standard normal density, while the importance density is a t distribution with 3 degrees of freedom, with a mean of zero and a scale parameter such that the second derivative of the log-density evaluated at the mode is equal to -1 (note that this matches the normal distribution's curvature at 0).</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>a.  What is the scale parameter for the t distribution?</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>b.  Draw 100 samples from the importance distribution and make a histogram of the log of the importance weights</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>c.  Estimate $\Exp{X}$ and $\Var{X}$ using the importance sampling estimator and compare to the true values</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>d.  Repeat b and c for $10{,}000$ samples</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>e.  Repeat b, c, and d where we use the normal distribution as the importance density and the target distribution is the same t distribution you used above.</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>f.  Comment on why the estimates of the variance in part e. are too small.</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="fu">## Question 6</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>Grad students only</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>Owen Chapter 9, problem 9.7. We worked through part of this in class, see <span class="co">[</span><span class="ot">normal example</span><span class="co">](../lectures/Lecture-4-Importance-Sampling.qmd#exm-normal-is)</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>For the second part of the question, give the ratio of the variances.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
