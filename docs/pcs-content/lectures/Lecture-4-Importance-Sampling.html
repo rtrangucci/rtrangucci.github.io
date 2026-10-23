@@ -370,9 +370,9 @@ p(y_i \mid y_{-i}) = \int_{\Theta} p(y_i \mid \theta) \pi(\theta \mid y_{-i}) d\
 \]</span> Letting <span class="math display">\[
 w_n(X_i) = \frac{w_u(X_i)}{\sum_{i=1}^S w_u(X_i)}
 \]</span></p>
-<p>we can write the final estimator for the variance as: <span class="math display">\[
+<p>we can write the final estimator for the variance as: <span id="eq-var-snis"><span class="math display">\[
 \widehat{\Var{\tilde{\mu}_{\text{IS}}}} = \sum_{i=1}^S w^2_n(X_i) (h(X_i) - \tilde{\mu}_{\text{IS}})^2
-\]</span></p>
+\tag{2}\]</span></span></p>
 <div id="exm-loo-cont" class="theorem example">
 <p><span class="theorem-title"><strong>Example 3 (LOO-CV-IS estimator)</strong></span> Our unnormalized importance weights are <span class="math display">\[
 w_u(\theta_j) = 1/p(y_i \mid \theta_j)

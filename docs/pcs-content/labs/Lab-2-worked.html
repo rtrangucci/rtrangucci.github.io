@@ -347,7 +347,7 @@ w(X_i) = \frac{f_u(X_i) / g(X_i)}{\sum_{j=1}^S f_u(X_j) / g(X_j)}
 <p>Let’s suppose our importance density is a multivariate <span class="math inline">\(t\)</span> distribution, which we can do in R by using the <code>mvtnorm</code> package, and our target density will be the following density:</p>
 <p><span class="math display">\[
 f_u(x) \propto \norm{x}_2^{1-d} \exp\lp -x^T \Sigma^{-1}x/2 \rp
-\]</span></p>
+\]</span> This density arises in problems for esimating</p>
 <p>and we’re going to estimate the second moment for <span class="math inline">\(X_1\)</span> and the <span class="math inline">\(X_1 X_2\)</span> for <span class="math inline">\(X \in \R^3\)</span>.</p>
 <p>We’ll define <span class="math inline">\(\Sigma\)</span> in the code below.</p>
 <div class="cell">
@@ -1030,7 +1030,7 @@ f_u(x) \propto \norm{x}_2^{1-d} \exp\lp -x^T \Sigma^{-1}x/2 \rp
 <span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>f_u(x) \propto \norm{x}_2^{1-d} \exp\lp -x^T \Sigma^{-1}x/2 \rp</span>
 <span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>This density arises in problems for esimating </span>
 <span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>and we're going to estimate the second moment for $X_1$ and the $X_1 X_2$ for  $X \in \R^3$.</span>
