@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>MCMC and diagnostics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-fd68462179fdb1eb8400a3e2e38edf1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      const {STATE} = MathJax._.core.MathItem;
+      MathJax.tex2mml(String.raw`
+      \newcommand{\R}{\mathbb{R}}
+      \newcommand{\comp}{\mathsf{c}}
+        \newcommand{\lp}{\left(}
+        \newcommand{\rp}{\right)}
+        \newcommand{\lb}{\left[}
+        \newcommand{\rb}{\right]}
+        \newcommand{\ind}[1]{\mathbbm{1}\lp#1\rp}
+        \newcommand{\Exp}[1]{\mathbb{E} \lb #1 \rb}
+        \newcommand{\ExpA}[2]{\mathbb{E}_{#2} \lb #1 \rb}
+        \newcommand{\Var}[1]{\text{Var} \lp #1 \rp}
+        \newcommand{\VarA}[2]{\text{Var}_{#2} \lp #1 \rp}
+        \newcommand{\indy}{\mathrel{\unicode{x2AEB}}}
+        \newcommand{\Prob}[2]{\mathbb{P}_{#2} \lp #1 \rp}
+        \newcommand{\abs}[1]{\left| #1 \right|}
+        \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+      `);
+    }
+  },
+  loader: {load: ['[tex]/bbm']},
+  tex: {packages: {'[+]': ['bbm']}}
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1/tex-mml-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../papers.html"> 
+<span class="menu-text">My papers</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Random thoughts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../courses.html"> 
+<span class="menu-text">Courses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#markov-chains" id="toc-markov-chains" class="nav-link active" data-scroll-target="#markov-chains">Markov Chains</a>
+  <ul class="collapse">
+  <li><a href="#stationary-stochastic-processes" id="toc-stationary-stochastic-processes" class="nav-link" data-scroll-target="#stationary-stochastic-processes">Stationary stochastic processes</a></li>
+  </ul></li>
+  <li><a href="#markov-chain-monte-carlo-mcmc" id="toc-markov-chain-monte-carlo-mcmc" class="nav-link" data-scroll-target="#markov-chain-monte-carlo-mcmc">Markov Chain Monte Carlo (MCMC)</a></li>
+  <li><a href="#gibbs-sampling" id="toc-gibbs-sampling" class="nav-link" data-scroll-target="#gibbs-sampling">Gibbs sampling</a>
+  <ul class="collapse">
+  <li><a href="#quantifying-uncertainty-in-mcmc-estimates" id="toc-quantifying-uncertainty-in-mcmc-estimates" class="nav-link" data-scroll-target="#quantifying-uncertainty-in-mcmc-estimates">Quantifying Uncertainty in MCMC estimates</a></li>
+  <li><a href="#convergence-diagnostics" id="toc-convergence-diagnostics" class="nav-link" data-scroll-target="#convergence-diagnostics">Convergence diagnostics</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">MCMC and diagnostics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="markov-chains" class="level2">
+<h2 class="anchored" data-anchor-id="markov-chains">Markov Chains</h2>
+<p>What follows is from <span class="citation" data-cites="geyerMCMC">Geyer (<a href="#ref-geyerMCMC" role="doc-biblioref">2005</a>)</span> Chapter 1.</p>
+<p>Henceforth, we’ll refer to a Markov Chain as a discrete time stochastic process with an arbitrary state space. Next, I’ll define each of these terms.</p>
+<p>A stochastic process in discrete time is an infinite collection of random variables indexed by non-negative integers: <span class="math display">\[
+\{X_0, X_1, X_2, \dots \}
+\]</span></p>
+<p>In order to define a stochastic process, we can define all finite-dimensional distributions (f.d.d. for short). That is, for every <span class="math inline">\(n\)</span>, if we can define the <strong>joint</strong> distribution: <span class="math display">\[
+P(X_0 = x_0, X_1 = x_1, \dots, X_n = x_n)
+\]</span> this is as good as defining the infinite-dimensional distribution over the collection <span class="math inline">\(X_0, X_1, \dots\)</span>.</p>
+<p>The state space of this process is the set of values each <span class="math inline">\(X_t\)</span> can take. It may be integer valued, real valued, vector valued, etc.</p>
+<p>Defining the joint distribution for every <span class="math inline">\(n\)</span> is a tall task, so we’ll need to simplify how we do so. Markov Chains give us one way of simplifying our joint distribution. Markov Chains possess the Markov property: the conditional distribution of <span class="math inline">\(X_n\)</span> given the full history of the stochastic process depends only on <span class="math inline">\(X_{n-1}\)</span>: <span class="math display">\[
+P(X_n = x_n \mid X_0 = x_0, X_1 = x_1, \dots, X_{n-1} = x_{n-1}) = P(X_n = x_n \mid X_{n-1} = x_{n-1})
+\]</span></p>
+<p>Then, if we have a way of specifying the initial distribution, <span class="math inline">\(P(X_0 = x_0)\)</span> <strong>and</strong> the conditional distributions <span class="math inline">\(P(X_n = x_n \mid X_{n-1} = x_{n-1})\)</span> we can define the joint distribution for <span class="math inline">\(\{X_0, X_1, \dots, X_n\}\)</span> for all <span class="math inline">\(n\)</span> via the law of total probability: <span class="math display">\[
+\begin{aligned}
+&amp; P(X_0 = x_0, X_1 = x_1, \dots, X_n = x_n) \\
+&amp; = P(X_0 = x_0)\times P(X_1 = x_1 \mid X_{0} = x_{0})\times\dots\times P(X_n = x_n \mid X_{n-1} = x_{n-1})
+\end{aligned}
+\]</span> These conditional distributions will be called transition kernels, Markov kernels or transitions probabilities. In theory we could allow the kernel to depend on <span class="math inline">\(n\)</span>, but for this class we’ll assume that the transition kernels are <strong>stationary</strong>, namely that they do not change with the index of the RVs at which they are evaluated.</p>
+<div id="def-stationary-trans" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1 (Stationary transition kernel)</strong></span> <span class="math display">\[
+P_i(X_i = x_i \mid X_{i-1} = x_{i-1}) = P(X_i = x_i \mid X_{i-1} = x_{i-1})
+\]</span> for all <span class="math inline">\(i\)</span></p>
+</div>
+<section id="stationary-stochastic-processes" class="level3">
+<h3 class="anchored" data-anchor-id="stationary-stochastic-processes">Stationary stochastic processes</h3>
+<p>We will also focus our attention on determining if a stochastic process <span class="math inline">\(\{X_0, X_1, \dots\}\)</span> is stationary</p>
+<div id="def-stationary-proc" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2 (Stationary stochastic process)</strong></span> The distribution for <span class="math inline">\(\{X_n, X_{n+1}, \dots, X_{n+k}\}\)</span> does not depend on <span class="math inline">\(n\)</span>. In other words, for all <span class="math inline">\(n\)</span> and for all <span class="math inline">\(k+1\)</span> tuples</p>
+<p><span class="math display">\[
+\{X_n, X_{n+1}, \dots, X_{n+k}\} \overset{d}{=} \{X_0, X_{1}, \dots, X_{k}\}
+\]</span></p>
+</div>
+<p>Note that having a stationary transition kernel does not guarantee that our Markov Chain is stationary. The transition kernel only defines the conditional distribution, but stationarity is a property of the joint collection of RVs.</p>
+<div id="def-invariant-dist" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3 (Invariant distribution)</strong></span> An initial distribution <span class="math inline">\(\pi(x) = P(X_0 = x)\)</span> is invariant for a transition kernel <span class="math inline">\(P(X_n = x \mid X_{n-1} = x_{n-1})\)</span> if <span class="math display">\[
+\pi(x) = \int_{\mathcal{X}} P(X_1 = x \mid X_{0} = y) \pi(y) dy
+\]</span></p>
+</div>
+<p>Note that the existence of an invariant distribution implies the chain is stationary. In the <a href="#def-invariant-dist" class="quarto-xref">Definition&nbsp;3</a> <span class="math inline">\(X_0\)</span> is distributed according to <span class="math inline">\(\pi\)</span> while <span class="math inline">\(X_1\)</span> is also distributed according to <span class="math inline">\(\pi\)</span></p>
+</section>
+</section>
+<section id="markov-chain-monte-carlo-mcmc" class="level2">
+<h2 class="anchored" data-anchor-id="markov-chain-monte-carlo-mcmc">Markov Chain Monte Carlo (MCMC)</h2>
+<p>The motivation for studying Markov chains is to find a way to generate draws from a distribution we otherwise couldn’t. Let’s call this distribution <span class="math inline">\(\pi\)</span>. If we can find a transition kernel for which our target is the invariant distribution, we can, in theory, generate draws from our target distribution by picking an initial point <span class="math inline">\(x_0\)</span> and repeatedly applying the transition kernel until, eventually, we get a draw from our target distribution.</p>
+<p>The complication is that we need conditions on the transition kernel for all of this to work. We’ll first gain intuition by studying discrete state-space Markov chains.</p>
+</section>
+<section id="gibbs-sampling" class="level2">
+<h2 class="anchored" data-anchor-id="gibbs-sampling">Gibbs sampling</h2>
+<p>See <span class="citation" data-cites="tanner1987calculation">Tanner and Wong (<a href="#ref-tanner1987calculation" role="doc-biblioref">1987</a>)</span> for more details; what follows is an abbreviated presentation of their work, with bits of <span class="citation" data-cites="gelfand1990sampling">Gelfand and Smith (<a href="#ref-gelfand1990sampling" role="doc-biblioref">1990</a>)</span> thrown in.</p>
+<p>Let <span class="math inline">\(p(\theta_1, \theta_2 \mid y)\)</span> be the posterior of interest.</p>
+<p>We can represent the marginal posterior for <span class="math inline">\(\theta_1\)</span> as: <span class="math display">\[
+p(\theta_1 \mid y) = \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) p(\theta_2 \mid y) d\theta_2,
+\]</span> and similarly for <span class="math inline">\(\theta_2\)</span>: <span class="math display">\[
+p(\theta_2 \mid y) = \int_{\Omega_{\theta_1}} p(\theta_2 \mid y, \theta_1) p(\theta_1 \mid y) d\theta_1
+\]</span></p>
+<p>Plugging the second expression into the first yields:</p>
+<p><span class="math display">\[
+p(\theta_1 \mid y) = \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) \int_{\Omega_{\theta_1}} p(\theta_2 \mid y, \theta_1^\prime) p(\theta_1^\prime \mid y) d\theta^\prime_1 d\theta_2,
+\]</span></p>
+<p>which we can rearrange into:</p>
+<p><span class="math display">\[
+p(\theta_1 \mid y) = \int_{\Omega_{\theta_1}} \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) p(\theta_2 \mid y, \theta_1^\prime) d\theta_2 p(\theta_1^\prime \mid y) d\theta^\prime_1,
+\]</span> Let <span class="math inline">\(P(\theta \mid \theta^\prime)\)</span> be the proposal distribution, which conditions on <span class="math inline">\(\theta^\prime\)</span>: <span class="math display">\[
+P(\theta \mid \theta^\prime) = \int_{\Omega_{\theta_2}} p(\theta_1 \mid y, \theta_2) p(\theta_2 \mid y, \theta_1^\prime) d\theta_2
+\]</span> Then the equation <span class="math display">\[
+g(\theta_1) = \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  g(\theta_1^\prime) d\theta^\prime_1,
+\]</span> is an integral equation. Given weak conditions on <span class="math inline">\(P(\theta_1 \mid \theta^\prime_1)\)</span>, <span class="math inline">\(p(\theta_1 \mid y)\)</span> is a unique solution for the equation.</p>
+<p>We can define the integral transformation: <span class="math inline">\(T g = \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  g(\theta_1^\prime) d\theta^\prime_1\)</span>, which takes an <span class="math inline">\(L_1\)</span> integrable function, <span class="math inline">\(\lVert g \rVert_1 = \int_{\Omega_{\theta_1}} \abs{g(\theta_1)} d\theta_1 &lt; \infty\)</span> and yields another <span class="math inline">\(L_1\)</span> integrable function.</p>
+<p>One thing to note is that <span class="math inline">\(\lVert T g \rVert_1 = \lVert g \rVert_1\)</span>, and, because <span class="math inline">\(P(\theta \mid \theta^\prime)\)</span> is a probability density in <span class="math inline">\(\theta\)</span> for each <span class="math inline">\(\theta^\prime\)</span>, it integrates to <span class="math inline">\(1\)</span>, <span class="math display">\[
+\begin{aligned}
+\int_{\Omega_{\theta_1}} \abs{(T g)(\theta_1)} d\theta_1 &amp; = \int_{\Omega_{\theta_1}} \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  g(\theta_1^\prime) d\theta^\prime_1 d\theta_1 \\
+&amp; = \int_{\Omega_{\theta_1}} \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)d\theta_1  g(\theta_1^\prime) d\theta^\prime_1  \\
+&amp; = \int_{\Omega_{\theta_1}} 1  g(\theta_1^\prime) d\theta^\prime_1  \\
+&amp; = \int_{\Omega_{\theta_1}} \abs{g(\theta_1^\prime)} d\theta^\prime_1  \\
+&amp; = \lVert g \rVert_1
+\end{aligned}
+\]</span> Also note that if <span class="math inline">\(f(\theta) \geq g(\theta)\)</span> for all <span class="math inline">\(\theta\)</span>, then <span class="math inline">\(T f \geq T g\)</span> for all <span class="math inline">\(\theta\)</span>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+T f - T g &amp; =  \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  f(\theta_1^\prime) d\theta^\prime_1 - \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime)  g(\theta_1^\prime) d\theta^\prime_1 \\
+&amp; = \int_{\Omega_{\theta_1}} P(\theta_1 \mid \theta_1^\prime) (f(\theta_1^\prime) - g(\theta_1^\prime)) d\theta^\prime_1 \\
+&amp; \geq 0
+\end{aligned}
+\]</span> With these two facts, we can show that given a function <span class="math inline">\(g_i\)</span>, <span class="math inline">\(g_{i+1} = T g_i\)</span> and a solution, which we’ll call <span class="math inline">\(g^\star \equiv p(\theta_1 \mid y)\)</span>, which solves the integral equation, that <span class="math inline">\(\lVert g_{i+1} - g^\star \rVert \leq  \lVert g_{i} - g^\star \rVert\)</span>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\norm{g_{i+1} - g^\star} &amp; = \norm{T (g_{i} - g^\star)} \\
+&amp; \leq \norm{T \abs{g_{i} - g^\star}} \\
+&amp; = \norm{g_{i} - g^\star}
+\end{aligned}
+\]</span> There are two more conditions that lead to <span class="math inline">\(g^\star\)</span> being the unique solution to the equation, and to another desirable characteristic for our computational schemes, which is called geometric ergodicity: <span class="math display">\[
+\norm{g_{i+1} - g^\star} \leq \alpha^{i}(g_0) \norm{g_{0} - g^\star}, \, \alpha \in (0, 1)
+\]</span> as long as <span class="math inline">\(\sup_\theta g_0(\theta) / g^\star(\theta) &lt; \infty\)</span>.</p>
+<p>This condition is the following: For every <span class="math inline">\(\theta_0 \in \Omega_{\theta}\)</span> there is an open neighborhood <span class="math inline">\(U\)</span> of <span class="math inline">\(\theta_0\)</span> so that: <span class="math display">\[
+P(\theta \mid \theta^\prime) &gt; 0, \forall (\theta, \theta^\prime) \in U
+\]</span></p>
+<p><span class="math display">\[
+P(\theta \mid \theta^\prime) \leq M &lt; \infty \,\, \forall (\theta, \theta^\prime) \in \Omega_\theta
+\]</span></p>
+<p>We can use this fact to show that the scheme will converge to <span class="math inline">\(p(\theta_1 \mid y)\)</span>, the unique posterior for <span class="math inline">\(\theta_1\)</span>, and the stationary distribution for the proposal <span class="math inline">\(P(\theta \mid \theta^\prime\)</span>. I won’t go over the proof, but you can see it in section 6 of <span class="citation" data-cites="tanner1987calculation">Tanner and Wong (<a href="#ref-tanner1987calculation" role="doc-biblioref">1987</a>)</span>.</p>
+<p>This suggests the following algorithm, which we’ll call Gibbs sampling, to generate draws from an unknown posterior:</p>
+<ol type="1">
+<li><p>Determine starting values <span class="math inline">\(\theta_1^0, \theta_2^0\)</span></p></li>
+<li><p>For <span class="math inline">\(t=1, \dots, S\)</span></p>
+<ol type="a">
+<li><p>Draw <span class="math inline">\(\theta_1^{t+1} \sim p(\theta_1 \mid \theta_2^t, y)\)</span></p></li>
+<li><p>Draw <span class="math inline">\(\theta_2^{t+1} \sim p(\theta_2 \mid \theta_1^{t+1}, y)\)</span></p></li>
+</ol></li>
+<li><p>Discard <span class="math inline">\(S/2\)</span> iterations, and keep the set of draws <span class="math inline">\(\{ (\theta_1^s, \theta_2^s) \mid s = S/2+1, ,\dots, S\}\)</span>.</p></li>
+</ol>
+<p>The final set of draws <span class="math inline">\(S/2\)</span> draws are approximately distributed according to <span class="math inline">\(p(\theta_1, \theta_2 \mid y)\)</span></p>
+<p>The assumptions that make the algorithm work are key. <span class="citation" data-cites="tanner1987calculation">Tanner and Wong (<a href="#ref-tanner1987calculation" role="doc-biblioref">1987</a>)</span> note that <span class="math inline">\(\alpha\)</span> is dependent on the starting distribution, and <span class="math inline">\(\alpha\)</span> can be arbitrarily close to <span class="math inline">\(1\)</span> for unbounded parameter spaces.</p>
+<p>The condition on the starting distribution mean that a <span class="math inline">\(g_0\)</span> with compact support might be a good choice, because we avoid a situation where <span class="math inline">\(\sup_\theta g_0(\theta) / g^\star(\theta)\)</span> is large because <span class="math inline">\(g_0\)</span> has tails that are heavier than those of <span class="math inline">\(g^\star(\theta)\)</span> as <span class="math inline">\(\norm{\theta} \to \infty\)</span>.</p>
+<p>The problem with Gibbs is that it often moves slowly in high dimensions when there is high correlation between components.</p>
+<section id="quantifying-uncertainty-in-mcmc-estimates" class="level3">
+<h3 class="anchored" data-anchor-id="quantifying-uncertainty-in-mcmc-estimates">Quantifying Uncertainty in MCMC estimates</h3>
+<p>Given a set of draws <span class="math inline">\(\{\theta_s, s = 1, \dots, S\}\)</span> from a Gibbs sampler, we want a way to assess how well our empirical average: <span class="math display">\[
+\bar{f} = \frac{1}{S} \sum_{s = 1}^S f(\theta_s)
+\]</span> approximates the true expectation: <span class="math display">\[
+\ExpA{f(\theta)}{p(\theta \mid y)}
+\]</span> Under fairly general conditions, <span class="math display">\[
+\sqrt{n}(\bar{f} - \Exp{f}) \overset{d}{\to} N(0, \sigma^2)
+\]</span> The wrinkle is that <span class="math inline">\(\sigma^2\)</span> wont equal <span class="math inline">\(\text{Var}_{p(\theta \mid y)}(f(\theta))\)</span> because our draws aren’t independent. In fact, as shown in <span class="citation" data-cites="geyerMCMC">Geyer (<a href="#ref-geyerMCMC" role="doc-biblioref">2005</a>)</span>, we can compute the variance of the left-hand side: <span class="math display">\[
+\begin{aligned}
+\text{Var}(\sqrt{n}(\bar{f} - \Exp{f})) &amp; = n \text{Var}(\bar{f}) \\
+&amp; = \frac{1}{n}\sum_{s=1}^n \text{Var}(f(\theta_s)) + \frac{2}{n} \sum_{i=1}^{n-1} \sum_{j={i+1}}^{n} \text{Cov}(f(\theta_i),f(\theta_j))
+\end{aligned}
+\]</span> We’ll assume we have a stationary chain, so <span class="math inline">\(\text{Var}(f(\theta_s)) = \gamma_0\)</span>, and <span class="math inline">\(\gamma_k = \text{Cov}(f(\theta_{i}),f(\theta_{i+k}))\)</span>, which leads to</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{1}{n}\sum_{s=1}^n \text{Var}(f(\theta_s)) + \frac{2}{n} \sum_{i=1}^{n-1} \sum_{j={i+1}}^{n} \text{Cov}(f(\theta_i),f(\theta_j)) &amp; = \gamma_0 + \frac{2}{n} \sum_{i=1}^{n-1} \sum_{j={i+1}}^{n} \gamma_{j - i} \\
+&amp; = \gamma_0 + \frac{2}{n} \sum_{i=1}^{n-1} (n - i) \gamma_i
+\end{aligned}
+\]</span> If things are well-behaved, the series on the right converges to: <span class="math display">\[
+\begin{aligned}
+\sigma^2 = \gamma_0 + 2 \sum_{i=1}^{\infty} \gamma_i
+\end{aligned}
+\]</span> Thus, <span class="math display">\[
+\sqrt{n}(\bar{f} - \Exp{f}) \overset{d}{\to} N(0, \gamma_0 + 2 \sum_{i=1}^{\infty} \gamma_i)
+\]</span> If we had independent draws of <span class="math inline">\(\theta_i\)</span>, we would instead have <span class="math display">\[
+\sqrt{n}(\bar{f} - \Exp{f}) \overset{d}{\to} N(0, \gamma_0)
+\]</span> The ratio of these variances: <span class="math display">\[
+\frac{\gamma_0}{\gamma_0 + 2 \sum_{i=1}^{\infty} \gamma_i} = \frac{1}{1 + 2 \sum_{i=1}^{\infty} \frac{\gamma_i}{\gamma_0}}
+\]</span> Can be used to compute something called the effective sample size from an MCMC sample of <span class="math inline">\(S\)</span> draws: <span class="math display">\[
+n_\text{eff} = \frac{n}{1 + 2 \sum_{i=1}^{\infty} \rho_k}
+\]</span> where <span class="math inline">\(\rho_k\)</span> is the autocorrelation at the <span class="math inline">\(k^\text{th}\)</span> lag. The effective sample size represents the number of independent draws with an equivalent variance to the samples from an MCMC chain.</p>
+<p>These figures can be used to benchmark MCMC algorithms by computing <span class="math inline">\(n_\text{eff}/\text{sec}\)</span> of computing time, or <span class="math inline">\(n_\text{eff}/\text{flop}\)</span>, where flop is floating point operation.</p>
+</section>
+<section id="convergence-diagnostics" class="level3">
+<h3 class="anchored" data-anchor-id="convergence-diagnostics">Convergence diagnostics</h3>
+<p>One question we might have is how to assess if we’ve run enough iterations so that we’re drawing from the stationary distribution. We won’t ever truly reach the stationary distribution, because, as we can see above, we only ``reach” the stationary distribution asymptotically.</p>
+<p>However, we can use diagnostics to determine if there is any evidence that we haven’t converged. The most common heuristic for this is called <span class="math inline">\(\hat{R}\)</span>, which was proposed in <span class="citation" data-cites="gelman1992inference">Gelman and Rubin (<a href="#ref-gelman1992inference" role="doc-biblioref">1992</a>)</span>, and is thus called the Gelman-Rubin statistic, or R-hat.</p>
+<p>The statistic relies on the fact that asymptotically, running the MCMC chain long enough from any starting distribution will yield samples from the stationary distribution. Thus, if we choose many well-dispersed starting points, and run our sampler for each starting point, the samples generated from each starting point should be indistinguishable from each other.</p>
+<p>TK: draw one example on the board of chains that would look stationary for a single chain, but are not if we have two</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MCMC-lecture-1_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>One way to assess differences between chains is to compare the within-chain variance for a parameter of interest, say <span class="math inline">\(\theta\)</span> to the combined variance of all the chains. Let <span class="math inline">\(\theta^{(sm)}\)</span> be the draw for <span class="math inline">\(\theta\)</span> from the <span class="math inline">\(m^\mathrm{th}\)</span> chain out of <span class="math inline">\(M\)</span> chains at the <span class="math inline">\(s^\mathrm{th}\)</span> iteration. Let <span class="math inline">\(\bar{\theta}^{(.m)} = \frac{1}{S}\sum_{s=1}^S \theta^{(sm)}\)</span>, <span class="math inline">\(\bar{\theta}^{(..)} = \frac{1}{M}\sum_{m=1}^M \bar{\theta}^{(.m)}\)</span>. Let <span class="math inline">\(v_m = \frac{1}{S-1}\sum_{s=1}^S (\theta^{(sm)} - \bar{\theta}^{(.m)})^2\)</span>, and let <span class="math inline">\(W = \frac{1}{M}\sum_{m=1}^M v_m\)</span>. We also compute the between-chain variance, so <span class="math inline">\(B = \frac{S}{M-1}\sum_{m=1}^M (\bar{\theta}^{(.m)} - \bar{\theta}^{(..)})^2\)</span></p>
+<p>Then we estimate the variance of the posterior with the following consistent but biased estimator: <span class="math display">\[
+\widehat{\text{var}}(\theta \mid y) = \frac{S-1}{S} W + \frac{B}{S}
+\]</span> We can see that this is likely an oversetimate of the variance because as <span class="math inline">\(S\to\infty\)</span>, <span class="math inline">\(v_m \to \text{var}(\theta \mid y)\)</span>, and the first factor converges to the same, while the second factor goes to zero.</p>
+<p>The term <span class="math inline">\(W\)</span> underestimates the posterior variance for any finite <span class="math inline">\(S\)</span> because each chain hasn’t explored the full extent of the tails of the distribution, and thus will have a smaller variance than the true variance.</p>
+<p>The final expression for <span class="math inline">\(\hat{R}\)</span> is <span class="math display">\[
+\hat{R} = \sqrt{\frac{\widehat{\text{var}}(\theta \mid y)}{W}}
+\]</span> The statistic is calculated so that each chain in the above calculation is the first or second half of a single chain. Thus, if we ran two MCMC chains, <span class="math inline">\(M=4\)</span> above.</p>
+<p>The reason for this is to catch scenarios where each chain is nonstationary, but the chains are marginally indistinguishable.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MCMC-lecture-1_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The version that Stan uses is outlined here: <span class="citation" data-cites="vehtari2021rank">Vehtari et al. (<a href="#ref-vehtari2021rank" role="doc-biblioref">2021</a>)</span>. It uses an <span class="math inline">\(\hat{R}\)</span> that is computed using normlized ranks, which means we compute the rank <span class="math inline">\(r^{(sm)}\)</span> of each draw of a parameter with respect to the pooled draws from all the chains. Then the ranks are trasnformed to z-scores using: <span class="math display">\[
+z^{(sm)} = \Phi^{-1}\lp\frac{r^{(sm)} - 3/8}{S M + 1/4}\rp
+\]</span> Then the <span class="math inline">\(\hat{R}\)</span> is computed using <span class="math inline">\(z^{(sm)}\)</span> in place of <span class="math inline">\(\theta^{(sm)}\)</span> above. This has the effect of making the statistic useful in scenarios where there is an infinite mean (e.g.&nbsp;when we’re sampling from a Cauchy distribution, or something with similarly heavy tails).</p>
+
+
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-gelfand1990sampling" class="csl-entry" role="listitem">
+Gelfand, Alan E, and Adrian FM Smith. 1990. <span>“Sampling-Based Approaches to Calculating Marginal Densities.”</span> <em>Journal of the American Statistical Association</em> 85 (410): 398–409.
+</div>
+<div id="ref-gelman1992inference" class="csl-entry" role="listitem">
+Gelman, Andrew, and Donald B Rubin. 1992. <span>“Inference from Iterative Simulation Using Multiple Sequences.”</span> <em>Statistical Science</em> 7 (4): 457–72.
+</div>
+<div id="ref-geyerMCMC" class="csl-entry" role="listitem">
+Geyer, Charles J. 2005. <span>“Markov <span>Chain Monte Carlo Lecture Notes</span>.”</span>
+</div>
+<div id="ref-tanner1987calculation" class="csl-entry" role="listitem">
+Tanner, Martin A, and Wing Hung Wong. 1987. <span>“The Calculation of Posterior Distributions by Data Augmentation.”</span> <em>Journal of the American Statistical Association</em> 82 (398): 528–40.
+</div>
+<div id="ref-vehtari2021rank" class="csl-entry" role="listitem">
+Vehtari, Aki, Andrew Gelman, Daniel Simpson, Bob Carpenter, and Paul-Christian Bürkner. 2021. <span>“Rank-Normalization, Folding, and Localization: An Improved r ̂ for Assessing Convergence of MCMC (with Discussion).”</span> <em>Bayesian Analysis</em> 16 (2): 667–718.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
