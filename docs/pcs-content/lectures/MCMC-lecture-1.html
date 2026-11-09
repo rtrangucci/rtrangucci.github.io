@@ -200,6 +200,10 @@ window.Quarto = {
   <li><a href="#stationary-stochastic-processes" id="toc-stationary-stochastic-processes" class="nav-link" data-scroll-target="#stationary-stochastic-processes">Stationary stochastic processes</a></li>
   </ul></li>
   <li><a href="#markov-chain-monte-carlo-mcmc" id="toc-markov-chain-monte-carlo-mcmc" class="nav-link" data-scroll-target="#markov-chain-monte-carlo-mcmc">Markov Chain Monte Carlo (MCMC)</a></li>
+  <li><a href="#discrete-state-space-markov-chains" id="toc-discrete-state-space-markov-chains" class="nav-link" data-scroll-target="#discrete-state-space-markov-chains">Discrete state space Markov chains</a></li>
+  <li><a href="#gamblers-ruin-markov-chain" id="toc-gamblers-ruin-markov-chain" class="nav-link" data-scroll-target="#gamblers-ruin-markov-chain">Gambler’s ruin Markov Chain</a></li>
+  <li><a href="#dissection-principle" id="toc-dissection-principle" class="nav-link" data-scroll-target="#dissection-principle">Dissection principle</a></li>
+  <li><a href="#recurrence" id="toc-recurrence" class="nav-link" data-scroll-target="#recurrence">Recurrence</a></li>
   <li><a href="#gibbs-sampling" id="toc-gibbs-sampling" class="nav-link" data-scroll-target="#gibbs-sampling">Gibbs sampling</a>
   <ul class="collapse">
   <li><a href="#quantifying-uncertainty-in-mcmc-estimates" id="toc-quantifying-uncertainty-in-mcmc-estimates" class="nav-link" data-scroll-target="#quantifying-uncertainty-in-mcmc-estimates">Quantifying Uncertainty in MCMC estimates</a></li>
@@ -277,6 +281,146 @@ P_i(X_i = x_i \mid X_{i-1} = x_{i-1}) = P(X_i = x_i \mid X_{i-1} = x_{i-1})
 <h2 class="anchored" data-anchor-id="markov-chain-monte-carlo-mcmc">Markov Chain Monte Carlo (MCMC)</h2>
 <p>The motivation for studying Markov chains is to find a way to generate draws from a distribution we otherwise couldn’t. Let’s call this distribution <span class="math inline">\(\pi\)</span>. If we can find a transition kernel for which our target is the invariant distribution, we can, in theory, generate draws from our target distribution by picking an initial point <span class="math inline">\(x_0\)</span> and repeatedly applying the transition kernel until, eventually, we get a draw from our target distribution.</p>
 <p>The complication is that we need conditions on the transition kernel for all of this to work. We’ll first gain intuition by studying discrete state-space Markov chains.</p>
+</section>
+<section id="discrete-state-space-markov-chains" class="level2">
+<h2 class="anchored" data-anchor-id="discrete-state-space-markov-chains">Discrete state space Markov chains</h2>
+<p>Let <span class="math inline">\(X_n \in \Omega \subseteq \mathbb{Z}\)</span> and define the transition kernel as a matrix <span class="math inline">\(P\)</span> with <span class="math inline">\((i,j)^\mathrm{th}\)</span> entry <span class="math display">\[
+p_{ij} = P(X_n = j \mid X_{n-1} = i)
+\]</span> This defines the one-step transition probabilities.</p>
+</section>
+<div id="ex-gamblers-ruin-MC">
+<section id="gamblers-ruin-markov-chain" class="level2">
+<h2 class="anchored" data-anchor-id="gamblers-ruin-markov-chain">Gambler’s ruin Markov Chain</h2>
+<p>We can use a Markov Chain to represent a simple game with two opponents, player one with <span class="math inline">\(i &gt; 0\)</span> dollars and player two with <span class="math inline">\(m - i &gt; 0\)</span> dollars. Player one flips a coin. If the coin comes up heads, they gain a dollar and their opponent loses a dollar. If the coin comes up tails, they lose a dollar and their opponent gains a dollar. The game ends when either player has zero dollars.</p>
+<p>We can represent the game as a Markov chain with a state space representing player one’s cash: <span class="math inline">\(\Omega = \{0, 1, \dots, m\}\)</span>. The <span class="math inline">\(m+1 \times m+1\)</span> transition matrix, <span class="math inline">\(P\)</span> has <span class="math inline">\((i,i+1)^{\mathrm{th}}\)</span> entry <span class="math inline">\(P(X_n = i + 1 \mid X_{n-1} = i) = p\)</span>, <span class="math inline">\((i,i-1)^{\mathrm{th}}\)</span> entry <span class="math inline">\(P(X_n = i - 1 \mid X_{n-1} = i) = q\)</span> where <span class="math inline">\(q = 1-p\)</span> for <span class="math inline">\(1 &lt; i &lt; m+1\)</span> and elements <span class="math inline">\(P_{1,1} = P_{m+1,m+1} = 1\)</span>. All other entries are zero. This leads to a matrix: <span class="math display">\[
+P = \begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 \\
+q &amp; 0 &amp; p &amp; 0 &amp; \dots &amp; 0 &amp; 0 \\
+0 &amp; q &amp; 0 &amp; p &amp; \dots &amp; 0 &amp; 0 \\
+\vdots &amp; \ddots &amp;  &amp; \ddots &amp;  &amp;  &amp; \vdots \\
+0 &amp; \dots &amp; 0 &amp; 0 &amp; q &amp; 0 &amp; p \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 1
+\end{bmatrix}
+\]</span></p>
+</section>
+</div>
+<p>If we want to compute higher-order transition probabilities, we need to marginalize over intermediate steps. Consider the two step transition function: <span class="math display">\[
+\begin{aligned}
+p^{(2)}_{ij} &amp; = P(X_{n} = j \mid X_{n-2} = i) \\
+&amp; = \sum_{k \in \Omega} P(X_n = j \mid X_{n-1} = k)P(X_{n-1} = k \mid X_{n-2} = i)
+\end{aligned}
+\]</span> This can be seen as the <span class="math inline">\((i,j)^\mathrm{th}\)</span> element of the matrix <span class="math inline">\(P^{(2)}\)</span> which is the result of the matrix multiplication: <span class="math display">\[
+P^{(2)} = P P
+\]</span> This generalizes to the n-step transition matrix: <span class="math display">\[
+P^{(n)} = P^{(n-1)} P
+\]</span></p>
+<p>If we have <span class="math inline">\(a = (a_1, a_2, \dots)'\)</span> where <span class="math inline">\(a_i = P(X_0 = i)\)</span> then <span class="math inline">\(P(X_n = j)\)</span>, denoted as <span class="math inline">\(a^{(n)}\)</span> can be computed via matrix multiplication:</p>
+<p><span class="math display">\[
+(a^{(n)})^T = a^T P^{(n)}
+\]</span> we can see this by the law of total probability for each element <span class="math inline">\(a^{(n)}_j\)</span>: <span class="math display">\[
+a^{(n)}_j = \sum_{k} P(X_n = j \mid X_0 = k) P(X_0 = k)
+\]</span> ## Hitting times</p>
+<p>In order to understand how the Markov chain progresses through time, it’ll be important to define the time it takes for the Markov chain to first reach a set <span class="math inline">\(B \subset \Omega\)</span>: <span class="math display">\[
+\tau_B = \inf \{n \geq 0 \mid X_n \in B \}
+\]</span></p>
+<p>We’ll say that state <span class="math inline">\(j\)</span> is accessible from <span class="math inline">\(i\)</span> if <span class="math inline">\(P(\tau_{j} &lt; \infty \mid X_0 = i)\)</span>. This is equivalent to the statement that <span class="math display">\[
+\exists n \geq 0 \, \mid  \, p^{(n)}_{ij} &gt; 0
+\]</span> For shorthand, we’ll write <span class="math inline">\(i \to j\)</span>.</p>
+<p>If <span class="math inline">\(i \to j\)</span> and <span class="math inline">\(j \to i\)</span> we write that state <span class="math inline">\(i\)</span> communicates with state <span class="math inline">\(j\)</span>. We can partition the state space into mutually exclusive and exhaustive classes of states that communicate.<br>
+We’ll say a Markov chain is <strong>irreducible</strong> if there is only one class.</p>
+<p>For finite state space MCs we can examine the transition matrix to determine the number of classes. In the <span class="math inline">\(m=3\)</span> gambler’s ruin chain, we have: <span class="math display">\[
+\begin{bmatrix}
+1 &amp; 0 &amp; 0 &amp; 0 \\
+q &amp; 0 &amp; p &amp; 0 \\
+0 &amp; q &amp; 0 &amp; p \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{bmatrix}
+\]</span></p>
+<p>we can see the classes are <span class="math inline">\(\{0\}, \{1, 2\}, \{3 \}\)</span>.</p>
+<section id="dissection-principle" class="level2">
+<h2 class="anchored" data-anchor-id="dissection-principle">Dissection principle</h2>
+<p>Despite the dependence between <span class="math inline">\(X_n\)</span> and <span class="math inline">\(X_{n-1}\)</span> in a Markov chain, we can break the sequence <span class="math inline">\(X_0, X_1, X_2, \dots\)</span> into iid sequences. We can use the Markov property to our advantage here. Suppose that <span class="math inline">\(X_0 = i\)</span>. If we ran the chain until step <span class="math inline">\(n\)</span> such that <span class="math inline">\(X_n = i\)</span>, the conditional distribution of the next step <span class="math inline">\(X_{n+1}\)</span> given <span class="math inline">\(X_n = i\)</span> would be the same as the conditional distribution of <span class="math inline">\(X_1\)</span> given <span class="math inline">\(X_0 = i\)</span>. We can define the time at which the chain returns to the initial state <span class="math inline">\(i\)</span> as <span class="math inline">\(\tau_i(1) = \inf (n &gt; 0 \mid X_{n} = i)\)</span>. We can then define the second time that the chain returns to state <span class="math inline">\(i\)</span> as <span class="math display">\[
+\tau_i(2) = \inf (n &gt; \tau_i(1) \mid X_{n} = i)
+\]</span> Generalizing, we can define the <span class="math inline">\(m^\mathrm{th}\)</span> return to state <span class="math inline">\(i\)</span> as: <span class="math display">\[
+\tau_i(m) = \inf (n &gt; \tau_i(m-1) \mid X_{n} = i)
+\]</span></p>
+<p>The number of steps required to hit state <span class="math inline">\(i\)</span> the first time may differ from the number of steps required to hit state <span class="math inline">\(i\)</span> the second time. This too is a RV, so we can define <span class="math inline">\(\alpha_2 = \tau_i(2) - \tau_i(1)\)</span>. We can define <span class="math inline">\(\alpha_1 = \tau_i(1)\)</span>.</p>
+<p>Of course, <span class="math inline">\(\alpha_2\)</span> is only properly defined if <span class="math inline">\(\tau_i(1) &lt; \infty\)</span>. Let’s define the sequence <span class="math display">\[
+\xi_1 = (\alpha_1, X_1, \dots, X_{\tau_i(1)})
+\]</span> This random vector has <span class="math inline">\(\alpha_1 + 1\)</span> elements. Note that <span class="math inline">\(\alpha_1\)</span> could take the value <span class="math inline">\(\infty\)</span>.</p>
+<p>On the event that <span class="math inline">\([\alpha_1 &lt; \infty]\)</span>, we can define <span class="math display">\[
+\xi_2 = (\alpha_2, X_{\tau_i(1) + 1}, \dots, X_{\tau_i(2)})
+\]</span> and similarly on the event <span class="math inline">\([\alpha_1 &lt; \infty, \alpha_2 &lt; \infty, \dots, \alpha_{n} &lt; \infty] = [\tau_i(1) &lt; \infty, \tau_i(2) &lt; \infty, \dots, \tau_i(n) &lt; \infty]\)</span> <span class="math display">\[
+\xi_{n+1} = (\alpha_{n+1}, X_{\tau_i(n) + 1}, \dots, X_{\tau_i(n+1)})
+\]</span> These RVs live in the space of all finite-length vectors of integers with the length of the vector as one element plus infinite length vectors of integers.</p>
+<p>Now we can show that the <span class="math inline">\(\xi_i\)</span> are iid in this space: <span id="eq-start"><span class="math display">\[
+\begin{aligned}
+&amp; P(\xi_1 = (k, i_1, i_2, \dots, i_k), \xi_2 = (\ell, j_{1}, \dots, j_{\ell}), \tau_i(1) &lt; \infty, \tau_i(2) &lt; \infty \mid X_0 = i) \\
+&amp; = P(X_1 = i_1, \dots, X_k = i_k, X_{k+1} = j_1, \dots, X_{k + \ell} = j_{\ell} \mid X_0 = i)
+\end{aligned}
+\tag{1}\]</span></span> This requires that <span class="math inline">\(i_k = j_\ell = i\)</span> and <span class="math inline">\(i_1, i_2, \dots, i_{k-1}\)</span> and <span class="math inline">\(j_{1}, j_2, \dots, j_{\ell - 1}\)</span> don’t equal <span class="math inline">\(i\)</span>. This allows us to write <span class="math display">\[
+\begin{aligned}
+&amp;P(X_1 = i_1, \dots, X_k = i, X_{k+1} = j_1, \dots, X_{k + \ell} = i \mid X_0 = i)
+\end{aligned}
+\]</span> By the product rule and Markov Property we get: <span class="math display">\[
+\begin{aligned}
+&amp;P(X_1 = i_1, \dots, X_k = i, X_{k+1} = j_1, \dots, X_{k + \ell} = i \mid X_0 = i) \\
+&amp; = P(X_1 = i_1, \dots, X_k = i \mid X_0 = i) \\
+&amp; \quad \times P(X_{k+1} = j_1, \dots, X_{k + \ell} = i \mid X_0 = i, X_1 = i_1, \dots, X_k = i) \\
+&amp; = P(X_1 = i_1, \dots, X_k = i \mid X_0 = i) \\
+&amp; \quad \times P(X_{k+1} = j_1, \dots, X_{k + \ell} = i \mid X_k = i) \\
+&amp; = P(X_1 = i_1, \dots, X_k = i \mid X_0 = i)P(X_{1} = j_1, \dots, X_{\ell} = i \mid X_0 = i)
+\end{aligned}
+\]</span> These last two probabilities may be written as <span id="eq-big-marg"><span class="math display">\[
+\begin{aligned}
+&amp;P(X_1 = i_1, \dots, X_k = i \mid X_0 = i)P(X_{1} = j_1, \dots, X_{\ell} = i \mid X_0 = i) \\
+&amp; = P(X_1 = i_1, \dots, X_k = i, \tau_i(1) = k \mid X_0 = i) P(X_{1} = j_1, \dots, X_{\ell} = i, \tau_i(1) = \ell  \mid X_0 = i)
+\end{aligned}
+\tag{2}\]</span></span> Marginalizing <a href="#eq-start" class="quarto-xref">Equation&nbsp;1</a> over all <span class="math inline">\(i_1, \dots, i_k, j_1, \dots, j_\ell\)</span> gives: <span class="math display">\[
+\begin{aligned}
+P(\alpha_1 = k, \alpha_2 = \ell, \tau_i(1) &lt; \infty, \tau_i(2) &lt; \infty)
+\end{aligned}
+\]</span> while the marginal of the last line of <a href="#eq-big-marg" class="quarto-xref">Equation&nbsp;2</a> gives: <span class="math display">\[
+P(\tau_i(1) = k) P(\tau_i(1) = \ell)
+\]</span> which implies that <span class="math display">\[
+\begin{aligned}
+P(\tau_i(1) &lt; \infty, \tau_i(2) &lt; \infty) &amp; = P(\tau_i(1) &lt; \infty) P(\tau_i(1) &lt; \infty) \\
+&amp; = P(\alpha_1 &lt; \infty)^2
+\end{aligned}
+\]</span> Dividing <a href="#eq-start" class="quarto-xref">Equation&nbsp;1</a> by <span class="math inline">\(P(\tau_i(1) &lt; \infty, \tau_i(2) &lt; \infty)\)</span> gives: <span class="math display">\[
+P(\xi_1 = (k, i_1, i_2, \dots, i_k), \xi_2 = (\ell, j_{1}, \dots, j_{\ell}) \mid X_0 = i, \tau_i(1) &lt; \infty, \tau_i(2) &lt; \infty)
+\]</span> while dividing the last line of <a href="#eq-big-marg" class="quarto-xref">Equation&nbsp;2</a> by <span class="math inline">\(P(\alpha_1 &lt; \infty)^2\)</span> yields <span class="math display">\[
+P(X_1 = i_1, \dots, X_k = i \mid X_0 = i, \alpha_1 &lt; \infty)P(X_{1} = j_1, \dots, X_{\ell} = i \mid X_0 = i, \alpha_1 &lt; \infty)
+\]</span> or, restated:</p>
+<p><span class="math display">\[
+P(\xi_1 = (k, i_1, \dots, i_k) \mid X_0 = i, \alpha_1 &lt; \infty)P(\xi_1 = (\ell, j_1, \dots, j_\ell) \mid X_0 = i, \alpha_1 &lt; \infty)
+\]</span></p>
+<p>When <span class="math inline">\(P(\alpha_i &lt; \infty) = 1\)</span>, the expression simplifies to</p>
+<p><span class="math display">\[
+P(\xi_1 = (k, i_1, \dots, i_k) \mid X_0 = i)P(\xi_1 = (\ell, j_1, \dots, j_\ell) \mid X_0 = i)
+\]</span></p>
+</section>
+<section id="recurrence" class="level2">
+<h2 class="anchored" data-anchor-id="recurrence">Recurrence</h2>
+<p>A property that will be important for us is to understand if we will hit a state repeatedly after starting the chain at that state. If this is the case, then <span class="math inline">\(P(\alpha_i &lt; \infty) = 1\)</span>. Given the fact that we can chop the chain into iid realizations, if we find that, for each state <span class="math inline">\(i\)</span>, <span class="math inline">\(P(\alpha_i &lt; \infty) = 1\)</span>, we can generate an infinite collection of iid sequences. Thus, if we start the chain at any initial value, we can run the chain for <span class="math inline">\(N\)</span> large; averages of <span class="math inline">\(\sum_{i=0}^N f(X_i) / N\)</span> will converge because we can show that this sum is a sum over iid realizations of the chain.</p>
+<p>We’ll define the notation <span class="math inline">\(f_{jk}^{(n)}\)</span> <span class="math display">\[
+f_{jk}^{(n)} = P(\tau_k(1) = n \mid X_0 = j)
+\]</span> or the probability of the number of steps to return to state <span class="math inline">\(k\)</span> is equal to <span class="math inline">\(n\)</span> given that we start at state <span class="math inline">\(j\)</span>.</p>
+<p>To compute <span class="math inline">\(P(\tau_k(1) &lt; \infty \mid X_0 = j)\)</span> we sum over the set <span class="math inline">\(n = 0, \dots, \infty\)</span> <span class="math display">\[
+P(\tau_k(1) &lt; \infty \mid X_0 = j) = \sum_{n=0}^\infty f_{jk}^{(n)}
+\]</span> To compute this for a state <span class="math inline">\(i\)</span> returning to state <span class="math inline">\(i\)</span> <span class="math display">\[
+P(\tau_i(1) &lt; \infty \mid X_0 = i) = \sum_{n=0}^\infty f_{ii}^{(n)}
+\]</span> Similarly, if we want <span class="math inline">\(\Exp{\tau_i(1) \mid X_0 = i}\)</span> we just compute the expected value: <span class="math display">\[
+\Exp{\tau_i(1) \mid X_0 = i} = \sum_{n=0}^\infty n f_{ii}^{(n)}
+\]</span></p>
+<p>We’ll say that state <span class="math inline">\(i\)</span> is recurrent if and only if <span class="math display">\[
+\sum_{n=0}^\infty p^{(n)}_{ii} = \infty
+\]</span> ## Stationary measures</p>
+<p>The whole ballgame is in determining whether a Markov chain as defined for the transition matrix <span class="math inline">\(P\)</span> has a unique stationary distribution. As a reminder, the stationary distribution is a left eigenvector of the matrix <span class="math inline">\(P\)</span> <span class="math display">\[
+\pi^T P = \pi^T
+\]</span> There is another notion here of an invariant measure, which is just the un-normalized version of the stationary distribution: <span class="math display">\[
+\nu^T P = \nu^T
+\]</span></p>
 </section>
 <section id="gibbs-sampling" class="level2">
 <h2 class="anchored" data-anchor-id="gibbs-sampling">Gibbs sampling</h2>
