@@ -204,6 +204,8 @@ window.Quarto = {
   <li><a href="#gamblers-ruin-markov-chain" id="toc-gamblers-ruin-markov-chain" class="nav-link" data-scroll-target="#gamblers-ruin-markov-chain">Gambler’s ruin Markov Chain</a></li>
   <li><a href="#dissection-principle" id="toc-dissection-principle" class="nav-link" data-scroll-target="#dissection-principle">Dissection principle</a></li>
   <li><a href="#recurrence" id="toc-recurrence" class="nav-link" data-scroll-target="#recurrence">Recurrence</a></li>
+  <li><a href="#stationary-measures" id="toc-stationary-measures" class="nav-link" data-scroll-target="#stationary-measures">Stationary measures</a></li>
+  <li><a href="#strong-law-of-large-numbers" id="toc-strong-law-of-large-numbers" class="nav-link" data-scroll-target="#strong-law-of-large-numbers">Strong law of large numbers</a></li>
   <li><a href="#gibbs-sampling" id="toc-gibbs-sampling" class="nav-link" data-scroll-target="#gibbs-sampling">Gibbs sampling</a>
   <ul class="collapse">
   <li><a href="#quantifying-uncertainty-in-mcmc-estimates" id="toc-quantifying-uncertainty-in-mcmc-estimates" class="nav-link" data-scroll-target="#quantifying-uncertainty-in-mcmc-estimates">Quantifying Uncertainty in MCMC estimates</a></li>
@@ -415,12 +417,166 @@ P(\tau_i(1) &lt; \infty \mid X_0 = i) = \sum_{n=0}^\infty f_{ii}^{(n)}
 \]</span></p>
 <p>We’ll say that state <span class="math inline">\(i\)</span> is recurrent if and only if <span class="math display">\[
 \sum_{n=0}^\infty p^{(n)}_{ii} = \infty
-\]</span> ## Stationary measures</p>
+\]</span> This implies that the chain returns to <span class="math inline">\(i\)</span> infinitely often.</p>
+</section>
+<section id="stationary-measures" class="level2">
+<h2 class="anchored" data-anchor-id="stationary-measures">Stationary measures</h2>
 <p>The whole ballgame is in determining whether a Markov chain as defined for the transition matrix <span class="math inline">\(P\)</span> has a unique stationary distribution. As a reminder, the stationary distribution is a left eigenvector of the matrix <span class="math inline">\(P\)</span> <span class="math display">\[
 \pi^T P = \pi^T
 \]</span> There is another notion here of an invariant measure, which is just the un-normalized version of the stationary distribution: <span class="math display">\[
 \nu^T P = \nu^T
+\]</span> It turns out that if we have a recurrent state <span class="math inline">\(i\)</span>, we can define <span class="math inline">\(\nu_j\)</span> as the expected number of times we visit state <span class="math inline">\(j\)</span> after starting the chain at state <span class="math inline">\(i\)</span> before we return to <span class="math inline">\(i\)</span>.</p>
+<p>In other words: <span class="math display">\[
+\nu_j = \Exp{\sum_{k=0}^{\tau_i(1) - 1} \ind{X_k = j} \mid X_0 = i}
+\]</span> One fact about <span class="math inline">\(\nu_i\)</span> is that it is <span class="math inline">\(1\)</span> because: <span class="math display">\[
+\nu_i = \Exp{\sum_{k=0}^{\tau_i(1) - 1} \ind{X_k = i} \mid X_0 = i}
+\]</span> Another fact is that <span class="math inline">\(X_0 = X_{\tau_i(1)} = 1\)</span>, so for <span class="math inline">\(j \neq  i\)</span> we have <span class="math display">\[
+\begin{aligned}
+\nu_j &amp; = \Exp{\sum_{k=0}^{\tau_i(1) - 1} \ind{X_k = j} \mid X_0 = i} \\
+&amp; = \Exp{\sum_{k=1}^{\tau_i(1)} \ind{X_k = j} \mid X_0 = i}
+\end{aligned}
 \]</span></p>
+<p>We may write this equivalently as or</p>
+<p><span class="math display">\[
+\begin{aligned}
+\nu_j &amp; = \Exp{\sum_{k=1}^{\infty} \ind{X_k = j}\ind{\tau_i(1) \geq k} \mid X_0 = i}  \\
+&amp; = \sum_{k=1}^{\infty} \Exp{\ind{X_k = j} \ind{\tau_i(1) \geq k}  \mid X_0 = i} \\
+&amp; = \sum_{k=1}^{\infty} P(X_k = j,\tau_i(1) \geq k  \mid X_0 = i)
+\end{aligned}
+\]</span> Swapping the expectation and the sum is permissible because we’re operating on non-negative values.</p>
+<p>Showing that this is indeed the stationary distribution requires some intricate index fiddling and uses of the Markov property.</p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>We start with the definition of <span class="math inline">\(\nu_j\)</span> that we derived above, assuming <span class="math inline">\(i\neq j\)</span>: <span class="math display">\[
+\begin{aligned}
+\nu_j &amp; = \sum_{k=1}^{\infty} P(X_k = j,\tau_i(1) \geq k  \mid X_0 = i) \\
+&amp; = p_{ij} + \sum_{k=2}^{\infty} P(X_k = j,\tau_i(1) \geq k  \mid X_0 = i)
+\end{aligned}
+\]</span> The set <span class="math display">\[
+\{\tau_i(1) \geq k\} \equiv \{\tau_i(1) \geq k, X_{k-1} \neq i\}
+\]</span> In order to write the measure of this set, we need to sum over all states not equal to <span class="math inline">\(i\)</span>: <span class="math display">\[
+\begin{aligned}
+\nu_j &amp; = p_{ij} + \sum_{k=2}^{\infty} P(X_k = j,\tau_i(1) \geq k  \mid X_0 = i) \\
+&amp; = p_{ij} + \sum_{\ell \in \Omega, \ell \neq i} \sum_{k=2}^{\infty} P(X_k = j,\tau_i(1) \geq k, X_{k-1} = \ell  \mid X_0 = i) \\
+&amp; = p_{ij} + \sum_{\ell \in \Omega, \ell \neq i} \sum_{k=2}^{\infty} P(X_k = j\mid \tau_i(1) \geq k, X_{k-1} = \ell, X_0 = i)P(\tau_i(1) \geq k, X_{k-1} = \ell \mid X_0 = i) \\
+&amp; = \nu_i p_{ij} + \sum_{\ell \in \Omega, \ell \neq i} \sum_{k=2}^{\infty} p_{\ell j} P(\tau_i(1) \geq k, X_{k-1} = \ell \mid X_0 = i) \\
+\end{aligned}
+\]</span> Now we can reindex <span class="math inline">\(m = k-1\)</span>: <span class="math display">\[
+\begin{aligned}
+\nu_j &amp; = \nu_i p_{ij} + \sum_{\ell \in \Omega, \ell \neq i} \sum_{m=1}^{\infty} p_{\ell j} P(\tau_i(1) \geq m+1, X_{m} = \ell \mid X_0 = i) \\
+&amp; = \nu_i p_{ij} + \sum_{\ell \in \Omega, \ell \neq i} \sum_{m=1}^{\infty} p_{\ell j} P(\tau_i(1) &gt; m, X_{m} = \ell \mid X_0 = i) \\
+&amp; = \nu_i p_{ij} + \sum_{\ell \in \Omega, \ell \neq i}p_{\ell j}\Exp{\sum_{m=1}^{\infty}  \ind{\tau_i(1) &gt; m}\ind{X_{m} = \ell} \mid X_0 = i} \\
+&amp; = \nu_i p_{ij} + \sum_{\ell \in \Omega, \ell \neq i}p_{\ell j}\Exp{\sum_{m=1}^{\infty}  \ind{\tau_i(1) &gt; m}\ind{X_{m} = \ell} \mid X_0 = i} \\
+&amp; = \nu_i p_{ij} + \sum_{\ell \in \Omega, \ell \neq i}p_{\ell j}\Exp{\sum_{m=0}^{\tau_i(1) - 1}  \ind{X_{m} = \ell} \mid X_0 = i} \\
+&amp; = \nu_i p_{ij} + \sum_{\ell \in \Omega, \ell \neq i}p_{\ell j}\nu_{\ell} \\
+\end{aligned}
+\]</span></p>
+<p>If <span class="math inline">\(i\)</span> is positive recurrent. <span class="math display">\[
+\sum_{k \in \Omega} \nu_k = \sum_{k \in \Omega} \Exp{\sum_{m=0}^{\tau_i(1) - 1}  \ind{X_{m} = k} \mid X_0 = i}
+\]</span> swapping the sums gives <span class="math display">\[
+\sum_{k \in \Omega} \nu_k = \Exp{\sum_{m=0}^{\tau_i(1) - 1}\sum_{k \in \Omega}   \ind{X_{m} = k} \mid X_0 = i}
+\]</span> Note that <span class="math display">\[
+\sum_{k \in \Omega}   \ind{X_{m} = k} = 1
+\]</span> so</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sum_{k \in \Omega} \nu_k &amp; = \Exp{\sum_{m=0}^{\tau_i(1) - 1} 1 \mid X_0 = i} \\
+&amp; = \Exp{\tau_i(1) \mid X_0 = i} \\
+&lt; \infty
+\end{aligned}
+\]</span> This means that if <span class="math inline">\(i\)</span> is positive recurrent, we can normalize <span class="math inline">\(\nu_j\)</span> to get: <span class="math display">\[
+\pi_j = \nu_j / \Exp{\tau_i(1) \mid X_0 = i}
+\]</span></p>
+</div>
+</section>
+<section id="strong-law-of-large-numbers" class="level2">
+<h2 class="anchored" data-anchor-id="strong-law-of-large-numbers">Strong law of large numbers</h2>
+<p>Suppose MC is irreducible and positive recurrent with unique stationary distribution <span class="math inline">\(\pi\)</span>. Then for <span class="math inline">\(f \geq 0\)</span> <span class="math display">\[
+\lim_{N\to\infty}\frac{1}{N} \sum_{n=0}^N f(X_n) \overset{\text{a.s.}}{\to} \sum_{k \in \Omega} f(k) \pi_k
+\]</span></p>
+<div class="proof">
+<p><span class="proof-title"><em>Proof</em>. </span>We’ll write the RHS in a different form <span class="math display">\[
+\begin{aligned}
+\sum_{k \in \Omega} f(k) \pi_k &amp; = \sum_{k \in \Omega} f(k) \frac{1}{\Exp{\tau_i(1) \mid X_0 = 0}}\Exp{\sum_{n=0}^{\tau_i(1) - 1} \ind{X_n = k} \mid X_0 = i} \\
+&amp; = \frac{1}{\Exp{\tau_i(1) \mid X_0 = 0}} \Exp{\sum_{k \in \Omega} f(k) \sum_{n=0}^{\tau_i(1) - 1} \ind{X_n = k} \mid X_0 = i}\\
+&amp; = \frac{1}{\Exp{\tau_i(1) \mid X_0 = 0}} \Exp{\sum_{k \in \Omega} \sum_{n=0}^{\tau_i(1) - 1} f(k) \ind{X_n = k} \mid X_0 = i} \\
+&amp; = \frac{1}{\Exp{\tau_i(1) \mid X_0 = 0}} \Exp{\sum_{n=0}^{\tau_i(1) - 1} \sum_{k \in \Omega} f(k) \ind{X_n = k} \mid X_0 = i} \\
+&amp; = \frac{1}{\Exp{\tau_i(1) \mid X_0 = 0}} \Exp{\sum_{n=0}^{\tau_i(1) - 1} f(X_n) \mid X_0 = i} \\
+\end{aligned}
+\]</span></p>
+<p>Now, we turn to the LHS. For a given <span class="math inline">\(N\)</span>, there are <span class="math inline">\(B(N)\)</span> returns to state <span class="math inline">\(i\)</span>, which we define as <span class="math display">\[
+B(N) = \sup \{k \geq 0 \mid \tau_i(k) \leq N \}
+\]</span></p>
+<p>Visualizing the quantity on the number line:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MCMC-lecture-1_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>By the dissection principle, we have that the RVs: <span class="math display">\[
+\eta_k = \sum_{n=\tau_i(k) + 1}^{\tau_i(k+1)} f(X_n)
+\]</span> are iid, then the following: <span class="math display">\[
+\begin{aligned}
+\lim_{m \to \infty} \frac{1}{m} \sum_{k=1}^m \eta_k &amp; \overset{\text{a.s.}}{\to} \Exp{\eta_1 \mid X_0 = i} \\
+&amp; = \Exp{\sum_{n=\tau_i(1) + 1}^{\tau_i(2)} f(X_n) \mid X_0 = i}
+\end{aligned}
+\]</span> Because <span class="math inline">\(f(k) \geq 0\)</span> for all <span class="math inline">\(k \in \Omega\)</span> we’ll get the following set of inequalities: <span class="math display">\[
+\sum_{n=0}^{\tau_i(B(N))} f(X_n) \leq \sum_{n=0}^{N} f(X_n) \leq \sum_{n=0}^{\tau_i(B(N) + 1)} f(X_n)
+\]</span></p>
+<p>The first inequality can we written as: <span class="math display">\[
+\sum_{n=0}^{\tau_i(1)} f(X_n) + \sum_{n=\tau_i(1)+1}^{\tau_i(B(N))}f(X_n)
+\]</span> Rewriting the expression: <span class="math display">\[
+\begin{aligned}
+\sum_{n=\tau_i(1)+1}^{\tau_i(B(N))}f(X_n) &amp; = \sum_{k=1}^{B(N)-1} \sum_{n=\tau_i(k) + 1}^{\tau_i(k+1)} f(X_n) \\
+&amp; = \sum_{k=1}^{B(N)-1} \eta_k
+\end{aligned}
+\]</span> We can do the same for the RHS: <span class="math display">\[
+\begin{aligned}
+\sum_{n=0}^{\tau_i(B(N) + 1)} f(X_n) &amp; = \sum_{n=0}^{\tau_i(1)} f(X_n) + \sum_{n=\tau_i(1)+1}^{\tau_i(B(N) + 1)} f(X_n) \\
+&amp; = \sum_{n=0}^{\tau_i(1)} f(X_n) + \sum_{k=1}^{B(N)} \sum_{n=\tau_i(k)+1}^{\tau_i(k)} f(X_n) \\
+&amp; = \sum_{n=0}^{\tau_i(1)} f(X_n) + \sum_{k=1}^{B(N)} \eta_k\\
+&amp; = \sum_{n=0}^{\tau_i(1)} f(X_n) + \sum_{k=1}^{B(N)-1} \eta_k + \sum_{n=\tau_i(B(N)) + 1}^{\tau_i(B(N) + 1)} f(X_n)
+\end{aligned}
+\]</span> Let’s write <span class="math inline">\(Y = \sum_{n=0}^{\tau_i(1)} f(X_n)\)</span> and <span class="math inline">\(Y^\prime = \sum_{n=\tau_i(B(N)) + 1}^{\tau_i(B(N) + 1)} f(X_n)\)</span></p>
+<p>Now we write the string of inequalities: <span class="math display">\[
+Y + \sum_{k=1}^{B(N) - 1} \eta_k \leq \sum_{n=0}^{N} f(X_n) \leq Y + \sum_{k=1}^{B(N)-1} \eta_k + Y^\prime
+\]</span> Dividing the string of inequalities by <span class="math inline">\(N\)</span> gives: <span class="math display">\[
+\frac{Y}{N} + \frac{\sum_{k=1}^{B(N) - 1} \eta_k}{N} \leq \frac{1}{N}\sum_{n=0}^{N} f(X_n) \leq \frac{Y}{N} + \frac{\sum_{k=1}^{B(N)-1} \eta_k}{N} + \frac{Y^\prime}{N}
+\]</span> We know that due to positive recurrence, <span class="math inline">\(\Exp{\tau_i(1)} &lt; \infty\)</span>, which means that taking limits <span class="math display">\[
+\lim_{N\to\infty} \frac{Y}{N} = \lim_{N\to\infty} \frac{Y^\prime}{N} = 0
+\]</span> Thus, we have that <span class="math display">\[
+\begin{aligned}
+\lim_{N \to \infty} \frac{1}{N}\sum_{n=0}^{N} f(X_n) &amp; =\lim_{N \to \infty} \frac{\sum_{k=1}^{B(N)-1} \eta_k}{N} \\
+&amp; = \lim_{N \to \infty} \frac{\sum_{k=1}^{B(N)-1} \eta_k}{B(N) - 1} \frac{B(N) - 1}{N}
+\end{aligned}
+\]</span> By the argument above the first term on the RHS: <span class="math display">\[
+\begin{aligned}
+\lim_{N\to\infty} \frac{1}{B(N)-1}\sum_{k=1}^{B(N) - 1} \eta_k &amp; = \Exp{\eta_1 \mid X_0 = i} \\
+&amp; = \Exp{\sum_{n=\tau_i(1)+1}^{\tau_i(2)} f(X_n) \mid X_0 = i} \\
+&amp; = \Exp{\sum_{n=0}^{\tau_i(1)} f(X_n) \mid X_0 = i}
+\end{aligned}
+\]</span> We just need to show that <span class="math display">\[
+\lim_{N\to\infty} \frac{B(N)-1}{N} = \frac{1}{\Exp{\tau_i(1) \mid X_0 = i}}
+\]</span> <span class="math display">\[
+\begin{aligned}
+\lim_{N\to\infty} \frac{B(N)-1}{N} &amp; = \lim_{N\to\infty} \frac{B(N)-1}{B(N)} \frac{B(N)}{N}
+\end{aligned}
+\]</span> <span class="math inline">\(\frac{B(N) - 1}{B(N)} \to 1\)</span>, but <span class="math inline">\(B(N) / N\)</span> needs some more work.</p>
+<p>Note the following set of inequalities: <span class="math display">\[
+\tau_i(B(N)) \leq N \leq \tau_i(B(N) + 1)
+\]</span> Dividing by <span class="math inline">\(B(N)\)</span> yields: <span class="math display">\[
+\frac{\tau_i(B(N))}{B(N)} \leq \frac{N}{B(N)} \leq \frac{\tau_i(B(N) + 1)}{B(N) + 1} \frac{B(N) +1}{B(N)}
+\]</span> We can write <span class="math inline">\(\tau_i(B(N))\)</span>, with <span class="math inline">\(\tau_i(0) = 0\)</span>, as <span class="math display">\[
+\tau_i(B(N)) = \sum_{k=0}^{B(N) - 1} \tau_i(k+1) - \tau_i(k)
+\]</span> We showed above that <span class="math inline">\(\tau_i(k+1) - \tau_i(k)\)</span> are iid RVs equal in distribution to <span class="math inline">\(\tau_i(1)\)</span>, so <span class="math display">\[
+\frac{\sum_{k=0}^{B(N) - 1} \tau_i(k+1) - \tau_i(k)}{B(N)} \overset{\text{a.s.}}{\to} \Exp{\tau_i(1) \mid X_0 = i}
+\]</span> This shows that <span class="math inline">\(\frac{N}{B(N)} \overset{\text{a.s.}}{\to}  \Exp{\tau_i(1) \mid X_0 = i}\)</span>, or that <span class="math display">\[
+\frac{B(N)}{N} \overset{\text{a.s.}}{\to}  \frac{1}{\Exp{\tau_i(1) \mid X_0 = i}}
+\]</span></p>
+</div>
 </section>
 <section id="gibbs-sampling" class="level2">
 <h2 class="anchored" data-anchor-id="gibbs-sampling">Gibbs sampling</h2>
@@ -534,7 +690,7 @@ n_\text{eff} = \frac{n}{1 + 2 \sum_{i=1}^{\infty} \rho_k}
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="MCMC-lecture-1_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="MCMC-lecture-1_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -552,7 +708,7 @@ n_\text{eff} = \frac{n}{1 + 2 \sum_{i=1}^{\infty} \rho_k}
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="MCMC-lecture-1_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="MCMC-lecture-1_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
