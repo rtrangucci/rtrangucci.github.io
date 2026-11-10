@@ -202,6 +202,7 @@ window.Quarto = {
   <li><a href="#markov-chain-monte-carlo-mcmc" id="toc-markov-chain-monte-carlo-mcmc" class="nav-link" data-scroll-target="#markov-chain-monte-carlo-mcmc">Markov Chain Monte Carlo (MCMC)</a></li>
   <li><a href="#discrete-state-space-markov-chains" id="toc-discrete-state-space-markov-chains" class="nav-link" data-scroll-target="#discrete-state-space-markov-chains">Discrete state space Markov chains</a></li>
   <li><a href="#gamblers-ruin-markov-chain" id="toc-gamblers-ruin-markov-chain" class="nav-link" data-scroll-target="#gamblers-ruin-markov-chain">Gambler’s ruin Markov Chain</a></li>
+  <li><a href="#hitting-times" id="toc-hitting-times" class="nav-link" data-scroll-target="#hitting-times">Hitting times</a></li>
   <li><a href="#dissection-principle" id="toc-dissection-principle" class="nav-link" data-scroll-target="#dissection-principle">Dissection principle</a></li>
   <li><a href="#recurrence" id="toc-recurrence" class="nav-link" data-scroll-target="#recurrence">Recurrence</a></li>
   <li><a href="#stationary-measures" id="toc-stationary-measures" class="nav-link" data-scroll-target="#stationary-measures">Stationary measures</a></li>
@@ -238,7 +239,7 @@ window.Quarto = {
 
 <section id="markov-chains" class="level2">
 <h2 class="anchored" data-anchor-id="markov-chains">Markov Chains</h2>
-<p>What follows is from <span class="citation" data-cites="geyerMCMC">Geyer (<a href="#ref-geyerMCMC" role="doc-biblioref">2005</a>)</span> Chapter 1.</p>
+<p>What follows is from <span class="citation" data-cites="geyerMCMC">Geyer (<a href="#ref-geyerMCMC" role="doc-biblioref">2005</a>)</span> Chapter 1 and <span class="citation" data-cites="resnick">Resnick (<a href="#ref-resnick" role="doc-biblioref">2013</a>)</span> Chapter 2.</p>
 <p>Henceforth, we’ll refer to a Markov Chain as a discrete time stochastic process with an arbitrary state space. Next, I’ll define each of these terms.</p>
 <p>A stochastic process in discrete time is an infinite collection of random variables indexed by non-negative integers: <span class="math display">\[
 \{X_0, X_1, X_2, \dots \}
@@ -321,7 +322,9 @@ P^{(n)} = P^{(n-1)} P
 (a^{(n)})^T = a^T P^{(n)}
 \]</span> we can see this by the law of total probability for each element <span class="math inline">\(a^{(n)}_j\)</span>: <span class="math display">\[
 a^{(n)}_j = \sum_{k} P(X_n = j \mid X_0 = k) P(X_0 = k)
-\]</span> ## Hitting times</p>
+\]</span></p>
+<section id="hitting-times" class="level2">
+<h2 class="anchored" data-anchor-id="hitting-times">Hitting times</h2>
 <p>In order to understand how the Markov chain progresses through time, it’ll be important to define the time it takes for the Markov chain to first reach a set <span class="math inline">\(B \subset \Omega\)</span>: <span class="math display">\[
 \tau_B = \inf \{n \geq 0 \mid X_n \in B \}
 \]</span></p>
@@ -339,6 +342,7 @@ q &amp; 0 &amp; p &amp; 0 \\
 \end{bmatrix}
 \]</span></p>
 <p>we can see the classes are <span class="math inline">\(\{0\}, \{1, 2\}, \{3 \}\)</span>.</p>
+</section>
 <section id="dissection-principle" class="level2">
 <h2 class="anchored" data-anchor-id="dissection-principle">Dissection principle</h2>
 <p>Despite the dependence between <span class="math inline">\(X_n\)</span> and <span class="math inline">\(X_{n-1}\)</span> in a Markov chain, we can break the sequence <span class="math inline">\(X_0, X_1, X_2, \dots\)</span> into iid sequences. We can use the Markov property to our advantage here. Suppose that <span class="math inline">\(X_0 = i\)</span>. If we ran the chain until step <span class="math inline">\(n\)</span> such that <span class="math inline">\(X_n = i\)</span>, the conditional distribution of the next step <span class="math inline">\(X_{n+1}\)</span> given <span class="math inline">\(X_n = i\)</span> would be the same as the conditional distribution of <span class="math inline">\(X_1\)</span> given <span class="math inline">\(X_0 = i\)</span>. We can define the time at which the chain returns to the initial state <span class="math inline">\(i\)</span> as <span class="math inline">\(\tau_i(1) = \inf (n &gt; 0 \mid X_{n} = i)\)</span>. We can then define the second time that the chain returns to state <span class="math inline">\(i\)</span> as <span class="math display">\[
@@ -731,6 +735,9 @@ Gelman, Andrew, and Donald B Rubin. 1992. <span>“Inference from Iterative Simu
 </div>
 <div id="ref-geyerMCMC" class="csl-entry" role="listitem">
 Geyer, Charles J. 2005. <span>“Markov <span>Chain Monte Carlo Lecture Notes</span>.”</span>
+</div>
+<div id="ref-resnick" class="csl-entry" role="listitem">
+Resnick, Sidney I. 2013. <em>Adventures in Stochastic Processes</em>. Springer Science &amp; Business Media.
 </div>
 <div id="ref-tanner1987calculation" class="csl-entry" role="listitem">
 Tanner, Martin A, and Wing Hung Wong. 1987. <span>“The Calculation of Posterior Distributions by Data Augmentation.”</span> <em>Journal of the American Statistical Association</em> 82 (398): 528–40.
