@@ -206,7 +206,7 @@ window.Quarto = {
   <li><a href="#dissection-principle" id="toc-dissection-principle" class="nav-link" data-scroll-target="#dissection-principle">Dissection principle</a></li>
   <li><a href="#recurrence" id="toc-recurrence" class="nav-link" data-scroll-target="#recurrence">Recurrence</a></li>
   <li><a href="#stationary-measures" id="toc-stationary-measures" class="nav-link" data-scroll-target="#stationary-measures">Stationary measures</a></li>
-  <li><a href="#strong-law-of-large-numbers" id="toc-strong-law-of-large-numbers" class="nav-link" data-scroll-target="#strong-law-of-large-numbers">Strong law of large numbers</a></li>
+  <li><a href="#sec-slln" id="toc-sec-slln" class="nav-link" data-scroll-target="#sec-slln">Strong law of large numbers</a></li>
   <li><a href="#gibbs-sampling" id="toc-gibbs-sampling" class="nav-link" data-scroll-target="#gibbs-sampling">Gibbs sampling</a>
   <ul class="collapse">
   <li><a href="#quantifying-uncertainty-in-mcmc-estimates" id="toc-quantifying-uncertainty-in-mcmc-estimates" class="nav-link" data-scroll-target="#quantifying-uncertainty-in-mcmc-estimates">Quantifying Uncertainty in MCMC estimates</a></li>
@@ -419,6 +419,12 @@ P(\tau_i(1) &lt; \infty \mid X_0 = i) = \sum_{n=0}^\infty f_{ii}^{(n)}
 \]</span> Similarly, if we want <span class="math inline">\(\Exp{\tau_i(1) \mid X_0 = i}\)</span> we just compute the expected value: <span class="math display">\[
 \Exp{\tau_i(1) \mid X_0 = i} = \sum_{n=0}^\infty n f_{ii}^{(n)}
 \]</span></p>
+<div id="def-pos-rec" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 4 (Positive recurrent)</strong></span> A MC is positive recurrent if</p>
+<p><span class="math display">\[
+\Exp{\tau_i(1) \mid X_0 = i} &lt; \infty
+\]</span></p>
+</div>
 <p>We’ll say that state <span class="math inline">\(i\)</span> is recurrent if and only if <span class="math display">\[
 \sum_{n=0}^\infty p^{(n)}_{ii} = \infty
 \]</span> This implies that the chain returns to <span class="math inline">\(i\)</span> infinitely often.</p>
@@ -492,9 +498,15 @@ P(\tau_i(1) &lt; \infty \mid X_0 = i) = \sum_{n=0}^\infty f_{ii}^{(n)}
 \]</span></p>
 </div>
 </section>
-<section id="strong-law-of-large-numbers" class="level2">
-<h2 class="anchored" data-anchor-id="strong-law-of-large-numbers">Strong law of large numbers</h2>
-<p>Suppose MC is irreducible and positive recurrent with unique stationary distribution <span class="math inline">\(\pi\)</span>. Then for <span class="math inline">\(f \geq 0\)</span> <span class="math display">\[
+<section id="sec-slln" class="level2">
+<h2 class="anchored" data-anchor-id="sec-slln">Strong law of large numbers</h2>
+<p>Suppose MC is</p>
+<ul>
+<li>irreducible</li>
+<li>positive recurrent (See <a href="#def-pos-rec" class="quarto-xref">Definition&nbsp;4</a>)</li>
+<li>Has a unique stationary distribution <span class="math inline">\(\pi\)</span>.</li>
+</ul>
+<p>Then for <span class="math inline">\(f \geq 0\)</span> <span class="math display">\[
 \lim_{N\to\infty}\frac{1}{N} \sum_{n=0}^N f(X_n) \overset{\text{a.s.}}{\to} \sum_{k \in \Omega} f(k) \pi_k
 \]</span></p>
 <div class="proof">
