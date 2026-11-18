@@ -195,7 +195,9 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#mcmc-and-gibbs-sampling-recap" id="toc-mcmc-and-gibbs-sampling-recap" class="nav-link active" data-scroll-target="#mcmc-and-gibbs-sampling-recap">MCMC and Gibbs sampling recap</a>
+  <li><a href="#markov-chain-monte-carlo" id="toc-markov-chain-monte-carlo" class="nav-link active" data-scroll-target="#markov-chain-monte-carlo">Markov Chain Monte Carlo</a></li>
+  <li><a href="#bridge-between-discrete-and-general-spaces" id="toc-bridge-between-discrete-and-general-spaces" class="nav-link" data-scroll-target="#bridge-between-discrete-and-general-spaces">Bridge between discrete and general spaces</a></li>
+  <li><a href="#mcmc-and-gibbs-sampling-recap" id="toc-mcmc-and-gibbs-sampling-recap" class="nav-link" data-scroll-target="#mcmc-and-gibbs-sampling-recap">MCMC and Gibbs sampling recap</a>
   <ul class="collapse">
   <li><a href="#metropolis-sampler" id="toc-metropolis-sampler" class="nav-link" data-scroll-target="#metropolis-sampler">Metropolis sampler</a></li>
   <li><a href="#hamiltonian-monte-carlo" id="toc-hamiltonian-monte-carlo" class="nav-link" data-scroll-target="#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
@@ -225,11 +227,22 @@ window.Quarto = {
 </header>
 
 
+<section id="markov-chain-monte-carlo" class="level2">
+<h2 class="anchored" data-anchor-id="markov-chain-monte-carlo">Markov Chain Monte Carlo</h2>
+<p>Markov chain Monte Carlo algorithms are that which generate draws for a distribution <span class="math inline">\(\pi\)</span> via an ergodic Markov chain with stationary distribution equal to <span class="math inline">\(\pi\)</span>.</p>
+</section>
+<section id="bridge-between-discrete-and-general-spaces" class="level2">
+<h2 class="anchored" data-anchor-id="bridge-between-discrete-and-general-spaces">Bridge between discrete and general spaces</h2>
+<p>Until now, we’ve operated in discrete state spaces, and we know that if a MC is irreducible, aperiodic, and positive recurrent, we get a limit distribution, and a SLLN.</p>
+<p>In general state spaces, like <span class="math inline">\(\R\)</span>, we have much the same properties, but a bit more involved. The transition function is a conditional probability measure: <span class="math display">\[
+P(\theta_n \in A \mid \theta_{n-1} = c) = \int_{A} p(\theta \mid c) d\theta
+\]</span> Instead of positive recurrent, we say a MC is Harris recurrent, which just means that</p>
+</section>
 <section id="mcmc-and-gibbs-sampling-recap" class="level2">
 <h2 class="anchored" data-anchor-id="mcmc-and-gibbs-sampling-recap">MCMC and Gibbs sampling recap</h2>
 <p>Suppose we want to sample from a distribution <span class="math inline">\(\pi(\theta)\)</span> (for the rest of the lecture I’ll suppress the dependence on <span class="math inline">\(y\)</span> unless otherwise noted), but we can’t easily do so, we might be able to create a Markov Chain whose stationary distribution is <span class="math inline">\(\pi(\theta)\)</span>.</p>
 <p>The Markov Chain has the property that <span class="math display">\[
-P(\theta^{(n)} \in A \mid \theta^{(n-1)} = c_{n-1}, \dots, \theta^{(n-1)} = c_{1}) = P(\theta^{(n)} \in A \mid \theta^{(n-1)} = c_{n-1})
+P(\theta^{(n)} \in A \mid \theta^{(n-1)} = c_{n-1}, \dots, \theta^{1} = c_{1}) = P(\theta^{(n)} \in A \mid \theta^{(n-1)} = c_{n-1})
 \]</span> and that <span class="math display">\[
 P(\theta^{(n)} \in A \mid \theta^{(n-1)} = c)
 \]</span> doesn’t depend on <span class="math inline">\(n\)</span>.</p>
