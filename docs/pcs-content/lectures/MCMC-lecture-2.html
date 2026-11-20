@@ -196,7 +196,10 @@ window.Quarto = {
    
   <ul>
   <li><a href="#markov-chain-monte-carlo" id="toc-markov-chain-monte-carlo" class="nav-link active" data-scroll-target="#markov-chain-monte-carlo">Markov Chain Monte Carlo</a></li>
-  <li><a href="#bridge-between-discrete-and-general-spaces" id="toc-bridge-between-discrete-and-general-spaces" class="nav-link" data-scroll-target="#bridge-between-discrete-and-general-spaces">Bridge between discrete and general spaces</a></li>
+  <li><a href="#bridge-between-discrete-and-general-spaces" id="toc-bridge-between-discrete-and-general-spaces" class="nav-link" data-scroll-target="#bridge-between-discrete-and-general-spaces">Bridge between discrete and general spaces</a>
+  <ul class="collapse">
+  <li><a href="#irreducibility" id="toc-irreducibility" class="nav-link" data-scroll-target="#irreducibility">Irreducibility</a></li>
+  </ul></li>
   <li><a href="#mcmc-and-gibbs-sampling-recap" id="toc-mcmc-and-gibbs-sampling-recap" class="nav-link" data-scroll-target="#mcmc-and-gibbs-sampling-recap">MCMC and Gibbs sampling recap</a>
   <ul class="collapse">
   <li><a href="#metropolis-sampler" id="toc-metropolis-sampler" class="nav-link" data-scroll-target="#metropolis-sampler">Metropolis sampler</a></li>
@@ -236,7 +239,49 @@ window.Quarto = {
 <p>Until now, we’ve operated in discrete state spaces, and we know that if a MC is irreducible, aperiodic, and positive recurrent, we get a limit distribution, and a SLLN.</p>
 <p>In general state spaces, like <span class="math inline">\(\R\)</span>, we have much the same properties, but a bit more involved. The transition function is a conditional probability measure: <span class="math display">\[
 P(\theta_n \in A \mid \theta_{n-1} = c) = \int_{A} p(\theta \mid c) d\theta
-\]</span> Instead of positive recurrent, we say a MC is Harris recurrent, which just means that</p>
+\]</span></p>
+<p>I’ll write this as <span class="math inline">\(K(c,A)\)</span> for short. The <span class="math inline">\(n\)</span>-step transition kernel will be written <span class="math inline">\(K^n(c,A)\)</span></p>
+<section id="irreducibility" class="level3">
+<h3 class="anchored" data-anchor-id="irreducibility">Irreducibility</h3>
+<p>When <span class="math inline">\(\Omega\)</span> was countable, we had the following definition of irreducibility, for <span class="math inline">\(\tau_j = \inf(n \geq 0 \mid X_n = i)\)</span>: <span class="math display">\[
+P(\tau_j &lt; \infty \mid X_0 = i) &gt; 0 \text{ for all } i,j \in \Omega
+\]</span> This is equivalently stated: For all <span class="math inline">\(i,j \in \Omega\)</span>, there exists an <span class="math inline">\(n\)</span> such that: <span class="math display">\[
+p_{ij}^{(n)} &gt; 0
+\]</span> When the state space is uncountable, say <span class="math inline">\(\Omega \equiv \R\)</span>, we have the following definition of irreducibility, called <span class="math inline">\(\varphi\)</span>-irreducibility</p>
+<div id="def-irred" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1 (<span class="math inline">\(\varphi\)</span>-irreducibility)</strong></span> For a measure <span class="math inline">\(\varphi\)</span> on <span class="math inline">\(\mathcal{B}(\Omega)\)</span>, a MC with transition kernel <span class="math inline">\(K(x,A)\)</span> is <span class="math inline">\(\varphi\)</span>-irreducible if for every <span class="math inline">\(A \in \mathcal{B}(\Omega)\)</span> such that <span class="math inline">\(\varphi(A) &gt; 0\)</span> there exists an <span class="math inline">\(n\)</span> for which <span class="math display">\[
+K^n(x,A) &gt; 0
+\]</span> for every <span class="math inline">\(x \in \Omega\)</span>.</p>
+</div>
+<p>We can also define the hitting time for a set <span class="math inline">\(A\)</span> as: <span class="math display">\[
+\tau_{A} = \inf(n \geq 0 \mid X_n \in A)
+\]</span> Thus we can write <span class="math display">\[
+K^n(x,A) &gt; 0 \equiv P(\tau_A &lt; \infty \mid X_0 = x) &gt; 0
+\]</span></p>
+<p>Instead of positive recurrent, the propert we most care about is called Harris recurrence:</p>
+<div id="def-harris-recur-set" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2 (Harris Recurrent Sets and Chains)</strong></span> Let <span class="math inline">\(\eta_A = \lim_{N\to\infty}\sum_{n=0}^N \ind{X_n \in A}\)</span>. A set <span class="math inline">\(A\)</span> is <strong>Harris recurrent</strong> if <span class="math inline">\(\forall x \in A\)</span> we have <span class="math display">\[
+P(\eta_A = \infty \mid X_0 = x) = 1
+\]</span> A chain is <strong>Harris recurrent</strong> if there is a measure <span class="math inline">\(\psi\)</span> for which the chain is <span class="math inline">\(\psi\)</span>-irreducible and for all A for which <span class="math inline">\(\psi(A) &gt; 0\)</span>, <span class="math inline">\(A\)</span> is Harris recurrent.</p>
+</div>
+<p>Another way to think about this is with the following proposition:</p>
+<div id="prp-harris-recur" class="theorem proposition">
+<p><span class="theorem-title"><strong>Proposition 1 (Hitting times and Harris recurrence)</strong></span> If for all <span class="math inline">\(A \in \mathcal{B}(\Omega)\)</span> <span class="math inline">\(P(\tau_A &lt; \infty \mid X_0 = x) = 1\)</span> for all <span class="math inline">\(x \in A\)</span>, then <span class="math inline">\(P(\eta_A = \infty \mid X_0 = x) = 1\)</span> for all <span class="math inline">\(x \in \Omega\)</span> and the chain is Harris recurrent.</p>
+</div>
+<p>Putting everything together:</p>
+<div id="thm-ergod" class="theorem">
+<p><span class="theorem-title"><strong>Theorem 1 (Ergodicity)</strong></span> If a MC chain is</p>
+<ol type="1">
+<li>Harris recurrent</li>
+<li>Has a stationary <strong>distribution</strong></li>
+<li>Is aperiodic</li>
+</ol>
+<p>We may show the following for all <span class="math inline">\(\mu\)</span>:</p>
+<p><span class="math display">\[
+\lim_{n \to \infty} \sup_{A \in \mathcal{B}(\Omega)} \abs{\int K^n(x, A) \mu(x)dx - \pi(A)} = 0
+\]</span></p>
+</div>
+</section>
 </section>
 <section id="mcmc-and-gibbs-sampling-recap" class="level2">
 <h2 class="anchored" data-anchor-id="mcmc-and-gibbs-sampling-recap">MCMC and Gibbs sampling recap</h2>
